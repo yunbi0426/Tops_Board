@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NexacroObject version="1.0" type="Action">
+  <MetaInfo version="2.0" locale="ENG">
+    <Object id="nexacro.OpenWorkForm">
+      <ObjectInfo finalclass="false" inheritance="nexacro.Action" classname="nexacro.OpenWorkForm" shorttypename="OpenWorkForm" csstypename="OpenWorkForm" csscontrolname="OpenWorkFormControl" group="Action" subgroup="ActionBase" csspseudo="" container="false" composite="false" tabstop="false" cssstyle="false" contents="true" formats="false" contentseditor="auto" defaultwidth="" defaultheight="" registration="allow" edittype="action" useinitvalue="false" popup="false" edittypecomponent="" dblclickevent="" requirement="Edge,Chrome,Safari,Firefox,Opera,Windows NRE,macOS NRE,Android NRE,iOS/iPadOS NRE,Android Default Web Browser,iOS/iPadOS Default Web Browser" description="Trigger가 발생하는 시점에 수행하는 Action을 설정합니다." a11yprop=""/>
+      <PropertyInfo>
+        <Property name="formUrl" edittype="URL" readonly="false" configurable="true" initonly="false" hidden="false" control="false" expr="false" enumerable="true" bind="false" unused="false" mandatory="false"/>
+        <Property name="targetview" edittype="String" readonly="false" initonly="false" hidden="true" control="false" expr="false" bind="false" deprecated="false" unused="false" mandatory="false" requirement="Edge,Chrome,Safari,Firefox,Opera,Windows NRE,macOS NRE,Android NRE,iOS/iPadOS NRE,Android Default Web Browser,iOS/iPadOS Default Web Browser" description="Action을 수행할 View 오브젝트를 설정하는 속성입니다." normalpropertyname="targetview" stringrc="false" defaultstringrc="false"/>
+      </PropertyInfo>
+      <ContentsInfo contentsformat="json" contentseditor="auto" contentstype="contents" showpreview="false" showobjtree="false" showproperties="false"/>
+      <MethodInfo/>
+      <EventHandlerInfo/>
+      <StatusInfo/>
+      <ControlInfo/>
+      <CSSInfo>
+        <PropertyInfo/>
+      </CSSInfo>
+    </Object>
+  </MetaInfo>
+  <ScriptConfig version="1.0"><![CDATA[{
+	"members": [
+		{
+			"name": "run",
+			"body": "let bSucc = true;\nlet oWorkDiv = this._findWorkDiv();                   // [변경] WorkFrame 하드코딩 → 탐색\n\nif (oWorkDiv && !this.gfnIsNull(this._p_formUrl)) {\n    oWorkDiv.set_url(this._p_formUrl);\n} else {\n    bSucc = false;\n}\n\nif (bSucc == true) {\n    this.on_fire_onsuccess(\"success\");\n} else {\n    this.on_fire_onerror(\"error\");\n}"
+		},
+		{
+			"name": "contents",
+			"body": "nexacro.Action.prototype._setContents.call(this, v);\n\n// TODO : enter your code here."
+		},
+		{
+			"name": "property:formUrl",
+			"body": "if (this._p_formUrl != v)\n{\n    this._p_formUrl = v;\n    // TODO : enter your code here.\n}"
+		}
+	],
+	"extraCode": "nexacro.OpenWorkForm.prototype._findWorkDiv = function () {\r\n    let find = function (f) {\r\n        if (!f) {\r\n            return null;\r\n        }\r\n\r\n        if (f.form && f.form.div_work) {    // ChildFrame\r\n            return f.form.div_work;\r\n        }\r\n\r\n        if (f.frames) {                                                // FrameSet\r\n            for (let i = 0; i < f.frames.length; i++) {\r\n                let r = find(f.frames[i]);\r\n                if (r) return r;\r\n            }\r\n        }\r\n\r\n        return f.frame ? find(f.frame) : null;                         // MainFrame\r\n    };\r\n\r\n    return find(nexacro.getApplication().mainframe);\r\n};"
+}]]>
+  </ScriptConfig>
+  <Script type="xscript5.1"><![CDATA[//==============================================================================
+// Define the Action.
+//==============================================================================
+//==============================================================================
+// Object : nexacro.OpenWorkForm
+// Group : Action
+//==============================================================================
+if (!nexacro.OpenWorkForm)
+{
+    nexacro.OpenWorkForm = function (id, parent)
+    {
+        nexacro.Action.call(this, id, parent);
+    };
+
+    nexacro.OpenWorkForm.prototype = nexacro._createPrototype(nexacro.Action, nexacro.OpenWorkForm);
+    nexacro.OpenWorkForm.prototype._type_name = "OpenWorkForm";
+
+    //===============================================================
+    // nexacro.OpenWorkForm : Method
+    //===============================================================
+    nexacro.OpenWorkForm.prototype.run = function ()
+    {
+        let bSucc = true;
+        let oWorkDiv = this._findWorkDiv();                   // [변경] WorkFrame 하드코딩 → 탐색
+
+        if (oWorkDiv && !this.gfnIsNull(this._p_formUrl)) {
+            oWorkDiv.set_url(this._p_formUrl);
+        } else {
+            bSucc = false;
+        }
+
+        if (bSucc == true) {
+            this.on_fire_onsuccess("success");
+        } else {
+            this.on_fire_onerror("error");
+        }
+    };
+
+    //===============================================================
+    // nexacro.OpenWorkForm : Contents
+    //===============================================================
+    nexacro.OpenWorkForm.prototype._p_contents = "";
+    nexacro.OpenWorkForm.prototype.set_contents = function (v)
+    {
+        if (this._p_contents != v)
+        {
+            this._p_contents = v;
+            this._setContents(this._p_contents);
+        }
+    };
+
+    Object.defineProperty(nexacro.OpenWorkForm.prototype, "contents", {
+        get: new Function("return this._p_contents"),
+        set: nexacro.OpenWorkForm.prototype["set_contents"],
+        enumerable: true,
+        configurable: true
+    });
+
+    nexacro.OpenWorkForm.prototype._setContents = function (v)
+    {
+        // This function is necessary to apply contents in the run environment.
+        nexacro.Action.prototype._setContents.call(this, v);
+
+        // TODO : enter your code here.
+    };
+
+    //===============================================================
+    // nexacro.OpenWorkForm : Declared Properties
+    //===============================================================
+    nexacro.OpenWorkForm.prototype._p_formUrl = "";
+    nexacro.OpenWorkForm.prototype.set_formUrl = function (v)
+    {
+        if (this._p_formUrl != v)
+        {
+            this._p_formUrl = v;
+            // TODO : enter your code here.
+        }
+    };
+
+    nexacro.OpenWorkForm.prototype._properties = [{name: "formUrl"}];
+    nexacro._defineProperties(nexacro.OpenWorkForm.prototype, nexacro.OpenWorkForm.prototype._properties);
+
+    nexacro.OpenWorkForm.prototype._findWorkDiv = function () {
+        let find = function (f) {
+            if (!f) {
+                return null;
+            }
+
+            if (f.form && f.form.div_work) {    // ChildFrame
+                return f.form.div_work;
+            }
+
+            if (f.frames) {                                                // FrameSet
+                for (let i = 0; i < f.frames.length; i++) {
+                    let r = find(f.frames[i]);
+                    if (r) return r;
+                }
+            }
+
+            return f.frame ? find(f.frame) : null;                         // MainFrame
+        };
+
+        return find(nexacro.getApplication().mainframe);
+    };
+
+}]]>
+  </Script>
+  <DesignScriptConfig version="1.0"><![CDATA[{
+	"version": "1.0",
+	"body": "nexacro.OpenWorkForm.prototype.run = nexacro._emptyFn;"
+}]]>
+  </DesignScriptConfig>
+  <DesignScript type="xscript5.1"><![CDATA[//==============================================================================
+//	Define the code to be applied in the Form Design of nexacrostudio.
+//==============================================================================
+//==============================================================================
+// Object : nexacro.OpenWorkForm
+// Group : Action
+//==============================================================================
+if (nexacro.OpenWorkForm) 
+{
+    //===============================================================
+    // nexacro.OpenWorkForm : Method
+    //===============================================================
+    nexacro.OpenWorkForm.prototype.run = nexacro._emptyFn;
+}]]>
+  </DesignScript>
+</NexacroObject>

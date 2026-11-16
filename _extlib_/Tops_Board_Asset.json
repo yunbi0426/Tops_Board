@@ -1,0 +1,14 @@
+{
+  "name": "Tops_Board_Asset",
+  "objInfo": [
+    "Tops_Board_Asset/_metainfo_/OpenWorkForm.info"
+  ],
+  "scripts": [
+    "Tops_Board_Asset/OpenWorkForm/OpenWorkForm.js"
+  ],
+  "designscripts": [
+    "Tops_Board_Asset/OpenWorkForm/DesignOpenWorkForm.js"
+  ],
+  "moduletype": "component",
+  "version": "1.0.0"
+}

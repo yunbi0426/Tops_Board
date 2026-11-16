@@ -99,20 +99,10 @@ this.fnFindMenuBtn = function (sId)
 };]]>
     </Script>
     <Trigger>
-      <TriggerItem id="item0" triggertype="onclick" triggerview="" triggerobj="staLogo" targetaction="RunScript00"/>
+      <TriggerItem id="item0" triggertype="onclick" triggerview="" triggerobj="staLogo" targetaction="OpenWorkForm00"/>
     </Trigger>
     <Objects>
-      <RunScript id="RunScript00" alias="Dashboard 화면으로 돌아가기">
-        <Contents><![CDATA[` var app = nexacro.getApplication();
-    var ds = app.gdsMenu;
-    var dashboardUrl = ds.getColumn(0, "MENU_URL");
-    var compDivWork = app.mainframe.vfrs.frmWork.form.div_work;
-    if (dashboardUrl && compDivWork) {
-        compDivWork.set_url(dashboardUrl)
-    };
-`]]>
-        </Contents>
-      </RunScript>
+      <OpenWorkForm id="OpenWorkForm00" alias="Dashboard 화면으로 돌아가기" formUrl="Base::frmDashboard.xfdl"/>
     </Objects>
   </Form>
 </FDL>
