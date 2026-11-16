@@ -130,7 +130,7 @@
                       <Cell id="cell_body_3_0_row_count" col="3" row="0" text="bind:row_count" displaytype="number" edittype="none"/>
                       <Cell id="cell_body_4_0_new_count" col="4" row="0" text="bind:new_count" displaytype="number" edittype="none"/>
                       <Cell id="cell_body_5_0_changed_count" col="5" row="0" text="bind:changed_count" displaytype="number" edittype="none"/>
-                      <Cell id="cell_body_6_0_uploaded_at" col="6" row="0" text="bind:uploaded_at" displaytype="auto" edittype="none"/>
+                      <Cell id="cell_body_6_0_uploaded_at" col="6" row="0" text="bind:uploaded_at" displaytype="date" edittype="none" calendardateformat="yyyy-MM-dd HH:mm" calendardisplaynulltype="none"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -214,7 +214,7 @@
             <Field id="row_count" label="전체"/>
             <Field id="new_count" label="신규"/>
             <Field id="changed_count" label="변경"/>
-            <Field id="uploaded_at" options=""/>
+            <Field id="uploaded_at" options="{&quot;dataformat&quot;:&quot;yyyy-MM-dd HH:mm&quot;}" displaytype="date"/>
           </Fields>
           <Components>
             <Component id="grdList" fields="upload_id,base_date,file_name,row_count,new_count,changed_count,uploaded_at"/>
