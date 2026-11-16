@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="frmWork" width="1280" height="670">
+    <Layouts>
+      <Layout width="1280" height="670">
+        <Div id="div_work" left="0" top="0" taborder="0" text="div_work" right="0" bottom="0" url="Base::frmDetails.xfdl">
+          <Layouts>
+            <Layout/>
+          </Layouts>
+        </Div>
+      </Layout>
+    </Layouts>
+  </Form>
+</FDL>

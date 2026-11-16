@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ADL version="2.0">
+  <Application id="Tops_Board" screenid="Desktop_screen" licenseurl="./license/NexaLAP_client_license.xml">
+    <Layout>
+      <MainFrame id="mainframe" showtitlebar="false" showstatusbar="false" titletext="TOPS Board" left="0" top="0" width="1280" height="720">
+        <VFrameSet id="vfrs" separatesize="50,*">
+          <Frames>
+            <ChildFrame id="frmTop" showtitlebar="false" showstatusbar="false" formurl="NexaFrame::frmTop.xfdl"/>
+            <ChildFrame id="frmWork" showtitlebar="false" showstatusbar="false" formurl="NexaFrame::frmWork.xfdl"/>
+          </Frames>
+        </VFrameSet>
+      </MainFrame>
+    </Layout>
+  </Application>
+  <Script type="xscript5.1"><![CDATA[var objEnv = nexacro.getEnvironment();
+
+// Top 템플릿이라 Left 메뉴는 없음 → 빈 함수
+objEnv.fnSetLeftMenu = function (sMenuId) {};
+
+// gdsMenu의 MENU_URL을 frmWork의 div_work에 연다
+objEnv.fnOpenForm = function (sMenuId, bPopup) {
+    var app = nexacro.getApplication();
+    var ds = app.gdsMenu;
+    var nRow = ds.findRow("MENU_ID", sMenuId);
+    if (nRow < 0) {
+        return;
+    }
+
+    var url = ds.getColumn(nRow, "MENU_URL");
+    var compDivWork = app.mainframe.vfrs.frmWork.form.div_work;
+    if (url && compDivWork) {
+        compDivWork.set_url(url)
+    };
+};
+]]>
+  </Script>
+</ADL>

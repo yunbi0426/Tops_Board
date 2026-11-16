@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AppVariables version="2.0">
+  <Datasets>
+    <Dataset id="gdsLocale">
+      <ColumnInfo>
+        <Column id="code" type="STRING" size="256"/>
+        <Column id="data" type="STRING" size="256"/>
+      </ColumnInfo>
+      <Rows>
+        <Row>
+          <Col id="code">en</Col>
+          <Col id="data">English</Col>
+        </Row>
+      </Rows>
+    </Dataset>
+    <Dataset id="gdsMenu">
+      <ColumnInfo>
+        <Column id="MENU_ID" type="STRING" size="80"/>
+        <Column id="MENU_NM" type="STRING" size="80"/>
+        <Column id="MENU_URL" type="STRING" size="80"/>
+        <Column id="MENU_LV" type="STRING" size="80"/>
+        <Column id="MENU_GROUP_ID" type="STRING" size="80"/>
+      </ColumnInfo>
+      <Rows>
+        <Row>
+          <Col id="MENU_ID">DASHBOARD</Col>
+          <Col id="MENU_NM">Dashboard</Col>
+          <Col id="MENU_URL">Base::frmDashboard.xfdl</Col>
+          <Col id="MENU_LV">0</Col>
+        </Row>
+        <Row>
+          <Col id="MENU_ID">DETAILS</Col>
+          <Col id="MENU_NM">Details</Col>
+          <Col id="MENU_URL">Base::frmDetails.xfdl</Col>
+          <Col id="MENU_LV">0</Col>
+        </Row>
+        <Row>
+          <Col id="MENU_LV">0</Col>
+          <Col id="MENU_ID">UPLOAD</Col>
+          <Col id="MENU_NM">Upload</Col>
+          <Col id="MENU_URL">Base::frmUpload.xfdl</Col>
+        </Row>
+        <Row>
+          <Col id="MENU_ID">EXPORT</Col>
+          <Col id="MENU_NM">Export</Col>
+          <Col id="MENU_URL">Base::frmExport.xfdl</Col>
+          <Col id="MENU_LV">0</Col>
+        </Row>
+      </Rows>
+    </Dataset>
+  </Datasets>
+  <Variables/>
+  <DataObjects/>
+</AppVariables>
