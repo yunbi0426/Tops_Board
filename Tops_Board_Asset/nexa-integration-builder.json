@@ -1,0 +1,10 @@
+{
+    "name": "Tops_Board_Asset",
+    "version": "1.0.0",
+    "specVersion": "1.0",
+    "explorer": {
+        "exclude": [
+            "runtime"
+        ]
+    }
+}
