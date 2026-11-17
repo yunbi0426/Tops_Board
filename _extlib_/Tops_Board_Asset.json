@@ -1,13 +1,17 @@
 {
   "name": "Tops_Board_Asset",
   "objInfo": [
-    "Tops_Board_Asset/_metainfo_/OpenWorkForm.info"
+    "Tops_Board_Asset/_metainfo_/OpenWorkForm.info",
+    "Tops_Board_Asset/_metainfo_/FileUploadTransfer.info"
   ],
   "scripts": [
-    "Tops_Board_Asset/OpenWorkForm/OpenWorkForm.js"
+    "Tops_Board_Asset/OpenWorkForm/OpenWorkForm.js",
+    "Tops_Board_Asset/FileUploadTransfer/FileUploadTransfer.js",
+    "Tops_Board_Asset/ActionLib/TopsActionLib.js"
   ],
   "designscripts": [
-    "Tops_Board_Asset/OpenWorkForm/DesignOpenWorkForm.js"
+    "Tops_Board_Asset/OpenWorkForm/DesignOpenWorkForm.js",
+    "Tops_Board_Asset/FileUploadTransfer/DesignFileUploadTransfer.js"
   ],
   "moduletype": "component",
   "version": "1.0.0"

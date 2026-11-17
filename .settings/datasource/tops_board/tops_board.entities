@@ -665,5 +665,39 @@
   "procedures": {},
   "functions": {},
   "views": {},
-  "relationships": []
+  "relationships": [
+    {
+      "requester_map": {
+        "relation": [],
+        "pk": [
+          "requester"
+        ]
+      }
+    },
+    {
+      "req_master": {
+        "relation": [],
+        "pk": [
+          "rp"
+        ]
+      }
+    },
+    {
+      "req_snapshot": {
+        "relation": [],
+        "pk": [
+          "upload_id",
+          "rp"
+        ]
+      }
+    },
+    {
+      "upload_log": {
+        "relation": [],
+        "pk": [
+          "upload_id"
+        ]
+      }
+    }
+  ]
 }

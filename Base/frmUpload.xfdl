@@ -3,7 +3,111 @@
   <Form id="frmUpload" width="1050" height="736" titletext="New Form">
     <Layouts>
       <Layout width="1050" height="736">
-        <View id="viewHistory" left="10" top="50%" taborder="0" text="viewHistory" right="10" bottom="10" viewdataset="_dstops_uploadLogSelect_ds_output">
+        <View id="viewUpload" left="10" top="10" taborder="3" height="50" text="View00" right="10" viewdataset="_dstops_importTopsExcel_ds_input">
+          <Layouts>
+            <Layout>
+              <Static id="staBaseDate" left="10" top="10" width="56" height="32" text="기준일" _fieldid="base_date" _fieldcomptype="label"/>
+              <Calendar id="calBaseDate" left="72" top="10" width="140" height="32" dateformat="yyyy-MM-dd" editformat="yyyy-MM-dd" _fieldid="base_date" _fieldcomptype="comp"/>
+              <Static id="staFileName" left="228" top="10" width="40" height="32" text="파일명" _fieldid="file_name" _fieldcomptype="label"/>
+              <Edit id="edtFileName" left="274" top="10" width="300" height="32" readonly="true" _fieldid="file_name" _fieldcomptype="comp"/>
+              <Button id="btnSelect" left="582" top="10" width="90" height="32" text="파일 선택"/>
+              <Button id="btnUpload" left="680" top="10" width="110" height="32" text="업로드"/>
+            </Layout>
+          </Layouts>
+          <Objects>
+            <FileDialog id="fdgExcel" filter="Excel(*.xlsx)|*.xlsx|"/>
+          </Objects>
+          <Bind>
+            <BindItem id="bind_calBaseDate" compid="calBaseDate" propid="value" datasetid="_dstops_importTopsExcel_ds_input" columnid="base_date"/>
+            <BindItem id="bind_edtFileName" compid="edtFileName" propid="value" datasetid="_dstops_importTopsExcel_ds_input" columnid="file_name"/>
+          </Bind>
+          <Script><![CDATA[
+	this.fvBaseDateField = "base_date";
+	this.fvFileNameField = "file_name";
+
+	this._fnViewOnLoad = function(objForm) {
+		/* Sets the view form reference so that functions declared in the view can access it */
+		this._ownerForm = objForm;
+
+		/* 업로드 Action 이 읽어가는 파일 목록 */
+		this.oUploadFileList = [];
+
+		/* View Dataset : 1행 보장 + 기준일 기본값(오늘) */
+		var oDs = this.parent.getViewDataset();
+		if (oDs) {
+			/* 기본 행(Normal)을 지우고 Insert 상태 행으로 새로 만든다 */
+			oDs.clearData();
+			oDs.addRow();
+			
+			if (this.fvBaseDateField) {
+				var vDate = oDs.getColumn(0, this.fvBaseDateField);
+				if (vDate === undefined || vDate === null || vDate === "") {
+					oDs.setColumn(0, this.fvBaseDateField, this.fn_getToday());
+				}
+			}
+		} else if (this.calBaseDate) {
+			this.calBaseDate.set_value(this.fn_getToday());
+		}
+
+		this.fdgExcel.addEventHandler("onclose", this.fn_fileDialog_onclose, this);
+		this.btnSelect.addEventHandler("onclick", this.fn_btnSelect_onclick, this);
+	};
+
+	this.fn_getToday = function() {
+		var d = new Date();
+		var m = d.getMonth() + 1;
+		var n = d.getDate();
+		return "" + d.getFullYear() + (m < 10 ? "0" + m : m) + (n < 10 ? "0" + n : n);
+	};
+
+	this.fn_setFileName = function(sFileName) {
+		var oDs = this.parent.getViewDataset();
+		if (oDs && this.fvFileNameField) {
+			if (oDs.getRowCount() < 1) {
+				oDs.addRow();
+			}
+			oDs.setColumn(0, this.fvFileNameField, sFileName);
+		} else if (this.edtFileName) {
+			this.edtFileName.set_value(sFileName);
+		}
+	};
+
+	this.fn_btnSelect_onclick = function(obj, e) {
+		/* 1 : FileDialog.LOAD (파일 1개) */
+		this.fdgExcel.open("엑셀 파일 선택", 1);
+	};
+
+	this.fn_fileDialog_onclose = function(obj, e) {
+		var aFiles = e.virtualfiles;
+		if (!aFiles || aFiles.length < 1) {
+			return;		// 취소 : 기존 선택 유지
+		}
+
+		var oFile = aFiles[0];
+		var sName = oFile.filename ? ("" + oFile.filename) : "";
+		if (sName.toLowerCase().lastIndexOf(".xlsx") != sName.length - 5 || sName.length < 6) {
+			this.fn_clearFile();
+			this.alert("xlsx 파일만 업로드할 수 있습니다.");
+			return;
+		}
+
+		this.oUploadFileList = [oFile];
+		this.fn_setFileName(sName);
+	};
+
+	this.fn_clearFile = function() {
+		this.oUploadFileList = [];
+		this.fn_setFileName("");
+	};
+]]>
+          </Script>
+        </View>
+        <View id="viewResult" left="10" top="viewUpload:10" taborder="1" height="200" text="viewResult" right="10">
+          <Layouts>
+            <Layout type="default"/>
+          </Layouts>
+        </View>
+        <View id="viewHistory" left="10" top="viewResult:10" taborder="0" text="viewHistory" right="10" bottom="10" viewdataset="_dstops_uploadLogSelect_ds_output">
           <Layouts>
             <Layout>
               <Grid id="grdList" left="0" top="0" right="0" bottom="0" binddataset="_dstops_uploadLogSelect_ds_output" autofittype="col" _fieldid="grdList" _fieldcomptype="comp">
@@ -38,99 +142,7 @@
                       <Cell id="cell_body_3_0_row_count" col="3" row="0" text="bind:row_count" displaytype="number" edittype="none"/>
                       <Cell id="cell_body_4_0_new_count" col="4" row="0" text="bind:new_count" displaytype="number" edittype="none"/>
                       <Cell id="cell_body_5_0_changed_count" col="5" row="0" text="bind:changed_count" displaytype="number" edittype="none"/>
-                      <Cell id="cell_body_6_0_uploaded_at" col="6" row="0" text="bind:uploaded_at" displaytype="auto" edittype="none"/>
-                    </Band>
-                  </Format>
-                </Formats>
-              </Grid>
-            </Layout>
-          </Layouts>
-          <Objects/>
-          <Script><![CDATA[this._fnViewOnLoad = function(objForm){/* Sets the view form reference so that functions declared in the view can access it */this._ownerForm = objForm;};]]>
-          </Script>
-        </View>
-        <View id="viewHistory01" left="10" top="50%" taborder="2" text="viewHistory" right="10" bottom="10" viewdataset="_dstops_uploadLogSelect_ds_output">
-          <Layouts>
-            <Layout>
-              <Grid id="grdList" left="0" top="0" right="0" bottom="0" binddataset="_dstops_uploadLogSelect_ds_output" autofittype="col" _fieldid="grdList" _fieldcomptype="comp">
-                <Formats>
-                  <Format id="default">
-                    <Columns>
-                      <Column size="100" band="body"/>
-                      <Column size="100" band="body"/>
-                      <Column size="100" band="body"/>
-                      <Column size="100" band="body"/>
-                      <Column size="100" band="body"/>
-                      <Column size="100" band="body"/>
-                      <Column size="100" band="body"/>
-                    </Columns>
-                    <Rows>
-                      <Row size="40" band="head"/>
-                      <Row size="40" band="body"/>
-                    </Rows>
-                    <Band id="head">
-                      <Cell id="cell_head_0_0_회차" col="0" row="0" text="회차"/>
-                      <Cell id="cell_head_1_0_기준일" col="1" row="0" text="기준일"/>
-                      <Cell id="cell_head_2_0_파일명" col="2" row="0" text="파일명"/>
-                      <Cell id="cell_head_3_0_전체" col="3" row="0" text="전체"/>
-                      <Cell id="cell_head_4_0_신규" col="4" row="0" text="신규"/>
-                      <Cell id="cell_head_5_0_변경" col="5" row="0" text="변경"/>
-                      <Cell id="cell_head_6_0_업로드 시각" col="6" row="0" text="업로드 시각"/>
-                    </Band>
-                    <Band id="body">
-                      <Cell id="cell_body_0_0_upload_id" col="0" row="0" text="bind:upload_id" displaytype="number" edittype="none"/>
-                      <Cell id="cell_body_1_0_base_date" col="1" row="0" text="bind:base_date" displaytype="date" edittype="normal" calendardateformat="yyyy-MM-dd" calendardisplaynulltype="none"/>
-                      <Cell id="cell_body_2_0_file_name" col="2" row="0" text="bind:file_name" displaytype="normal" edittype="none"/>
-                      <Cell id="cell_body_3_0_row_count" col="3" row="0" text="bind:row_count" displaytype="number" edittype="none"/>
-                      <Cell id="cell_body_4_0_new_count" col="4" row="0" text="bind:new_count" displaytype="number" edittype="none"/>
-                      <Cell id="cell_body_5_0_changed_count" col="5" row="0" text="bind:changed_count" displaytype="number" edittype="none"/>
-                      <Cell id="cell_body_6_0_uploaded_at" col="6" row="0" text="bind:uploaded_at" displaytype="auto" edittype="none"/>
-                    </Band>
-                  </Format>
-                </Formats>
-              </Grid>
-            </Layout>
-          </Layouts>
-          <Objects/>
-          <Script><![CDATA[this._fnViewOnLoad = function(objForm){/* Sets the view form reference so that functions declared in the view can access it */this._ownerForm = objForm;};]]>
-          </Script>
-        </View>
-        <View id="viewHistory00" left="10" top="50%" taborder="1" text="viewHistory" right="10" bottom="10" viewdataset="_dstops_uploadLogSelect_ds_output">
-          <Layouts>
-            <Layout>
-              <Grid id="grdList" left="0" top="0" right="0" bottom="0" binddataset="_dstops_uploadLogSelect_ds_output" autofittype="col" _fieldid="grdList" _fieldcomptype="comp">
-                <Formats>
-                  <Format id="default">
-                    <Columns>
-                      <Column size="100" band="body"/>
-                      <Column size="100" band="body"/>
-                      <Column size="100" band="body"/>
-                      <Column size="100" band="body"/>
-                      <Column size="100" band="body"/>
-                      <Column size="100" band="body"/>
-                      <Column size="100" band="body"/>
-                    </Columns>
-                    <Rows>
-                      <Row size="40" band="head"/>
-                      <Row size="40" band="body"/>
-                    </Rows>
-                    <Band id="head">
-                      <Cell id="cell_head_0_0_회차" col="0" row="0" text="회차"/>
-                      <Cell id="cell_head_1_0_기준일" col="1" row="0" text="기준일"/>
-                      <Cell id="cell_head_2_0_파일명" col="2" row="0" text="파일명"/>
-                      <Cell id="cell_head_3_0_전체" col="3" row="0" text="전체"/>
-                      <Cell id="cell_head_4_0_신규" col="4" row="0" text="신규"/>
-                      <Cell id="cell_head_5_0_변경" col="5" row="0" text="변경"/>
-                      <Cell id="cell_head_6_0_업로드 시각" col="6" row="0" text="업로드 시각"/>
-                    </Band>
-                    <Band id="body">
-                      <Cell id="cell_body_0_0_upload_id" col="0" row="0" text="bind:upload_id" displaytype="number" edittype="none"/>
-                      <Cell id="cell_body_1_0_base_date" col="1" row="0" text="bind:base_date" displaytype="calendarcontrol" edittype="none" calendardateformat="yyyy-MM-dd" calendardisplaynulltype="none"/>
-                      <Cell id="cell_body_2_0_file_name" col="2" row="0" text="bind:file_name" displaytype="normal" edittype="none"/>
-                      <Cell id="cell_body_3_0_row_count" col="3" row="0" text="bind:row_count" displaytype="number" edittype="none"/>
-                      <Cell id="cell_body_4_0_new_count" col="4" row="0" text="bind:new_count" displaytype="number" edittype="none"/>
-                      <Cell id="cell_body_5_0_changed_count" col="5" row="0" text="bind:changed_count" displaytype="number" edittype="none"/>
-                      <Cell id="cell_body_6_0_uploaded_at" col="6" row="0" text="bind:uploaded_at" displaytype="date" edittype="none" calendardateformat="yyyy-MM-dd HH:mm" calendardisplaynulltype="none"/>
+                      <Cell id="cell_body_6_0_uploaded_at" col="6" row="0" text="bind:uploaded_at" displaytype="normal" edittype="none"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -143,6 +155,15 @@
         </View>
       </Layout>
     </Layouts>
+    <DesignSettings>
+      <InteractionEditor>
+        <NodePositions>
+          <NodePosition id="action:OnLoadView00" x="1605" y="418"/>
+          <NodePosition id="action:Transaction00" x="1604" y="172"/>
+          <NodePosition id="action:Transaction01" x="1291" y="617"/>
+        </NodePositions>
+      </InteractionEditor>
+    </DesignSettings>
     <Script type="xscript5.1"><![CDATA[]]>
     </Script>
     <Objects>
@@ -157,18 +178,7 @@
 }]]>
         </Contents>
       </Transaction>
-      <Dataset id="_dstops_uploadLogSelect_ds_output00">
-        <ColumnInfo>
-          <Column id="upload_id" type="int" size="11" description="업로드 회차"/>
-          <Column id="base_date" type="date" size="10" description="기준일"/>
-          <Column id="file_name" type="string" size="200" description="파일명"/>
-          <Column id="row_count" type="int" size="11" description="전체 건수"/>
-          <Column id="new_count" type="int" size="11" description="신규 건수"/>
-          <Column id="changed_count" type="int" size="11" description="상태 변경 건수"/>
-          <Column id="uploaded_at" type="datetime" size="19" description="업로드 시각"/>
-        </ColumnInfo>
-        <Rows/>
-      </Dataset>
+      <OnLoadView id="OnLoadView00" alias="Form Init"/>
       <Dataset id="_dstops_uploadLogSelect_ds_output">
         <ColumnInfo>
           <Column id="upload_id" type="int" size="11" description="업로드 회차"/>
@@ -181,9 +191,70 @@
         </ColumnInfo>
         <Rows/>
       </Dataset>
+      <Dataset id="_dstops_importTopsExcel__FileMetaInfo00">
+        <ColumnInfo>
+          <Column id="filekey" type="STRING" size="255" description="filekey"/>
+          <Column id="filename" type="STRING" size="255" description="filename"/>
+          <Column id="filesize" type="INT" size="255" description="filesize"/>
+          <Column id="fileext" type="STRING" size="255" description="fileext"/>
+          <Column id="contenttype" type="STRING" size="255" description="contenttype"/>
+          <Column id="nailurl" type="STRING" size="255" description="nailurl"/>
+          <Column id="storedfilename" type="STRING" size="255" description="storedfilename"/>
+          <Column id="filepath" type="STRING" size="1024" description="filepath"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <Transaction id="Transaction01" alias="엑셀 반영" servicemodel="tops::importTopsExcel" serviceurl="NexaLAPServer::api/v1/execute">
+        <Contents><![CDATA[{
+    "inputdatasets": [
+        {
+            "modelid": "_FileMetaInfo",
+            "datasetid": "_dstops_importTopsExcel__FileMetaInfo00"
+        },
+        {
+            "modelid": "ds_input",
+            "datasetid": "_dstops_importTopsExcel_ds_input",
+            "type": "A"
+        }
+    ],
+    "outputdatasets": [
+        {
+            "modelid": "ds_output",
+            "datasetid": "_dstops_importTopsExcel_ds_output00"
+        }
+    ]
+}]]>
+        </Contents>
+      </Transaction>
+      <Dataset id="_dstops_importTopsExcel_ds_output00">
+        <ColumnInfo>
+          <Column id="row_count" type="INT" size="10" description="전체 건수"/>
+          <Column id="new_count" type="INT" size="10" description="신규 건수"/>
+          <Column id="changed_count" type="INT" size="10" description="상태 변경 건수"/>
+          <Column id="upload_id" type="INT" size="10" description="업로드 회차"/>
+        </ColumnInfo>
+        <Rows/>
+      </Dataset>
+      <Dataset id="_dstops_importTopsExcel_ds_input">
+        <ColumnInfo>
+          <Column id="base_date" type="DATE" size="100" description="기준일"/>
+          <Column id="file_name" type="STRING" size="200" description="파일명"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <FileUploadTransfer id="FileUploadTransfer00" alias="엑셀 업로드" targetview="viewUpload" resultdataset="_dstops_importTopsExcel__FileMetaInfo00"/>
     </Objects>
     <Trigger>
       <TriggerItem id="item0" triggertype="onload" triggerview="" triggerobj="" targetaction="Transaction00"/>
+      <TriggerItem id="item1" triggertype="onload" triggerview="" triggerobj="" targetaction="OnLoadView00"/>
+      <TriggerItem id="item4" triggertype="Action Success" triggerview="" triggerobj="Transaction01" targetaction="Transaction00"/>
+      <TriggerItem id="item2" triggertype="Action Success" triggerview="" triggerobj="Transaction01" targetaction="OnLoadView00"/>
+      <TriggerItem id="item6" triggertype="onclick" triggerview="viewUpload" triggerobj="btnUpload" targetaction="FileUploadTransfer00"/>
+      <TriggerItem id="item7" triggertype="Action Success" triggerview="" triggerobj="FileUploadTransfer00" targetaction="Transaction01"/>
     </Trigger>
     <ViewGenerationInfo>
       <ViewInfo viewid="viewHistory">
@@ -195,26 +266,7 @@
             <Field id="row_count" label="전체"/>
             <Field id="new_count" label="신규"/>
             <Field id="changed_count" label="변경"/>
-            <Field id="uploaded_at"/>
-          </Fields>
-          <Components>
-            <Component id="grdList" fields="upload_id,base_date,file_name,row_count,new_count,changed_count,uploaded_at"/>
-          </Components>
-        </ModelInfo>
-        <ViewTemplateInfo filepath="NexaLAP_BasePack/Grid/GridView.viewtemplate">
-          <Attribute id="gridlayout" value="{&amp;quot;columns&amp;quot;:[{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100}],&amp;quot;rows&amp;quot;:[{&amp;quot;band&amp;quot;:&amp;quot;head&amp;quot;,&amp;quot;size&amp;quot;:40},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:40}],&amp;quot;head&amp;quot;:[{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;회차&amp;quot;},{&amp;quot;col&amp;quot;:1,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;기준일&amp;quot;},{&amp;quot;col&amp;quot;:2,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;파일명&amp;quot;},{&amp;quot;col&amp;quot;:3,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;전체&amp;quot;},{&amp;quot;col&amp;quot;:4,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;신규&amp;quot;},{&amp;quot;col&amp;quot;:5,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;변경&amp;quot;},{&amp;quot;col&amp;quot;:6,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;업로드 시각&amp;quot;}],&amp;quot;body&amp;quot;:[{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;upload_id&amp;quot;},{&amp;quot;col&amp;quot;:1,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;base_date&amp;quot;},{&amp;quot;col&amp;quot;:2,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;file_name&amp;quot;},{&amp;quot;col&amp;quot;:3,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;row_count&amp;quot;},{&amp;quot;col&amp;quot;:4,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;new_count&amp;quot;},{&amp;quot;col&amp;quot;:5,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;changed_count&amp;quot;},{&amp;quot;col&amp;quot;:6,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;uploaded_at&amp;quot;}]}"/>
-        </ViewTemplateInfo>
-      </ViewInfo>
-      <ViewInfo viewid="viewHistory00">
-        <ModelInfo modelserviceid="tops" serviceid="uploadLogSelect" modelid="ds_output" datasetid="_dstops_uploadLogSelect_ds_output" filepath=".model\uploadLogSelect.model">
-          <Fields>
-            <Field id="upload_id" label="회차"/>
-            <Field id="base_date"/>
-            <Field id="file_name"/>
-            <Field id="row_count" label="전체"/>
-            <Field id="new_count" label="신규"/>
-            <Field id="changed_count" label="변경"/>
-            <Field id="uploaded_at" options="{&quot;dataformat&quot;:&quot;yyyy-MM-dd HH:mm&quot;}" displaytype="date"/>
+            <Field id="uploaded_at" fieldtype="Date" options="{&quot;dataformat&quot;:&quot;yyyy-MM-dd HH:mm&quot;}" displaytype="normal"/>
           </Fields>
           <Components>
             <Component id="grdList" fields="upload_id,base_date,file_name,row_count,new_count,changed_count,uploaded_at"/>
@@ -223,6 +275,28 @@
         <ViewTemplateInfo filepath="NexaLAP_BasePack/Grid/GridView.viewtemplate">
           <Attribute id="gridlayout" value="{&quot;columns&quot;:[{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100}],&quot;rows&quot;:[{&quot;band&quot;:&quot;head&quot;,&quot;size&quot;:40},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:40}],&quot;head&quot;:[{&quot;col&quot;:0,&quot;row&quot;:0,&quot;text&quot;:&quot;회차&quot;},{&quot;col&quot;:1,&quot;row&quot;:0,&quot;text&quot;:&quot;기준일&quot;},{&quot;col&quot;:2,&quot;row&quot;:0,&quot;text&quot;:&quot;파일명&quot;},{&quot;col&quot;:3,&quot;row&quot;:0,&quot;text&quot;:&quot;전체&quot;},{&quot;col&quot;:4,&quot;row&quot;:0,&quot;text&quot;:&quot;신규&quot;},{&quot;col&quot;:5,&quot;row&quot;:0,&quot;text&quot;:&quot;변경&quot;},{&quot;col&quot;:6,&quot;row&quot;:0,&quot;text&quot;:&quot;업로드 시각&quot;}],&quot;body&quot;:[{&quot;col&quot;:0,&quot;row&quot;:0,&quot;field&quot;:&quot;upload_id&quot;},{&quot;col&quot;:1,&quot;row&quot;:0,&quot;field&quot;:&quot;base_date&quot;},{&quot;col&quot;:2,&quot;row&quot;:0,&quot;field&quot;:&quot;file_name&quot;},{&quot;col&quot;:3,&quot;row&quot;:0,&quot;field&quot;:&quot;row_count&quot;},{&quot;col&quot;:4,&quot;row&quot;:0,&quot;field&quot;:&quot;new_count&quot;},{&quot;col&quot;:5,&quot;row&quot;:0,&quot;field&quot;:&quot;changed_count&quot;},{&quot;col&quot;:6,&quot;row&quot;:0,&quot;field&quot;:&quot;uploaded_at&quot;}]}"/>
         </ViewTemplateInfo>
+      </ViewInfo>
+      <ViewInfo viewid="frmUpload">
+        <ModelInfo modelserviceid="tops" serviceid="importTopsExcel" modelid="_FileMetaInfo" datasetid="_dstops_importTopsExcel__FileMetaInfo00" filepath=".model\importTopsExcel.model"/>
+        <ViewTemplateInfo/>
+        <ModelInfo modelserviceid="tops" serviceid="importTopsExcel" modelid="ds_output" datasetid="_dstops_importTopsExcel_ds_output00" filepath=".model\importTopsExcel.model"/>
+      </ViewInfo>
+      <ViewInfo viewid="viewUpload">
+        <ModelInfo modelserviceid="tops" serviceid="importTopsExcel" modelid="ds_input" datasetid="_dstops_importTopsExcel_ds_input" filepath=".model\importTopsExcel.model">
+          <Fields>
+            <Field id="base_date"/>
+            <Field id="file_name"/>
+          </Fields>
+          <Components>
+            <Component id="staBaseDate" fields="base_date"/>
+            <Component id="calBaseDate" fields="base_date"/>
+            <Component id="staFileName" fields="file_name"/>
+            <Component id="edtFileName" fields="file_name"/>
+            <Component id="btnSelect" fields=""/>
+            <Component id="btnUpload" fields=""/>
+          </Components>
+        </ModelInfo>
+        <ViewTemplateInfo filepath="Tops_Board_Asset/ExcelUploadView.viewtemplate"/>
       </ViewInfo>
     </ViewGenerationInfo>
   </Form>

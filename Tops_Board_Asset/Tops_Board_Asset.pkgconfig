@@ -1,0 +1,21 @@
+{
+  "specVersion": "1.0",
+  "name": "Tops_Board_Asset",
+  "version": "1.0.0",
+  "description": "",
+  "minNexacroVersion": "",
+  "license": "",
+  "manual": "",
+  "icon": "",
+  "publisher": "",
+  "contents": {
+    "assets": [
+      "FileUploadTransfer.nexaobj",
+      "OpenWorkForm.nexaobj",
+      "ExcelUploadView.viewtemplate",
+      "Tops_Board",
+      "ActionLib/TopsActionLib.js"
+    ]
+  },
+  "contentsEditor": []
+}

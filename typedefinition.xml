@@ -102,6 +102,7 @@
     <Component type="JavaScript" id="TCPClientSocket" classname="nexacro.TCPClientSocket"/>
     <Component type="JavaScript" id="BluetoothLE" classname="nexacro.BluetoothLE"/>
     <Component type="JavaScript" id="OpenWorkForm" classname="nexacro.OpenWorkForm"/>
+    <Component type="JavaScript" id="FileUploadTransfer" classname="nexacro.FileUploadTransfer"/>
   </Components>
   <Services>
     <Service prefixid="theme" type="resource" url="./_resource_/_theme_/" version="0" cachelevel="session" include_subdir="true"/>

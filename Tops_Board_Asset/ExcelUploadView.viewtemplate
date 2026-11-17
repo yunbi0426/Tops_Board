@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewTemplateInfo version="2.0">
+  <ViewTemplate id="ExcelUploadView" viewtype="Others" description_en="Base date + single excel file select + upload button"/>
+  <Script version="1.0" type="xscript5.1"><![CDATA[/************************************************************************************************
+ * @FileName    ExcelUploadView
+ * @Description 기준일 + 엑셀 파일 1개 선택 + 업로드 버튼으로 구성된 View
+ *              - 선택한 파일은 View 폼의 oUploadFileList 에 보관 (업로드 Action 이 targetview 로 읽음)
+ *              - 파일 전송 자체는 하지 않음 (Action 담당)
+ ************************************************************************************************/
+
+/************************************************************************************************
+ * Variable Definitions
+ ************************************************************************************************/
+	// Layout
+	this.VIEW_PADDING   = 10;
+	this.COMP_HEIGHT    = 32;
+	this.COMP_GAP       = 8;
+	this.LABEL_GAP      = 6;
+
+	// Default values of view properties
+	this.BASE_DATE_FIELD = "base_date";
+	this.FILE_NAME_FIELD = "file_name";
+	this.FILE_FILTER     = "Excel(*.xlsx)|*.xlsx|";
+	this.SELECT_TEXT     = "파일 선택";
+	this.UPLOAD_TEXT     = "엑셀 업로드";
+
+	// Component ids (업로드 버튼 id 는 Interaction 의 Trigger 대상이므로 고정)
+	this.ID_DIALOG  = "fdgExcel";
+	this.ID_CAL     = "calBaseDate";
+	this.ID_EDIT    = "edtFileName";
+	this.ID_SELECT  = "btnSelect";
+	this.ID_UPLOAD  = "btnUpload";
+
+	// View-related variables
+	this.oFieldArray;
+	this.oContents;
+	this.oViewProperties;
+	this.arrBindItems = [];
+
+/************************************************************************************************
+ * Required Function Area for NexaLAP Studio
+ ************************************************************************************************/
+	this.set_viewProperties = function() {
+		var oViewAttr = {
+			"attributes": [
+				{
+					"id": "basedatefield",
+					"displaytext": "Base date field",
+					"edittype": "String",
+					"defaultvalue": this.BASE_DATE_FIELD,
+					"description": "기준일로 사용할 Model 필드 ID",
+					"group": "Field"
+				},
+				{
+					"id": "filenamefield",
+					"displaytext": "File name field",
+					"edittype": "String",
+					"defaultvalue": this.FILE_NAME_FIELD,
+					"description": "선택한 파일명을 넣을 Model 필드 ID",
+					"group": "Field"
+				},
+				{
+					"id": "filefilter",
+					"displaytext": "File filter",
+					"edittype": "String",
+					"defaultvalue": this.FILE_FILTER,
+					"description": "파일 선택 창 필터",
+					"group": "File"
+				},
+				{
+					"id": "selecttext",
+					"displaytext": "Select button text",
+					"edittype": "String",
+					"defaultvalue": this.SELECT_TEXT,
+					"description": "파일 선택 버튼 문구",
+					"group": "Button"
+				},
+				{
+					"id": "uploadtext",
+					"displaytext": "Upload button text",
+					"edittype": "String",
+					"defaultvalue": this.UPLOAD_TEXT,
+					"description": "업로드 버튼 문구",
+					"group": "Button"
+				}
+			]
+		};
+
+		return JSON.stringify(oViewAttr, null, "\t");
+	};
+
+	this.set_fieldProperties = function() {
+		var oFieldAttr = { "attributes": [] };
+
+		return JSON.stringify(oFieldAttr, null, "\t");
+	};
+
+	/*---------------------------------------------------------------------------------------------*
+	 *                        !!! This function is required by NexaLAP Studio. !!!                 *
+	 *---------------------------------------------------------------------------------------------*/
+	this.main = function(fieldarray, contents, viewproperties) {
+		if (fieldarray) {
+			this.oFieldArray = JSON.parse(fieldarray);
+		}
+
+		if (contents) {
+			this.oContents = JSON.parse(contents);
+
+			// Initialize Model Information
+			this.oContents.View.Model = [];
+
+			// Initialize View layout
+			if (this.oContents.View.View && this.oContents.View.View[0]) {
+				this.oContents.View.View[0].tag = "Layouts";
+				this.oContents.View.View[0].Layouts = [];
+			}
+		}
+
+		if (viewproperties) {
+			this.oViewProperties = JSON.parse(viewproperties);
+		}
+
+		this.arrBindItems = [];
+
+		// Generate model(component) information
+		this.oContents.View.Model = this.fn_GetModel();
+
+		// The viewdataset must be set for binding
+		this.oContents.View.attribute.viewdataset = "${VIEW_DATASET}";
+
+		// Generate object information
+		this.oContents.View.Objects = this.fn_GetObjects();
+
+		// Generate bind information
+		this.oContents.View.Bind = this.fn_GetBind();
+
+		// Generate script information
+		this.oContents.View.Script = this.fn_GetScript();
+
+		return JSON.stringify(this.oContents, null, "\t");
+	};
+
+/************************************************************************************************
+ * Functions Related to the main() Execution Flow
+ ************************************************************************************************/
+	// View property value (없으면 기본값)
+	this.fn_GetProp = function(sId, vDefault) {
+		var oAttr = (this.oViewProperties && this.oViewProperties.attributes) ? this.oViewProperties.attributes : null;
+		if (oAttr && oAttr[sId] !== undefined && oAttr[sId] !== null && oAttr[sId] !== "") {
+			return oAttr[sId];
+		}
+		return vDefault;
+	};
+
+	// Model field 찾기 (없으면 null)
+	this.fn_FindField = function(sFieldId) {
+		var arrFields = (this.oFieldArray && this.oFieldArray.fields) ? this.oFieldArray.fields : [];
+		for (var i = 0; i < arrFields.length; i++) {
+			if (arrFields[i].id == sFieldId) {
+				return arrFields[i];
+			}
+		}
+		return null;
+	};
+
+	this.fn_GetModel = function() {
+		var oModel = [];
+
+		var sDateField = this.fn_GetProp("basedatefield", this.BASE_DATE_FIELD);
+		var sFileField = this.fn_GetProp("filenamefield", this.FILE_NAME_FIELD);
+		var oDateField = this.fn_FindField(sDateField);
+		var oFileField = this.fn_FindField(sFileField);
+
+		var nTop    = this.VIEW_PADDING;
+		var nLeft   = this.VIEW_PADDING;
+		var nHeight = this.COMP_HEIGHT;
+
+		//---------------- 기준일 : Label + Calendar ----------------
+		var oDateLabel = {
+			"tag": "Static",
+			"attribute": {
+				"id": "staBaseDate", "left": nLeft, "top": nTop, "width": 56, "height": nHeight,
+				"text": (oDateField && oDateField.label) ? oDateField.label : "기준일"
+			}
+		};
+		nLeft += 56 + this.LABEL_GAP;
+
+		var oCal = {
+			"tag": "Calendar",
+			"attribute": {
+				"id": this.ID_CAL, "left": nLeft, "top": nTop, "width": 140, "height": nHeight,
+				"dateformat": "yyyy-MM-dd", "editformat": "yyyy-MM-dd"
+			}
+		};
+		nLeft += 140 + this.COMP_GAP * 2;
+
+		if (oDateField) {
+			oDateLabel.attribute._fieldid = sDateField;
+			oDateLabel.attribute._fieldcomptype = "label";
+			oCal.attribute._fieldid = sDateField;
+			oCal.attribute._fieldcomptype = "comp";
+			this.arrBindItems.push({ "compid": this.ID_CAL, "fieldid": sDateField, "propid": "value" });
+		}
+		oModel.push({ "fieldid": oDateField ? sDateField : "", "Components": [oDateLabel, oCal] });
+
+		//---------------- 파일 : Label + Edit(readonly) ----------------
+		var oFileLabel = {
+			"tag": "Static",
+			"attribute": {
+				"id": "staFileName", "left": nLeft, "top": nTop, "width": 40, "height": nHeight,
+				"text": (oFileField && oFileField.label) ? oFileField.label : "파일"
+			}
+		};
+		nLeft += 40 + this.LABEL_GAP;
+
+		var oEdit = {
+			"tag": "Edit",
+			"attribute": {
+				"id": this.ID_EDIT, "left": nLeft, "top": nTop, "width": 300, "height": nHeight,
+				"readonly": "true"
+			}
+		};
+		nLeft += 300 + this.COMP_GAP;
+
+		if (oFileField) {
+			oFileLabel.attribute._fieldid = sFileField;
+			oFileLabel.attribute._fieldcomptype = "label";
+			oEdit.attribute._fieldid = sFileField;
+			oEdit.attribute._fieldcomptype = "comp";
+			this.arrBindItems.push({ "compid": this.ID_EDIT, "fieldid": sFileField, "propid": "value" });
+		}
+		oModel.push({ "fieldid": oFileField ? sFileField : "", "Components": [oFileLabel, oEdit] });
+
+		//---------------- 버튼 : 파일 선택 / 업로드 ----------------
+		var oSelect = {
+			"tag": "Button",
+			"attribute": {
+				"id": this.ID_SELECT, "left": nLeft, "top": nTop, "width": 90, "height": nHeight,
+				"text": this.fn_GetProp("selecttext", this.SELECT_TEXT)
+			}
+		};
+		nLeft += 90 + this.COMP_GAP;
+		oModel.push({ "fieldid": "", "Components": [oSelect] });
+
+		var oUpload = {
+			"tag": "Button",
+			"attribute": {
+				"id": this.ID_UPLOAD, "left": nLeft, "top": nTop, "width": 110, "height": nHeight,
+				"text": this.fn_GetProp("uploadtext", this.UPLOAD_TEXT)
+			}
+		};
+		oModel.push({ "fieldid": "", "Components": [oUpload] });
+
+		return oModel;
+	};
+
+	this.fn_GetObjects = function() {
+		var oObjects = [];
+
+		oObjects.push({
+			"tag": "FileDialog",
+			"attribute": {
+				"id": this.ID_DIALOG,
+				"filter": this.fn_GetProp("filefilter", this.FILE_FILTER)
+			}
+		});
+
+		return oObjects;
+	};
+
+	this.fn_GetBind = function() {
+		var oBind = [];
+		var oBindItems = [];
+
+		for (var i = 0; i < this.arrBindItems.length; i++) {
+			oBindItems.push({
+				"tag": "BindItem",
+				"attribute": {
+					"id": "bind_" + this.arrBindItems[i].compid,
+					"compid": this.arrBindItems[i].compid,
+					"propid": this.arrBindItems[i].propid,
+					"datasetid": "${VIEW_DATASET}",
+					"columnid": this.arrBindItems[i].fieldid
+				}
+			});
+		}
+
+		if (oBindItems.length > 0) {
+			oBind.push({ "tag": "Bind", "Bind": oBindItems });
+		}
+
+		return oBind;
+	};
+
+	// 함수를 "this.<name> = function..." 문자열로 변환
+	this.fn_FuncString = function(sName) {
+		return "\n\tthis." + sName + " = " + this[sName].toString() + ";\n";
+	};
+
+	this.fn_GetScript = function() {
+		var sDateField = this.fn_FindField(this.fn_GetProp("basedatefield", this.BASE_DATE_FIELD)) ? this.fn_GetProp("basedatefield", this.BASE_DATE_FIELD) : "";
+		var sFileField = this.fn_FindField(this.fn_GetProp("filenamefield", this.FILE_NAME_FIELD)) ? this.fn_GetProp("filenamefield", this.FILE_NAME_FIELD) : "";
+
+		// 실행 시점에 View 스크립트가 참조할 필드 ID
+		var sValue = "\n\tthis.fvBaseDateField = " + JSON.stringify(sDateField) + ";"
+		           + "\n\tthis.fvFileNameField = " + JSON.stringify(sFileField) + ";\n";
+
+		sValue += this.fn_FuncString("_fnViewOnLoad");
+		sValue += this.fn_FuncString("fn_getToday");
+		sValue += this.fn_FuncString("fn_setFileName");
+		sValue += this.fn_FuncString("fn_btnSelect_onclick");
+		sValue += this.fn_FuncString("fn_fileDialog_onclose");
+		sValue += this.fn_FuncString("fn_clearFile");
+
+		return {
+			"tag": "Script",
+			"attribute": { "type": "xscript5.1" },
+			"value": sValue
+		};
+	};
+
+/************************************************************************************************
+ * Runtime Functions (생성된 View 안에서 실행되는 함수. this = View 내부 폼)
+ ************************************************************************************************/
+	this._fnViewOnLoad = function(objForm) {
+		/* Sets the view form reference so that functions declared in the view can access it */
+		this._ownerForm = objForm;
+
+		/* 업로드 Action 이 읽어가는 파일 목록 */
+		this.oUploadFileList = [];
+
+		/* View Dataset : 1행 보장 + 기준일 기본값(오늘) */
+		var oDs = this.parent.getViewDataset();
+		if (oDs) {
+			/* 기본 행(Normal)을 지우고 Insert 상태 행으로 새로 만든다 */
+			oDs.clearData();
+			oDs.addRow();
+			
+			if (this.fvBaseDateField) {
+				var vDate = oDs.getColumn(0, this.fvBaseDateField);
+				if (vDate === undefined || vDate === null || vDate === "") {
+					oDs.setColumn(0, this.fvBaseDateField, this.fn_getToday());
+				}
+			}
+		} else if (this.calBaseDate) {
+			this.calBaseDate.set_value(this.fn_getToday());
+		}
+
+		this.fdgExcel.addEventHandler("onclose", this.fn_fileDialog_onclose, this);
+		this.btnSelect.addEventHandler("onclick", this.fn_btnSelect_onclick, this);
+	};
+
+	this.fn_getToday = function() {
+		var d = new Date();
+		var m = d.getMonth() + 1;
+		var n = d.getDate();
+		return "" + d.getFullYear() + (m < 10 ? "0" + m : m) + (n < 10 ? "0" + n : n);
+	};
+
+	this.fn_setFileName = function(sFileName) {
+		var oDs = this.parent.getViewDataset();
+		if (oDs && this.fvFileNameField) {
+			if (oDs.getRowCount() < 1) {
+				oDs.addRow();
+			}
+			oDs.setColumn(0, this.fvFileNameField, sFileName);
+		} else if (this.edtFileName) {
+			this.edtFileName.set_value(sFileName);
+		}
+	};
+
+	this.fn_btnSelect_onclick = function(obj, e) {
+		/* 1 : FileDialog.LOAD (파일 1개) */
+		this.fdgExcel.open("엑셀 파일 선택", 1);
+	};
+
+	this.fn_fileDialog_onclose = function(obj, e) {
+		var aFiles = e.virtualfiles;
+		if (!aFiles || aFiles.length < 1) {
+			return;		// 취소 : 기존 선택 유지
+		}
+
+		var oFile = aFiles[0];
+		var sName = oFile.filename ? ("" + oFile.filename) : "";
+		if (sName.toLowerCase().lastIndexOf(".xlsx") != sName.length - 5 || sName.length < 6) {
+			this.fn_clearFile();
+			this.alert("xlsx 파일만 업로드할 수 있습니다.");
+			return;
+		}
+
+		this.oUploadFileList = [oFile];
+		this.fn_setFileName(sName);
+	};
+
+	/* 업로드 완료 후 선택 초기화가 필요할 때 호출 */
+	this.fn_clearFile = function() {
+		this.oUploadFileList = [];
+		this.fn_setFileName("");
+	};
+]]>
+  </Script>
+  <TestData>
+    <TestFields><![CDATA[{
+    "fields": [
+        {"id": "base_date", "label": "기준일", "uselabel": "true", "editable": "true", "fieldtype": "Date", "datatype": "DATE", "datasize": "10", "required": "false", "description_ENG": "", "description_KOR": "", "description_JPN": "", "options": {"dataformat": "yyyy-MM-dd"}},
+        {"id": "file_name", "label": "파일", "uselabel": "true", "editable": "true", "fieldtype": "Text", "datatype": "STRING", "datasize": "200", "required": "false", "description_ENG": "", "description_KOR": "", "description_JPN": "", "options": ""}
+    ]
+}]]>
+    </TestFields>
+    <TestViewProperties><![CDATA[{
+    "attributes": {
+        "basedatefield": "base_date",
+        "filenamefield": "file_name",
+        "filefilter": "Excel(*.xlsx)|*.xlsx|",
+        "selecttext": "파일 선택",
+        "uploadtext": "엑셀 업로드"
+    }
+}]]>
+    </TestViewProperties>
+  </TestData>
+</ViewTemplateInfo>

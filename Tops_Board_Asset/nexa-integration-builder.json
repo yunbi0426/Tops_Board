@@ -6,5 +6,10 @@
         "exclude": [
             "runtime"
         ]
+    },
+    "runtime": {
+        "libraryScripts": [
+            "ActionLib/TopsActionLib.js"
+        ]
     }
 }

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NexacroObject version="1.0" type="Action">
+  <MetaInfo version="2.0" locale="ENG">
+    <Object id="nexacro.FileUploadTransfer">
+      <ObjectInfo classname="nexacro.FileUploadTransfer" inheritance="nexacro.Action" shorttypename="FileUploadTransfer" group="Action" registration="allow" contents="true" formats="false" contentseditor="auto" container="false" csstypename="" csscontrolname="" subgroup="Action" edittype="action" useinitvalue="false" composite="false" tabstop="false" cssstyle="false" csspseudo="" defaultwidth="" defaultheight="" popup="false" dblclickevent="" a11yprop="" finalclass="false" edittypecomponent="" requirement="" description=""/>
+      <ContentsInfo contentsformat="json" contentseditor="auto" contentstype="contents" showpreview="false" showobjtree="false" showproperties="false"/>
+      <PropertyInfo>
+        <Property name="resultdataset" group="" subgroup="" refreshinfo="" displayinfo="" edittype="DatasetID" defaultvalue="" readonly="false" configurable="true" initonly="false" hidden="false" control="false" expr="false" enumerable="true" bind="false" unused="false" mandatory="false" enuminfo="" enuminfo2="" unitinfo="" delimiter="" requirement="" description="" csspropertyname="" normalpropertyname="" stringrc="false" defaultstringrc="false"/>
+        <Property name="targetview" group="" subgroup="" refreshinfo="" displayinfo="" edittype="ViewObjList" readonly="false" initonly="false" hidden="false" control="false" expr="false" bind="false" deprecated="false" unused="false" mandatory="false" objectinfo="" enuminfo="" enuminfo2="" unitinfo="" delimiter="" requirement="Edge,Chrome,Safari,Firefox,Opera,Windows NRE,macOS NRE,Android NRE,iOS/iPadOS NRE,Android Default Web Browser,iOS/iPadOS Default Web Browser" description="Action을 수행할 View 오브젝트를 설정하는 속성입니다." csspropertyname="" normalpropertyname="targetview" stringrc="false" defaultstringrc="false"/>
+      </PropertyInfo>
+      <MethodInfo/>
+      <EventHandlerInfo/>
+      <StatusInfo/>
+      <ControlInfo/>
+      <CSSInfo>
+        <PropertyInfo/>
+      </CSSInfo>
+    </Object>
+  </MetaInfo>
+  <ScriptConfig version="1.0"><![CDATA[{
+	"members": [
+		{
+			"name": "run",
+			"body": "let oView = this.getTargetView();\nlet oViewForm = oView ? oView.form : null;\nlet aFiles = oViewForm ? oViewForm.oUploadFileList : null;\n\n// 선택된 파일이 없으면 여기서 끝\nif (!aFiles || aFiles.length < 1) {\n    this.on_fire_onerror();\n    return;\n}\n\nlet oUploader = this._getUploader();\noUploader.clearFileList();\noUploader.clearPostDataList();\n\nfor (let i = 0; i < aFiles.length; i++) {\n    oUploader.addFile(\"file\" + i, aFiles[i]);\n}\n\n// @ts-ignore : TopsActionLib.js(runtime.libraryScripts)에 정의\noUploader.setPostData(\"project\", this.topsGetProjectName());\n// Excel Import 노드는 tempFiles 에서만 파일을 읽으므로 storagetype 을 지정하지 않는다\n\noUploader.upload(this._UPLOAD_URL);"
+		},
+		{
+			"name": "contents",
+			"body": "nexacro.Action.prototype._setContents.call(this, v);\n\n// TODO : enter your code here."
+		},
+		{
+			"name": "property:resultdataset",
+			"body": "if (this._p_resultdataset != v)\n{\n    this._p_resultdataset = v;\n    // TODO : enter your code here.\n}"
+		},
+		{
+			"name": "property:uploadurl",
+			"body": "if (this._p_uploadurl != v)\n{\n    this._p_uploadurl = v;\n    // TODO : enter your code here.\n}"
+		}
+	],
+	"extraCode": "// NexaLAP Server 고정 업로드 경로 (FileUpDownloadController /file/upload)\r\nnexacro.FileUploadTransfer.prototype._UPLOAD_URL = \"NexaLAPServer::file/upload\";\r\n\r\n// 전송 객체는 Action이 속한 폼에 한 번만 만든다\r\nnexacro.FileUploadTransfer.prototype._getUploader = function ()\r\n{\r\n    let oForm = this._p_parent ? this._p_parent : this.parent;\r\n    let sId = \"_\" + this._p_name + \"_uploader\";\r\n\r\n    if (!oForm[sId]) {\r\n        let oUploader = new nexacro.FileUpTransfer(sId, oForm);\r\n        oForm.addChild(sId, oUploader);\r\n        oUploader.addEventHandler(\"onsuccess\", this._onUploadSuccess, this);\r\n        oUploader.addEventHandler(\"onerror\", this._onUploadError, this);\r\n    }\r\n    return oForm[sId];\r\n};\r\n\r\n// 서버 응답 Dataset(_FileMetaInfo)을 resultdataset 으로 복사\r\nnexacro.FileUploadTransfer.prototype._onUploadSuccess = function (obj, e)\r\n{\r\n    let oForm = this._p_parent ? this._p_parent : this.parent;\r\n    let oResult = this._p_resultdataset ? oForm[this._p_resultdataset] : null;\r\n\r\n    if (oResult && e.datasets && e.datasets.length > 0) {\r\n        oResult.copyData(e.datasets[0], false);\r\n    }\r\n    this.on_fire_onsuccess();\r\n};\r\n\r\nnexacro.FileUploadTransfer.prototype._onUploadError = function (obj, e)\r\n{\r\n    this.on_fire_onerror();\r\n};"
+}]]>
+  </ScriptConfig>
+  <Script type="xscript5.1"><![CDATA[//==============================================================================
+// Define the Action.
+//==============================================================================
+//==============================================================================
+// Object : nexacro.FileUploadTransfer
+// Group : Action
+//==============================================================================
+if (!nexacro.FileUploadTransfer)
+{
+    nexacro.FileUploadTransfer = function (id, parent)
+    {
+        nexacro.Action.call(this, id, parent);
+    };
+
+    nexacro.FileUploadTransfer.prototype = nexacro._createPrototype(nexacro.Action, nexacro.FileUploadTransfer);
+    nexacro.FileUploadTransfer.prototype._type_name = "FileUploadTransfer";
+
+    //===============================================================
+    // nexacro.FileUploadTransfer : Method
+    //===============================================================
+    nexacro.FileUploadTransfer.prototype.run = function ()
+    {
+        let oView = this.getTargetView();
+        let oViewForm = oView ? oView.form : null;
+        let aFiles = oViewForm ? oViewForm.oUploadFileList : null;
+
+        // 선택된 파일이 없으면 여기서 끝
+        if (!aFiles || aFiles.length < 1) {
+            this.on_fire_onerror();
+            return;
+        }
+
+        let oUploader = this._getUploader();
+        oUploader.clearFileList();
+        oUploader.clearPostDataList();
+
+        for (let i = 0; i < aFiles.length; i++) {
+            oUploader.addFile("file" + i, aFiles[i]);
+        }
+
+        // @ts-ignore : TopsActionLib.js(runtime.libraryScripts)에 정의
+        oUploader.setPostData("project", this.topsGetProjectName());
+        // Excel Import 노드는 tempFiles 에서만 파일을 읽으므로 storagetype 을 지정하지 않는다
+
+        oUploader.upload(this._UPLOAD_URL);
+    };
+
+    //===============================================================
+    // nexacro.FileUploadTransfer : Contents
+    //===============================================================
+    nexacro.FileUploadTransfer.prototype._p_contents = "";
+    nexacro.FileUploadTransfer.prototype.set_contents = function (v)
+    {
+        if (this._p_contents != v)
+        {
+            this._p_contents = v;
+            this._setContents(this._p_contents);
+        }
+    };
+
+    Object.defineProperty(nexacro.FileUploadTransfer.prototype, "contents", {
+        get: new Function("return this._p_contents"),
+        set: nexacro.FileUploadTransfer.prototype["set_contents"],
+        enumerable: true,
+        configurable: true
+    });
+
+    nexacro.FileUploadTransfer.prototype._setContents = function (v)
+    {
+        // This function is necessary to apply contents in the run environment.
+        nexacro.Action.prototype._setContents.call(this, v);
+
+        // TODO : enter your code here.
+    };
+
+    //===============================================================
+    // nexacro.FileUploadTransfer : Declared Properties
+    //===============================================================
+    nexacro.FileUploadTransfer.prototype._p_resultdataset = "";
+    nexacro.FileUploadTransfer.prototype.set_resultdataset = function (v)
+    {
+        if (this._p_resultdataset != v)
+        {
+            this._p_resultdataset = v;
+            // TODO : enter your code here.
+        }
+    };
+
+    nexacro.FileUploadTransfer.prototype._properties = [{name: "resultdataset"}];
+    nexacro._defineProperties(nexacro.FileUploadTransfer.prototype, nexacro.FileUploadTransfer.prototype._properties);
+
+    // NexaLAP Server 고정 업로드 경로 (FileUpDownloadController /file/upload)
+    nexacro.FileUploadTransfer.prototype._UPLOAD_URL = "NexaLAPServer::file/upload";
+
+    // 전송 객체는 Action이 속한 폼에 한 번만 만든다
+    nexacro.FileUploadTransfer.prototype._getUploader = function ()
+    {
+        let oForm = this._p_parent ? this._p_parent : this.parent;
+        let sId = "_" + this._p_name + "_uploader";
+
+        if (!oForm[sId]) {
+            let oUploader = new nexacro.FileUpTransfer(sId, oForm);
+            oForm.addChild(sId, oUploader);
+            oUploader.addEventHandler("onsuccess", this._onUploadSuccess, this);
+            oUploader.addEventHandler("onerror", this._onUploadError, this);
+        }
+        return oForm[sId];
+    };
+
+    // 서버 응답 Dataset(_FileMetaInfo)을 resultdataset 으로 복사
+    nexacro.FileUploadTransfer.prototype._onUploadSuccess = function (obj, e)
+    {
+        let oForm = this._p_parent ? this._p_parent : this.parent;
+        let oResult = this._p_resultdataset ? oForm[this._p_resultdataset] : null;
+
+        if (oResult && e.datasets && e.datasets.length > 0) {
+            oResult.copyData(e.datasets[0], false);
+        }
+        this.on_fire_onsuccess();
+    };
+
+    nexacro.FileUploadTransfer.prototype._onUploadError = function (obj, e)
+    {
+        this.on_fire_onerror();
+    };
+
+}]]>
+  </Script>
+  <DesignScriptConfig version="1.0"><![CDATA[{
+	"version": "1.0",
+	"body": "nexacro.FileUploadTransfer.prototype.run = nexacro._emptyFn;"
+}]]>
+  </DesignScriptConfig>
+  <DesignScript type="xscript5.1"><![CDATA[//==============================================================================
+//	Define the code to be applied in the Form Design of nexacrostudio.
+//==============================================================================
+//==============================================================================
+// Object : nexacro.FileUploadTransfer
+// Group : Action
+//==============================================================================
+if (nexacro.FileUploadTransfer) 
+{
+    //===============================================================
+    // nexacro.FileUploadTransfer : Method
+    //===============================================================
+    nexacro.FileUploadTransfer.prototype.run = nexacro._emptyFn;
+}]]>
+  </DesignScript>
+</NexacroObject>
