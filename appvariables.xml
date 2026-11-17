@@ -20,6 +20,8 @@
         <Column id="MENU_URL" type="STRING" size="80"/>
         <Column id="MENU_LV" type="STRING" size="80"/>
         <Column id="MENU_GROUP_ID" type="STRING" size="80"/>
+        <Column id="PAGE_TITLE" type="STRING" size="80"/>
+        <Column id="PAGE_DESC" type="STRING" size="80"/>
       </ColumnInfo>
       <Rows>
         <Row>
@@ -27,24 +29,32 @@
           <Col id="MENU_NM">Dashboard</Col>
           <Col id="MENU_URL">Base::frmDashboard.xfdl</Col>
           <Col id="MENU_LV">0</Col>
+          <Col id="PAGE_TITLE">대시보드</Col>
+          <Col id="PAGE_DESC">TOPS 요구사항 처리 현황</Col>
         </Row>
         <Row>
           <Col id="MENU_ID">DETAILS</Col>
           <Col id="MENU_NM">Details</Col>
           <Col id="MENU_URL">Base::frmDetails.xfdl</Col>
           <Col id="MENU_LV">0</Col>
+          <Col id="PAGE_TITLE">요구사항</Col>
+          <Col id="PAGE_DESC">요구사항 목록 · 상세 조회</Col>
         </Row>
         <Row>
           <Col id="MENU_LV">0</Col>
           <Col id="MENU_ID">UPLOAD</Col>
           <Col id="MENU_NM">Upload</Col>
           <Col id="MENU_URL">Base::frmUpload.xfdl</Col>
+          <Col id="PAGE_TITLE">업로드</Col>
+          <Col id="PAGE_DESC">TOPS 엑셀 업로드 · 이력</Col>
         </Row>
         <Row>
           <Col id="MENU_ID">EXPORT</Col>
           <Col id="MENU_NM">Export</Col>
           <Col id="MENU_URL">Base::frmExport.xfdl</Col>
           <Col id="MENU_LV">0</Col>
+          <Col id="PAGE_TITLE">내보내기</Col>
+          <Col id="PAGE_DESC">통계 보고서 엑셀 내보내기</Col>
         </Row>
       </Rows>
     </Dataset>

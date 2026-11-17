@@ -3,12 +3,22 @@
   <Form id="frmWork" width="1280" height="670">
     <Layouts>
       <Layout width="1280" height="670">
-        <Div id="div_work" left="0" top="0" taborder="0" text="div_work" right="0" bottom="0" url="Base::frmUpload.xfdl">
+        <Static id="staPageTitle" left="0" top="0" taborder="1" height="50" right="0" usedecorate="true" padding="0px 20px"/>
+        <Div id="div_work" left="0" top="staPageTitle:0" taborder="0" text="div_work" right="0" bottom="0" url="Base::frmUpload.xfdl">
           <Layouts>
             <Layout/>
           </Layouts>
         </Div>
       </Layout>
     </Layouts>
+    <Trigger>
+      <TriggerItem id="item0" triggertype="onload" triggerview="" triggerobj="" targetaction="RunScript00"/>
+    </Trigger>
+    <Objects>
+      <RunScript id="RunScript00" alias="Title 표시">
+        <Contents><![CDATA[`nexacro.getEnvironment().fnSetPageTitle(this.div_work.url);`]]>
+        </Contents>
+      </RunScript>
+    </Objects>
   </Form>
 </FDL>

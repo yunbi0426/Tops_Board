@@ -29,8 +29,35 @@ objEnv.fnOpenForm = function (sMenuId, bPopup) {
     var url = ds.getColumn(nRow, "MENU_URL");
     var compDivWork = app.mainframe.vfrs.frmWork.form.div_work;
     if (url && compDivWork) {
-        compDivWork.set_url(url)
+        compDivWork.set_url(url);
+        objEnv.fnSetPageTitle(url);
     };
+};
+
+// frmWork 제목 줄(staPageTitle)을 gdsMenu의 PAGE_TITLE / PAGE_DESC로 갱신
+objEnv.fnSetPageTitle = function (sUrl) {
+    var app = nexacro.getApplication();
+    var oWorkForm = app.mainframe.vfrs.frmWork.form;
+    var oTitle = oWorkForm ? oWorkForm.staPageTitle : null;
+    if (!oTitle) {
+        return;
+    }
+
+    var ds = app.gdsMenu;
+    var nRow = ds.findRow("MENU_URL", sUrl);
+    if (nRow < 0) {
+        oTitle.set_text("");
+        return;
+    }
+
+    var sTitle = ds.getColumn(nRow, "PAGE_TITLE") || ds.getColumn(nRow, "MENU_NM") || "";
+    var sDesc  = ds.getColumn(nRow, "PAGE_DESC") || "";
+
+    var sText = "<b v='true'><fs v='16'>" + sTitle + "</fs></b>";
+    if (sDesc) {
+        sText += "   <fc v='#6B7280'>" + sDesc + "</fc>";
+    }
+    oTitle.set_text(sText);
 };
 ]]>
   </Script>
