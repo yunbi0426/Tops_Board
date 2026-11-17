@@ -3,16 +3,199 @@
   <Form id="frmDetails" width="1050" height="736" titletext="New Form">
     <Layouts>
       <Layout width="1050" height="736">
-        <View id="Master" taborder="0" viewtype="Freeform" viewdataset="viewdataset" text="Details" left="10" top="10" right="10" bottom="10">
+        <View id="Master" taborder="0" viewtype="Freeform" viewdataset="_dstops_svcTest_ds_output" text="Details" left="10" top="10" right="10" bottom="10">
           <Layouts>
-            <Layout/>
+            <Layout>
+              <Grid id="grdList" left="0" top="0" right="0" bottom="0" binddataset="_dstops_svcTest_ds_output" autofittype="col" _fieldid="grdList" _fieldcomptype="comp">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="40" band="head"/>
+                      <Row size="40" band="body"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell id="cell_head_0_0_RP" col="0" row="0" text="RP"/>
+                      <Cell id="cell_head_1_0_RC" col="1" row="0" text="RC"/>
+                      <Cell id="cell_head_2_0_상태" col="2" row="0" text="상태"/>
+                      <Cell id="cell_head_3_0_요구종류" col="3" row="0" text="요구종류"/>
+                      <Cell id="cell_head_4_0_버그종류" col="4" row="0" text="버그종류"/>
+                      <Cell id="cell_head_5_0_제품-모듈" col="5" row="0" text="제품-모듈"/>
+                      <Cell id="cell_head_6_0_요구처" col="6" row="0" text="요구처"/>
+                      <Cell id="cell_head_7_0_작업패치" col="7" row="0" text="작업패치"/>
+                      <Cell id="cell_head_8_0_배포패치" col="8" row="0" text="배포패치"/>
+                      <Cell id="cell_head_9_0_등록자" col="9" row="0" text="등록자"/>
+                      <Cell id="cell_head_10_0_작업자" col="10" row="0" text="작업자"/>
+                      <Cell id="cell_head_11_0_개발자" col="11" row="0" text="개발자"/>
+                      <Cell id="cell_head_12_0_검수자" col="12" row="0" text="검수자"/>
+                      <Cell id="cell_head_13_0_등록일자" col="13" row="0" text="등록일자"/>
+                      <Cell id="cell_head_14_0_최종작업일" col="14" row="0" text="최종작업일"/>
+                      <Cell id="cell_head_15_0_검수일" col="15" row="0" text="검수일"/>
+                      <Cell id="cell_head_16_0_제목" col="16" row="0" text="제목"/>
+                      <Cell id="cell_head_17_0_등록" col="17" row="0" text="등록"/>
+                      <Cell id="cell_head_18_0_접수" col="18" row="0" text="접수"/>
+                      <Cell id="cell_head_19_0_분석" col="19" row="0" text="분석"/>
+                      <Cell id="cell_head_20_0_설계" col="20" row="0" text="설계"/>
+                      <Cell id="cell_head_21_0_구현" col="21" row="0" text="구현"/>
+                      <Cell id="cell_head_22_0_구현상세" col="22" row="0" text="구현상세"/>
+                      <Cell id="cell_head_23_0_검수" col="23" row="0" text="검수"/>
+                      <Cell id="cell_head_24_0_업로드 회차" col="24" row="0" text="업로드 회차"/>
+                      <Cell id="cell_head_25_0_반영 시각" col="25" row="0" text="반영 시각"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell id="cell_body_0_0_rp" col="0" row="0" text="bind:rp" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_1_0_rc" col="1" row="0" text="bind:rc" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_2_0_status" col="2" row="0" text="bind:status" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_3_0_req_type" col="3" row="0" text="bind:req_type" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_4_0_bug_type" col="4" row="0" text="bind:bug_type" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_5_0_product_module" col="5" row="0" text="bind:product_module" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_6_0_requester" col="6" row="0" text="bind:requester" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_7_0_work_patch" col="7" row="0" text="bind:work_patch" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_8_0_deploy_patch" col="8" row="0" text="bind:deploy_patch" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_9_0_reg_user" col="9" row="0" text="bind:reg_user" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_10_0_worker" col="10" row="0" text="bind:worker" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_11_0_developer" col="11" row="0" text="bind:developer" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_12_0_inspector" col="12" row="0" text="bind:inspector" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_13_0_reg_date" col="13" row="0" text="bind:reg_date" displaytype="calendarcontrol" edittype="none" calendardateformat="yyyy-MM-dd" calendardisplaynulltype="none"/>
+                      <Cell id="cell_body_14_0_last_work_date" col="14" row="0" text="bind:last_work_date" displaytype="calendarcontrol" edittype="none" calendardateformat="yyyy-MM-dd" calendardisplaynulltype="none"/>
+                      <Cell id="cell_body_15_0_inspect_date" col="15" row="0" text="bind:inspect_date" displaytype="calendarcontrol" edittype="none" calendardateformat="yyyy-MM-dd" calendardisplaynulltype="none"/>
+                      <Cell id="cell_body_16_0_title" col="16" row="0" text="bind:title" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_17_0_txt_reg" col="17" row="0" text="bind:txt_reg" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_18_0_txt_receipt" col="18" row="0" text="bind:txt_receipt" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_19_0_txt_analysis" col="19" row="0" text="bind:txt_analysis" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_20_0_txt_design" col="20" row="0" text="bind:txt_design" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_21_0_txt_impl" col="21" row="0" text="bind:txt_impl" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_22_0_txt_impl_detail" col="22" row="0" text="bind:txt_impl_detail" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_23_0_txt_inspect" col="23" row="0" text="bind:txt_inspect" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_24_0_upload_id" col="24" row="0" text="bind:upload_id" displaytype="number" edittype="none"/>
+                      <Cell id="cell_body_25_0_updated_at" col="25" row="0" text="bind:updated_at" displaytype="auto" edittype="none"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+            </Layout>
           </Layouts>
+          <Objects/>
+          <Script><![CDATA[this._fnViewOnLoad = function(objForm){/* Sets the view form reference so that functions declared in the view can access it */this._ownerForm = objForm;};]]>
+          </Script>
         </View>
       </Layout>
     </Layouts>
     <Script type="xscript5.1"><![CDATA[]]>
     </Script>
-    <Objects/>
-    <Trigger/>
+    <Objects>
+      <Dataset id="_dstops_svcTest_ds_output">
+        <ColumnInfo>
+          <Column id="rp" type="string" size="10" description="RP"/>
+          <Column id="rc" type="string" size="10" description="RC"/>
+          <Column id="status" type="string" size="20" description="상태"/>
+          <Column id="req_type" type="string" size="10" description="요구종류"/>
+          <Column id="bug_type" type="string" size="20" description="버그종류"/>
+          <Column id="product_module" type="string" size="100" description="제품-모듈"/>
+          <Column id="requester" type="string" size="200" description="요구처"/>
+          <Column id="work_patch" type="string" size="50" description="작업패치"/>
+          <Column id="deploy_patch" type="string" size="50" description="배포패치"/>
+          <Column id="reg_user" type="string" size="50" description="등록자"/>
+          <Column id="worker" type="string" size="50" description="작업자"/>
+          <Column id="developer" type="string" size="50" description="개발자"/>
+          <Column id="inspector" type="string" size="50" description="검수자"/>
+          <Column id="reg_date" type="date" size="10" description="등록일자"/>
+          <Column id="last_work_date" type="date" size="10" description="최종작업일"/>
+          <Column id="inspect_date" type="date" size="10" description="검수일"/>
+          <Column id="title" type="string" size="500" description="제목"/>
+          <Column id="txt_reg" type="string" size="65535" description="등록"/>
+          <Column id="txt_receipt" type="string" size="65535" description="접수"/>
+          <Column id="txt_analysis" type="string" size="65535" description="분석"/>
+          <Column id="txt_design" type="string" size="65535" description="설계"/>
+          <Column id="txt_impl" type="string" size="65535" description="구현"/>
+          <Column id="txt_impl_detail" type="string" size="65535" description="구현상세"/>
+          <Column id="txt_inspect" type="string" size="65535" description="검수"/>
+          <Column id="upload_id" type="int" size="11" description="업로드 회차"/>
+          <Column id="updated_at" type="datetime" size="19" description="반영 시각"/>
+        </ColumnInfo>
+        <Rows/>
+      </Dataset>
+      <Transaction id="Transaction00" alias="test" servicemodel="tops::svcTest" serviceurl="NexaLAPServer::api/v1/execute">
+        <Contents><![CDATA[{
+    "outputdatasets": [
+        {
+            "modelid": "ds_output",
+            "datasetid": "_dstops_svcTest_ds_output"
+        }
+    ]
+}]]>
+        </Contents>
+      </Transaction>
+    </Objects>
+    <Trigger>
+      <TriggerItem id="item0" triggertype="onload" triggerview="" triggerobj="" targetaction="Transaction00"/>
+    </Trigger>
+    <ViewGenerationInfo>
+      <ViewInfo viewid="Master">
+        <ModelInfo modelserviceid="tops" serviceid="svcTest" modelid="ds_output" datasetid="_dstops_svcTest_ds_output" filepath=".model\svcTest.model">
+          <Fields>
+            <Field id="rp"/>
+            <Field id="rc"/>
+            <Field id="status"/>
+            <Field id="req_type"/>
+            <Field id="bug_type"/>
+            <Field id="product_module"/>
+            <Field id="requester"/>
+            <Field id="work_patch"/>
+            <Field id="deploy_patch"/>
+            <Field id="reg_user"/>
+            <Field id="worker"/>
+            <Field id="developer"/>
+            <Field id="inspector"/>
+            <Field id="reg_date"/>
+            <Field id="last_work_date"/>
+            <Field id="inspect_date"/>
+            <Field id="title"/>
+            <Field id="txt_reg"/>
+            <Field id="txt_receipt"/>
+            <Field id="txt_analysis"/>
+            <Field id="txt_design"/>
+            <Field id="txt_impl"/>
+            <Field id="txt_impl_detail"/>
+            <Field id="txt_inspect"/>
+            <Field id="upload_id"/>
+            <Field id="updated_at"/>
+          </Fields>
+          <Components>
+            <Component id="grdList" fields="rp,rc,status,req_type,bug_type,product_module,requester,work_patch,deploy_patch,reg_user,worker,developer,inspector,reg_date,last_work_date,inspect_date,title,txt_reg,txt_receipt,txt_analysis,txt_design,txt_impl,txt_impl_detail,txt_inspect,upload_id,updated_at"/>
+          </Components>
+        </ModelInfo>
+        <ViewTemplateInfo filepath="NexaLAP_BasePack/Grid/GridView.viewtemplate">
+          <Attribute id="gridlayout" value="{&amp;quot;columns&amp;quot;:[{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100}],&amp;quot;rows&amp;quot;:[{&amp;quot;band&amp;quot;:&amp;quot;head&amp;quot;,&amp;quot;size&amp;quot;:40},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:40}],&amp;quot;head&amp;quot;:[{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;RP&amp;quot;},{&amp;quot;col&amp;quot;:1,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;RC&amp;quot;},{&amp;quot;col&amp;quot;:2,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;상태&amp;quot;},{&amp;quot;col&amp;quot;:3,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;요구종류&amp;quot;},{&amp;quot;col&amp;quot;:4,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;버그종류&amp;quot;},{&amp;quot;col&amp;quot;:5,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;제품-모듈&amp;quot;},{&amp;quot;col&amp;quot;:6,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;요구처&amp;quot;},{&amp;quot;col&amp;quot;:7,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;작업패치&amp;quot;},{&amp;quot;col&amp;quot;:8,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;배포패치&amp;quot;},{&amp;quot;col&amp;quot;:9,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;등록자&amp;quot;},{&amp;quot;col&amp;quot;:10,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;작업자&amp;quot;},{&amp;quot;col&amp;quot;:11,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;개발자&amp;quot;},{&amp;quot;col&amp;quot;:12,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;검수자&amp;quot;},{&amp;quot;col&amp;quot;:13,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;등록일자&amp;quot;},{&amp;quot;col&amp;quot;:14,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;최종작업일&amp;quot;},{&amp;quot;col&amp;quot;:15,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;검수일&amp;quot;},{&amp;quot;col&amp;quot;:16,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;제목&amp;quot;},{&amp;quot;col&amp;quot;:17,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;등록&amp;quot;},{&amp;quot;col&amp;quot;:18,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;접수&amp;quot;},{&amp;quot;col&amp;quot;:19,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;분석&amp;quot;},{&amp;quot;col&amp;quot;:20,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;설계&amp;quot;},{&amp;quot;col&amp;quot;:21,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;구현&amp;quot;},{&amp;quot;col&amp;quot;:22,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;구현상세&amp;quot;},{&amp;quot;col&amp;quot;:23,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;검수&amp;quot;},{&amp;quot;col&amp;quot;:24,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;업로드 회차&amp;quot;},{&amp;quot;col&amp;quot;:25,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;반영 시각&amp;quot;}],&amp;quot;body&amp;quot;:[{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;rp&amp;quot;},{&amp;quot;col&amp;quot;:1,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;rc&amp;quot;},{&amp;quot;col&amp;quot;:2,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;status&amp;quot;},{&amp;quot;col&amp;quot;:3,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;req_type&amp;quot;},{&amp;quot;col&amp;quot;:4,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;bug_type&amp;quot;},{&amp;quot;col&amp;quot;:5,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;product_module&amp;quot;},{&amp;quot;col&amp;quot;:6,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;requester&amp;quot;},{&amp;quot;col&amp;quot;:7,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;work_patch&amp;quot;},{&amp;quot;col&amp;quot;:8,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;deploy_patch&amp;quot;},{&amp;quot;col&amp;quot;:9,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;reg_user&amp;quot;},{&amp;quot;col&amp;quot;:10,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;worker&amp;quot;},{&amp;quot;col&amp;quot;:11,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;developer&amp;quot;},{&amp;quot;col&amp;quot;:12,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;inspector&amp;quot;},{&amp;quot;col&amp;quot;:13,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;reg_date&amp;quot;},{&amp;quot;col&amp;quot;:14,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;last_work_date&amp;quot;},{&amp;quot;col&amp;quot;:15,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;inspect_date&amp;quot;},{&amp;quot;col&amp;quot;:16,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;title&amp;quot;},{&amp;quot;col&amp;quot;:17,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;txt_reg&amp;quot;},{&amp;quot;col&amp;quot;:18,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;txt_receipt&amp;quot;},{&amp;quot;col&amp;quot;:19,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;txt_analysis&amp;quot;},{&amp;quot;col&amp;quot;:20,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;txt_design&amp;quot;},{&amp;quot;col&amp;quot;:21,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;txt_impl&amp;quot;},{&amp;quot;col&amp;quot;:22,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;txt_impl_detail&amp;quot;},{&amp;quot;col&amp;quot;:23,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;txt_inspect&amp;quot;},{&amp;quot;col&amp;quot;:24,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;upload_id&amp;quot;},{&amp;quot;col&amp;quot;:25,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;updated_at&amp;quot;}]}"/>
+        </ViewTemplateInfo>
+      </ViewInfo>
+    </ViewGenerationInfo>
   </Form>
 </FDL>
