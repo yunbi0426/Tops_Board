@@ -24,11 +24,11 @@
                 </Contents>
               </Panel>
               <Static id="staStatus" taborder="2" text="상태" cssclass="sta_WF_SchLabel" left="0" top="0" width="80" height="38" _fieldid="status" _fieldcomptype="label"/>
-              <Edit id="edtstatus" taborder="3" left="0" top="0" width="20" height="38" flexgrow="1" _fieldid="status" _fieldcomptype="comp"/>
+              <MultiCombo id="mcbstatus" taborder="3" left="0" top="0" width="20" height="38" flexgrow="1" _fieldid="status" _fieldcomptype="comp" innerdataset="_dstops_reqStatusSelect_ds_output_status00" codecolumn="status" datacolumn="status"/>
               <Panel id="pnlStatus" taborder="4" left="0" top="0" width="100" height="38" flexcrossaxisalign="center" horizontalgap="0" flexgrow="1" verticalgap="0" cssclass="" _fieldid="status" _fieldcomptype="panel">
                 <Contents>
                   <PanelItem id="PanelItem_label" componentid="staStatus"/>
-                  <PanelItem id="PanelItem_comp_0" componentid="edtstatus"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="mcbstatus"/>
                 </Contents>
               </Panel>
               <Static id="staRequester" taborder="4" text="요구처" cssclass="sta_WF_SchLabel" left="0" top="0" width="80" height="38" _fieldid="requester" _fieldcomptype="label"/>
@@ -52,7 +52,7 @@
           <Objects/>
           <Bind>
             <BindItem id="bind_edtrp" compid="edtrp" propid="value" datasetid="_dstops_reqMasterSelect_ds_search" columnid="rp"/>
-            <BindItem id="bind_edtstatus" compid="edtstatus" propid="value" datasetid="_dstops_reqMasterSelect_ds_search" columnid="status"/>
+            <BindItem id="bind_mcbstatus" compid="mcbstatus" propid="value" datasetid="_dstops_reqMasterSelect_ds_search" columnid="status"/>
             <BindItem id="bind_edtrequester" compid="edtrequester" propid="value" datasetid="_dstops_reqMasterSelect_ds_search" columnid="requester"/>
             <BindItem id="bind_edttitle" compid="edttitle" propid="value" datasetid="_dstops_reqMasterSelect_ds_search" columnid="title"/>
           </Bind>
@@ -441,17 +441,6 @@
         </ColumnInfo>
         <Rows/>
       </Dataset>
-      <Dataset id="_dstops_reqMasterSelect_ds_search">
-        <ColumnInfo>
-          <Column id="rp" type="STRING" size="10" description="RP"/>
-          <Column id="status" type="STRING" size="20" description="상태"/>
-          <Column id="requester" type="STRING" size="200" description="요구처"/>
-          <Column id="title" type="STRING" size="500" description="제목"/>
-        </ColumnInfo>
-        <Rows>
-          <Row/>
-        </Rows>
-      </Dataset>
       <Transaction id="Transaction00" alias="Details 데이터 가져오기" servicemodel="tops::reqMasterSelect" serviceurl="NexaLAPServer::api/v1/execute">
         <Contents><![CDATA[{
     "inputdatasets": [
@@ -469,6 +458,35 @@
 }]]>
         </Contents>
       </Transaction>
+      <Dataset id="_dstops_reqStatusSelect_ds_output_status00">
+        <ColumnInfo>
+          <Column id="status" type="string" size="20" description="status"/>
+          <Column id="sort_no" type="int" size="11" description="sort_no"/>
+        </ColumnInfo>
+        <Rows/>
+      </Dataset>
+      <Transaction id="Transaction01" alias="상태 목록 가져오기" servicemodel="tops::reqStatusSelect" serviceurl="NexaLAPServer::api/v1/execute">
+        <Contents><![CDATA[{
+    "outputdatasets": [
+        {
+            "modelid": "ds_output",
+            "datasetid": "_dstops_reqStatusSelect_ds_output_status00"
+        }
+    ]
+}]]>
+        </Contents>
+      </Transaction>
+      <Dataset id="_dstops_reqMasterSelect_ds_search">
+        <ColumnInfo>
+          <Column id="rp" type="STRING" size="10" description="RP"/>
+          <Column id="status" type="STRING" size="20" description="상태"/>
+          <Column id="requester" type="STRING" size="200" description="요구처"/>
+          <Column id="title" type="STRING" size="500" description="제목"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
     </Objects>
     <ViewGenerationInfo>
       <ViewInfo viewid="Detail">
@@ -624,11 +642,22 @@
           <Attribute id="gridlayout" value="{&quot;columns&quot;:[{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100}],&quot;rows&quot;:[{&quot;band&quot;:&quot;head&quot;,&quot;size&quot;:32},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:32}],&quot;head&quot;:[{&quot;col&quot;:0,&quot;row&quot;:0,&quot;text&quot;:&quot;RP&quot;},{&quot;col&quot;:1,&quot;row&quot;:0,&quot;text&quot;:&quot;RC&quot;},{&quot;col&quot;:2,&quot;row&quot;:0,&quot;text&quot;:&quot;상태&quot;},{&quot;col&quot;:3,&quot;row&quot;:0,&quot;text&quot;:&quot;요구종류&quot;},{&quot;col&quot;:4,&quot;row&quot;:0,&quot;text&quot;:&quot;버그종류&quot;},{&quot;col&quot;:5,&quot;row&quot;:0,&quot;text&quot;:&quot;제품-모듈&quot;},{&quot;col&quot;:6,&quot;row&quot;:0,&quot;text&quot;:&quot;요구처&quot;},{&quot;col&quot;:7,&quot;row&quot;:0,&quot;text&quot;:&quot;작업패치&quot;},{&quot;col&quot;:8,&quot;row&quot;:0,&quot;text&quot;:&quot;배포패치&quot;},{&quot;col&quot;:9,&quot;row&quot;:0,&quot;text&quot;:&quot;등록자&quot;},{&quot;col&quot;:10,&quot;row&quot;:0,&quot;text&quot;:&quot;작업자&quot;},{&quot;col&quot;:11,&quot;row&quot;:0,&quot;text&quot;:&quot;개발자&quot;},{&quot;col&quot;:12,&quot;row&quot;:0,&quot;text&quot;:&quot;검수자&quot;},{&quot;col&quot;:13,&quot;row&quot;:0,&quot;text&quot;:&quot;등록일자&quot;},{&quot;col&quot;:14,&quot;row&quot;:0,&quot;text&quot;:&quot;최종작업일&quot;},{&quot;col&quot;:15,&quot;row&quot;:0,&quot;text&quot;:&quot;검수일&quot;},{&quot;col&quot;:16,&quot;row&quot;:0,&quot;text&quot;:&quot;제목&quot;},{&quot;col&quot;:17,&quot;row&quot;:0,&quot;text&quot;:&quot;등록&quot;},{&quot;col&quot;:18,&quot;row&quot;:0,&quot;text&quot;:&quot;접수&quot;},{&quot;col&quot;:19,&quot;row&quot;:0,&quot;text&quot;:&quot;분석&quot;},{&quot;col&quot;:20,&quot;row&quot;:0,&quot;text&quot;:&quot;설계&quot;},{&quot;col&quot;:21,&quot;row&quot;:0,&quot;text&quot;:&quot;구현&quot;},{&quot;col&quot;:22,&quot;row&quot;:0,&quot;text&quot;:&quot;구현상세&quot;},{&quot;col&quot;:23,&quot;row&quot;:0,&quot;text&quot;:&quot;검수&quot;},{&quot;col&quot;:24,&quot;row&quot;:0,&quot;text&quot;:&quot;업로드 회차&quot;},{&quot;col&quot;:25,&quot;row&quot;:0,&quot;text&quot;:&quot;반영 시각&quot;}],&quot;body&quot;:[{&quot;col&quot;:0,&quot;row&quot;:0,&quot;field&quot;:&quot;rp&quot;},{&quot;col&quot;:1,&quot;row&quot;:0,&quot;field&quot;:&quot;rc&quot;},{&quot;col&quot;:2,&quot;row&quot;:0,&quot;field&quot;:&quot;status&quot;},{&quot;col&quot;:3,&quot;row&quot;:0,&quot;field&quot;:&quot;req_type&quot;},{&quot;col&quot;:4,&quot;row&quot;:0,&quot;field&quot;:&quot;bug_type&quot;},{&quot;col&quot;:5,&quot;row&quot;:0,&quot;field&quot;:&quot;product_module&quot;},{&quot;col&quot;:6,&quot;row&quot;:0,&quot;field&quot;:&quot;requester&quot;},{&quot;col&quot;:7,&quot;row&quot;:0,&quot;field&quot;:&quot;work_patch&quot;},{&quot;col&quot;:8,&quot;row&quot;:0,&quot;field&quot;:&quot;deploy_patch&quot;},{&quot;col&quot;:9,&quot;row&quot;:0,&quot;field&quot;:&quot;reg_user&quot;},{&quot;col&quot;:10,&quot;row&quot;:0,&quot;field&quot;:&quot;worker&quot;},{&quot;col&quot;:11,&quot;row&quot;:0,&quot;field&quot;:&quot;developer&quot;},{&quot;col&quot;:12,&quot;row&quot;:0,&quot;field&quot;:&quot;inspector&quot;},{&quot;col&quot;:13,&quot;row&quot;:0,&quot;field&quot;:&quot;reg_date&quot;},{&quot;col&quot;:14,&quot;row&quot;:0,&quot;field&quot;:&quot;last_work_date&quot;},{&quot;col&quot;:15,&quot;row&quot;:0,&quot;field&quot;:&quot;inspect_date&quot;},{&quot;col&quot;:16,&quot;row&quot;:0,&quot;field&quot;:&quot;title&quot;},{&quot;col&quot;:17,&quot;row&quot;:0,&quot;field&quot;:&quot;txt_reg&quot;},{&quot;col&quot;:18,&quot;row&quot;:0,&quot;field&quot;:&quot;txt_receipt&quot;},{&quot;col&quot;:19,&quot;row&quot;:0,&quot;field&quot;:&quot;txt_analysis&quot;},{&quot;col&quot;:20,&quot;row&quot;:0,&quot;field&quot;:&quot;txt_design&quot;},{&quot;col&quot;:21,&quot;row&quot;:0,&quot;field&quot;:&quot;txt_impl&quot;},{&quot;col&quot;:22,&quot;row&quot;:0,&quot;field&quot;:&quot;txt_impl_detail&quot;},{&quot;col&quot;:23,&quot;row&quot;:0,&quot;field&quot;:&quot;txt_inspect&quot;},{&quot;col&quot;:24,&quot;row&quot;:0,&quot;field&quot;:&quot;upload_id&quot;},{&quot;col&quot;:25,&quot;row&quot;:0,&quot;field&quot;:&quot;updated_at&quot;}]}"/>
         </ViewTemplateInfo>
       </ViewInfo>
+      <ViewInfo viewid="frmDetails">
+        <ModelInfo modelserviceid="tops" serviceid="reqStatusSelect" modelid="ds_output" datasetid="_dstops_reqStatusSelect_ds_output" filepath=".model\reqStatusSelect.model">
+          <Fields>
+            <Field id="status"/>
+            <Field id="sort_no"/>
+          </Fields>
+          <Components/>
+        </ModelInfo>
+        <ViewTemplateInfo/>
+        <ModelInfo modelserviceid="tops" serviceid="reqStatusSelect" modelid="ds_output" datasetid="_dstops_reqStatusSelect_ds_output_status00" filepath=".model\reqStatusSelect.model"/>
+      </ViewInfo>
       <ViewInfo viewid="Search">
         <ModelInfo modelserviceid="tops" serviceid="reqMasterSelect" modelid="ds_search" datasetid="_dstops_reqMasterSelect_ds_search" filepath=".model\reqMasterSelect.model">
           <Fields>
             <Field id="rp"/>
-            <Field id="status"/>
+            <Field id="status" fieldtype="MultiSelect" options="{&amp;quot;innerdataset_service&amp;quot;:{&amp;quot;serviceid&amp;quot;:&amp;quot;tops::reqStatusSelect&amp;quot;,&amp;quot;modelid&amp;quot;:&amp;quot;ds_output&amp;quot;,&amp;quot;datasetid&amp;quot;:&amp;quot;_dstops_reqStatusSelect_ds_output_status00&amp;quot;,&amp;quot;code&amp;quot;:&amp;quot;status&amp;quot;,&amp;quot;data&amp;quot;:&amp;quot;status&amp;quot;}}"/>
             <Field id="requester"/>
             <Field id="title"/>
           </Fields>
@@ -639,7 +668,7 @@
             <Component id="edtrp" fields="rp"/>
             <Component id="pnlRp" fields="rp"/>
             <Component id="staStatus" fields="status"/>
-            <Component id="edtstatus" fields="status"/>
+            <Component id="mcbstatus" fields="status"/>
             <Component id="pnlStatus" fields="status"/>
             <Component id="staRequester" fields="requester"/>
             <Component id="edtrequester" fields="requester"/>
@@ -661,6 +690,7 @@
     <Trigger>
       <TriggerItem id="item0" triggertype="onload" triggerview="" triggerobj="" targetaction="Transaction00"/>
       <TriggerItem id="item1" triggertype="onclick" triggerview="Search" triggerobj="btnSearch" targetaction="Transaction00"/>
+      <TriggerItem id="item2" triggertype="onload" triggerview="" triggerobj="" targetaction="Transaction01"/>
     </Trigger>
   </Form>
 </FDL>

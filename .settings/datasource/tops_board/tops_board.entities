@@ -530,6 +530,45 @@
       "nexaai_description": "",
       "nexaai_active": false
     },
+    "req_status": {
+      "schema": null,
+      "entitytype": "table",
+      "catalog": "tops_board",
+      "name": "req_status",
+      "remarks": "",
+      "columns": [
+        {
+          "schema": null,
+          "isautoincrement": false,
+          "catalog": "tops_board",
+          "ordinalposition": 1,
+          "isnullable": false,
+          "columnname": "status",
+          "platformdatatype": "string",
+          "columnsize": 20,
+          "tablename": "req_status",
+          "columndefault": null,
+          "remarks": "",
+          "columntype": "VARCHAR",
+          "decimaldigits": null
+        },
+        {
+          "schema": null,
+          "isautoincrement": false,
+          "catalog": "tops_board",
+          "ordinalposition": 2,
+          "isnullable": false,
+          "columnname": "sort_no",
+          "platformdatatype": "int",
+          "columnsize": 10,
+          "tablename": "req_status",
+          "columndefault": null,
+          "remarks": "",
+          "columntype": "INTEGER",
+          "decimaldigits": "0"
+        }
+      ]
+    },
     "upload_log": {
       "schema": null,
       "entitytype": "table",
@@ -688,6 +727,14 @@
         "pk": [
           "upload_id",
           "rp"
+        ]
+      }
+    },
+    {
+      "req_status": {
+        "relation": [],
+        "pk": [
+          "status"
         ]
       }
     },

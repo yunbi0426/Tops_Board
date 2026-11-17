@@ -41,7 +41,9 @@
       "tops_board.upload_log.row_count": null,
       "tops_board.upload_log.new_count": null,
       "tops_board.upload_log.changed_count": null,
-      "tops_board.upload_log.uploaded_at": null
+      "tops_board.upload_log.uploaded_at": null,
+      "tops_board.req_status.status": null,
+      "tops_board.req_status.sort_no": null
     }
   }
 }
