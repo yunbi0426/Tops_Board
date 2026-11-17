@@ -1,12 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="frmDetails" width="1050" height="736" titletext="New Form">
+  <Form id="frmDetails" width="1050" height="736" titletext="ListDetail (H)">
     <Layouts>
       <Layout width="1050" height="736">
-        <View id="Master" taborder="0" viewtype="Freeform" viewdataset="_dstops_svcTest_ds_output" text="Details" left="10" top="10" right="10" bottom="10">
+        <View id="Search" taborder="1" viewtype="Search" viewdataset="_dstops_reqMasterSelect_ds_search" text="Search" left="10" height="50" top="10" right="10" cssclass="view_WF_Search">
           <Layouts>
             <Layout>
-              <Grid id="grdList" left="0" top="0" right="0" bottom="0" binddataset="_dstops_svcTest_ds_output" autofittype="col" _fieldid="grdList" _fieldcomptype="comp">
+              <Panel id="pnl_mainPanel" taborder="0" left="5" top="0" right="120" bottom="0" flexwrap="wrap" type="horizontal" verticalgap="5" fittocontents="height" spacing="5px 0px 5px 0px" _fieldid="_mainPanel" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_0" componentid="pnlRp"/>
+                  <PanelItem id="PanelItem_1" componentid="pnlStatus"/>
+                  <PanelItem id="PanelItem_2" componentid="pnlRequester"/>
+                  <PanelItem id="PanelItem_3" componentid="pnlTitle"/>
+                </Contents>
+              </Panel>
+              <Button id="btnSearch" cssclass="btn_WF_Search" text="Search" _fieldid="_btnSearch" _fieldcomptype="comp" top="5" height="38" width="110" right="5"/>
+              <Static id="staRp" taborder="0" text="RP" cssclass="sta_WF_SchLabel" left="0" top="0" width="80" height="38" _fieldid="rp" _fieldcomptype="label"/>
+              <Edit id="edtrp" taborder="1" left="0" top="0" width="20" height="38" flexgrow="1" _fieldid="rp" _fieldcomptype="comp"/>
+              <Panel id="pnlRp" taborder="2" left="0" top="0" width="100" height="38" flexcrossaxisalign="center" horizontalgap="0" flexgrow="1" verticalgap="0" cssclass="" _fieldid="rp" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="staRp"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edtrp"/>
+                </Contents>
+              </Panel>
+              <Static id="staStatus" taborder="2" text="상태" cssclass="sta_WF_SchLabel" left="0" top="0" width="80" height="38" _fieldid="status" _fieldcomptype="label"/>
+              <Edit id="edtstatus" taborder="3" left="0" top="0" width="20" height="38" flexgrow="1" _fieldid="status" _fieldcomptype="comp"/>
+              <Panel id="pnlStatus" taborder="4" left="0" top="0" width="100" height="38" flexcrossaxisalign="center" horizontalgap="0" flexgrow="1" verticalgap="0" cssclass="" _fieldid="status" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="staStatus"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edtstatus"/>
+                </Contents>
+              </Panel>
+              <Static id="staRequester" taborder="4" text="요구처" cssclass="sta_WF_SchLabel" left="0" top="0" width="80" height="38" _fieldid="requester" _fieldcomptype="label"/>
+              <Edit id="edtrequester" taborder="5" left="0" top="0" width="20" height="38" flexgrow="1" _fieldid="requester" _fieldcomptype="comp"/>
+              <Panel id="pnlRequester" taborder="6" left="0" top="0" width="100" height="38" flexcrossaxisalign="center" horizontalgap="0" flexgrow="1" verticalgap="0" cssclass="" _fieldid="requester" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="staRequester"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edtrequester"/>
+                </Contents>
+              </Panel>
+              <Static id="staTitle" taborder="6" text="제목" cssclass="sta_WF_SchLabel" left="0" top="0" width="80" height="38" _fieldid="title" _fieldcomptype="label"/>
+              <Edit id="edttitle" taborder="7" left="0" top="0" width="20" height="38" flexgrow="1" _fieldid="title" _fieldcomptype="comp"/>
+              <Panel id="pnlTitle" taborder="8" left="0" top="0" width="100" height="38" flexcrossaxisalign="center" horizontalgap="0" flexgrow="1" verticalgap="0" cssclass="" _fieldid="title" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="staTitle"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edttitle"/>
+                </Contents>
+              </Panel>
+            </Layout>
+          </Layouts>
+          <Objects/>
+          <Bind>
+            <BindItem id="bind_edtrp" compid="edtrp" propid="value" datasetid="_dstops_reqMasterSelect_ds_search" columnid="rp"/>
+            <BindItem id="bind_edtstatus" compid="edtstatus" propid="value" datasetid="_dstops_reqMasterSelect_ds_search" columnid="status"/>
+            <BindItem id="bind_edtrequester" compid="edtrequester" propid="value" datasetid="_dstops_reqMasterSelect_ds_search" columnid="requester"/>
+            <BindItem id="bind_edttitle" compid="edttitle" propid="value" datasetid="_dstops_reqMasterSelect_ds_search" columnid="title"/>
+          </Bind>
+          <Script><![CDATA[this._fnViewOnLoad = function(objForm){/* Sets the view form reference so that functions declared in the view can access it */this._ownerForm = objForm;};]]>
+          </Script>
+        </View>
+        <View id="Master" taborder="0" viewtype="Grid" viewdataset="_dstops_reqMasterSelect_ds_output" text="Master(N)" left="10" bottom="10" top="70" width="50%">
+          <Layouts>
+            <Layout>
+              <Grid id="grdList" left="0" top="0" right="0" bottom="0" binddataset="_dstops_reqMasterSelect_ds_output" autofittype="col" cssclass="grd_WF_Detail" _fieldid="grdList" _fieldcomptype="comp">
                 <Formats>
                   <Format id="default">
                     <Columns>
@@ -38,8 +94,8 @@
                       <Column size="100" band="body"/>
                     </Columns>
                     <Rows>
-                      <Row size="40" band="head"/>
-                      <Row size="40" band="body"/>
+                      <Row size="32" band="head"/>
+                      <Row size="32" band="body"/>
                     </Rows>
                     <Band id="head">
                       <Cell id="cell_head_0_0_RP" col="0" row="0" text="RP"/>
@@ -103,15 +159,258 @@
             </Layout>
           </Layouts>
           <Objects/>
+          <Script><![CDATA[this.cfn_FilterBtn_onclick = function(obj, e){let aComponents = this.components;for(let i = 0 ; i < aComponents.length ; i++){if(aComponents[i]._fieldcomptype == "filter"){aComponents[i].setSelectStatus(false);}}obj.setSelectStatus(true);};this._fnViewOnLoad = function(objForm){/* Sets the view form reference so that functions declared in the view can access it */this._ownerForm = objForm;this._sSearchFilterValue = "";this._sFilterValue = "";let aComponents = this.components;let oComp = null;for(let i = 0 ; i < aComponents.length ; i++){oComp = aComponents[i];if(oComp instanceof nexacro.Button){if(oComp._fieldcomptype == "filter"){oComp.addEventHandler("onclick",this.cfn_FilterBtn_onclick, this)}}}};]]>
+          </Script>
+        </View>
+        <View id="Detail" taborder="2" viewtype="Freeform" viewdataset="_dstops_reqMasterSelect_ds_output" text="Detail(1)" right="10" bottom="10" left="Master:10" top="70" fittocontents="height">
+          <Layouts>
+            <Layout type="horizontal" flexwrap="wrap">
+              <Static id="sta_rp" taborder="0" text="RP" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="rp" _fieldcomptype="label"/>
+              <Edit id="edtrp" taborder="1" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="rp" _fieldcomptype="comp"/>
+              <Panel id="pnlRp" taborder="2" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="rp" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_rp"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edtrp"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_rc" taborder="2" text="RC" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="rc" _fieldcomptype="label"/>
+              <Edit id="edtrc" taborder="3" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="rc" _fieldcomptype="comp"/>
+              <Panel id="pnlRc" taborder="4" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="rc" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_rc"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edtrc"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_status" taborder="4" text="상태" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="status" _fieldcomptype="label"/>
+              <Edit id="edtstatus" taborder="5" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="status" _fieldcomptype="comp"/>
+              <Panel id="pnlStatus" taborder="6" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="status" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_status"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edtstatus"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_req_type" taborder="6" text="요구종류" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="req_type" _fieldcomptype="label"/>
+              <Edit id="edtreqType" taborder="7" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="req_type" _fieldcomptype="comp"/>
+              <Panel id="pnlReqType" taborder="8" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="req_type" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_req_type"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edtreqType"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_bug_type" taborder="8" text="버그종류" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="bug_type" _fieldcomptype="label"/>
+              <Edit id="edtbugType" taborder="9" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="bug_type" _fieldcomptype="comp"/>
+              <Panel id="pnlBugType" taborder="10" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="bug_type" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_bug_type"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edtbugType"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_product_module" taborder="10" text="제품-모듈" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="product_module" _fieldcomptype="label"/>
+              <Edit id="edtproductModule" taborder="11" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="product_module" _fieldcomptype="comp"/>
+              <Panel id="pnlProductModule" taborder="12" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="product_module" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_product_module"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edtproductModule"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_requester" taborder="12" text="요구처" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="requester" _fieldcomptype="label"/>
+              <Edit id="edtrequester" taborder="13" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="requester" _fieldcomptype="comp"/>
+              <Panel id="pnlRequester" taborder="14" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="requester" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_requester"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edtrequester"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_work_patch" taborder="14" text="작업패치" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="work_patch" _fieldcomptype="label"/>
+              <Edit id="edtworkPatch" taborder="15" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="work_patch" _fieldcomptype="comp"/>
+              <Panel id="pnlWorkPatch" taborder="16" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="work_patch" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_work_patch"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edtworkPatch"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_deploy_patch" taborder="16" text="배포패치" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="deploy_patch" _fieldcomptype="label"/>
+              <Edit id="edtdeployPatch" taborder="17" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="deploy_patch" _fieldcomptype="comp"/>
+              <Panel id="pnlDeployPatch" taborder="18" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="deploy_patch" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_deploy_patch"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edtdeployPatch"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_reg_user" taborder="18" text="등록자" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="reg_user" _fieldcomptype="label"/>
+              <Edit id="edtregUser" taborder="19" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="reg_user" _fieldcomptype="comp"/>
+              <Panel id="pnlRegUser" taborder="20" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="reg_user" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_reg_user"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edtregUser"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_worker" taborder="20" text="작업자" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="worker" _fieldcomptype="label"/>
+              <Edit id="edtworker" taborder="21" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="worker" _fieldcomptype="comp"/>
+              <Panel id="pnlWorker" taborder="22" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="worker" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_worker"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edtworker"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_developer" taborder="22" text="개발자" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="developer" _fieldcomptype="label"/>
+              <Edit id="edtdeveloper" taborder="23" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="developer" _fieldcomptype="comp"/>
+              <Panel id="pnlDeveloper" taborder="24" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="developer" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_developer"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edtdeveloper"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_inspector" taborder="24" text="검수자" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="inspector" _fieldcomptype="label"/>
+              <Edit id="edtinspector" taborder="25" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="inspector" _fieldcomptype="comp"/>
+              <Panel id="pnlInspector" taborder="26" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="inspector" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_inspector"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edtinspector"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_reg_date" taborder="26" text="등록일자" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="reg_date" _fieldcomptype="label"/>
+              <Calendar id="calregDate" taborder="27" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="reg_date" _fieldcomptype="comp"/>
+              <Panel id="pnlRegDate" taborder="28" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="reg_date" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_reg_date"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="calregDate"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_last_work_date" taborder="28" text="최종작업일" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="last_work_date" _fieldcomptype="label"/>
+              <Calendar id="callastWorkDate" taborder="29" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="last_work_date" _fieldcomptype="comp"/>
+              <Panel id="pnlLastWorkDate" taborder="30" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="last_work_date" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_last_work_date"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="callastWorkDate"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_inspect_date" taborder="30" text="검수일" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="inspect_date" _fieldcomptype="label"/>
+              <Calendar id="calinspectDate" taborder="31" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="inspect_date" _fieldcomptype="comp"/>
+              <Panel id="pnlInspectDate" taborder="32" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="inspect_date" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_inspect_date"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="calinspectDate"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_title" taborder="32" text="제목" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="title" _fieldcomptype="label"/>
+              <Edit id="edttitle" taborder="33" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="title" _fieldcomptype="comp"/>
+              <Panel id="pnlTitle" taborder="34" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="title" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_title"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edttitle"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_txt_reg" taborder="34" text="등록" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="txt_reg" _fieldcomptype="label"/>
+              <Edit id="edttxtReg" taborder="35" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="txt_reg" _fieldcomptype="comp"/>
+              <Panel id="pnlTxtReg" taborder="36" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="txt_reg" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_txt_reg"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edttxtReg"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_txt_receipt" taborder="36" text="접수" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="txt_receipt" _fieldcomptype="label"/>
+              <Edit id="edttxtReceipt" taborder="37" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="txt_receipt" _fieldcomptype="comp"/>
+              <Panel id="pnlTxtReceipt" taborder="38" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="txt_receipt" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_txt_receipt"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edttxtReceipt"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_txt_analysis" taborder="38" text="분석" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="txt_analysis" _fieldcomptype="label"/>
+              <Edit id="edttxtAnalysis" taborder="39" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="txt_analysis" _fieldcomptype="comp"/>
+              <Panel id="pnlTxtAnalysis" taborder="40" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="txt_analysis" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_txt_analysis"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edttxtAnalysis"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_txt_design" taborder="40" text="설계" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="txt_design" _fieldcomptype="label"/>
+              <Edit id="edttxtDesign" taborder="41" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="txt_design" _fieldcomptype="comp"/>
+              <Panel id="pnlTxtDesign" taborder="42" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="txt_design" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_txt_design"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edttxtDesign"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_txt_impl" taborder="42" text="구현" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="txt_impl" _fieldcomptype="label"/>
+              <Edit id="edttxtImpl" taborder="43" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="txt_impl" _fieldcomptype="comp"/>
+              <Panel id="pnlTxtImpl" taborder="44" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="txt_impl" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_txt_impl"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edttxtImpl"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_txt_impl_detail" taborder="44" text="구현상세" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="txt_impl_detail" _fieldcomptype="label"/>
+              <Edit id="edttxtImplDetail" taborder="45" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="txt_impl_detail" _fieldcomptype="comp"/>
+              <Panel id="pnlTxtImplDetail" taborder="46" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="txt_impl_detail" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_txt_impl_detail"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edttxtImplDetail"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_txt_inspect" taborder="46" text="검수" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="txt_inspect" _fieldcomptype="label"/>
+              <Edit id="edttxtInspect" taborder="47" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="txt_inspect" _fieldcomptype="comp"/>
+              <Panel id="pnlTxtInspect" taborder="48" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="txt_inspect" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_txt_inspect"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="edttxtInspect"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_upload_id" taborder="48" text="업로드 회차" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="upload_id" _fieldcomptype="label"/>
+              <MaskEdit id="mskuploadId" taborder="49" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="upload_id" _fieldcomptype="comp"/>
+              <Panel id="pnlUploadId" taborder="50" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="upload_id" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_upload_id"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="mskuploadId"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_updated_at" taborder="50" text="반영 시각" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="updated_at" _fieldcomptype="label"/>
+              <DateField id="dtfupdatedAt" taborder="51" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="updated_at" _fieldcomptype="comp"/>
+              <Panel id="pnlUpdatedAt" taborder="52" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="updated_at" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_updated_at"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="dtfupdatedAt"/>
+                </Contents>
+              </Panel>
+            </Layout>
+          </Layouts>
+          <Objects/>
+          <Bind>
+            <BindItem id="bind_edtrp" compid="edtrp" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="rp"/>
+            <BindItem id="bind_edtrc" compid="edtrc" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="rc"/>
+            <BindItem id="bind_edtstatus" compid="edtstatus" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="status"/>
+            <BindItem id="bind_edtreqType" compid="edtreqType" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="req_type"/>
+            <BindItem id="bind_edtbugType" compid="edtbugType" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="bug_type"/>
+            <BindItem id="bind_edtproductModule" compid="edtproductModule" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="product_module"/>
+            <BindItem id="bind_edtrequester" compid="edtrequester" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="requester"/>
+            <BindItem id="bind_edtworkPatch" compid="edtworkPatch" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="work_patch"/>
+            <BindItem id="bind_edtdeployPatch" compid="edtdeployPatch" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="deploy_patch"/>
+            <BindItem id="bind_edtregUser" compid="edtregUser" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="reg_user"/>
+            <BindItem id="bind_edtworker" compid="edtworker" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="worker"/>
+            <BindItem id="bind_edtdeveloper" compid="edtdeveloper" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="developer"/>
+            <BindItem id="bind_edtinspector" compid="edtinspector" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="inspector"/>
+            <BindItem id="bind_calregDate" compid="calregDate" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="reg_date"/>
+            <BindItem id="bind_callastWorkDate" compid="callastWorkDate" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="last_work_date"/>
+            <BindItem id="bind_calinspectDate" compid="calinspectDate" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="inspect_date"/>
+            <BindItem id="bind_edttitle" compid="edttitle" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="title"/>
+            <BindItem id="bind_edttxtReg" compid="edttxtReg" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="txt_reg"/>
+            <BindItem id="bind_edttxtReceipt" compid="edttxtReceipt" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="txt_receipt"/>
+            <BindItem id="bind_edttxtAnalysis" compid="edttxtAnalysis" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="txt_analysis"/>
+            <BindItem id="bind_edttxtDesign" compid="edttxtDesign" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="txt_design"/>
+            <BindItem id="bind_edttxtImpl" compid="edttxtImpl" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="txt_impl"/>
+            <BindItem id="bind_edttxtImplDetail" compid="edttxtImplDetail" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="txt_impl_detail"/>
+            <BindItem id="bind_edttxtInspect" compid="edttxtInspect" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="txt_inspect"/>
+            <BindItem id="bind_mskuploadId" compid="mskuploadId" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="upload_id"/>
+            <BindItem id="bind_dtfupdatedAt" compid="dtfupdatedAt" propid="value" datasetid="_dstops_reqMasterSelect_ds_output" columnid="updated_at"/>
+          </Bind>
           <Script><![CDATA[this._fnViewOnLoad = function(objForm){/* Sets the view form reference so that functions declared in the view can access it */this._ownerForm = objForm;};]]>
           </Script>
         </View>
       </Layout>
     </Layouts>
-    <Script type="xscript5.1"><![CDATA[]]>
-    </Script>
     <Objects>
-      <Dataset id="_dstops_svcTest_ds_output">
+      <Dataset id="_dstops_reqMasterSelect_ds_output">
         <ColumnInfo>
           <Column id="rp" type="string" size="10" description="RP"/>
           <Column id="rc" type="string" size="10" description="RC"/>
@@ -142,24 +441,38 @@
         </ColumnInfo>
         <Rows/>
       </Dataset>
-      <Transaction id="Transaction00" alias="test" servicemodel="tops::svcTest" serviceurl="NexaLAPServer::api/v1/execute">
+      <Dataset id="_dstops_reqMasterSelect_ds_search">
+        <ColumnInfo>
+          <Column id="rp" type="STRING" size="10" description="RP"/>
+          <Column id="status" type="STRING" size="20" description="상태"/>
+          <Column id="requester" type="STRING" size="200" description="요구처"/>
+          <Column id="title" type="STRING" size="500" description="제목"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <Transaction id="Transaction00" alias="Details 데이터 가져오기" servicemodel="tops::reqMasterSelect" serviceurl="NexaLAPServer::api/v1/execute">
         <Contents><![CDATA[{
+    "inputdatasets": [
+        {
+            "modelid": "ds_search",
+            "datasetid": "_dstops_reqMasterSelect_ds_search"
+        }
+    ],
     "outputdatasets": [
         {
             "modelid": "ds_output",
-            "datasetid": "_dstops_svcTest_ds_output"
+            "datasetid": "_dstops_reqMasterSelect_ds_output"
         }
     ]
 }]]>
         </Contents>
       </Transaction>
     </Objects>
-    <Trigger>
-      <TriggerItem id="item0" triggertype="onload" triggerview="" triggerobj="" targetaction="Transaction00"/>
-    </Trigger>
     <ViewGenerationInfo>
-      <ViewInfo viewid="Master">
-        <ModelInfo modelserviceid="tops" serviceid="svcTest" modelid="ds_output" datasetid="_dstops_svcTest_ds_output" filepath=".model\svcTest.model">
+      <ViewInfo viewid="Detail">
+        <ModelInfo modelserviceid="tops" serviceid="reqMasterSelect" modelid="ds_output" datasetid="_dstops_reqMasterSelect_ds_output" filepath=".model\reqMasterSelect.model">
           <Fields>
             <Field id="rp"/>
             <Field id="rc"/>
@@ -189,13 +502,165 @@
             <Field id="updated_at"/>
           </Fields>
           <Components>
+            <Component id="sta_rp" fields="rp"/>
+            <Component id="edtrp" fields="rp"/>
+            <Component id="pnlRp" fields="rp"/>
+            <Component id="sta_rc" fields="rc"/>
+            <Component id="edtrc" fields="rc"/>
+            <Component id="pnlRc" fields="rc"/>
+            <Component id="sta_status" fields="status"/>
+            <Component id="edtstatus" fields="status"/>
+            <Component id="pnlStatus" fields="status"/>
+            <Component id="sta_req_type" fields="req_type"/>
+            <Component id="edtreqType" fields="req_type"/>
+            <Component id="pnlReqType" fields="req_type"/>
+            <Component id="sta_bug_type" fields="bug_type"/>
+            <Component id="edtbugType" fields="bug_type"/>
+            <Component id="pnlBugType" fields="bug_type"/>
+            <Component id="sta_product_module" fields="product_module"/>
+            <Component id="edtproductModule" fields="product_module"/>
+            <Component id="pnlProductModule" fields="product_module"/>
+            <Component id="sta_requester" fields="requester"/>
+            <Component id="edtrequester" fields="requester"/>
+            <Component id="pnlRequester" fields="requester"/>
+            <Component id="sta_work_patch" fields="work_patch"/>
+            <Component id="edtworkPatch" fields="work_patch"/>
+            <Component id="pnlWorkPatch" fields="work_patch"/>
+            <Component id="sta_deploy_patch" fields="deploy_patch"/>
+            <Component id="edtdeployPatch" fields="deploy_patch"/>
+            <Component id="pnlDeployPatch" fields="deploy_patch"/>
+            <Component id="sta_reg_user" fields="reg_user"/>
+            <Component id="edtregUser" fields="reg_user"/>
+            <Component id="pnlRegUser" fields="reg_user"/>
+            <Component id="sta_worker" fields="worker"/>
+            <Component id="edtworker" fields="worker"/>
+            <Component id="pnlWorker" fields="worker"/>
+            <Component id="sta_developer" fields="developer"/>
+            <Component id="edtdeveloper" fields="developer"/>
+            <Component id="pnlDeveloper" fields="developer"/>
+            <Component id="sta_inspector" fields="inspector"/>
+            <Component id="edtinspector" fields="inspector"/>
+            <Component id="pnlInspector" fields="inspector"/>
+            <Component id="sta_reg_date" fields="reg_date"/>
+            <Component id="calregDate" fields="reg_date"/>
+            <Component id="pnlRegDate" fields="reg_date"/>
+            <Component id="sta_last_work_date" fields="last_work_date"/>
+            <Component id="callastWorkDate" fields="last_work_date"/>
+            <Component id="pnlLastWorkDate" fields="last_work_date"/>
+            <Component id="sta_inspect_date" fields="inspect_date"/>
+            <Component id="calinspectDate" fields="inspect_date"/>
+            <Component id="pnlInspectDate" fields="inspect_date"/>
+            <Component id="sta_title" fields="title"/>
+            <Component id="edttitle" fields="title"/>
+            <Component id="pnlTitle" fields="title"/>
+            <Component id="sta_txt_reg" fields="txt_reg"/>
+            <Component id="edttxtReg" fields="txt_reg"/>
+            <Component id="pnlTxtReg" fields="txt_reg"/>
+            <Component id="sta_txt_receipt" fields="txt_receipt"/>
+            <Component id="edttxtReceipt" fields="txt_receipt"/>
+            <Component id="pnlTxtReceipt" fields="txt_receipt"/>
+            <Component id="sta_txt_analysis" fields="txt_analysis"/>
+            <Component id="edttxtAnalysis" fields="txt_analysis"/>
+            <Component id="pnlTxtAnalysis" fields="txt_analysis"/>
+            <Component id="sta_txt_design" fields="txt_design"/>
+            <Component id="edttxtDesign" fields="txt_design"/>
+            <Component id="pnlTxtDesign" fields="txt_design"/>
+            <Component id="sta_txt_impl" fields="txt_impl"/>
+            <Component id="edttxtImpl" fields="txt_impl"/>
+            <Component id="pnlTxtImpl" fields="txt_impl"/>
+            <Component id="sta_txt_impl_detail" fields="txt_impl_detail"/>
+            <Component id="edttxtImplDetail" fields="txt_impl_detail"/>
+            <Component id="pnlTxtImplDetail" fields="txt_impl_detail"/>
+            <Component id="sta_txt_inspect" fields="txt_inspect"/>
+            <Component id="edttxtInspect" fields="txt_inspect"/>
+            <Component id="pnlTxtInspect" fields="txt_inspect"/>
+            <Component id="sta_upload_id" fields="upload_id"/>
+            <Component id="mskuploadId" fields="upload_id"/>
+            <Component id="pnlUploadId" fields="upload_id"/>
+            <Component id="sta_updated_at" fields="updated_at"/>
+            <Component id="dtfupdatedAt" fields="updated_at"/>
+            <Component id="pnlUpdatedAt" fields="updated_at"/>
+          </Components>
+        </ModelInfo>
+        <ViewTemplateInfo filepath="NexaLAP_BasePack/Freeform/FluidFreeformView.viewtemplate">
+          <Attribute id="layout" value="{&amp;quot;columnsize&amp;quot;:[300],&amp;quot;rowsize&amp;quot;:[38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38,38],&amp;quot;celllist&amp;quot;:[{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:0,&amp;quot;fieldlist&amp;quot;:[&amp;quot;rp&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:1,&amp;quot;fieldlist&amp;quot;:[&amp;quot;rc&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:2,&amp;quot;fieldlist&amp;quot;:[&amp;quot;status&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:3,&amp;quot;fieldlist&amp;quot;:[&amp;quot;req_type&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:4,&amp;quot;fieldlist&amp;quot;:[&amp;quot;bug_type&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:5,&amp;quot;fieldlist&amp;quot;:[&amp;quot;product_module&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:6,&amp;quot;fieldlist&amp;quot;:[&amp;quot;requester&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:7,&amp;quot;fieldlist&amp;quot;:[&amp;quot;work_patch&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:8,&amp;quot;fieldlist&amp;quot;:[&amp;quot;deploy_patch&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:9,&amp;quot;fieldlist&amp;quot;:[&amp;quot;reg_user&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:10,&amp;quot;fieldlist&amp;quot;:[&amp;quot;worker&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:11,&amp;quot;fieldlist&amp;quot;:[&amp;quot;developer&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:12,&amp;quot;fieldlist&amp;quot;:[&amp;quot;inspector&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:13,&amp;quot;fieldlist&amp;quot;:[&amp;quot;reg_date&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:14,&amp;quot;fieldlist&amp;quot;:[&amp;quot;last_work_date&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:15,&amp;quot;fieldlist&amp;quot;:[&amp;quot;inspect_date&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:16,&amp;quot;fieldlist&amp;quot;:[&amp;quot;title&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:17,&amp;quot;fieldlist&amp;quot;:[&amp;quot;txt_reg&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:18,&amp;quot;fieldlist&amp;quot;:[&amp;quot;txt_receipt&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:19,&amp;quot;fieldlist&amp;quot;:[&amp;quot;txt_analysis&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:20,&amp;quot;fieldlist&amp;quot;:[&amp;quot;txt_design&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:21,&amp;quot;fieldlist&amp;quot;:[&amp;quot;txt_impl&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:22,&amp;quot;fieldlist&amp;quot;:[&amp;quot;txt_impl_detail&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:23,&amp;quot;fieldlist&amp;quot;:[&amp;quot;txt_inspect&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:24,&amp;quot;fieldlist&amp;quot;:[&amp;quot;upload_id&amp;quot;]},{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:25,&amp;quot;fieldlist&amp;quot;:[&amp;quot;updated_at&amp;quot;]}]}"/>
+        </ViewTemplateInfo>
+      </ViewInfo>
+      <ViewInfo viewid="Master">
+        <ModelInfo modelserviceid="tops" serviceid="reqMasterSelect" modelid="ds_output" datasetid="_dstops_reqMasterSelect_ds_output" filepath=".model\reqMasterSelect.model">
+          <Fields>
+            <Field id="rp"/>
+            <Field required="false" id="rc"/>
+            <Field id="status"/>
+            <Field id="req_type"/>
+            <Field id="bug_type"/>
+            <Field id="product_module"/>
+            <Field id="requester"/>
+            <Field id="work_patch"/>
+            <Field id="deploy_patch"/>
+            <Field id="reg_user"/>
+            <Field id="worker"/>
+            <Field id="developer"/>
+            <Field id="inspector"/>
+            <Field id="reg_date"/>
+            <Field id="last_work_date"/>
+            <Field id="inspect_date"/>
+            <Field id="title"/>
+            <Field id="txt_reg"/>
+            <Field id="txt_receipt"/>
+            <Field id="txt_analysis"/>
+            <Field id="txt_design"/>
+            <Field id="txt_impl"/>
+            <Field id="txt_impl_detail"/>
+            <Field id="txt_inspect"/>
+            <Field id="upload_id"/>
+            <Field id="updated_at"/>
+          </Fields>
+          <Components>
             <Component id="grdList" fields="rp,rc,status,req_type,bug_type,product_module,requester,work_patch,deploy_patch,reg_user,worker,developer,inspector,reg_date,last_work_date,inspect_date,title,txt_reg,txt_receipt,txt_analysis,txt_design,txt_impl,txt_impl_detail,txt_inspect,upload_id,updated_at"/>
           </Components>
         </ModelInfo>
-        <ViewTemplateInfo filepath="NexaLAP_BasePack/Grid/GridView.viewtemplate">
-          <Attribute id="gridlayout" value="{&amp;quot;columns&amp;quot;:[{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100}],&amp;quot;rows&amp;quot;:[{&amp;quot;band&amp;quot;:&amp;quot;head&amp;quot;,&amp;quot;size&amp;quot;:40},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:40}],&amp;quot;head&amp;quot;:[{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;RP&amp;quot;},{&amp;quot;col&amp;quot;:1,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;RC&amp;quot;},{&amp;quot;col&amp;quot;:2,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;상태&amp;quot;},{&amp;quot;col&amp;quot;:3,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;요구종류&amp;quot;},{&amp;quot;col&amp;quot;:4,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;버그종류&amp;quot;},{&amp;quot;col&amp;quot;:5,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;제품-모듈&amp;quot;},{&amp;quot;col&amp;quot;:6,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;요구처&amp;quot;},{&amp;quot;col&amp;quot;:7,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;작업패치&amp;quot;},{&amp;quot;col&amp;quot;:8,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;배포패치&amp;quot;},{&amp;quot;col&amp;quot;:9,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;등록자&amp;quot;},{&amp;quot;col&amp;quot;:10,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;작업자&amp;quot;},{&amp;quot;col&amp;quot;:11,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;개발자&amp;quot;},{&amp;quot;col&amp;quot;:12,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;검수자&amp;quot;},{&amp;quot;col&amp;quot;:13,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;등록일자&amp;quot;},{&amp;quot;col&amp;quot;:14,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;최종작업일&amp;quot;},{&amp;quot;col&amp;quot;:15,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;검수일&amp;quot;},{&amp;quot;col&amp;quot;:16,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;제목&amp;quot;},{&amp;quot;col&amp;quot;:17,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;등록&amp;quot;},{&amp;quot;col&amp;quot;:18,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;접수&amp;quot;},{&amp;quot;col&amp;quot;:19,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;분석&amp;quot;},{&amp;quot;col&amp;quot;:20,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;설계&amp;quot;},{&amp;quot;col&amp;quot;:21,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;구현&amp;quot;},{&amp;quot;col&amp;quot;:22,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;구현상세&amp;quot;},{&amp;quot;col&amp;quot;:23,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;검수&amp;quot;},{&amp;quot;col&amp;quot;:24,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;업로드 회차&amp;quot;},{&amp;quot;col&amp;quot;:25,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;반영 시각&amp;quot;}],&amp;quot;body&amp;quot;:[{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;rp&amp;quot;},{&amp;quot;col&amp;quot;:1,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;rc&amp;quot;},{&amp;quot;col&amp;quot;:2,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;status&amp;quot;},{&amp;quot;col&amp;quot;:3,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;req_type&amp;quot;},{&amp;quot;col&amp;quot;:4,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;bug_type&amp;quot;},{&amp;quot;col&amp;quot;:5,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;product_module&amp;quot;},{&amp;quot;col&amp;quot;:6,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;requester&amp;quot;},{&amp;quot;col&amp;quot;:7,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;work_patch&amp;quot;},{&amp;quot;col&amp;quot;:8,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;deploy_patch&amp;quot;},{&amp;quot;col&amp;quot;:9,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;reg_user&amp;quot;},{&amp;quot;col&amp;quot;:10,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;worker&amp;quot;},{&amp;quot;col&amp;quot;:11,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;developer&amp;quot;},{&amp;quot;col&amp;quot;:12,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;inspector&amp;quot;},{&amp;quot;col&amp;quot;:13,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;reg_date&amp;quot;},{&amp;quot;col&amp;quot;:14,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;last_work_date&amp;quot;},{&amp;quot;col&amp;quot;:15,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;inspect_date&amp;quot;},{&amp;quot;col&amp;quot;:16,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;title&amp;quot;},{&amp;quot;col&amp;quot;:17,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;txt_reg&amp;quot;},{&amp;quot;col&amp;quot;:18,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;txt_receipt&amp;quot;},{&amp;quot;col&amp;quot;:19,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;txt_analysis&amp;quot;},{&amp;quot;col&amp;quot;:20,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;txt_design&amp;quot;},{&amp;quot;col&amp;quot;:21,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;txt_impl&amp;quot;},{&amp;quot;col&amp;quot;:22,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;txt_impl_detail&amp;quot;},{&amp;quot;col&amp;quot;:23,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;txt_inspect&amp;quot;},{&amp;quot;col&amp;quot;:24,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;upload_id&amp;quot;},{&amp;quot;col&amp;quot;:25,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;updated_at&amp;quot;}]}"/>
+        <ViewTemplateInfo filepath="NexaLAP_BasePack/Grid/FilterGridView.viewtemplate">
+          <Attribute id="gridlayout" value="{&quot;columns&quot;:[{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100}],&quot;rows&quot;:[{&quot;band&quot;:&quot;head&quot;,&quot;size&quot;:32},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:32}],&quot;head&quot;:[{&quot;col&quot;:0,&quot;row&quot;:0,&quot;text&quot;:&quot;RP&quot;},{&quot;col&quot;:1,&quot;row&quot;:0,&quot;text&quot;:&quot;RC&quot;},{&quot;col&quot;:2,&quot;row&quot;:0,&quot;text&quot;:&quot;상태&quot;},{&quot;col&quot;:3,&quot;row&quot;:0,&quot;text&quot;:&quot;요구종류&quot;},{&quot;col&quot;:4,&quot;row&quot;:0,&quot;text&quot;:&quot;버그종류&quot;},{&quot;col&quot;:5,&quot;row&quot;:0,&quot;text&quot;:&quot;제품-모듈&quot;},{&quot;col&quot;:6,&quot;row&quot;:0,&quot;text&quot;:&quot;요구처&quot;},{&quot;col&quot;:7,&quot;row&quot;:0,&quot;text&quot;:&quot;작업패치&quot;},{&quot;col&quot;:8,&quot;row&quot;:0,&quot;text&quot;:&quot;배포패치&quot;},{&quot;col&quot;:9,&quot;row&quot;:0,&quot;text&quot;:&quot;등록자&quot;},{&quot;col&quot;:10,&quot;row&quot;:0,&quot;text&quot;:&quot;작업자&quot;},{&quot;col&quot;:11,&quot;row&quot;:0,&quot;text&quot;:&quot;개발자&quot;},{&quot;col&quot;:12,&quot;row&quot;:0,&quot;text&quot;:&quot;검수자&quot;},{&quot;col&quot;:13,&quot;row&quot;:0,&quot;text&quot;:&quot;등록일자&quot;},{&quot;col&quot;:14,&quot;row&quot;:0,&quot;text&quot;:&quot;최종작업일&quot;},{&quot;col&quot;:15,&quot;row&quot;:0,&quot;text&quot;:&quot;검수일&quot;},{&quot;col&quot;:16,&quot;row&quot;:0,&quot;text&quot;:&quot;제목&quot;},{&quot;col&quot;:17,&quot;row&quot;:0,&quot;text&quot;:&quot;등록&quot;},{&quot;col&quot;:18,&quot;row&quot;:0,&quot;text&quot;:&quot;접수&quot;},{&quot;col&quot;:19,&quot;row&quot;:0,&quot;text&quot;:&quot;분석&quot;},{&quot;col&quot;:20,&quot;row&quot;:0,&quot;text&quot;:&quot;설계&quot;},{&quot;col&quot;:21,&quot;row&quot;:0,&quot;text&quot;:&quot;구현&quot;},{&quot;col&quot;:22,&quot;row&quot;:0,&quot;text&quot;:&quot;구현상세&quot;},{&quot;col&quot;:23,&quot;row&quot;:0,&quot;text&quot;:&quot;검수&quot;},{&quot;col&quot;:24,&quot;row&quot;:0,&quot;text&quot;:&quot;업로드 회차&quot;},{&quot;col&quot;:25,&quot;row&quot;:0,&quot;text&quot;:&quot;반영 시각&quot;}],&quot;body&quot;:[{&quot;col&quot;:0,&quot;row&quot;:0,&quot;field&quot;:&quot;rp&quot;},{&quot;col&quot;:1,&quot;row&quot;:0,&quot;field&quot;:&quot;rc&quot;},{&quot;col&quot;:2,&quot;row&quot;:0,&quot;field&quot;:&quot;status&quot;},{&quot;col&quot;:3,&quot;row&quot;:0,&quot;field&quot;:&quot;req_type&quot;},{&quot;col&quot;:4,&quot;row&quot;:0,&quot;field&quot;:&quot;bug_type&quot;},{&quot;col&quot;:5,&quot;row&quot;:0,&quot;field&quot;:&quot;product_module&quot;},{&quot;col&quot;:6,&quot;row&quot;:0,&quot;field&quot;:&quot;requester&quot;},{&quot;col&quot;:7,&quot;row&quot;:0,&quot;field&quot;:&quot;work_patch&quot;},{&quot;col&quot;:8,&quot;row&quot;:0,&quot;field&quot;:&quot;deploy_patch&quot;},{&quot;col&quot;:9,&quot;row&quot;:0,&quot;field&quot;:&quot;reg_user&quot;},{&quot;col&quot;:10,&quot;row&quot;:0,&quot;field&quot;:&quot;worker&quot;},{&quot;col&quot;:11,&quot;row&quot;:0,&quot;field&quot;:&quot;developer&quot;},{&quot;col&quot;:12,&quot;row&quot;:0,&quot;field&quot;:&quot;inspector&quot;},{&quot;col&quot;:13,&quot;row&quot;:0,&quot;field&quot;:&quot;reg_date&quot;},{&quot;col&quot;:14,&quot;row&quot;:0,&quot;field&quot;:&quot;last_work_date&quot;},{&quot;col&quot;:15,&quot;row&quot;:0,&quot;field&quot;:&quot;inspect_date&quot;},{&quot;col&quot;:16,&quot;row&quot;:0,&quot;field&quot;:&quot;title&quot;},{&quot;col&quot;:17,&quot;row&quot;:0,&quot;field&quot;:&quot;txt_reg&quot;},{&quot;col&quot;:18,&quot;row&quot;:0,&quot;field&quot;:&quot;txt_receipt&quot;},{&quot;col&quot;:19,&quot;row&quot;:0,&quot;field&quot;:&quot;txt_analysis&quot;},{&quot;col&quot;:20,&quot;row&quot;:0,&quot;field&quot;:&quot;txt_design&quot;},{&quot;col&quot;:21,&quot;row&quot;:0,&quot;field&quot;:&quot;txt_impl&quot;},{&quot;col&quot;:22,&quot;row&quot;:0,&quot;field&quot;:&quot;txt_impl_detail&quot;},{&quot;col&quot;:23,&quot;row&quot;:0,&quot;field&quot;:&quot;txt_inspect&quot;},{&quot;col&quot;:24,&quot;row&quot;:0,&quot;field&quot;:&quot;upload_id&quot;},{&quot;col&quot;:25,&quot;row&quot;:0,&quot;field&quot;:&quot;updated_at&quot;}]}"/>
+        </ViewTemplateInfo>
+      </ViewInfo>
+      <ViewInfo viewid="Search">
+        <ModelInfo modelserviceid="tops" serviceid="reqMasterSelect" modelid="ds_search" datasetid="_dstops_reqMasterSelect_ds_search" filepath=".model\reqMasterSelect.model">
+          <Fields>
+            <Field id="rp"/>
+            <Field id="status"/>
+            <Field id="requester"/>
+            <Field id="title"/>
+          </Fields>
+          <Components>
+            <Component id="pnl_mainPanel" fields="_mainPanel"/>
+            <Component id="btnSearch" fields="btnSearch"/>
+            <Component id="staRp" fields="rp"/>
+            <Component id="edtrp" fields="rp"/>
+            <Component id="pnlRp" fields="rp"/>
+            <Component id="staStatus" fields="status"/>
+            <Component id="edtstatus" fields="status"/>
+            <Component id="pnlStatus" fields="status"/>
+            <Component id="staRequester" fields="requester"/>
+            <Component id="edtrequester" fields="requester"/>
+            <Component id="pnlRequester" fields="requester"/>
+            <Component id="staTitle" fields="title"/>
+            <Component id="edttitle" fields="title"/>
+            <Component id="pnlTitle" fields="title"/>
+          </Components>
+        </ModelInfo>
+        <ViewTemplateInfo filepath="NexaLAP_BasePack/Search/FluidSearchView.viewtemplate">
+          <Attribute id="labelWidth" value="80"/>
+          <Attribute id="fieldWidth" value="100"/>
+          <Attribute id="layout" value="{&quot;columnsize&quot;:[300,300,300],&quot;rowsize&quot;:[38,38],&quot;celllist&quot;:[{&quot;col&quot;:0,&quot;row&quot;:0,&quot;fieldlist&quot;:[&quot;rp&quot;]},{&quot;col&quot;:1,&quot;row&quot;:0,&quot;fieldlist&quot;:[&quot;status&quot;]},{&quot;col&quot;:2,&quot;row&quot;:0,&quot;fieldlist&quot;:[&quot;requester&quot;]},{&quot;col&quot;:0,&quot;row&quot;:1,&quot;fieldlist&quot;:[&quot;title&quot;]}]}"/>
         </ViewTemplateInfo>
       </ViewInfo>
     </ViewGenerationInfo>
+    <Script type="xscript5.1"><![CDATA[]]>
+    </Script>
+    <Trigger>
+      <TriggerItem id="item0" triggertype="onload" triggerview="" triggerobj="" targetaction="Transaction00"/>
+      <TriggerItem id="item1" triggertype="onclick" triggerview="Search" triggerobj="btnSearch" targetaction="Transaction00"/>
+    </Trigger>
   </Form>
 </FDL>

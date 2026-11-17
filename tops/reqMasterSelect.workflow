@@ -2,8 +2,8 @@
   "file": {
     "version": "1.0",
     "package": "tops",
-    "name": "svcTest",
-    "alias": "svcTest",
+    "name": "reqMasterSelect",
+    "alias": "reqMasterSelect",
     "description": ""
   },
   "workflow": [
@@ -42,7 +42,7 @@
       "datasource": "tops_board",
       "target": "",
       "output": "ds_output",
-      "sql": "SELECT *\nFROM req_master R",
+      "sql": "SELECT r.*\nFROM req_master r\nWHERE (IFNULL(#{ds_search.rp}, '') = '' OR r.rp LIKE CONCAT('%', #{ds_search.rp}, '%'))\n  AND (IFNULL(#{ds_search.status}, '') = '' OR FIND_IN_SET(r.status, #{ds_search.status}) > 0)\n  AND (IFNULL(#{ds_search.requester}, '') = '' OR r.requester LIKE CONCAT('%', #{ds_search.requester}, '%'))\n  AND (IFNULL(#{ds_search.title}, '') = '' OR r.title LIKE CONCAT('%', #{ds_search.title}, '%'))\nORDER BY r.reg_date DESC, r.rp DESC",
       "insertquery": "",
       "updatequery": "",
       "deletequery": "",
@@ -51,13 +51,26 @@
       "actiontype": "query",
       "sqltype": "select",
       "_designer": {
-        "mode": "designer",
-        "isCustomSql": false,
+        "mode": "sql",
+        "isCustomSql": true,
         "designerModel": {
-          "activeTab": "select",
+          "activeTab": "where",
           "selectedColumns": [],
           "joins": [],
-          "conditions": [],
+          "conditions": [
+            {
+              "column": "R.rp",
+              "operator": "=",
+              "valueType": "workflowProperty",
+              "value": "#{ds_search.rp}"
+            },
+            {
+              "column": "R.rp",
+              "operator": "=",
+              "valueType": "workflowProperty",
+              "value": ""
+            }
+          ],
           "orderBy": [],
           "tableSearch": "",
           "tablePanelsExpanded": true,
@@ -73,7 +86,7 @@
       },
       "nodesize": {
         "width": 550,
-        "height": 582
+        "height": 570
       }
     }
   ],
@@ -84,7 +97,47 @@
   },
   "request": {
     "variables": [],
-    "datasets": []
+    "datasets": [
+      {
+        "name": "ds_search",
+        "description": "",
+        "columns": [
+          {
+            "name": "rp",
+            "type": "STRING",
+            "datasize": 10,
+            "tablename": "req_master",
+            "isconstant": false,
+            "key": "tops_board.req_master.rp"
+          },
+          {
+            "name": "status",
+            "type": "STRING",
+            "datasize": 20,
+            "tablename": "req_master",
+            "isconstant": false,
+            "key": "tops_board.req_master.status"
+          },
+          {
+            "name": "requester",
+            "type": "STRING",
+            "datasize": 200,
+            "tablename": "req_master",
+            "isconstant": false,
+            "key": "tops_board.req_master.requester"
+          },
+          {
+            "name": "title",
+            "type": "STRING",
+            "datasize": 500,
+            "tablename": "req_master",
+            "isconstant": false,
+            "key": "tops_board.req_master.title"
+          }
+        ],
+        "datasource": "tops_board"
+      }
+    ]
   },
   "response": {
     "variables": [],
