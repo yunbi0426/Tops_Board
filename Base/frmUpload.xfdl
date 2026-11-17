@@ -102,10 +102,148 @@
 ]]>
           </Script>
         </View>
-        <View id="viewResult" left="10" top="viewUpload:10" taborder="1" height="200" text="viewResult" right="10">
+        <View id="viewResult" left="10" top="viewUpload:10" taborder="1" height="110" text="viewResult" right="10" viewdataset="_dstops_uploadLogSelect_ds_output">
           <Layouts>
-            <Layout type="default"/>
+            <Layout>
+              <Static id="staFrame" left="10" top="10" right="10" bottom="10" text="" border="1px solid #E0DED6" borderRadius="12px" background="#FFFFFF"/>
+              <Static id="staHeader" left="22" top="22" right="22" height="22" text="" color="#5F5E5A" font="normal 12px/normal &quot;Malgun Gothic&quot;" usedecorate="true"/>
+              <Static id="staTotal" left="50%" top="22" right="22" height="22" text="" color="#5F5E5A" font="normal 12px/normal &quot;Malgun Gothic&quot;" usedecorate="true" textAlign="right"/>
+              <Static id="staTrack" left="22" top="52" right="22" height="10" text="" background="#D3D1C7" borderRadius="5px"/>
+              <Static id="staSeg_new_count" left="22" top="52" width="0" height="10" text="" background="#639922" _fieldid="new_count" _fieldcomptype="comp"/>
+              <Static id="staSeg_changed_count" left="staSeg_new_count:0" top="52" width="0" height="10" text="" background="#EF9F27" _fieldid="changed_count" _fieldcomptype="comp"/>
+              <Static id="staLegend" left="22" top="70" right="22" height="22" text="" color="#5F5E5A" font="normal 12px/normal &quot;Malgun Gothic&quot;" usedecorate="true"/>
+            </Layout>
           </Layouts>
+          <Script><![CDATA[
+	this.fvHeaderFormat = "<b v='true'>{upload_id}회차</b>   기준일 {base_date}";
+	this.fvEmptyText = "업로드 이력이 없습니다";
+	this.fvTotalField = "row_count";
+	this.fvTotalLabel = "전체";
+	this.fvRestLabel = "변동 없음";
+	this.fvValueSuffix = "건";
+	this.fvSegFields = ["new_count","changed_count"];
+	this.fvSegLabels = ["신규","변경"];
+	this.fvSegColors = ["#639922","#EF9F27","#378ADD","#D4537E"];
+	this.fvRestColor = "#D3D1C7";
+	this.fvMinSegPx = 3;
+
+	this._fnViewOnLoad = function(objForm) {
+		/* Sets the view form reference so that functions declared in the view can access it */
+		this._ownerForm = objForm;
+
+		var oDs = this.parent.getViewDataset();
+		if (!this._bSummaryInit) {
+			/* 조회 완료 / 값 변경 / 행 이동 때 갱신, 크기 변경 때 막대 길이 재계산. 재호출 시 중복 등록 방지 */
+			if (oDs) {
+				oDs.addEventHandler("onload", this.fn_ds_onchanged, this);
+				oDs.addEventHandler("oncolumnchanged", this.fn_ds_onchanged, this);
+				oDs.addEventHandler("onrowposchanged", this.fn_ds_onchanged, this);
+			}
+			this.addEventHandler("onsize", this.fn_onsize, this);
+			this._bSummaryInit = true;
+		}
+
+		this.fn_refresh();
+	};
+
+	this.fn_ds_onchanged = function(obj, e) {
+		this.fn_refresh();
+	};
+
+	this.fn_onsize = function(obj, e) {
+		this.fn_refresh();
+	};
+
+	this.fn_refresh = function() {
+		var oDs    = this.parent.getViewDataset();
+		var bData  = oDs && oDs.getRowCount() > 0 && oDs.rowposition >= 0;
+		var nRow   = bData ? oDs.rowposition : -1;
+		var oThis  = this;
+		var sUnit  = this.fvValueSuffix ? " " + this.fvValueSuffix : "";
+		var i;
+
+		// 제목
+		if (!bData) {
+			this.staHeader.set_text(this.fvEmptyText);
+		} else {
+			this.staHeader.set_text(("" + this.fvHeaderFormat).replace(/\{([A-Za-z0-9_]+)\}/g, function(sAll, sCol) {
+				return oThis.fn_formatValue(oDs.getColumn(nRow, sCol));
+			}));
+		}
+
+		// 구간 값과 합계 (합계 필드가 없으면 구간 합을 합계로)
+		var arrValues = [];
+		var nSegSum   = 0;
+		for (i = 0; i < this.fvSegFields.length; i++) {
+			var n = bData ? this.fn_toNumber(oDs.getColumn(nRow, this.fvSegFields[i])) : 0;
+			arrValues.push(n);
+			nSegSum += n;
+		}
+		var nTotal = (bData && this.fvTotalField) ? this.fn_toNumber(oDs.getColumn(nRow, this.fvTotalField)) : nSegSum;
+		var nRest  = Math.max(nTotal - nSegSum, 0);
+
+		// 합계 (오른쪽)
+		this.staTotal.set_text(bData
+			? this.fvTotalLabel + " <b v='true'><fs v='12'>" + this.fn_formatNumber(nTotal) + "</fs></b>" + sUnit
+			: "");
+
+		// 막대 : 실제 막대 너비(px) 기준으로 구간 길이 계산
+		var nTrackW = this.staTrack.getOffsetWidth();
+		for (i = 0; i < this.fvSegFields.length; i++) {
+			var oSeg = this["staSeg_" + this.fvSegFields[i]];
+			if (!oSeg) {
+				continue;
+			}
+			var nW = 0;
+			if (nTotal > 0 && arrValues[i] > 0) {
+				nW = Math.max(Math.round(nTrackW * arrValues[i] / nTotal), this.fvMinSegPx);
+			}
+			oSeg.set_width(nW);
+		}
+
+		// 범례
+		var sLegend = "";
+		if (bData) {
+			for (i = 0; i < this.fvSegFields.length; i++) {
+				var sColor = this.fvSegColors.length > 0 ? this.fvSegColors[i % this.fvSegColors.length] : "#639922";
+				sLegend += "<fc v='" + sColor + "'>■</fc> " + this.fvSegLabels[i] + " " + this.fn_formatNumber(arrValues[i]) + sUnit + "      ";
+			}
+			sLegend += "<fc v='" + this.fvRestColor + "'>■</fc> " + this.fvRestLabel + " " + this.fn_formatNumber(nRest) + sUnit;
+		}
+		this.staLegend.set_text(sLegend);
+	};
+
+	this.fn_toNumber = function(v) {
+		var n = parseFloat(v);
+		return isNaN(n) ? 0 : n;
+	};
+
+	this.fn_formatValue = function(v) {
+		if (v === undefined || v === null) {
+			return "";
+		}
+		if (v.getFullYear) {
+			var p = function(n) { return n < 10 ? "0" + n : "" + n; };
+			var sDate = v.getFullYear() + "-" + p(v.getMonth() + 1) + "-" + p(v.getDate());
+			if (v.getHours() == 0 && v.getMinutes() == 0) {
+				return sDate;
+			}
+			return sDate + " " + p(v.getHours()) + ":" + p(v.getMinutes());
+		}
+		return "" + v;
+	};
+
+	this.fn_formatNumber = function(v) {
+		var s = "" + v;
+		if (!/^-?\d+(\.\d+)?$/.test(s)) {
+			return this.fn_formatValue(v);
+		}
+		var arr = s.split(".");
+		arr[0] = arr[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		return arr.join(".");
+	};
+]]>
+          </Script>
         </View>
         <View id="viewHistory" left="10" top="viewResult:10" taborder="0" text="viewHistory" right="10" bottom="10" viewdataset="_dstops_uploadLogSelect_ds_output">
           <Layouts>
@@ -178,7 +316,7 @@
 }]]>
         </Contents>
       </Transaction>
-      <OnLoadView id="OnLoadView00" alias="Form Init"/>
+      <OnLoadView id="OnLoadView00" alias="폼 초기화"/>
       <Dataset id="_dstops_uploadLogSelect_ds_output">
         <ColumnInfo>
           <Column id="upload_id" type="int" size="11" description="업로드 회차"/>
@@ -222,21 +360,12 @@
     "outputdatasets": [
         {
             "modelid": "ds_output",
-            "datasetid": "_dstops_importTopsExcel_ds_output00"
+            "datasetid": "_dstops_uploadLogSelect_ds_output"
         }
     ]
 }]]>
         </Contents>
       </Transaction>
-      <Dataset id="_dstops_importTopsExcel_ds_output00">
-        <ColumnInfo>
-          <Column id="row_count" type="INT" size="10" description="전체 건수"/>
-          <Column id="new_count" type="INT" size="10" description="신규 건수"/>
-          <Column id="changed_count" type="INT" size="10" description="상태 변경 건수"/>
-          <Column id="upload_id" type="INT" size="10" description="업로드 회차"/>
-        </ColumnInfo>
-        <Rows/>
-      </Dataset>
       <Dataset id="_dstops_importTopsExcel_ds_input">
         <ColumnInfo>
           <Column id="base_date" type="DATE" size="100" description="기준일"/>
@@ -257,29 +386,9 @@
       <TriggerItem id="item7" triggertype="Action Success" triggerview="" triggerobj="FileUploadTransfer00" targetaction="Transaction01"/>
     </Trigger>
     <ViewGenerationInfo>
-      <ViewInfo viewid="viewHistory">
-        <ModelInfo modelserviceid="tops" serviceid="uploadLogSelect" modelid="ds_output" datasetid="_dstops_uploadLogSelect_ds_output" filepath=".model\uploadLogSelect.model">
-          <Fields>
-            <Field id="upload_id" label="회차"/>
-            <Field id="base_date" displaytype="date" edittype="normal"/>
-            <Field id="file_name"/>
-            <Field id="row_count" label="전체"/>
-            <Field id="new_count" label="신규"/>
-            <Field id="changed_count" label="변경"/>
-            <Field id="uploaded_at" fieldtype="Date" options="{&quot;dataformat&quot;:&quot;yyyy-MM-dd HH:mm&quot;}" displaytype="normal"/>
-          </Fields>
-          <Components>
-            <Component id="grdList" fields="upload_id,base_date,file_name,row_count,new_count,changed_count,uploaded_at"/>
-          </Components>
-        </ModelInfo>
-        <ViewTemplateInfo filepath="NexaLAP_BasePack/Grid/GridView.viewtemplate">
-          <Attribute id="gridlayout" value="{&quot;columns&quot;:[{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100}],&quot;rows&quot;:[{&quot;band&quot;:&quot;head&quot;,&quot;size&quot;:40},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:40}],&quot;head&quot;:[{&quot;col&quot;:0,&quot;row&quot;:0,&quot;text&quot;:&quot;회차&quot;},{&quot;col&quot;:1,&quot;row&quot;:0,&quot;text&quot;:&quot;기준일&quot;},{&quot;col&quot;:2,&quot;row&quot;:0,&quot;text&quot;:&quot;파일명&quot;},{&quot;col&quot;:3,&quot;row&quot;:0,&quot;text&quot;:&quot;전체&quot;},{&quot;col&quot;:4,&quot;row&quot;:0,&quot;text&quot;:&quot;신규&quot;},{&quot;col&quot;:5,&quot;row&quot;:0,&quot;text&quot;:&quot;변경&quot;},{&quot;col&quot;:6,&quot;row&quot;:0,&quot;text&quot;:&quot;업로드 시각&quot;}],&quot;body&quot;:[{&quot;col&quot;:0,&quot;row&quot;:0,&quot;field&quot;:&quot;upload_id&quot;},{&quot;col&quot;:1,&quot;row&quot;:0,&quot;field&quot;:&quot;base_date&quot;},{&quot;col&quot;:2,&quot;row&quot;:0,&quot;field&quot;:&quot;file_name&quot;},{&quot;col&quot;:3,&quot;row&quot;:0,&quot;field&quot;:&quot;row_count&quot;},{&quot;col&quot;:4,&quot;row&quot;:0,&quot;field&quot;:&quot;new_count&quot;},{&quot;col&quot;:5,&quot;row&quot;:0,&quot;field&quot;:&quot;changed_count&quot;},{&quot;col&quot;:6,&quot;row&quot;:0,&quot;field&quot;:&quot;uploaded_at&quot;}]}"/>
-        </ViewTemplateInfo>
-      </ViewInfo>
       <ViewInfo viewid="frmUpload">
         <ModelInfo modelserviceid="tops" serviceid="importTopsExcel" modelid="_FileMetaInfo" datasetid="_dstops_importTopsExcel__FileMetaInfo00" filepath=".model\importTopsExcel.model"/>
         <ViewTemplateInfo/>
-        <ModelInfo modelserviceid="tops" serviceid="importTopsExcel" modelid="ds_output" datasetid="_dstops_importTopsExcel_ds_output00" filepath=".model\importTopsExcel.model"/>
       </ViewInfo>
       <ViewInfo viewid="viewUpload">
         <ModelInfo modelserviceid="tops" serviceid="importTopsExcel" modelid="ds_input" datasetid="_dstops_importTopsExcel_ds_input" filepath=".model\importTopsExcel.model">
@@ -297,6 +406,54 @@
           </Components>
         </ModelInfo>
         <ViewTemplateInfo filepath="Tops_Board_Asset/ExcelUploadView.viewtemplate"/>
+      </ViewInfo>
+      <ViewInfo viewid="viewResult">
+        <ModelInfo modelserviceid="tops" serviceid="uploadLogSelect" modelid="ds_output" datasetid="_dstops_uploadLogSelect_ds_output" filepath=".model\uploadLogSelect.model">
+          <Fields>
+            <Field id="upload_id" used="false"/>
+            <Field id="base_date" used="false"/>
+            <Field id="file_name" used="false"/>
+            <Field id="row_count"/>
+            <Field id="new_count" label="신규"/>
+            <Field id="changed_count" label="변경"/>
+            <Field id="uploaded_at" used="false"/>
+          </Fields>
+          <Components>
+            <Component id="staFrame" fields=""/>
+            <Component id="staHeader" fields=""/>
+            <Component id="staTotal" fields=""/>
+            <Component id="staTrack" fields=""/>
+            <Component id="staSeg_new_count" fields=""/>
+            <Component id="staSeg_changed_count" fields=""/>
+            <Component id="staLegend" fields=""/>
+          </Components>
+        </ModelInfo>
+        <ViewTemplateInfo filepath="Tops_Board_Asset/SummaryBarView.viewtemplate">
+          <Attribute id="headerformat" value="&lt;b v=&apos;true&apos;&gt;{upload_id}회차&lt;/b&gt;   기준일 {base_date}"/>
+          <Attribute id="emptytext" value="업로드 이력이 없습니다"/>
+          <Attribute id="totalfield" value="row_count"/>
+          <Attribute id="restlabel" value="변동 없음"/>
+          <Attribute id="valuesuffix" value="건"/>
+        </ViewTemplateInfo>
+      </ViewInfo>
+      <ViewInfo viewid="viewHistory">
+        <ModelInfo modelserviceid="tops" serviceid="uploadLogSelect" modelid="ds_output" datasetid="_dstops_uploadLogSelect_ds_output" filepath=".model\uploadLogSelect.model">
+          <Fields>
+            <Field id="upload_id" label="회차"/>
+            <Field id="base_date" displaytype="date" edittype="normal"/>
+            <Field id="file_name"/>
+            <Field id="row_count" label="전체"/>
+            <Field id="new_count" label="신규"/>
+            <Field id="changed_count" label="변경"/>
+            <Field id="uploaded_at" fieldtype="Date" options="{&amp;quot;dataformat&amp;quot;:&amp;quot;yyyy-MM-dd HH:mm:ss&amp;quot;}" displaytype="normal"/>
+          </Fields>
+          <Components>
+            <Component id="grdList" fields="upload_id,base_date,file_name,row_count,new_count,changed_count,uploaded_at"/>
+          </Components>
+        </ModelInfo>
+        <ViewTemplateInfo filepath="NexaLAP_BasePack/Grid/GridView.viewtemplate">
+          <Attribute id="gridlayout" value="{&quot;columns&quot;:[{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100}],&quot;rows&quot;:[{&quot;band&quot;:&quot;head&quot;,&quot;size&quot;:40},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:40}],&quot;head&quot;:[{&quot;col&quot;:0,&quot;row&quot;:0,&quot;text&quot;:&quot;회차&quot;},{&quot;col&quot;:1,&quot;row&quot;:0,&quot;text&quot;:&quot;기준일&quot;},{&quot;col&quot;:2,&quot;row&quot;:0,&quot;text&quot;:&quot;파일명&quot;},{&quot;col&quot;:3,&quot;row&quot;:0,&quot;text&quot;:&quot;전체&quot;},{&quot;col&quot;:4,&quot;row&quot;:0,&quot;text&quot;:&quot;신규&quot;},{&quot;col&quot;:5,&quot;row&quot;:0,&quot;text&quot;:&quot;변경&quot;},{&quot;col&quot;:6,&quot;row&quot;:0,&quot;text&quot;:&quot;업로드 시각&quot;}],&quot;body&quot;:[{&quot;col&quot;:0,&quot;row&quot;:0,&quot;field&quot;:&quot;upload_id&quot;},{&quot;col&quot;:1,&quot;row&quot;:0,&quot;field&quot;:&quot;base_date&quot;},{&quot;col&quot;:2,&quot;row&quot;:0,&quot;field&quot;:&quot;file_name&quot;},{&quot;col&quot;:3,&quot;row&quot;:0,&quot;field&quot;:&quot;row_count&quot;},{&quot;col&quot;:4,&quot;row&quot;:0,&quot;field&quot;:&quot;new_count&quot;},{&quot;col&quot;:5,&quot;row&quot;:0,&quot;field&quot;:&quot;changed_count&quot;},{&quot;col&quot;:6,&quot;row&quot;:0,&quot;field&quot;:&quot;uploaded_at&quot;}]}"/>
+        </ViewTemplateInfo>
       </ViewInfo>
     </ViewGenerationInfo>
   </Form>

@@ -14,7 +14,8 @@
       "OpenWorkForm.nexaobj",
       "ExcelUploadView.viewtemplate",
       "Tops_Board",
-      "ActionLib/TopsActionLib.js"
+      "ActionLib/TopsActionLib.js",
+      "SummaryCardView.viewtemplate"
     ]
   },
   "contentsEditor": []

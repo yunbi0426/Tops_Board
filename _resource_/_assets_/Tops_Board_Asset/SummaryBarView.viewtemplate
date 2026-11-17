@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewTemplateInfo version="2.0">
+  <ViewTemplate id="SummaryBarView" viewtype="Others" description_en="One-line summary with a proportion bar for the current row of the view dataset"/>
+  <Script version="1.0" type="xscript5.1"><![CDATA[/************************************************************************************************
+ * @FileName    SummaryBarView
+ * @Description 현재 행의 합계와 구성 비율을 막대 하나로 보여주는 요약 View
+ *              - 1줄 : 제목(headerformat)          ...          합계(totalfield)
+ *              - 2줄 : 비율 막대 (선택한 필드 = 구간, 나머지 = 합계 - 구간 합)
+ *              - 3줄 : 범례 (구간별 건수 + 나머지)
+ *              - 값은 View Dataset 의 현재 행(rowposition) 기준 → 그리드 선택을 따라감
+ *              - 너비는 View 에 맞춰 늘어나고, 막대 길이는 실제 너비 기준으로 다시 계산
+ ************************************************************************************************/
+
+/************************************************************************************************
+ * Variable Definitions
+ ************************************************************************************************/
+	// Layout
+	this.VIEW_PADDING  = 10;     // View 가장자리 ~ 테두리 박스
+	this.FRAME_PADDING = 12;     // 테두리 박스 ~ 내용
+	this.LINE_HEIGHT   = 22;     // 제목 줄 / 범례 줄 높이
+	this.BAR_HEIGHT    = 10;
+	this.LINE_GAP      = 8;
+	this.MIN_SEG_PX    = 3;      // 0 이 아닌 구간의 최소 길이 (너무 작아 안 보이는 것 방지)
+
+	// Fonts / colors (화면과 무관한 스타일 기본값)
+	this.TEXT_FONT    = "normal 12px/normal \"Malgun Gothic\"";
+	this.FRAME_BORDER = "1px solid #E0DED6";
+	this.TEXT_COLOR   = "#5F5E5A";
+
+	// Default values of view properties (화면마다 다른 값은 비워두고 View Generation 속성에서 지정)
+	this.HEADER_FORMAT  = "";
+	this.EMPTY_TEXT     = "데이터가 없습니다";
+	this.TOTAL_FIELD    = "";
+	this.TOTAL_LABEL    = "전체";
+	this.REST_LABEL     = "나머지";
+	this.VALUE_SUFFIX   = "";
+	this.SEGMENT_COLORS = "#639922,#EF9F27,#378ADD,#D4537E";
+	this.REST_COLOR     = "#D3D1C7";
+
+	// Component ids
+	this.ID_FRAME  = "staFrame";
+	this.ID_HEADER = "staHeader";
+	this.ID_TOTAL  = "staTotal";
+	this.ID_TRACK  = "staTrack";
+	this.ID_LEGEND = "staLegend";
+
+	// View-related variables
+	this.oFieldArray;
+	this.oContents;
+	this.oViewProperties;
+	this.arrSegIds = [];
+	this.arrSegLabels = [];
+
+/************************************************************************************************
+ * Required Function Area for NexaLAP Studio
+ ************************************************************************************************/
+	this.set_viewProperties = function() {
+		var oViewAttr = {
+			"attributes": [
+				{
+					"id": "headerformat",
+					"displaytext": "Header format",
+					"edittype": "String",
+					"defaultvalue": this.HEADER_FORMAT,
+					"description": "제목 형식. {필드ID} 를 현재 행 값으로 치환. <b v='true'>굵게</b> 사용 가능",
+					"group": "Header"
+				},
+				{
+					"id": "emptytext",
+					"displaytext": "Empty text",
+					"edittype": "String",
+					"defaultvalue": this.EMPTY_TEXT,
+					"description": "데이터가 없을 때 제목 문구",
+					"group": "Header"
+				},
+				{
+					"id": "totalfield",
+					"displaytext": "Total field",
+					"edittype": "String",
+					"defaultvalue": this.TOTAL_FIELD,
+					"description": "합계로 쓸 필드 ID (막대 전체 길이 기준)",
+					"group": "Total"
+				},
+				{
+					"id": "totallabel",
+					"displaytext": "Total label",
+					"edittype": "String",
+					"defaultvalue": this.TOTAL_LABEL,
+					"description": "합계 앞에 붙일 문구",
+					"group": "Total"
+				},
+				{
+					"id": "restlabel",
+					"displaytext": "Rest label",
+					"edittype": "String",
+					"defaultvalue": this.REST_LABEL,
+					"description": "합계에서 구간을 뺀 나머지의 범례 문구",
+					"group": "Total"
+				},
+				{
+					"id": "valuesuffix",
+					"displaytext": "Value suffix",
+					"edittype": "String",
+					"defaultvalue": this.VALUE_SUFFIX,
+					"description": "건수 뒤에 붙일 단위 (예: 건)",
+					"group": "Total"
+				},
+				{
+					"id": "segmentcolors",
+					"displaytext": "Segment colors",
+					"edittype": "String",
+					"defaultvalue": this.SEGMENT_COLORS,
+					"description": "구간 색 (선택한 필드 순서대로, 쉼표 구분)",
+					"group": "Bar"
+				},
+				{
+					"id": "restcolor",
+					"displaytext": "Rest color",
+					"edittype": "String",
+					"defaultvalue": this.REST_COLOR,
+					"description": "나머지(막대 바탕) 색",
+					"group": "Bar"
+				}
+			]
+		};
+
+		return JSON.stringify(oViewAttr, null, "\t");
+	};
+
+	this.set_fieldProperties = function() {
+		var oFieldAttr = { "attributes": [] };
+
+		return JSON.stringify(oFieldAttr, null, "\t");
+	};
+
+	/*---------------------------------------------------------------------------------------------*
+	 *                        !!! This function is required by NexaLAP Studio. !!!                 *
+	 *---------------------------------------------------------------------------------------------*/
+	this.main = function(fieldarray, contents, viewproperties) {
+		if (fieldarray) {
+			this.oFieldArray = JSON.parse(fieldarray);
+		}
+
+		if (contents) {
+			this.oContents = JSON.parse(contents);
+
+			// Initialize Model Information
+			this.oContents.View.Model = [];
+
+			// Initialize View layout
+			if (this.oContents.View.View && this.oContents.View.View[0]) {
+				this.oContents.View.View[0].tag = "Layouts";
+				this.oContents.View.View[0].Layouts = [];
+			}
+		}
+
+		if (viewproperties) {
+			this.oViewProperties = JSON.parse(viewproperties);
+		}
+
+		this.arrSegIds = [];
+		this.arrSegLabels = [];
+
+		// Generate model(component) information
+		this.oContents.View.Model = this.fn_GetModel();
+
+		// The viewdataset must be set (값은 바인딩 대신 스크립트로 채움)
+		this.oContents.View.attribute.viewdataset = "${VIEW_DATASET}";
+
+		// Generate script information
+		this.oContents.View.Script = this.fn_GetScript();
+
+		return JSON.stringify(this.oContents, null, "\t");
+	};
+
+/************************************************************************************************
+ * Functions Related to the main() Execution Flow
+ ************************************************************************************************/
+	// View property value (없으면 기본값)
+	this.fn_GetProp = function(sId, vDefault) {
+		var oAttr = (this.oViewProperties && this.oViewProperties.attributes) ? this.oViewProperties.attributes : null;
+		if (oAttr && oAttr[sId] !== undefined && oAttr[sId] !== null && oAttr[sId] !== "") {
+			return oAttr[sId];
+		}
+		return vDefault;
+	};
+
+	// 쉼표 문자열 → 배열 (공백 제거)
+	this.fn_Split = function(sValue) {
+		var arr = ("" + sValue).split(",");
+		var arrResult = [];
+		for (var i = 0; i < arr.length; i++) {
+			var s = arr[i].replace(/^\s+|\s+$/g, "");
+			if (s != "") {
+				arrResult.push(s);
+			}
+		}
+		return arrResult;
+	};
+
+	// 구간으로 쓸 필드 = 선택한 필드 중 합계 필드를 뺀 나머지
+	this.fn_GetSegmentFields = function() {
+		var arrFields = (this.oFieldArray && this.oFieldArray.fields) ? this.oFieldArray.fields : [];
+		var sTotal    = this.fn_GetProp("totalfield", this.TOTAL_FIELD);
+		var arrResult = [];
+
+		for (var i = 0; i < arrFields.length; i++) {
+			if (arrFields[i].id != sTotal) {
+				arrResult.push(arrFields[i]);
+			}
+		}
+		return arrResult;
+	};
+
+	this.fn_GetModel = function() {
+		var oModel = [];
+
+		var arrSegs   = this.fn_GetSegmentFields();
+		var arrColors = this.fn_Split(this.fn_GetProp("segmentcolors", this.SEGMENT_COLORS));
+
+		var nPad   = this.VIEW_PADDING;
+		var nInner = nPad + this.FRAME_PADDING;
+		var nTop   = nInner;
+
+		//---------------- 테두리 박스 : View 를 가득 채움 ----------------
+		oModel.push({ "fieldid": "", "Components": [{
+			"tag": "Static",
+			"attribute": {
+				"id": this.ID_FRAME, "left": nPad, "top": nPad, "right": nPad, "bottom": nPad,
+				"text": "", "border": this.FRAME_BORDER, "borderRadius": "12px", "background": "#FFFFFF"
+			}
+		}] });
+
+		//---------------- 1줄 : 제목(왼쪽) + 합계(오른쪽) ----------------
+		oModel.push({ "fieldid": "", "Components": [
+			{
+				"tag": "Static",
+				"attribute": {
+					"id": this.ID_HEADER, "left": nInner, "top": nTop, "right": nInner, "height": this.LINE_HEIGHT,
+					"text": "", "color": this.TEXT_COLOR, "font": this.TEXT_FONT, "usedecorate": "true"
+				}
+			},
+			{
+				"tag": "Static",
+				"attribute": {
+					"id": this.ID_TOTAL, "left": "50%", "top": nTop, "right": nInner, "height": this.LINE_HEIGHT,
+					"text": "", "color": this.TEXT_COLOR, "font": this.TEXT_FONT, "usedecorate": "true",
+					"textAlign": "right"
+				}
+			}
+		] });
+
+		nTop += this.LINE_HEIGHT + this.LINE_GAP;
+
+		//---------------- 2줄 : 비율 막대 (바탕 = 나머지 색, 위에 구간을 이어 붙임) ----------------
+		var arrBar = [{
+			"tag": "Static",
+			"attribute": {
+				"id": this.ID_TRACK, "left": nInner, "top": nTop, "right": nInner, "height": this.BAR_HEIGHT,
+				"text": "", "background": this.fn_GetProp("restcolor", this.REST_COLOR), "borderRadius": "5px"
+			}
+		}];
+
+		var sPrevId = "";
+		for (var i = 0; i < arrSegs.length; i++) {
+			var oField = arrSegs[i];
+			var sId    = "staSeg_" + oField.id;
+
+			arrBar.push({
+				"tag": "Static",
+				"attribute": {
+					"id": sId, "left": (i == 0) ? nInner : sPrevId + ":0", "top": nTop, "width": 0, "height": this.BAR_HEIGHT,
+					"text": "", "background": arrColors.length > 0 ? arrColors[i % arrColors.length] : "#639922",
+					"_fieldid": oField.id, "_fieldcomptype": "comp"
+				}
+			});
+
+			this.arrSegIds.push(oField.id);
+			this.arrSegLabels.push(oField.label ? oField.label : oField.id);
+			sPrevId = sId;
+		}
+		oModel.push({ "fieldid": "", "Components": arrBar });
+
+		nTop += this.BAR_HEIGHT + this.LINE_GAP;
+
+		//---------------- 3줄 : 범례 ----------------
+		oModel.push({ "fieldid": "", "Components": [{
+			"tag": "Static",
+			"attribute": {
+				"id": this.ID_LEGEND, "left": nInner, "top": nTop, "right": nInner, "height": this.LINE_HEIGHT,
+				"text": "", "color": this.TEXT_COLOR, "font": this.TEXT_FONT, "usedecorate": "true"
+			}
+		}] });
+
+		return oModel;
+	};
+
+	// 함수를 "this.<name> = function..." 문자열로 변환
+	this.fn_FuncString = function(sName) {
+		return "\n\tthis." + sName + " = " + this[sName].toString() + ";\n";
+	};
+
+	this.fn_GetScript = function() {
+		var arrColors = this.fn_Split(this.fn_GetProp("segmentcolors", this.SEGMENT_COLORS));
+
+		// 실행 시점에 View 스크립트가 참조할 값
+		var sValue = "\n\tthis.fvHeaderFormat = " + JSON.stringify(this.fn_GetProp("headerformat", this.HEADER_FORMAT)) + ";"
+		           + "\n\tthis.fvEmptyText = " + JSON.stringify(this.fn_GetProp("emptytext", this.EMPTY_TEXT)) + ";"
+		           + "\n\tthis.fvTotalField = " + JSON.stringify(this.fn_GetProp("totalfield", this.TOTAL_FIELD)) + ";"
+		           + "\n\tthis.fvTotalLabel = " + JSON.stringify(this.fn_GetProp("totallabel", this.TOTAL_LABEL)) + ";"
+		           + "\n\tthis.fvRestLabel = " + JSON.stringify(this.fn_GetProp("restlabel", this.REST_LABEL)) + ";"
+		           + "\n\tthis.fvValueSuffix = " + JSON.stringify(this.fn_GetProp("valuesuffix", this.VALUE_SUFFIX)) + ";"
+		           + "\n\tthis.fvSegFields = " + JSON.stringify(this.arrSegIds) + ";"
+		           + "\n\tthis.fvSegLabels = " + JSON.stringify(this.arrSegLabels) + ";"
+		           + "\n\tthis.fvSegColors = " + JSON.stringify(arrColors) + ";"
+		           + "\n\tthis.fvRestColor = " + JSON.stringify(this.fn_GetProp("restcolor", this.REST_COLOR)) + ";"
+		           + "\n\tthis.fvMinSegPx = " + this.MIN_SEG_PX + ";\n";
+
+		sValue += this.fn_FuncString("_fnViewOnLoad");
+		sValue += this.fn_FuncString("fn_ds_onchanged");
+		sValue += this.fn_FuncString("fn_onsize");
+		sValue += this.fn_FuncString("fn_refresh");
+		sValue += this.fn_FuncString("fn_toNumber");
+		sValue += this.fn_FuncString("fn_formatValue");
+		sValue += this.fn_FuncString("fn_formatNumber");
+
+		return {
+			"tag": "Script",
+			"attribute": { "type": "xscript5.1" },
+			"value": sValue
+		};
+	};
+
+/************************************************************************************************
+ * Runtime Functions (생성된 View 안에서 실행되는 함수. this = View 내부 폼)
+ ************************************************************************************************/
+	this._fnViewOnLoad = function(objForm) {
+		/* Sets the view form reference so that functions declared in the view can access it */
+		this._ownerForm = objForm;
+
+		var oDs = this.parent.getViewDataset();
+		if (!this._bSummaryInit) {
+			/* 조회 완료 / 값 변경 / 행 이동 때 갱신, 크기 변경 때 막대 길이 재계산. 재호출 시 중복 등록 방지 */
+			if (oDs) {
+				oDs.addEventHandler("onload", this.fn_ds_onchanged, this);
+				oDs.addEventHandler("oncolumnchanged", this.fn_ds_onchanged, this);
+				oDs.addEventHandler("onrowposchanged", this.fn_ds_onchanged, this);
+			}
+			this.addEventHandler("onsize", this.fn_onsize, this);
+			this._bSummaryInit = true;
+		}
+
+		this.fn_refresh();
+	};
+
+	this.fn_ds_onchanged = function(obj, e) {
+		this.fn_refresh();
+	};
+
+	this.fn_onsize = function(obj, e) {
+		this.fn_refresh();
+	};
+
+	/* 제목 + 합계 + 막대 + 범례를 현재 행 기준으로 다시 그림 */
+	this.fn_refresh = function() {
+		var oDs    = this.parent.getViewDataset();
+		var bData  = oDs && oDs.getRowCount() > 0 && oDs.rowposition >= 0;
+		var nRow   = bData ? oDs.rowposition : -1;
+		var oThis  = this;
+		var sUnit  = this.fvValueSuffix ? " " + this.fvValueSuffix : "";
+		var i;
+
+		// 제목
+		if (!bData) {
+			this.staHeader.set_text(this.fvEmptyText);
+		} else {
+			this.staHeader.set_text(("" + this.fvHeaderFormat).replace(/\{([A-Za-z0-9_]+)\}/g, function(sAll, sCol) {
+				return oThis.fn_formatValue(oDs.getColumn(nRow, sCol));
+			}));
+		}
+
+		// 구간 값과 합계 (합계 필드가 없으면 구간 합을 합계로)
+		var arrValues = [];
+		var nSegSum   = 0;
+		for (i = 0; i < this.fvSegFields.length; i++) {
+			var n = bData ? this.fn_toNumber(oDs.getColumn(nRow, this.fvSegFields[i])) : 0;
+			arrValues.push(n);
+			nSegSum += n;
+		}
+		var nTotal = (bData && this.fvTotalField) ? this.fn_toNumber(oDs.getColumn(nRow, this.fvTotalField)) : nSegSum;
+		var nRest  = Math.max(nTotal - nSegSum, 0);
+
+		// 합계 (오른쪽)
+		this.staTotal.set_text(bData
+			? this.fvTotalLabel + " <b v='true'><fs v='12'>" + this.fn_formatNumber(nTotal) + "</fs></b>" + sUnit
+			: "");
+
+		// 막대 : 실제 막대 너비(px) 기준으로 구간 길이 계산
+		var nTrackW = this.staTrack.getOffsetWidth();
+		for (i = 0; i < this.fvSegFields.length; i++) {
+			var oSeg = this["staSeg_" + this.fvSegFields[i]];
+			if (!oSeg) {
+				continue;
+			}
+			var nW = 0;
+			if (nTotal > 0 && arrValues[i] > 0) {
+				nW = Math.max(Math.round(nTrackW * arrValues[i] / nTotal), this.fvMinSegPx);
+			}
+			oSeg.set_width(nW);
+		}
+
+		// 범례
+		var sLegend = "";
+		if (bData) {
+			for (i = 0; i < this.fvSegFields.length; i++) {
+				var sColor = this.fvSegColors.length > 0 ? this.fvSegColors[i % this.fvSegColors.length] : "#639922";
+				sLegend += "<fc v='" + sColor + "'>■</fc> " + this.fvSegLabels[i] + " " + this.fn_formatNumber(arrValues[i]) + sUnit + "      ";
+			}
+			sLegend += "<fc v='" + this.fvRestColor + "'>■</fc> " + this.fvRestLabel + " " + this.fn_formatNumber(nRest) + sUnit;
+		}
+		this.staLegend.set_text(sLegend);
+	};
+
+	/* 숫자로 변환 (숫자가 아니면 0) */
+	this.fn_toNumber = function(v) {
+		var n = parseFloat(v);
+		return isNaN(n) ? 0 : n;
+	};
+
+	/* 날짜 값은 yyyy-MM-dd (시각이 있으면 HH:mm 까지), 그 외는 문자열 */
+	this.fn_formatValue = function(v) {
+		if (v === undefined || v === null) {
+			return "";
+		}
+		if (v.getFullYear) {
+			var p = function(n) { return n < 10 ? "0" + n : "" + n; };
+			var sDate = v.getFullYear() + "-" + p(v.getMonth() + 1) + "-" + p(v.getDate());
+			if (v.getHours() == 0 && v.getMinutes() == 0) {
+				return sDate;
+			}
+			return sDate + " " + p(v.getHours()) + ":" + p(v.getMinutes());
+		}
+		return "" + v;
+	};
+
+	/* 숫자는 천 단위 쉼표, 숫자가 아니면 그대로 */
+	this.fn_formatNumber = function(v) {
+		var s = "" + v;
+		if (!/^-?\d+(\.\d+)?$/.test(s)) {
+			return this.fn_formatValue(v);
+		}
+		var arr = s.split(".");
+		arr[0] = arr[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		return arr.join(".");
+	};
+]]>
+  </Script>
+  <TestData>
+    <TestFields><![CDATA[{
+    "fields": [
+        {"id": "new_count", "label": "신규", "uselabel": "true", "editable": "false", "fieldtype": "Number", "datatype": "INT", "datasize": "11", "required": "false", "description_ENG": "", "description_KOR": "", "description_JPN": "", "options": ""},
+        {"id": "changed_count", "label": "상태 변경", "uselabel": "true", "editable": "false", "fieldtype": "Number", "datatype": "INT", "datasize": "11", "required": "false", "description_ENG": "", "description_KOR": "", "description_JPN": "", "options": ""}
+    ]
+}]]>
+    </TestFields>
+    <TestViewProperties><![CDATA[{
+    "attributes": {
+        "headerformat": "<b v='true'>{upload_id}회차</b>   기준일 {base_date} · {file_name}",
+        "emptytext": "업로드 이력이 없습니다",
+        "totalfield": "row_count",
+        "totallabel": "전체",
+        "restlabel": "변동 없음",
+        "valuesuffix": "건",
+        "segmentcolors": "#639922,#EF9F27,#378ADD,#D4537E",
+        "restcolor": "#D3D1C7"
+    }
+}]]>
+    </TestViewProperties>
+  </TestData>
+</ViewTemplateInfo>
