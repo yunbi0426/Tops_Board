@@ -487,6 +487,12 @@
           <Row/>
         </Rows>
       </Dataset>
+      <RunScript id="RunScript00" alias="Enter 키 입력 여부 확인">
+        <Contents><![CDATA[`let e = this._current_action.getEventInfo();
+return !!(e && e.keycode == 13);`]]>
+        </Contents>
+      </RunScript>
+      <Message id="Message00" alias="검색 결과 없는 경우 안내 메세지" message="검색 조건에 일치하는 결과가 없습니다." messagetype="alert"/>
     </Objects>
     <ViewGenerationInfo>
       <ViewInfo viewid="Detail">
@@ -685,12 +691,25 @@
         </ViewTemplateInfo>
       </ViewInfo>
     </ViewGenerationInfo>
+    <DesignSettings>
+      <InteractionEditor>
+        <NodePositions>
+          <NodePosition id="action:Message00" x="1598" y="9"/>
+          <NodePosition id="action:Transaction00" x="1362" y="9"/>
+        </NodePositions>
+      </InteractionEditor>
+    </DesignSettings>
     <Script type="xscript5.1"><![CDATA[]]>
     </Script>
     <Trigger>
       <TriggerItem id="item0" triggertype="onload" triggerview="" triggerobj="" targetaction="Transaction00"/>
       <TriggerItem id="item1" triggertype="onclick" triggerview="Search" triggerobj="btnSearch" targetaction="Transaction00"/>
       <TriggerItem id="item2" triggertype="onload" triggerview="" triggerobj="" targetaction="Transaction01"/>
+      <TriggerItem id="item3" triggertype="onkeyup" triggerview="Search" triggerobj="edtrp" targetaction="RunScript00"/>
+      <TriggerItem id="item4" triggertype="Action Success" triggerview="" triggerobj="RunScript00" targetaction="Transaction00"/>
+      <TriggerItem id="item5" triggertype="onkeyup" triggerview="Search" triggerobj="edtrequester" targetaction="RunScript00"/>
+      <TriggerItem id="item6" triggertype="onkeyup" triggerview="Search" triggerobj="edttitle" targetaction="RunScript00"/>
+      <TriggerItem id="item7" triggertype="Action Success" triggerview="" triggerobj="Transaction00" targetaction="Message00" condition="this._dstops_reqMasterSelect_ds_output.rowcount == 0"/>
     </Trigger>
   </Form>
 </FDL>

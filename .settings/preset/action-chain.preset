@@ -1,0 +1,55 @@
+{
+  "ActionChainPresets": {
+    "version": "1.0",
+    "ActionChainPreset": [
+      {
+        "id": "7cc8373e-e3fb-4400-b2f5-3a6c612cd932",
+        "name": "Enter 키 입력해서 검색",
+        "description": "Enter 키를 누르면 Edit에서 입력된 값을 기준으로 검색",
+        "root": {
+          "className": "nexacro.RunScript",
+          "alias": "Enter 키 입력 여부 확인",
+          "properties": [
+            {
+              "name": "alias",
+              "value": "Enter 키 입력 여부 확인",
+              "valuetype": "2"
+            },
+            {
+              "name": "script",
+              "value": "let e = this._current_action.getEventInfo();\r\nreturn !!(e && e.keycode == 13);",
+              "valuetype": "2"
+            }
+          ],
+          "branches": [
+            {
+              "triggerType": "Action Success",
+              "target": {
+                "className": "nexacro.Transaction",
+                "alias": "Details 데이터 가져오기",
+                "properties": [
+                  {
+                    "name": "alias",
+                    "value": "Details 데이터 가져오기",
+                    "valuetype": "2"
+                  },
+                  {
+                    "name": "servicemodel",
+                    "value": "tops::reqMasterSelect",
+                    "valuetype": "2"
+                  },
+                  {
+                    "name": "parameters",
+                    "value": "{\n    \"inputdatasets\": [\n        {\n            \"modelid\": \"ds_search\",\n            \"datasetid\": \"_dstops_reqMasterSelect_ds_search\"\n        }\n    ],\n    \"outputdatasets\": [\n        {\n            \"modelid\": \"ds_output\",\n            \"datasetid\": \"_dstops_reqMasterSelect_ds_output\"\n        }\n    ]\n}",
+                    "valuetype": "2"
+                  }
+                ],
+                "branches": []
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
