@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="popRequesterMap" width="1000" height="600" titletext="New Form">
+    <Layouts>
+      <Layout width="1000" height="600">
+        <View id="Master" left="10" top="10" text="Master" width="30%" bottom="50" viewtype="Grid" viewdataset="_dstops_requester_mapSelect_ds_group">
+          <Layouts>
+            <Layout>
+              <Grid id="grdList" left="0" top="40" right="0" bottom="0" binddataset="_dstops_requester_mapSelect_ds_group" autofittype="col" cssclass="grd_WF_Detail" _fieldid="grdList" _fieldcomptype="comp">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="32" band="head"/>
+                      <Row size="32" band="body"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell id="cell_head_0_0_라벨" col="0" row="0" text="라벨"/>
+                      <Cell id="cell_head_1_0_회사" col="1" row="0" text="회사"/>
+                      <Cell id="cell_head_2_0_그룹 수" col="2" row="0" text="그룹 수"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell id="cell_body_0_0_display_name" col="0" row="0" text="bind:display_name" displaytype="normal" edittype="normal"/>
+                      <Cell id="cell_body_1_0_company" col="1" row="0" text="bind:company" displaytype="normal" edittype="normal"/>
+                      <Cell id="cell_body_2_0_map_cnt" col="2" row="0" text="bind:map_cnt" displaytype="normal" edittype="none"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+              <Button id="btnDeleteGroup" top="5" text="➖" textAlign="center" padding="0" taborder="0" width="30" right="0" height="30" tooltiptext="Delete Group"/>
+              <Button id="btnAddGroup" top="5" height="30" text="➕" textAlign="center" padding="0" taborder="1" right="btnDeleteGroup:5" width="30" tooltiptext="Add Group"/>
+            </Layout>
+          </Layouts>
+          <Objects/>
+          <Script><![CDATA[this.cfn_FilterBtn_onclick = function(obj, e){let aComponents = this.components;for(let i = 0 ; i < aComponents.length ; i++){if(aComponents[i]._fieldcomptype == "filter"){aComponents[i].setSelectStatus(false);}}obj.setSelectStatus(true);};this._fnViewOnLoad = function(objForm){/* Sets the view form reference so that functions declared in the view can access it */this._ownerForm = objForm;this._sSearchFilterValue = "";this._sFilterValue = "";let aComponents = this.components;let oComp = null;for(let i = 0 ; i < aComponents.length ; i++){oComp = aComponents[i];if(oComp instanceof nexacro.Button){if(oComp._fieldcomptype == "filter"){oComp.addEventHandler("onclick",this.cfn_FilterBtn_onclick, this)}}}};]]>
+          </Script>
+        </View>
+        <View id="Source" left="Master:10" top="50" width="31%" text="Source" bottom="50" viewtype="Grid" viewdataset="_dstops_requester_mapSelect_ds_unmapped">
+          <Layouts>
+            <Layout>
+              <Grid id="grdList" left="0" top="0" right="0" bottom="0" binddataset="_dstops_requester_mapSelect_ds_unmapped" autofittype="col" cssclass="grd_WF_Detail" _fieldid="grdList" _fieldcomptype="comp">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="100" band="body"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="32" band="head"/>
+                      <Row size="32" band="body"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell id="cell_head_0_0_미분류 요구처" col="0" row="0" text="미분류 요구처"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell id="cell_body_0_0_requester" col="0" row="0" text="bind:requester" displaytype="normal" edittype="none"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+            </Layout>
+          </Layouts>
+          <Objects/>
+          <Script><![CDATA[this.cfn_FilterBtn_onclick = function(obj, e){let aComponents = this.components;for(let i = 0 ; i < aComponents.length ; i++){if(aComponents[i]._fieldcomptype == "filter"){aComponents[i].setSelectStatus(false);}}obj.setSelectStatus(true);};this._fnViewOnLoad = function(objForm){/* Sets the view form reference so that functions declared in the view can access it */this._ownerForm = objForm;this._sSearchFilterValue = "";this._sFilterValue = "";let aComponents = this.components;let oComp = null;for(let i = 0 ; i < aComponents.length ; i++){oComp = aComponents[i];if(oComp instanceof nexacro.Button){if(oComp._fieldcomptype == "filter"){oComp.addEventHandler("onclick",this.cfn_FilterBtn_onclick, this)}}}};]]>
+          </Script>
+        </View>
+        <View id="Target" top="50" text="Target" right="10" width="31%" bottom="50" viewtype="Grid" viewdataset="_dstops_requester_mapSelect_ds_mapped">
+          <Layouts>
+            <Layout>
+              <Grid id="grdList" left="0" top="0" right="0" bottom="0" binddataset="_dstops_requester_mapSelect_ds_mapped" autofittype="col" cssclass="grd_WF_Detail" _fieldid="grdList" _fieldcomptype="comp">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="100" band="body"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="32" band="head"/>
+                      <Row size="32" band="body"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell id="cell_head_0_0_포함된 요구처" col="0" row="0" text="포함된 요구처"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell id="cell_body_0_0_requester" col="0" row="0" text="bind:requester" displaytype="normal" edittype="none"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+            </Layout>
+          </Layouts>
+          <Objects/>
+          <Script><![CDATA[this.cfn_FilterBtn_onclick = function(obj, e){let aComponents = this.components;for(let i = 0 ; i < aComponents.length ; i++){if(aComponents[i]._fieldcomptype == "filter"){aComponents[i].setSelectStatus(false);}}obj.setSelectStatus(true);};this._fnViewOnLoad = function(objForm){/* Sets the view form reference so that functions declared in the view can access it */this._ownerForm = objForm;this._sSearchFilterValue = "";this._sFilterValue = "";let aComponents = this.components;let oComp = null;for(let i = 0 ; i < aComponents.length ; i++){oComp = aComponents[i];if(oComp instanceof nexacro.Button){if(oComp._fieldcomptype == "filter"){oComp.addEventHandler("onclick",this.cfn_FilterBtn_onclick, this)}}}};]]>
+          </Script>
+        </View>
+        <Button id="btnToTarget" left="Source:10" top="40%" height="30" text="▶" right="Target:10" textAlign="center" padding="0"/>
+        <Button id="btnToSource" top="btnToTarget:5" height="30" text="◀" left="Source:10" right="Target:10" textAlign="center" padding="0"/>
+        <Button id="btnSave" top="Target:10" text="Save" right="10" bottom="10" width="80"/>
+        <Button id="btnClose" top="Target:10" text="Close" bottom="10" right="btnSave:10" width="80" tooltiptext="Popup Close"/>
+      </Layout>
+    </Layouts>
+    <ViewGenerationInfo>
+      <ViewInfo viewid="Master">
+        <ModelInfo modelserviceid="tops" serviceid="requester/mapSelect" modelid="ds_group" datasetid="_dstops_requester_mapSelect_ds_group" filepath="requester\.model\mapSelect.model">
+          <Fields>
+            <Field id="group_id" used="false"/>
+            <Field id="display_name" label="그룹명" edittype="normal"/>
+            <Field id="company" label="회사명" edittype="normal"/>
+            <Field id="map_cnt" label="그룹 수"/>
+          </Fields>
+          <Components>
+            <Component id="grdList" fields="display_name,company,map_cnt"/>
+            <Component id="btnDeleteGroup" fields=""/>
+            <Component id="btnAddGroup" fields=""/>
+          </Components>
+        </ModelInfo>
+        <ViewTemplateInfo filepath="NexaLAP_BasePack/Grid/FilterGridView.viewtemplate">
+          <Attribute id="gridlayout" value="{&quot;columns&quot;:[{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100}],&quot;rows&quot;:[{&quot;band&quot;:&quot;head&quot;,&quot;size&quot;:32},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:32}],&quot;head&quot;:[{&quot;col&quot;:0,&quot;row&quot;:0,&quot;text&quot;:&quot;라벨&quot;},{&quot;col&quot;:1,&quot;row&quot;:0,&quot;text&quot;:&quot;회사&quot;},{&quot;col&quot;:2,&quot;row&quot;:0,&quot;text&quot;:&quot;그룹 수&quot;}],&quot;body&quot;:[{&quot;col&quot;:0,&quot;row&quot;:0,&quot;field&quot;:&quot;display_name&quot;},{&quot;col&quot;:1,&quot;row&quot;:0,&quot;field&quot;:&quot;company&quot;},{&quot;col&quot;:2,&quot;row&quot;:0,&quot;field&quot;:&quot;map_cnt&quot;}]}"/>
+        </ViewTemplateInfo>
+      </ViewInfo>
+      <ViewInfo viewid="Target">
+        <ModelInfo modelserviceid="tops" serviceid="requester/mapSelect" modelid="ds_mapped" datasetid="_dstops_requester_mapSelect_ds_mapped" filepath="requester\.model\mapSelect.model">
+          <Fields>
+            <Field id="requester" label="포함된 요구처"/>
+            <Field id="group_id" used="false"/>
+            <Field id="req_cnt" label="요구사항 수" used="false"/>
+          </Fields>
+          <Components>
+            <Component id="grdList" fields="requester"/>
+          </Components>
+        </ModelInfo>
+        <ViewTemplateInfo filepath="NexaLAP_BasePack/Grid/FilterGridView.viewtemplate">
+          <Attribute id="gridlayout" value="{&amp;quot;columns&amp;quot;:[{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100}],&amp;quot;rows&amp;quot;:[{&amp;quot;band&amp;quot;:&amp;quot;head&amp;quot;,&amp;quot;size&amp;quot;:32},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:32}],&amp;quot;head&amp;quot;:[{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;포함된 요구처&amp;quot;}],&amp;quot;body&amp;quot;:[{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;requester&amp;quot;}]}"/>
+        </ViewTemplateInfo>
+      </ViewInfo>
+      <ViewInfo viewid="Source">
+        <ModelInfo modelserviceid="tops" serviceid="requester/mapSelect" modelid="ds_unmapped" datasetid="_dstops_requester_mapSelect_ds_unmapped" filepath="requester\.model\mapSelect.model">
+          <Fields>
+            <Field id="requester" label="미분류 요구처"/>
+            <Field id="req_cnt" used="false"/>
+          </Fields>
+          <Components>
+            <Component id="grdList" fields="requester"/>
+          </Components>
+        </ModelInfo>
+        <ViewTemplateInfo filepath="NexaLAP_BasePack/Grid/FilterGridView.viewtemplate">
+          <Attribute id="gridlayout" value="{&amp;quot;columns&amp;quot;:[{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100}],&amp;quot;rows&amp;quot;:[{&amp;quot;band&amp;quot;:&amp;quot;head&amp;quot;,&amp;quot;size&amp;quot;:32},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:32}],&amp;quot;head&amp;quot;:[{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;미분류 요구처&amp;quot;}],&amp;quot;body&amp;quot;:[{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;requester&amp;quot;}]}"/>
+        </ViewTemplateInfo>
+      </ViewInfo>
+    </ViewGenerationInfo>
+    <Script type="xscript5.1"><![CDATA[]]>
+    </Script>
+    <Objects>
+      <Transaction id="Transaction00" alias="요구처 목록 데이터 가져오기" servicemodel="tops::requester/mapSelect" serviceurl="NexaLAPServer::api/v1/execute">
+        <Contents><![CDATA[{
+    "outputdatasets": [
+        {
+            "modelid": "ds_group",
+            "datasetid": "_dstops_requester_mapSelect_ds_group"
+        },
+        {
+            "modelid": "ds_unmapped",
+            "datasetid": "_dstops_requester_mapSelect_ds_unmapped"
+        },
+        {
+            "modelid": "ds_mapped",
+            "datasetid": "_dstops_requester_mapSelect_ds_mapped"
+        }
+    ]
+}]]>
+        </Contents>
+      </Transaction>
+      <MasterRowFilter id="MasterRowFilter00" alias="Master에서 선택한 값으로 필터링" master="_dstops_requester_mapSelect_ds_group.group_id" target="_dstops_requester_mapSelect_ds_mapped.group_id"/>
+      <ShuttleMove id="ShuttleMove00" alias="그룹으로 이동" source="_dstops_requester_mapSelect_ds_unmapped.requester,_dstops_requester_mapSelect_ds_unmapped.req_cnt" target="_dstops_requester_mapSelect_ds_mapped.requester,_dstops_requester_mapSelect_ds_mapped.req_cnt" master="_dstops_requester_mapSelect_ds_group.group_id" mastertarget="_dstops_requester_mapSelect_ds_mapped.group_id"/>
+      <ShuttleMove id="ShuttleMove01" alias="그룹에서 제거" source="_dstops_requester_mapSelect_ds_mapped.requester,_dstops_requester_mapSelect_ds_mapped.req_cnt" target="_dstops_requester_mapSelect_ds_unmapped.requester,_dstops_requester_mapSelect_ds_unmapped.req_cnt"/>
+      <AddRow id="AddRow00" alias="그룹 추가" targetDataset="_dstops_requester_mapSelect_ds_group"/>
+      <DeleteRow id="DeleteRow00" alias="그룹 삭제" targetDataset="_dstops_requester_mapSelect_ds_group"/>
+      <ShuttleMove id="ShuttleMove02" alias="그룹 삭제전 해당 그룹에 있는 요구처 UnMapped로 이동" source="_dstops_requester_mapSelect_ds_mapped.requester,_dstops_requester_mapSelect_ds_mapped.req_cnt" target="_dstops_requester_mapSelect_ds_unmapped.requester,_dstops_requester_mapSelect_ds_unmapped.req_cnt" moveall="true"/>
+      <Message id="Message00" alias="그룹 삭제 실패" message="그룹 제거에 실패했습니다." messagetype="alert"/>
+      <Validation id="Validation01" alias="표시명 필수 검사 (추가전)" targetds="_dstops_requester_mapSelect_ds_group" targetrules="[{&quot;columnId&quot;:&quot;display_name&quot;,&quot;columnNm&quot;:&quot;&quot;,&quot;essential&quot;:&quot;1&quot;,&quot;rule&quot;:&quot;&quot;,&quot;targetCol&quot;:&quot;&quot;,&quot;targetColNm&quot;:&quot;&quot;,&quot;targetValue&quot;:&quot;&quot;,&quot;message&quot;:&quot;&quot;}]"/>
+      <Transaction id="Transaction01" alias="그룹 저장" servicemodel="tops::requester/mapSave" serviceurl="NexaLAPServer::api/v1/execute">
+        <Contents><![CDATA[{
+    "inputdatasets": [
+        {
+            "modelid": "ds_mapped",
+            "datasetid": "_dstops_requester_mapSelect_ds_mapped",
+            "type": "U"
+        }
+    ]
+}]]>
+        </Contents>
+      </Transaction>
+      <Transaction id="Transaction02" alias="표시명 저장" servicemodel="tops::requester/groupSave" serviceurl="NexaLAPServer::api/v1/execute">
+        <Contents><![CDATA[{
+    "inputdatasets": [
+        {
+            "modelid": "ds_group",
+            "datasetid": "_dstops_requester_mapSelect_ds_group",
+            "type": "U"
+        }
+    ]
+}]]>
+        </Contents>
+      </Transaction>
+      <Transaction id="Transaction03" alias="+ 전용 재조회" servicemodel="tops::requester/mapSelect" serviceurl="NexaLAPServer::api/v1/execute">
+        <Contents><![CDATA[{
+    "outputdatasets": [
+        {
+            "modelid": "ds_group",
+            "datasetid": "_dstops_requester_mapSelect_ds_group"
+        },
+        {
+            "modelid": "ds_unmapped",
+            "datasetid": "_dstops_requester_mapSelect_ds_unmapped"
+        },
+        {
+            "modelid": "ds_mapped",
+            "datasetid": "_dstops_requester_mapSelect_ds_mapped"
+        }
+    ]
+}]]>
+        </Contents>
+      </Transaction>
+      <SetRowPosition id="SetRowPosition00" alias="추가한 행 선택" targetdataset="_dstops_requester_mapSelect_ds_group" position="last"/>
+      <Validation id="Validation00" alias="Save 전 유효성 검사" targetds="_dstops_requester_mapSelect_ds_group" targetrules="[{&quot;columnId&quot;:&quot;display_name&quot;,&quot;columnNm&quot;:&quot;&quot;,&quot;essential&quot;:&quot;1&quot;,&quot;rule&quot;:&quot;&quot;,&quot;targetCol&quot;:&quot;&quot;,&quot;targetColNm&quot;:&quot;&quot;,&quot;targetValue&quot;:&quot;&quot;,&quot;message&quot;:&quot;&quot;}]"/>
+      <Transaction id="Transaction04" alias="Save" servicemodel="tops::requester/mapSave" serviceurl="NexaLAPServer::api/v1/execute">
+        <Contents><![CDATA[{
+    "inputdatasets": [
+        {
+            "modelid": "ds_mapped",
+            "datasetid": "_dstops_requester_mapSelect_ds_mapped",
+            "type": "U"
+        }
+    ]
+}]]>
+        </Contents>
+      </Transaction>
+      <Transaction id="Transaction05" alias="표시명 저장" servicemodel="tops::requester/groupSave" serviceurl="NexaLAPServer::api/v1/execute">
+        <Contents><![CDATA[{
+    "inputdatasets": [
+        {
+            "modelid": "ds_group",
+            "datasetid": "_dstops_requester_mapSelect_ds_group",
+            "type": "U"
+        }
+    ]
+}]]>
+        </Contents>
+      </Transaction>
+      <ClosePopup id="ClosePopup00" alias="팝업 닫기" returnDataFlag="false"/>
+      <Dataset id="_dstops_requester_mapSelect_ds_group">
+        <ColumnInfo>
+          <Column id="group_id" type="int" size="11" description="group_id"/>
+          <Column id="display_name" type="string" size="100" description="display_name"/>
+          <Column id="company" type="string" size="100" description="company"/>
+          <Column id="map_cnt" type="bigdecimal" size="21" description="map_cnt"/>
+        </ColumnInfo>
+        <Rows/>
+      </Dataset>
+      <Dataset id="_dstops_requester_mapSelect_ds_mapped">
+        <ColumnInfo>
+          <Column id="requester" type="string" size="200" description="요구처"/>
+          <Column id="group_id" type="int" size="11" description="group_id"/>
+          <Column id="req_cnt" type="bigdecimal" size="21" description="req_cnt"/>
+        </ColumnInfo>
+        <Rows/>
+      </Dataset>
+      <Dataset id="_dstops_requester_mapSelect_ds_unmapped">
+        <ColumnInfo>
+          <Column id="requester" type="string" size="200" description="요구처"/>
+          <Column id="req_cnt" type="bigdecimal" size="21" description="req_cnt"/>
+        </ColumnInfo>
+        <Rows/>
+      </Dataset>
+    </Objects>
+    <Trigger>
+      <TriggerItem id="item0" triggertype="onload" triggerview="" triggerobj="" targetaction="Transaction00"/>
+      <TriggerItem id="item1" triggertype="onrowposchanged" triggerview="" triggerobj="_dstops_requester_mapSelect_ds_group" targetaction="MasterRowFilter00"/>
+      <TriggerItem id="item2" triggertype="Action Success" triggerview="" triggerobj="Transaction00" targetaction="MasterRowFilter00"/>
+      <TriggerItem id="item3" triggertype="onclick" triggerview="" triggerobj="btnToTarget" targetaction="ShuttleMove00"/>
+      <TriggerItem id="item4" triggertype="onclick" triggerview="" triggerobj="btnToSource" targetaction="ShuttleMove01"/>
+      <TriggerItem id="item6" triggertype="onclick" triggerview="Master" triggerobj="btnDeleteGroup" targetaction="ShuttleMove02"/>
+      <TriggerItem id="item7" triggertype="Action Success" triggerview="" triggerobj="ShuttleMove02" targetaction="DeleteRow00"/>
+      <TriggerItem id="item8" triggertype="Action Fail" triggerview="" triggerobj="DeleteRow00" targetaction="Message00"/>
+      <TriggerItem id="item5" triggertype="onclick" triggerview="Master" triggerobj="btnAddGroup" targetaction="Validation01"/>
+      <TriggerItem id="item9" triggertype="Action Success" triggerview="" triggerobj="Validation01" targetaction="AddRow00"/>
+      <TriggerItem id="item10" triggertype="Action Success" triggerview="" triggerobj="AddRow00" targetaction="Transaction01"/>
+      <TriggerItem id="item11" triggertype="Action Success" triggerview="" triggerobj="Transaction01" targetaction="Transaction02"/>
+      <TriggerItem id="item12" triggertype="Action Success" triggerview="" triggerobj="Transaction02" targetaction="Transaction03"/>
+      <TriggerItem id="item13" triggertype="Action Success" triggerview="" triggerobj="Transaction03" targetaction="SetRowPosition00"/>
+      <TriggerItem id="item14" triggertype="onclick" triggerview="" triggerobj="btnSave" targetaction="Validation00"/>
+      <TriggerItem id="item15" triggertype="Action Success" triggerview="" triggerobj="Validation00" targetaction="Transaction04"/>
+      <TriggerItem id="item17" triggertype="Action Success" triggerview="" triggerobj="btnAddGroup" targetaction=""/>
+      <TriggerItem id="item16" triggertype="Action Success" triggerview="" triggerobj="Transaction04" targetaction="Transaction05"/>
+      <TriggerItem id="item19" triggertype="onclick" triggerview="" triggerobj="btnClose" targetaction="ClosePopup00"/>
+      <TriggerItem id="item18" triggertype="Action Success" triggerview="" triggerobj="Transaction05" targetaction="ClosePopup00"/>
+    </Trigger>
+  </Form>
+</FDL>

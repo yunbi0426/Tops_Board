@@ -2,12 +2,81 @@
   "connectionid": "tops_board",
   "producttype": "mariadb",
   "tables": {
+    "requester_group": {
+      "schema": null,
+      "entitytype": "table",
+      "catalog": "tops_board",
+      "name": "requester_group",
+      "remarks": "",
+      "columns": [
+        {
+          "schema": null,
+          "isautoincrement": true,
+          "catalog": "tops_board",
+          "ordinalposition": 1,
+          "isnullable": false,
+          "columnname": "group_id",
+          "platformdatatype": "int",
+          "columnsize": 10,
+          "tablename": "requester_group",
+          "columndefault": null,
+          "remarks": "",
+          "columntype": "INTEGER",
+          "decimaldigits": "0"
+        },
+        {
+          "schema": null,
+          "isautoincrement": false,
+          "catalog": "tops_board",
+          "ordinalposition": 2,
+          "isnullable": false,
+          "columnname": "display_name",
+          "platformdatatype": "string",
+          "columnsize": 100,
+          "tablename": "requester_group",
+          "columndefault": null,
+          "remarks": "",
+          "columntype": "VARCHAR",
+          "decimaldigits": null
+        },
+        {
+          "schema": null,
+          "isautoincrement": false,
+          "catalog": "tops_board",
+          "ordinalposition": 3,
+          "isnullable": true,
+          "columnname": "company",
+          "platformdatatype": "string",
+          "columnsize": 100,
+          "tablename": "requester_group",
+          "columndefault": "NULL",
+          "remarks": "",
+          "columntype": "VARCHAR",
+          "decimaldigits": null
+        },
+        {
+          "schema": null,
+          "isautoincrement": false,
+          "catalog": "tops_board",
+          "ordinalposition": 4,
+          "isnullable": true,
+          "columnname": "updated_at",
+          "platformdatatype": "datetime",
+          "columnsize": 19,
+          "tablename": "requester_group",
+          "columndefault": "current_timestamp()",
+          "remarks": "",
+          "columntype": "TIMESTAMP",
+          "decimaldigits": null
+        }
+      ]
+    },
     "requester_map": {
       "schema": null,
       "entitytype": "table",
       "catalog": "tops_board",
       "name": "requester_map",
-      "remarks": "요구처 매핑",
+      "remarks": "",
       "columns": [
         {
           "schema": null,
@@ -20,7 +89,7 @@
           "columnsize": 200,
           "tablename": "requester_map",
           "columndefault": null,
-          "remarks": "요구처 원본명",
+          "remarks": "",
           "columntype": "VARCHAR",
           "decimaldigits": null
         },
@@ -30,42 +99,12 @@
           "catalog": "tops_board",
           "ordinalposition": 2,
           "isnullable": false,
-          "columnname": "display_name",
-          "platformdatatype": "string",
-          "columnsize": 100,
-          "tablename": "requester_map",
-          "columndefault": null,
-          "remarks": "표시명",
-          "columntype": "VARCHAR",
-          "decimaldigits": null
-        },
-        {
-          "schema": null,
-          "isautoincrement": false,
-          "catalog": "tops_board",
-          "ordinalposition": 3,
-          "isnullable": false,
-          "columnname": "is_external",
-          "platformdatatype": "string",
-          "columnsize": 1,
-          "tablename": "requester_map",
-          "columndefault": "'N'",
-          "remarks": "외부 고객",
-          "columntype": "CHAR",
-          "decimaldigits": null
-        },
-        {
-          "schema": null,
-          "isautoincrement": false,
-          "catalog": "tops_board",
-          "ordinalposition": 4,
-          "isnullable": true,
-          "columnname": "sort_order",
+          "columnname": "group_id",
           "platformdatatype": "int",
           "columnsize": 10,
           "tablename": "requester_map",
-          "columndefault": "NULL",
-          "remarks": "정렬 순서",
+          "columndefault": null,
+          "remarks": "",
           "columntype": "INTEGER",
           "decimaldigits": "0"
         }
@@ -566,8 +605,25 @@
           "remarks": "",
           "columntype": "INTEGER",
           "decimaldigits": "0"
+        },
+        {
+          "schema": null,
+          "isautoincrement": false,
+          "catalog": "tops_board",
+          "ordinalposition": 3,
+          "isnullable": true,
+          "columnname": "stage",
+          "platformdatatype": "string",
+          "columnsize": 20,
+          "tablename": "req_status",
+          "columndefault": "NULL",
+          "remarks": "",
+          "columntype": "VARCHAR",
+          "decimaldigits": null
         }
-      ]
+      ],
+      "nexaai_description": "",
+      "nexaai_active": false
     },
     "upload_log": {
       "schema": null,
@@ -706,8 +762,25 @@
   "views": {},
   "relationships": [
     {
-      "requester_map": {
+      "requester_group": {
         "relation": [],
+        "pk": [
+          "group_id"
+        ]
+      }
+    },
+    {
+      "requester_map": {
+        "relation": [
+          {
+            "fkschema": null,
+            "fktable": "requester_map",
+            "fk": "group_id",
+            "pkschema": null,
+            "pktable": "requester_group",
+            "pk": "group_id"
+          }
+        ],
         "pk": [
           "requester"
         ]

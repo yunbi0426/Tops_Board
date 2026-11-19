@@ -12,6 +12,7 @@
               <Edit id="edtFileName" left="274" top="10" width="300" height="32" readonly="true" _fieldid="file_name" _fieldcomptype="comp"/>
               <Button id="btnSelect" left="582" top="10" width="90" height="32" text="파일 선택"/>
               <Button id="btnUpload" left="680" top="10" width="110" height="32" text="업로드"/>
+              <Button id="Button00" top="10" taborder="0" height="32" text="요구처 그룹핑" right="0" width="110"/>
             </Layout>
           </Layouts>
           <Objects>
@@ -105,7 +106,7 @@
         <View id="viewResult" left="10" top="viewUpload:10" taborder="1" height="110" text="viewResult" right="10" viewdataset="_dstops_uploadLogSelect_ds_output">
           <Layouts>
             <Layout>
-              <Static id="staFrame" left="10" top="10" right="10" bottom="10" text="" border="1px solid #E0DED6" borderRadius="12px" background="#FFFFFF"/>
+              <Static id="staFrame" left="0" top="0" right="0" bottom="0" text="" border="1px solid #E0DED6" borderRadius="12px" background="#FFFFFF"/>
               <Static id="staHeader" left="22" top="22" right="22" height="22" text="" color="#5F5E5A" font="normal 12px/normal &quot;Malgun Gothic&quot;" usedecorate="true"/>
               <Static id="staTotal" left="50%" top="22" right="22" height="22" text="" color="#5F5E5A" font="normal 12px/normal &quot;Malgun Gothic&quot;" usedecorate="true" textAlign="right"/>
               <Static id="staTrack" left="22" top="52" right="22" height="10" text="" background="#D3D1C7" borderRadius="5px"/>
@@ -376,6 +377,7 @@
           <Row/>
         </Rows>
       </Dataset>
+      <OpenPopup id="OpenPopup00" alias="요구처 그룹핑 팝업 오픈" title="요구처 그룹핑" formurl="Popup::popRequesterMap.xfdl" autosize="true" popupStyle="modal"/>
     </Objects>
     <Trigger>
       <TriggerItem id="item0" triggertype="onload" triggerview="" triggerobj="" targetaction="Transaction00"/>
@@ -384,6 +386,7 @@
       <TriggerItem id="item2" triggertype="Action Success" triggerview="" triggerobj="Transaction01" targetaction="OnLoadView00"/>
       <TriggerItem id="item6" triggertype="onclick" triggerview="viewUpload" triggerobj="btnUpload" targetaction="FileUploadTransfer00"/>
       <TriggerItem id="item7" triggertype="Action Success" triggerview="" triggerobj="FileUploadTransfer00" targetaction="Transaction01"/>
+      <TriggerItem id="item3" triggertype="onclick" triggerview="viewUpload" triggerobj="Button00" targetaction="OpenPopup00"/>
     </Trigger>
     <ViewGenerationInfo>
       <ViewInfo viewid="frmUpload">

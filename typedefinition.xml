@@ -103,6 +103,9 @@
     <Component type="JavaScript" id="BluetoothLE" classname="nexacro.BluetoothLE"/>
     <Component type="JavaScript" id="OpenWorkForm" classname="nexacro.OpenWorkForm"/>
     <Component type="JavaScript" id="FileUploadTransfer" classname="nexacro.FileUploadTransfer"/>
+    <Component type="JavaScript" id="MasterRowFilter" classname="nexacro.MasterRowFilter"/>
+    <Component type="JavaScript" id="ShuttleMove" classname="nexacro.ShuttleMove"/>
+    <Component type="JavaScript" id="SetRowPosition" classname="nexacro.SetRowPosition"/>
   </Components>
   <Services>
     <Service prefixid="theme" type="resource" url="./_resource_/_theme_/" version="0" cachelevel="session" include_subdir="true"/>
@@ -115,6 +118,8 @@
     <Service prefixid="Base" type="form" url="./Base/" version="0" cachelevel="session" communicationversion="0" include_subdir="true"/>
     <Service prefixid="NexaFrame" type="form" url="./NexaFrame/" version="0" cachelevel="session" include_subdir="true" communicationversion="0"/>
     <Service prefixid="tops" type="model" url="./tops/" include_subdir="true" version="0" cachelevel="session" communicationversion="0"/>
+    <Service prefixid="Test" type="form" url="./Test/" include_subdir="true" version="0" cachelevel="session" communicationversion="0"/>
+    <Service prefixid="Popup" type="form" url="./Popup/" include_subdir="true" version="0" cachelevel="session" communicationversion="0"/>
   </Services>
   <Protocols/>
   <DeviceAdaptors/>

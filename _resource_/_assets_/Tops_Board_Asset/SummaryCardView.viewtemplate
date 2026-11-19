@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewTemplateInfo version="2.0">
+  <ViewTemplate id="SummaryCardView" viewtype="Others" description_en="Summary cards for the current row of the view dataset"/>
+  <Script version="1.0" type="xscript5.1"><![CDATA[/************************************************************************************************
+ * @FileName    SummaryCardView
+ * @Description 선택한 Model 필드를 숫자 요약 카드로 보여주는 View
+ *              - 카드 값은 View Dataset 의 현재 행(rowposition) 값 → 그리드 선택을 따라감
+ *              - 테두리 박스 안에 제목 줄 + 카드 (제목 줄은 headerformat 이 있을 때만)
+ *              - 크기는 모두 View 크기에 맞춰 늘어남 (너비 : 카드 수로 나눈 %, 높이 : View 높이)
+ *              - 카드 안의 라벨 + 값은 한 덩어리로 세로 가운데 정렬 → 카드가 커져도 균형 유지
+ *              - 값은 천 단위 쉼표 + 단위(valuesuffix) 를 붙여 표시
+ ************************************************************************************************/
+
+/************************************************************************************************
+ * Variable Definitions
+ ************************************************************************************************/
+	// Layout
+	this.VIEW_PADDING    = 10;     // View 가장자리 ~ 테두리 박스
+	this.FRAME_PADDING   = 12;     // 테두리 박스 ~ 내용
+	this.HEADER_HEIGHT   = 20;
+	this.HEADER_GAP      = 8;
+	this.VALUE_FONT_SIZE = 22;
+	this.LABEL_FONT_PT   = 9;      // 라벨/단위 글자 크기 (decorate <fs> 는 pt 단위)
+	this.CARD_GAP        = 8;
+
+	// Fonts / colors (화면과 무관한 스타일 기본값)
+	this.TEXT_FONT    = "normal 12px/normal \"Malgun Gothic\"";
+	this.FRAME_BORDER = "1px solid #E0DED6";
+	this.HEADER_COLOR = "#5F5E5A";
+
+	// Default values of view properties (화면마다 다른 값은 비워두고 View Generation 속성에서 지정)
+	this.HEADER_FIELDS = "";
+	this.HEADER_FORMAT = "";
+	this.EMPTY_TEXT    = "데이터가 없습니다";
+	this.VALUE_SUFFIX  = "";
+	this.CARD_COLORS   = "#F1EFE8,#EAF3DE,#FAEEDA,#E6F1FB";
+	this.LABEL_COLORS  = "#5F5E5A,#3B6D11,#854F0B,#185FA5";
+	this.VALUE_COLORS  = "#444441,#27500A,#633806,#0C447C";
+
+	// Component ids
+	this.ID_FRAME  = "staFrame";
+	this.ID_HEADER = "staHeader";
+
+	// View-related variables
+	this.oFieldArray;
+	this.oContents;
+	this.oViewProperties;
+	this.arrCardIds = [];
+	this.arrCardLabels = [];
+
+/************************************************************************************************
+ * Required Function Area for NexaLAP Studio
+ ************************************************************************************************/
+	this.set_viewProperties = function() {
+		var oViewAttr = {
+			"attributes": [
+				{
+					"id": "headerfields",
+					"displaytext": "Header fields",
+					"edittype": "String",
+					"defaultvalue": this.HEADER_FIELDS,
+					"description": "선택한 필드 중 카드로 만들지 않을 필드 ID (쉼표 구분)",
+					"group": "Header"
+				},
+				{
+					"id": "headerformat",
+					"displaytext": "Header format",
+					"edittype": "String",
+					"defaultvalue": this.HEADER_FORMAT,
+					"description": "제목 줄 형식. {필드ID} 를 현재 행 값으로 치환. <b v='true'>굵게</b> 사용 가능. 비우면 제목 줄 없음",
+					"group": "Header"
+				},
+				{
+					"id": "emptytext",
+					"displaytext": "Empty text",
+					"edittype": "String",
+					"defaultvalue": this.EMPTY_TEXT,
+					"description": "데이터가 없을 때 제목 줄 문구",
+					"group": "Header"
+				},
+				{
+					"id": "valuesuffix",
+					"displaytext": "Value suffix",
+					"edittype": "String",
+					"defaultvalue": this.VALUE_SUFFIX,
+					"description": "값 뒤에 작게 붙일 단위 (예: 건)",
+					"group": "Card"
+				},
+				{
+					"id": "cardcolors",
+					"displaytext": "Card colors",
+					"edittype": "String",
+					"defaultvalue": this.CARD_COLORS,
+					"description": "카드 배경색 (카드 순서대로, 쉼표 구분)",
+					"group": "Card"
+				},
+				{
+					"id": "labelcolors",
+					"displaytext": "Label colors",
+					"edittype": "String",
+					"defaultvalue": this.LABEL_COLORS,
+					"description": "카드 라벨 글자색 (카드 순서대로, 쉼표 구분)",
+					"group": "Card"
+				},
+				{
+					"id": "valuecolors",
+					"displaytext": "Value colors",
+					"edittype": "String",
+					"defaultvalue": this.VALUE_COLORS,
+					"description": "카드 값 글자색 (카드 순서대로, 쉼표 구분)",
+					"group": "Card"
+				},
+				{
+					"id": "valuefontsize",
+					"displaytext": "Value font size",
+					"edittype": "Number",
+					"defaultvalue": this.VALUE_FONT_SIZE,
+					"description": "카드 값 글자 크기(px)",
+					"group": "Card"
+				},
+				{
+					"id": "cardgap",
+					"displaytext": "Card gap",
+					"edittype": "Number",
+					"defaultvalue": this.CARD_GAP,
+					"description": "카드 사이 간격(px)",
+					"group": "Card"
+				}
+			]
+		};
+
+		return JSON.stringify(oViewAttr, null, "\t");
+	};
+
+	this.set_fieldProperties = function() {
+		var oFieldAttr = { "attributes": [] };
+
+		return JSON.stringify(oFieldAttr, null, "\t");
+	};
+
+	/*---------------------------------------------------------------------------------------------*
+	 *                        !!! This function is required by NexaLAP Studio. !!!                 *
+	 *---------------------------------------------------------------------------------------------*/
+	this.main = function(fieldarray, contents, viewproperties) {
+		if (fieldarray) {
+			this.oFieldArray = JSON.parse(fieldarray);
+		}
+
+		if (contents) {
+			this.oContents = JSON.parse(contents);
+
+			// Initialize Model Information
+			this.oContents.View.Model = [];
+
+			// Initialize View layout
+			if (this.oContents.View.View && this.oContents.View.View[0]) {
+				this.oContents.View.View[0].tag = "Layouts";
+				this.oContents.View.View[0].Layouts = [];
+			}
+		}
+
+		if (viewproperties) {
+			this.oViewProperties = JSON.parse(viewproperties);
+		}
+
+		this.arrCardIds = [];
+		this.arrCardLabels = [];
+
+		// Generate model(component) information
+		this.oContents.View.Model = this.fn_GetModel();
+
+		// The viewdataset must be set (값은 바인딩 대신 스크립트로 채움 : 쉼표/단위 표시)
+		this.oContents.View.attribute.viewdataset = "${VIEW_DATASET}";
+
+		// Generate script information
+		this.oContents.View.Script = this.fn_GetScript();
+
+		return JSON.stringify(this.oContents, null, "\t");
+	};
+
+/************************************************************************************************
+ * Functions Related to the main() Execution Flow
+ ************************************************************************************************/
+	// View property value (없으면 기본값)
+	this.fn_GetProp = function(sId, vDefault) {
+		var oAttr = (this.oViewProperties && this.oViewProperties.attributes) ? this.oViewProperties.attributes : null;
+		if (oAttr && oAttr[sId] !== undefined && oAttr[sId] !== null && oAttr[sId] !== "") {
+			return oAttr[sId];
+		}
+		return vDefault;
+	};
+
+	// 숫자 속성 (잘못된 값이면 기본값)
+	this.fn_GetNumProp = function(sId, nDefault) {
+		var n = parseInt(this.fn_GetProp(sId, nDefault), 10);
+		return isNaN(n) ? nDefault : n;
+	};
+
+	// 쉼표 문자열 → 배열 (공백 제거)
+	this.fn_Split = function(sValue) {
+		var arr = ("" + sValue).split(",");
+		var arrResult = [];
+		for (var i = 0; i < arr.length; i++) {
+			var s = arr[i].replace(/^\s+|\s+$/g, "");
+			if (s != "") {
+				arrResult.push(s);
+			}
+		}
+		return arrResult;
+	};
+
+	// 배열에서 i 번째 (모자라면 순환, 비었으면 기본값)
+	this.fn_Pick = function(arr, i, sDefault) {
+		return arr.length > 0 ? arr[i % arr.length] : sDefault;
+	};
+
+	// 카드로 만들 필드 = 선택한 필드 중 헤더 필드를 뺀 나머지
+	this.fn_GetCardFields = function() {
+		var arrFields = (this.oFieldArray && this.oFieldArray.fields) ? this.oFieldArray.fields : [];
+		var arrHeader = this.fn_Split(this.fn_GetProp("headerfields", this.HEADER_FIELDS));
+		var arrResult = [];
+
+		for (var i = 0; i < arrFields.length; i++) {
+			if (arrHeader.indexOf(arrFields[i].id) < 0) {
+				arrResult.push(arrFields[i]);
+			}
+		}
+		return arrResult;
+	};
+
+	this.fn_GetModel = function() {
+		var oModel = [];
+
+		var arrCards   = this.fn_GetCardFields();
+		var arrBg      = this.fn_Split(this.fn_GetProp("cardcolors", this.CARD_COLORS));
+		var arrValueFg = this.fn_Split(this.fn_GetProp("valuecolors", this.VALUE_COLORS));
+		var nFontSize  = this.fn_GetNumProp("valuefontsize", this.VALUE_FONT_SIZE);
+		var nGap       = this.fn_GetNumProp("cardgap", this.CARD_GAP);
+		var bHeader    = this.fn_GetProp("headerformat", this.HEADER_FORMAT) != "";
+
+		var nPad   = this.VIEW_PADDING;
+		var nInner = nPad + this.FRAME_PADDING;     // 테두리 박스 안쪽 시작 위치
+		var nTop   = nInner;
+
+		//---------------- 테두리 박스 : View 를 가득 채움 (가장 먼저 = 맨 뒤에 깔림) ----------------
+		var oFrame = {
+			"tag": "Static",
+			"attribute": {
+				"id": this.ID_FRAME, "left": nPad, "top": nPad, "right": nPad, "bottom": nPad,
+				"text": "", "border": this.FRAME_BORDER, "borderRadius": "12px", "background": "#FFFFFF"
+			}
+		};
+		oModel.push({ "fieldid": "", "Components": [oFrame] });
+
+		//---------------- 제목 줄 (headerformat 이 있을 때만) ----------------
+		if (bHeader) {
+			var oHeader = {
+				"tag": "Static",
+				"attribute": {
+					"id": this.ID_HEADER, "left": nInner, "top": nTop, "right": nInner, "height": this.HEADER_HEIGHT,
+					"text": "", "color": this.HEADER_COLOR, "font": this.TEXT_FONT, "usedecorate": "true"
+				}
+			};
+			oModel.push({ "fieldid": "", "Components": [oHeader] });
+
+			nTop += this.HEADER_HEIGHT + this.HEADER_GAP;
+		}
+
+		//---------------- 카드 : 라벨 + 값을 한 Static 에 두 줄로 (세로 가운데) ----------------
+		// 너비 : 테두리 안쪽 너비를 카드 수로 나눈 %(간격만큼 2% 덜어냄). 마지막 카드는 right 로 끝을 맞춤
+		// 높이 : bottom 으로 테두리 안쪽 끝까지
+		var nCount  = arrCards.length;
+		var sWidth  = nCount > 0 ? (Math.floor(10000 / nCount) / 100 - 2) + "%" : "100%";
+		var sPrevId = "";
+
+		for (var i = 0; i < nCount; i++) {
+			var oField  = arrCards[i];
+			var sCardId = "staCard_" + oField.id;
+			var bLast   = (i == nCount - 1);
+
+			var oCard = {
+				"tag": "Static",
+				"attribute": {
+					"id": sCardId, "left": (i == 0) ? nInner : sPrevId + ":" + nGap, "top": nTop, "bottom": nInner,
+					"text": oField.label ? oField.label : oField.id,
+					"background": this.fn_Pick(arrBg, i, "#F1EFE8"), "borderRadius": "8px",
+					"color": this.fn_Pick(arrValueFg, i, "#444441"), "padding": "0px 14px",
+					"verticalAlign": "middle", "usedecorate": "true",
+					"font": "normal 500 " + nFontSize + "px/normal \"Malgun Gothic\"",
+					"_fieldid": oField.id, "_fieldcomptype": "comp"
+				}
+			};
+
+			if (bLast) {
+				oCard.attribute.right = nInner;
+			} else {
+				oCard.attribute.width = sWidth;
+			}
+
+			this.arrCardIds.push(oField.id);
+			this.arrCardLabels.push(oField.label ? oField.label : oField.id);
+			oModel.push({ "fieldid": oField.id, "Components": [oCard] });
+
+			sPrevId = sCardId;
+		}
+
+		return oModel;
+	};
+
+	// 함수를 "this.<name> = function..." 문자열로 변환
+	this.fn_FuncString = function(sName) {
+		return "\n\tthis." + sName + " = " + this[sName].toString() + ";\n";
+	};
+
+	this.fn_GetScript = function() {
+		// 실행 시점에 View 스크립트가 참조할 값
+		var sValue = "\n\tthis.fvHeaderFormat = " + JSON.stringify(this.fn_GetProp("headerformat", this.HEADER_FORMAT)) + ";"
+		           + "\n\tthis.fvEmptyText = " + JSON.stringify(this.fn_GetProp("emptytext", this.EMPTY_TEXT)) + ";"
+		           + "\n\tthis.fvValueSuffix = " + JSON.stringify(this.fn_GetProp("valuesuffix", this.VALUE_SUFFIX)) + ";"
+		           + "\n\tthis.fvCardFields = " + JSON.stringify(this.arrCardIds) + ";"
+		           + "\n\tthis.fvCardLabels = " + JSON.stringify(this.arrCardLabels) + ";"
+		           + "\n\tthis.fvLabelColors = " + JSON.stringify(this.fn_Split(this.fn_GetProp("labelcolors", this.LABEL_COLORS))) + ";"
+		           + "\n\tthis.fvSmallPt = " + this.LABEL_FONT_PT + ";\n";
+
+		sValue += this.fn_FuncString("_fnViewOnLoad");
+		sValue += this.fn_FuncString("fn_ds_onchanged");
+		sValue += this.fn_FuncString("fn_refresh");
+		sValue += this.fn_FuncString("fn_formatValue");
+		sValue += this.fn_FuncString("fn_formatNumber");
+
+		return {
+			"tag": "Script",
+			"attribute": { "type": "xscript5.1" },
+			"value": sValue
+		};
+	};
+
+/************************************************************************************************
+ * Runtime Functions (생성된 View 안에서 실행되는 함수. this = View 내부 폼)
+ ************************************************************************************************/
+	this._fnViewOnLoad = function(objForm) {
+		/* Sets the view form reference so that functions declared in the view can access it */
+		this._ownerForm = objForm;
+
+		var oDs = this.parent.getViewDataset();
+		if (oDs && !this._bSummaryInit) {
+			/* 조회 완료(onload) / 값 변경(oncolumnchanged) / 행 이동(onrowposchanged) 때 갱신. 재호출 시 중복 등록 방지 */
+			oDs.addEventHandler("onload", this.fn_ds_onchanged, this);
+			oDs.addEventHandler("oncolumnchanged", this.fn_ds_onchanged, this);
+			oDs.addEventHandler("onrowposchanged", this.fn_ds_onchanged, this);
+			this._bSummaryInit = true;
+		}
+
+		this.fn_refresh();
+	};
+
+	this.fn_ds_onchanged = function(obj, e) {
+		this.fn_refresh();
+	};
+
+	/* 제목 줄 + 카드 값을 현재 행 기준으로 다시 그림 */
+	this.fn_refresh = function() {
+		var oDs   = this.parent.getViewDataset();
+		var bData = oDs && oDs.getRowCount() > 0 && oDs.rowposition >= 0;
+		var nRow  = bData ? oDs.rowposition : -1;
+		var oThis = this;
+
+		// 제목 줄
+		if (this.staHeader && this.fvHeaderFormat) {
+			if (!bData) {
+				this.staHeader.set_text(this.fvEmptyText);
+			} else {
+				var sText = ("" + this.fvHeaderFormat).replace(/\{([A-Za-z0-9_]+)\}/g, function(sAll, sCol) {
+					return oThis.fn_formatValue(oDs.getColumn(nRow, sCol));
+				});
+				this.staHeader.set_text(sText);
+			}
+		}
+
+		// 카드 : 1줄 라벨(작게, 라벨색) + 2줄 값(천 단위 쉼표) + 작은 단위
+		var sSmall = "<fs v='" + this.fvSmallPt + "'>";
+		for (var i = 0; i < this.fvCardFields.length; i++) {
+			var sCol  = this.fvCardFields[i];
+			var oCard = this["staCard_" + sCol];
+			if (!oCard) {
+				continue;
+			}
+
+			var sColor = this.fvLabelColors.length > 0 ? this.fvLabelColors[i % this.fvLabelColors.length] : "#5F5E5A";
+			var sLabel = "<fc v='" + sColor + "'>" + sSmall + this.fvCardLabels[i] + "</fs></fc>";
+
+			var sValue = "-";
+			if (bData) {
+				var v = oDs.getColumn(nRow, sCol);
+				if (v !== undefined && v !== null && v !== "") {
+					sValue = this.fn_formatNumber(v) + (this.fvValueSuffix ? sSmall + " " + this.fvValueSuffix + "</fs>" : "");
+				}
+			}
+
+			oCard.set_text(sLabel + "\n" + sValue);
+		}
+	};
+
+	/* 날짜 값은 yyyy-MM-dd (시각이 있으면 HH:mm 까지), 그 외는 문자열 */
+	this.fn_formatValue = function(v) {
+		if (v === undefined || v === null) {
+			return "";
+		}
+		if (v.getFullYear) {
+			var p = function(n) { return n < 10 ? "0" + n : "" + n; };
+			var sDate = v.getFullYear() + "-" + p(v.getMonth() + 1) + "-" + p(v.getDate());
+			if (v.getHours() == 0 && v.getMinutes() == 0) {
+				return sDate;
+			}
+			return sDate + " " + p(v.getHours()) + ":" + p(v.getMinutes());
+		}
+		return "" + v;
+	};
+
+	/* 숫자는 천 단위 쉼표, 숫자가 아니면 그대로 */
+	this.fn_formatNumber = function(v) {
+		var s = "" + v;
+		if (!/^-?\d+(\.\d+)?$/.test(s)) {
+			return this.fn_formatValue(v);
+		}
+		var arr = s.split(".");
+		arr[0] = arr[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		return arr.join(".");
+	};
+]]>
+  </Script>
+  <TestData>
+    <TestFields><![CDATA[{
+    "fields": [
+        {"id": "row_count", "label": "전체", "uselabel": "true", "editable": "false", "fieldtype": "Number", "datatype": "INT", "datasize": "11", "required": "false", "description_ENG": "", "description_KOR": "", "description_JPN": "", "options": ""},
+        {"id": "new_count", "label": "신규", "uselabel": "true", "editable": "false", "fieldtype": "Number", "datatype": "INT", "datasize": "11", "required": "false", "description_ENG": "", "description_KOR": "", "description_JPN": "", "options": ""},
+        {"id": "changed_count", "label": "상태 변경", "uselabel": "true", "editable": "false", "fieldtype": "Number", "datatype": "INT", "datasize": "11", "required": "false", "description_ENG": "", "description_KOR": "", "description_JPN": "", "options": ""}
+    ]
+}]]>
+    </TestFields>
+    <TestViewProperties><![CDATA[{
+    "attributes": {
+        "headerfields": "",
+        "headerformat": "<b v='true'>{upload_id}회차</b> · 기준일 {base_date} · {file_name}",
+        "emptytext": "업로드 이력이 없습니다",
+        "valuesuffix": "건",
+        "cardcolors": "#F1EFE8,#EAF3DE,#FAEEDA,#E6F1FB",
+        "labelcolors": "#5F5E5A,#3B6D11,#854F0B,#185FA5",
+        "valuecolors": "#444441,#27500A,#633806,#0C447C",
+        "valuefontsize": 22,
+        "cardgap": 8
+    }
+}]]>
+    </TestViewProperties>
+  </TestData>
+</ViewTemplateInfo>

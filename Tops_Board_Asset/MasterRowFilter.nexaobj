@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NexacroObject version="1.0" type="Action">
+  <MetaInfo version="2.0" locale="ENG">
+    <Object id="nexacro.MasterRowFilter">
+      <ObjectInfo classname="nexacro.MasterRowFilter" inheritance="nexacro.Action" shorttypename="MasterRowFilter" group="Action" registration="allow" contents="true" formats="false" contentseditor="auto" container="false" csstypename="" csscontrolname="" subgroup="Action" edittype="action" useinitvalue="false" composite="false" tabstop="false" cssstyle="false" csspseudo="" defaultwidth="" defaultheight="" popup="false" dblclickevent="" a11yprop="" finalclass="false" edittypecomponent="" requirement="" description=""/>
+      <ContentsInfo contentsformat="json" contentseditor="auto" contentstype="contents" showpreview="false" showobjtree="false" showproperties="false"/>
+      <PropertyInfo>
+        <Property name="master" group="" subgroup="" refreshinfo="" displayinfo="" edittype="MultiColumnID" defaultvalue="" readonly="false" configurable="true" initonly="false" hidden="false" control="false" expr="false" enumerable="true" bind="false" unused="false" mandatory="false" enuminfo="" enuminfo2="" unitinfo="" delimiter="" requirement="" description="" csspropertyname="" normalpropertyname="" stringrc="false" defaultstringrc="false"/>
+        <Property name="target" group="" subgroup="" refreshinfo="" displayinfo="" edittype="MultiColumnID" defaultvalue="" readonly="false" configurable="true" initonly="false" hidden="false" control="false" expr="false" enumerable="true" bind="false" unused="false" mandatory="false" enuminfo="" enuminfo2="" unitinfo="" delimiter="" requirement="" description="" csspropertyname="" normalpropertyname="" stringrc="false" defaultstringrc="false"/>
+        <Property name="targetview" group="" subgroup="" refreshinfo="" displayinfo="" edittype="String" readonly="false" initonly="false" hidden="true" control="false" expr="false" bind="false" deprecated="false" unused="false" mandatory="false" objectinfo="" enuminfo="" enuminfo2="" unitinfo="" delimiter="" requirement="Edge,Chrome,Safari,Firefox,Opera,Windows NRE,macOS NRE,Android NRE,iOS/iPadOS NRE,Android Default Web Browser,iOS/iPadOS Default Web Browser" description="Action을 수행할 View 오브젝트를 설정하는 속성입니다." csspropertyname="" normalpropertyname="targetview" stringrc="false" defaultstringrc="false"/>
+      </PropertyInfo>
+      <MethodInfo/>
+      <EventHandlerInfo/>
+      <StatusInfo/>
+      <ControlInfo/>
+      <CSSInfo>
+        <PropertyInfo/>
+      </CSSInfo>
+    </Object>
+  </MetaInfo>
+  <ScriptConfig version="1.0"><![CDATA[{
+	"members": [
+		{
+			"name": "run",
+			"body": "let oForm   = this._p_parent ? this._p_parent : this.parent;\r\nlet oMaster = this.topsParseColumns(this._p_master);\r\nlet oTarget = this.topsParseColumns(this._p_target);\r\n\r\nif (!oMaster || !oTarget || oMaster.cols.length != oTarget.cols.length) {\r\n    this.on_fire_onerror(\"invalid master/target\");\r\n    return;\r\n}\r\n\r\nlet dsMaster = oForm[oMaster.ds];\r\nlet dsTarget = oForm[oTarget.ds];\r\nif (!dsMaster || !dsTarget) {\r\n    this.on_fire_onerror(\"dataset not found\");\r\n    return;\r\n}\r\n\r\nlet nRow = dsMaster.rowposition;\r\nlet arrCond = [];\r\n\r\nfor (let i = 0; i < oMaster.cols.length; i++) {\r\n    let vValue = nRow < 0 ? null : dsMaster.getColumn(nRow, oMaster.cols[i]);\r\n    if (vValue == null || vValue === \"\") {             // 선택 없음 / 새 행 → 대상 비움\r\n        dsTarget.filter(\"false\");\r\n        this.on_fire_onsuccess(\"empty\");\r\n        return;\r\n    }\r\n    arrCond.push(oTarget.cols[i] + \"=='\" + String(vValue).replace(/'/g, \"\\\\'\") + \"'\");\r\n}\r\n\r\ndsTarget.filter(arrCond.join(\" && \"));\r\nthis.on_fire_onsuccess(\"success\");"
+		},
+		{
+			"name": "contents",
+			"body": "nexacro.Action.prototype._setContents.call(this, v);\n\n// TODO : enter your code here."
+		},
+		{
+			"name": "property:master",
+			"body": "if (this._p_master != v)\n{\n    this._p_master = v;\n    // TODO : enter your code here.\n}"
+		},
+		{
+			"name": "property:target",
+			"body": "if (this._p_target != v)\n{\n    this._p_target = v;\n    // TODO : enter your code here.\n}"
+		}
+	]
+}]]>
+  </ScriptConfig>
+  <Script type="xscript5.1"><![CDATA[//==============================================================================
+// Define the Action.
+//==============================================================================
+//==============================================================================
+// Object : nexacro.MasterRowFilter
+// Group : Action
+//==============================================================================
+if (!nexacro.MasterRowFilter)
+{
+    nexacro.MasterRowFilter = function (id, parent)
+    {
+        nexacro.Action.call(this, id, parent);
+    };
+
+    nexacro.MasterRowFilter.prototype = nexacro._createPrototype(nexacro.Action, nexacro.MasterRowFilter);
+    nexacro.MasterRowFilter.prototype._type_name = "MasterRowFilter";
+
+    //===============================================================
+    // nexacro.MasterRowFilter : Method
+    //===============================================================
+    nexacro.MasterRowFilter.prototype.run = function ()
+    {
+        let oForm   = this._p_parent ? this._p_parent : this.parent;
+        let oMaster = this.topsParseColumns(this._p_master);
+        let oTarget = this.topsParseColumns(this._p_target);
+
+        if (!oMaster || !oTarget || oMaster.cols.length != oTarget.cols.length) {
+            this.on_fire_onerror("invalid master/target");
+            return;
+        }
+
+        let dsMaster = oForm[oMaster.ds];
+        let dsTarget = oForm[oTarget.ds];
+        if (!dsMaster || !dsTarget) {
+            this.on_fire_onerror("dataset not found");
+            return;
+        }
+
+        let nRow = dsMaster.rowposition;
+        let arrCond = [];
+
+        for (let i = 0; i < oMaster.cols.length; i++) {
+            let vValue = nRow < 0 ? null : dsMaster.getColumn(nRow, oMaster.cols[i]);
+            if (vValue == null || vValue === "") {             // 선택 없음 / 새 행 → 대상 비움
+                dsTarget.filter("false");
+                this.on_fire_onsuccess("empty");
+                return;
+            }
+            arrCond.push(oTarget.cols[i] + "=='" + String(vValue).replace(/'/g, "\\'") + "'");
+        }
+
+        dsTarget.filter(arrCond.join(" && "));
+        this.on_fire_onsuccess("success");
+    };
+
+    //===============================================================
+    // nexacro.MasterRowFilter : Contents
+    //===============================================================
+    nexacro.MasterRowFilter.prototype._p_contents = "";
+    nexacro.MasterRowFilter.prototype.set_contents = function (v)
+    {
+        if (this._p_contents != v)
+        {
+            this._p_contents = v;
+            this._setContents(this._p_contents);
+        }
+    };
+
+    Object.defineProperty(nexacro.MasterRowFilter.prototype, "contents", {
+        get: new Function("return this._p_contents"),
+        set: nexacro.MasterRowFilter.prototype["set_contents"],
+        enumerable: true,
+        configurable: true
+    });
+
+    nexacro.MasterRowFilter.prototype._setContents = function (v)
+    {
+        // This function is necessary to apply contents in the run environment.
+        nexacro.Action.prototype._setContents.call(this, v);
+
+        // TODO : enter your code here.
+    };
+
+    //===============================================================
+    // nexacro.MasterRowFilter : Declared Properties
+    //===============================================================
+    nexacro.MasterRowFilter.prototype._p_master = "";
+    nexacro.MasterRowFilter.prototype.set_master = function (v)
+    {
+        if (this._p_master != v)
+        {
+            this._p_master = v;
+            // TODO : enter your code here.
+        }
+    };
+
+    nexacro.MasterRowFilter.prototype._p_target = "";
+    nexacro.MasterRowFilter.prototype.set_target = function (v)
+    {
+        if (this._p_target != v)
+        {
+            this._p_target = v;
+            // TODO : enter your code here.
+        }
+    };
+
+    nexacro.MasterRowFilter.prototype._properties = [{name: "master"}, {name: "target"}];
+    nexacro._defineProperties(nexacro.MasterRowFilter.prototype, nexacro.MasterRowFilter.prototype._properties);
+
+}]]>
+  </Script>
+  <DesignScriptConfig version="1.0"><![CDATA[{
+	"version": "1.0",
+	"body": "nexacro.MasterRowFilter.prototype.run = nexacro._emptyFn;"
+}]]>
+  </DesignScriptConfig>
+  <DesignScript type="xscript5.1"><![CDATA[//==============================================================================
+//	Define the code to be applied in the Form Design of nexacrostudio.
+//==============================================================================
+//==============================================================================
+// Object : nexacro.MasterRowFilter
+// Group : Action
+//==============================================================================
+if (nexacro.MasterRowFilter) 
+{
+    //===============================================================
+    // nexacro.MasterRowFilter : Method
+    //===============================================================
+    nexacro.MasterRowFilter.prototype.run = nexacro._emptyFn;
+}]]>
+  </DesignScript>
+</NexacroObject>

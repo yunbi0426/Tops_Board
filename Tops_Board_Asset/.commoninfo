@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CommonInfo version="1.0" locale="ENG">
+  <EnumInfo id="PositionType">
+    <Enum name="first"/>
+    <Enum name="last"/>
+  </EnumInfo>
+</CommonInfo>

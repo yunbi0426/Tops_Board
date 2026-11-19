@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NexacroObject version="1.0" type="Action">
+  <MetaInfo version="2.0" locale="ENG">
+    <Object id="nexacro.ShuttleMove">
+      <ObjectInfo classname="nexacro.ShuttleMove" inheritance="nexacro.Action" shorttypename="ShuttleMove" group="Action" registration="allow" contents="true" formats="false" contentseditor="auto" container="false" csstypename="" csscontrolname="" subgroup="Action" edittype="action" useinitvalue="false" composite="false" tabstop="false" cssstyle="false" csspseudo="" defaultwidth="" defaultheight="" popup="false" dblclickevent="" a11yprop="" finalclass="false" edittypecomponent="" requirement="" description=""/>
+      <ContentsInfo contentsformat="json" contentseditor="auto" contentstype="contents" showpreview="false" showobjtree="false" showproperties="false"/>
+      <PropertyInfo>
+        <Property name="source" group="" subgroup="" refreshinfo="" displayinfo="" edittype="MultiColumnID" defaultvalue="" readonly="false" configurable="true" initonly="false" hidden="false" control="false" expr="false" enumerable="true" bind="false" unused="false" mandatory="false" enuminfo="" enuminfo2="" unitinfo="" delimiter="" requirement="" description="" csspropertyname="" normalpropertyname="" stringrc="false" defaultstringrc="false"/>
+        <Property name="target" group="" subgroup="" refreshinfo="" displayinfo="" edittype="MultiColumnID" defaultvalue="" readonly="false" configurable="true" initonly="false" hidden="false" control="false" expr="false" enumerable="true" bind="false" unused="false" mandatory="false" enuminfo="" enuminfo2="" unitinfo="" delimiter="" requirement="" description="" csspropertyname="" normalpropertyname="" stringrc="false" defaultstringrc="false"/>
+        <Property name="master" group="" subgroup="" refreshinfo="" displayinfo="" edittype="MultiColumnID" defaultvalue="" readonly="false" configurable="true" initonly="false" hidden="false" control="false" expr="false" enumerable="true" bind="false" unused="false" mandatory="false" enuminfo="" enuminfo2="" unitinfo="" delimiter="" requirement="" description="" csspropertyname="" normalpropertyname="" stringrc="false" defaultstringrc="false"/>
+        <Property name="mastertarget" group="" subgroup="" refreshinfo="" displayinfo="" edittype="MultiColumnID" defaultvalue="" readonly="false" configurable="true" initonly="false" hidden="false" control="false" expr="false" enumerable="true" bind="false" unused="false" mandatory="false" enuminfo="" enuminfo2="" unitinfo="" delimiter="" requirement="" description="" csspropertyname="" normalpropertyname="" stringrc="false" defaultstringrc="false"/>
+        <Property name="targetview" group="" subgroup="" refreshinfo="" displayinfo="" edittype="String" readonly="false" initonly="false" hidden="true" control="false" expr="false" bind="false" deprecated="false" unused="false" mandatory="false" objectinfo="" enuminfo="" enuminfo2="" unitinfo="" delimiter="" requirement="Edge,Chrome,Safari,Firefox,Opera,Windows NRE,macOS NRE,Android NRE,iOS/iPadOS NRE,Android Default Web Browser,iOS/iPadOS Default Web Browser" description="Action을 수행할 View 오브젝트를 설정하는 속성입니다." csspropertyname="" normalpropertyname="targetview" stringrc="false" defaultstringrc="false"/>
+        <Property name="moveall" group="" subgroup="" refreshinfo="" displayinfo="" edittype="Boolean" defaultvalue="false" readonly="false" configurable="true" initonly="false" hidden="false" control="false" expr="false" enumerable="true" bind="false" unused="false" mandatory="false" enuminfo="" enuminfo2="" unitinfo="" delimiter="" requirement="" description="" csspropertyname="" normalpropertyname="" stringrc="false" defaultstringrc="false"/>
+      </PropertyInfo>
+      <MethodInfo/>
+      <EventHandlerInfo/>
+      <StatusInfo/>
+      <ControlInfo/>
+      <CSSInfo>
+        <PropertyInfo/>
+      </CSSInfo>
+    </Object>
+  </MetaInfo>
+  <ScriptConfig version="1.0"><![CDATA[{
+	"members": [
+		{
+			"name": "run",
+			"body": "let oForm   = this._p_parent ? this._p_parent : this.parent;\nlet oSrc    = this.topsParseColumns(this._p_source);\nlet oTgt    = this.topsParseColumns(this._p_target);\nlet oMst    = this.topsParseColumns(this._p_master);\nlet oMstTgt = this.topsParseColumns(this._p_mastertarget);\nlet bAll    = nexacro._toBoolean(this._p_moveall);\n\nif (!oSrc || !oTgt || oSrc.cols.length != oTgt.cols.length) {\n    this.on_fire_onerror(\"invalid source/target\");\n    return;\n}\n\nif (!!oMst != !!oMstTgt || (oMst && oMst.cols.length != oMstTgt.cols.length)) {\n    this.on_fire_onerror(\"invalid master/mastertarget\");\n    return;\n}\n\nlet dsSrc = oForm[oSrc.ds];\nlet dsTgt = oForm[oTgt.ds];\nif (!dsSrc || !dsTgt) { \n    this.on_fire_onerror(\"dataset not found\");\n    return;\n}\n\n// 옮길 행 목록: 전체(보이는 행 전부) 또는 선택 1행\nlet arrRow = [];\nif (bAll) {\n    for (let r = 0; r < dsSrc.rowcount; r++) arrRow.push(r);\n    if (arrRow.length == 0) { \n        this.on_fire_onsuccess(\"nothing\");\n        return;\n    }  // 옮길 게 없어도 성공\n} else {\n    if (dsSrc.rowposition < 0) { \n        this.on_fire_onerror(\"no selected row\");\n        return;\n    }\n    arrRow.push(dsSrc.rowposition);\n}\n\n// master 값 (◀에서는 비어 있어서 건너뜀)\nlet arrMstVal = [];\nif (oMst) {\n    let dsMst = oForm[oMst.ds];\n    let nMstRow = dsMst ? dsMst.rowposition : -1;\n    for (let i = 0; i < oMst.cols.length; i++) {\n        let v = nMstRow < 0 ? null : dsMst.getColumn(nMstRow, oMst.cols[i]);\n        if (v == null || v === \"\") { \n            this.on_fire_onerror(\"no master value\");\n            return;\n        }\n        arrMstVal.push(v);\n    }\n}\n\n// 복사\nlet nNew = -1;\nfor (let k = 0; k < arrRow.length; k++) {\n    nNew = dsTgt.addRow();\n\n    for (let i = 0; i < oSrc.cols.length; i++) {\n        dsTgt.setColumn(nNew, oTgt.cols[i], dsSrc.getColumn(arrRow[k], oSrc.cols[i]));\n    }\n    \n    for (let i = 0; i < arrMstVal.length; i++) {\n        dsTgt.setColumn(nNew, oMstTgt.cols[i], arrMstVal[i]);\n    }\n}\n\n// 삭제는 뒤에서부터 (앞에서 지우면 인덱스가 밀림)\nfor (let k = arrRow.length - 1; k >= 0; k--) {\n    dsSrc.deleteRow(arrRow[k]);\n}\n\ndsTgt.set_rowposition(nNew);\nthis.on_fire_onsuccess(\"success\");"
+		},
+		{
+			"name": "contents",
+			"body": "nexacro.Action.prototype._setContents.call(this, v);\n\n// TODO : enter your code here."
+		},
+		{
+			"name": "property:source",
+			"body": "if (this._p_source != v)\n{\n    this._p_source = v;\n    // TODO : enter your code here.\n}"
+		},
+		{
+			"name": "property:target",
+			"body": "if (this._p_target != v)\n{\n    this._p_target = v;\n    // TODO : enter your code here.\n}"
+		},
+		{
+			"name": "property:master",
+			"body": "if (this._p_master != v)\n{\n    this._p_master = v;\n    // TODO : enter your code here.\n}"
+		},
+		{
+			"name": "property:mastertarget",
+			"body": "if (this._p_mastertarget != v)\n{\n    this._p_mastertarget = v;\n    // TODO : enter your code here.\n}"
+		},
+		{
+			"name": "property:moveall",
+			"body": "if (this._p_moveall != v)\n{\n    this._p_moveall = v;\n    // TODO : enter your code here.\n}"
+		}
+	]
+}]]>
+  </ScriptConfig>
+  <Script type="xscript5.1"><![CDATA[//==============================================================================
+// Define the Action.
+//==============================================================================
+//==============================================================================
+// Object : nexacro.ShuttleMove
+// Group : Action
+//==============================================================================
+if (!nexacro.ShuttleMove)
+{
+    nexacro.ShuttleMove = function (id, parent)
+    {
+        nexacro.Action.call(this, id, parent);
+    };
+
+    nexacro.ShuttleMove.prototype = nexacro._createPrototype(nexacro.Action, nexacro.ShuttleMove);
+    nexacro.ShuttleMove.prototype._type_name = "ShuttleMove";
+
+    //===============================================================
+    // nexacro.ShuttleMove : Method
+    //===============================================================
+    nexacro.ShuttleMove.prototype.run = function ()
+    {
+        let oForm   = this._p_parent ? this._p_parent : this.parent;
+        let oSrc    = this.topsParseColumns(this._p_source);
+        let oTgt    = this.topsParseColumns(this._p_target);
+        let oMst    = this.topsParseColumns(this._p_master);
+        let oMstTgt = this.topsParseColumns(this._p_mastertarget);
+        let bAll    = nexacro._toBoolean(this._p_moveall);
+
+        if (!oSrc || !oTgt || oSrc.cols.length != oTgt.cols.length) {
+            this.on_fire_onerror("invalid source/target");
+            return;
+        }
+
+        if (!!oMst != !!oMstTgt || (oMst && oMst.cols.length != oMstTgt.cols.length)) {
+            this.on_fire_onerror("invalid master/mastertarget");
+            return;
+        }
+
+        let dsSrc = oForm[oSrc.ds];
+        let dsTgt = oForm[oTgt.ds];
+        if (!dsSrc || !dsTgt) { 
+            this.on_fire_onerror("dataset not found");
+            return;
+        }
+
+        // 옮길 행 목록: 전체(보이는 행 전부) 또는 선택 1행
+        let arrRow = [];
+        if (bAll) {
+            for (let r = 0; r < dsSrc.rowcount; r++) arrRow.push(r);
+            if (arrRow.length == 0) { 
+                this.on_fire_onsuccess("nothing");
+                return;
+            }  // 옮길 게 없어도 성공
+        } else {
+            if (dsSrc.rowposition < 0) { 
+                this.on_fire_onerror("no selected row");
+                return;
+            }
+            arrRow.push(dsSrc.rowposition);
+        }
+
+        // master 값 (◀에서는 비어 있어서 건너뜀)
+        let arrMstVal = [];
+        if (oMst) {
+            let dsMst = oForm[oMst.ds];
+            let nMstRow = dsMst ? dsMst.rowposition : -1;
+            for (let i = 0; i < oMst.cols.length; i++) {
+                let v = nMstRow < 0 ? null : dsMst.getColumn(nMstRow, oMst.cols[i]);
+                if (v == null || v === "") { 
+                    this.on_fire_onerror("no master value");
+                    return;
+                }
+                arrMstVal.push(v);
+            }
+        }
+
+        // 복사
+        let nNew = -1;
+        for (let k = 0; k < arrRow.length; k++) {
+            nNew = dsTgt.addRow();
+
+            for (let i = 0; i < oSrc.cols.length; i++) {
+                dsTgt.setColumn(nNew, oTgt.cols[i], dsSrc.getColumn(arrRow[k], oSrc.cols[i]));
+            }
+    
+            for (let i = 0; i < arrMstVal.length; i++) {
+                dsTgt.setColumn(nNew, oMstTgt.cols[i], arrMstVal[i]);
+            }
+        }
+
+        // 삭제는 뒤에서부터 (앞에서 지우면 인덱스가 밀림)
+        for (let k = arrRow.length - 1; k >= 0; k--) {
+            dsSrc.deleteRow(arrRow[k]);
+        }
+
+        dsTgt.set_rowposition(nNew);
+        this.on_fire_onsuccess("success");
+    };
+
+    //===============================================================
+    // nexacro.ShuttleMove : Contents
+    //===============================================================
+    nexacro.ShuttleMove.prototype._p_contents = "";
+    nexacro.ShuttleMove.prototype.set_contents = function (v)
+    {
+        if (this._p_contents != v)
+        {
+            this._p_contents = v;
+            this._setContents(this._p_contents);
+        }
+    };
+
+    Object.defineProperty(nexacro.ShuttleMove.prototype, "contents", {
+        get: new Function("return this._p_contents"),
+        set: nexacro.ShuttleMove.prototype["set_contents"],
+        enumerable: true,
+        configurable: true
+    });
+
+    nexacro.ShuttleMove.prototype._setContents = function (v)
+    {
+        // This function is necessary to apply contents in the run environment.
+        nexacro.Action.prototype._setContents.call(this, v);
+
+        // TODO : enter your code here.
+    };
+
+    //===============================================================
+    // nexacro.ShuttleMove : Declared Properties
+    //===============================================================
+    nexacro.ShuttleMove.prototype._p_source = "";
+    nexacro.ShuttleMove.prototype.set_source = function (v)
+    {
+        if (this._p_source != v)
+        {
+            this._p_source = v;
+            // TODO : enter your code here.
+        }
+    };
+
+    nexacro.ShuttleMove.prototype._p_target = "";
+    nexacro.ShuttleMove.prototype.set_target = function (v)
+    {
+        if (this._p_target != v)
+        {
+            this._p_target = v;
+            // TODO : enter your code here.
+        }
+    };
+
+    nexacro.ShuttleMove.prototype._p_master = "";
+    nexacro.ShuttleMove.prototype.set_master = function (v)
+    {
+        if (this._p_master != v)
+        {
+            this._p_master = v;
+            // TODO : enter your code here.
+        }
+    };
+
+    nexacro.ShuttleMove.prototype._p_mastertarget = "";
+    nexacro.ShuttleMove.prototype.set_mastertarget = function (v)
+    {
+        if (this._p_mastertarget != v)
+        {
+            this._p_mastertarget = v;
+            // TODO : enter your code here.
+        }
+    };
+
+    nexacro.ShuttleMove.prototype._p_moveall = false;
+    nexacro.ShuttleMove.prototype.set_moveall = function (v)
+    {
+        if (this._p_moveall != v)
+        {
+            this._p_moveall = v;
+            // TODO : enter your code here.
+        }
+    };
+
+    nexacro.ShuttleMove.prototype._properties = [{name: "source"}, {name: "target"}, {name: "master"}, {name: "mastertarget"}, {name: "moveall"}];
+    nexacro._defineProperties(nexacro.ShuttleMove.prototype, nexacro.ShuttleMove.prototype._properties);
+
+}]]>
+  </Script>
+  <DesignScriptConfig version="1.0"><![CDATA[{
+	"version": "1.0",
+	"body": "nexacro.ShuttleMove.prototype.run = nexacro._emptyFn;"
+}]]>
+  </DesignScriptConfig>
+  <DesignScript type="xscript5.1"><![CDATA[//==============================================================================
+//	Define the code to be applied in the Form Design of nexacrostudio.
+//==============================================================================
+//==============================================================================
+// Object : nexacro.ShuttleMove
+// Group : Action
+//==============================================================================
+if (nexacro.ShuttleMove) 
+{
+    //===============================================================
+    // nexacro.ShuttleMove : Method
+    //===============================================================
+    nexacro.ShuttleMove.prototype.run = nexacro._emptyFn;
+}]]>
+  </DesignScript>
+</NexacroObject>

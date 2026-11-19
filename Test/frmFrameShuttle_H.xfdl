@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="frmFrameShuttle_H" width="1050" height="736" titletext="Shuttle (H)">
+    <Layouts>
+      <Layout height="736" mobileorientation="landscape" width="1050">
+        <View id="Search" taborder="4" viewtype="Search" viewdataset="viewdataset" text="Search" left="10" top="10" height="50" right="10">
+          <Layouts>
+            <Layout/>
+          </Layouts>
+        </View>
+        <View id="List_1" taborder="2" viewtype="Grid" viewdataset="viewdataset" text="List" bottom="10" top="Search:10" left="10" width="47%">
+          <Layouts>
+            <Layout/>
+          </Layouts>
+        </View>
+        <Button id="btnPlus" taborder="1" text="▶" top="48%" height="30" textAlign="center" padding="0px" right="48.5%" left="48.5%"/>
+        <View id="List_2" taborder="3" viewtype="Grid" viewdataset="viewdataset" text="List" bottom="10" top="Search:10" right="10" width="47%">
+          <Layouts>
+            <Layout/>
+          </Layouts>
+        </View>
+        <Button id="btnMinus" taborder="" text="◀" top="btnPlus:10" height="30" textDecoration="none" textAlign="center" padding="0px" left="48.5%" right="48.5%"/>
+      </Layout>
+    </Layouts>
+    <Objects/>
+    <Trigger/>
+    <Script type="xscript5.1"><![CDATA[]]>
+    </Script>
+  </Form>
+</FDL>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewSetInfo version="1.0">
+  <ViewSet id="MasterShuttle_H" viewsettype="viewset" description_en="A viewset for assigning items to a selected master row. The left Grid View lists masters, the middle Grid View lists unassigned items, and the right Grid View lists items assigned to the selected master. Move buttons sit between the two lists, with save and close buttons at the bottom.">
+    <Views/>
+  </ViewSet>
+  <FDL version="2.1">
+    <Form id="MasterShuttle_H" width="1000" height="600" titletext="New Form">
+      <Layouts>
+        <Layout width="1000" height="600">
+          <View id="Master" left="10" top="10" text="Master" width="30%" bottom="50" viewtype="Grid"/>
+          <View id="Source" left="Master:10" top="10" width="31%" text="Source" bottom="50" viewtype="Grid"/>
+          <View id="Target" top="10" text="Target" right="10" width="31%" bottom="50" viewtype="Grid"/>
+          <Button id="btnToTarget" left="Source:10" top="40%" height="30" text="▶" right="Target:10" textAlign="center" padding="0"/>
+          <Button id="btnToSource" top="btnToTarget:5" height="30" text="◀" left="Source:10" right="Target:10" textAlign="center" padding="0"/>
+          <Button id="btnSave" top="Target:10" text="Save" right="10" bottom="10" width="80"/>
+          <Button id="btnClose" top="Target:10" text="Close" bottom="10" right="btnSave:10" width="80"/>
+        </Layout>
+      </Layouts>
+      <Script type="xscript5.1"><![CDATA[]]>
+      </Script>
+      <Objects/>
+      <Trigger/>
+    </Form>
+  </FDL>
+  <Thumbnail>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-40.31 -40.31 1080.62 680.62" width="320" height="200" preserveAspectRatio="xMidYMid meet">
+      <rect x="0" y="0" width="1000" height="600" rx="13.44" ry="13.44" fill="#ebebeb"/>
+      <rect x="23.44" y="23.44" width="273.13" height="513.13" rx="10.08" ry="10.08" fill="#d6d6d6"/>
+      <rect x="333.44" y="23.44" width="283.13" height="513.13" rx="10.08" ry="10.08" fill="#d6d6d6"/>
+      <rect x="693.44" y="23.44" width="283.13" height="513.13" rx="10.08" ry="10.08" fill="#d6d6d6"/>
+      <rect x="643.36" y="243.36" width="23.28" height="23.28" rx="6.72" ry="6.72" fill="#000000" fill-opacity="0.13"/>
+      <rect x="643.36" y="278.36" width="23.28" height="23.28" rx="6.72" ry="6.72" fill="#000000" fill-opacity="0.13"/>
+      <rect x="913.36" y="563.36" width="73.28" height="23.28" rx="6.72" ry="6.72" fill="#000000" fill-opacity="0.13"/>
+      <rect x="823.36" y="563.36" width="73.28" height="23.28" rx="6.72" ry="6.72" fill="#000000" fill-opacity="0.13"/>
+    </svg>
+  </Thumbnail>
+</ViewSetInfo>

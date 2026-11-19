@@ -15,7 +15,12 @@
       "ExcelUploadView.viewtemplate",
       "Tops_Board",
       "ActionLib/TopsActionLib.js",
-      "SummaryCardView.viewtemplate"
+      "SummaryCardView.viewtemplate",
+      "MasterRowFilter.nexaobj",
+      "SetRowPosition.nexaobj",
+      "ShuttleMove.nexaobj",
+      "MasterShuttle_H.viewset",
+      "Tops_Board_Iris"
     ]
   },
   "contentsEditor": []

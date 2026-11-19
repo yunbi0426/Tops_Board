@@ -2,16 +2,26 @@
   "name": "Tops_Board_Asset",
   "objInfo": [
     "Tops_Board_Asset/_metainfo_/OpenWorkForm.info",
-    "Tops_Board_Asset/_metainfo_/FileUploadTransfer.info"
+    "Tops_Board_Asset/_metainfo_/FileUploadTransfer.info",
+    "Tops_Board_Asset/_metainfo_/MasterRowFilter.info",
+    "Tops_Board_Asset/_metainfo_/ShuttleMove.info",
+    "Tops_Board_Asset/_metainfo_/SetRowPosition.info",
+    "Tops_Board_Asset/_metainfo_/CommonInfo.info"
   ],
   "scripts": [
     "Tops_Board_Asset/OpenWorkForm/OpenWorkForm.js",
     "Tops_Board_Asset/FileUploadTransfer/FileUploadTransfer.js",
-    "Tops_Board_Asset/ActionLib/TopsActionLib.js"
+    "Tops_Board_Asset/ActionLib/TopsActionLib.js",
+    "Tops_Board_Asset/MasterRowFilter/MasterRowFilter.js",
+    "Tops_Board_Asset/ShuttleMove/ShuttleMove.js",
+    "Tops_Board_Asset/SetRowPosition/SetRowPosition.js"
   ],
   "designscripts": [
     "Tops_Board_Asset/OpenWorkForm/DesignOpenWorkForm.js",
-    "Tops_Board_Asset/FileUploadTransfer/DesignFileUploadTransfer.js"
+    "Tops_Board_Asset/FileUploadTransfer/DesignFileUploadTransfer.js",
+    "Tops_Board_Asset/MasterRowFilter/DesignMasterRowFilter.js",
+    "Tops_Board_Asset/ShuttleMove/DesignShuttleMove.js",
+    "Tops_Board_Asset/SetRowPosition/DesignSetRowPosition.js"
   ],
   "moduletype": "component",
   "version": "1.0.0"

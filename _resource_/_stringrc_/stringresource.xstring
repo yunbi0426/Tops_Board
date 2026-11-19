@@ -2,9 +2,6 @@
   "contents": {
     "en": {
       "tops_board.requester_map.requester": null,
-      "tops_board.requester_map.display_name": null,
-      "tops_board.requester_map.is_external": null,
-      "tops_board.requester_map.sort_order": null,
       "tops_board.req_master.rp": null,
       "tops_board.req_master.rc": null,
       "tops_board.req_master.status": null,
@@ -43,7 +40,13 @@
       "tops_board.upload_log.changed_count": null,
       "tops_board.upload_log.uploaded_at": null,
       "tops_board.req_status.status": null,
-      "tops_board.req_status.sort_no": null
+      "tops_board.req_status.sort_no": null,
+      "tops_board.requester_group.group_id": null,
+      "tops_board.requester_group.display_name": null,
+      "tops_board.requester_group.company": null,
+      "tops_board.requester_group.updated_at": null,
+      "tops_board.requester_map.group_id": null,
+      "tops_board.req_status.stage": null
     }
   }
 }

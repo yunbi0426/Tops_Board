@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MetaInfo version="2.0">
+    <Object id="nexacro.SetRowPosition">
+      <ObjectInfo classname="nexacro.SetRowPosition" inheritance="nexacro.Action" shorttypename="SetRowPosition" group="Action" registration="allow" contents="true" formats="false" contentseditor="auto" container="false" csstypename="" csscontrolname="" subgroup="Action" edittype="action" useinitvalue="false" composite="false" tabstop="false" cssstyle="false" csspseudo="" defaultwidth="" defaultheight="" popup="false" dblclickevent="" a11yprop="" finalclass="false" edittypecomponent="" requirement="" description=""/>
+      <ContentsInfo contentsformat="json" contentseditor="auto" contentstype="contents" showpreview="false" showobjtree="false" showproperties="false"/>
+      <PropertyInfo>
+        <Property name="targetdataset" group="" subgroup="" refreshinfo="" displayinfo="" edittype="DatasetID" defaultvalue="" readonly="false" configurable="true" initonly="false" hidden="false" control="false" expr="false" enumerable="true" bind="false" unused="false" mandatory="false" enuminfo="" enuminfo2="" unitinfo="" delimiter="" requirement="" description="" csspropertyname="" normalpropertyname="" stringrc="false" defaultstringrc="false"/>
+        <Property name="position" group="" subgroup="" refreshinfo="" displayinfo="" edittype="Enum" defaultvalue="" readonly="false" configurable="true" initonly="false" hidden="false" control="false" expr="false" enumerable="true" bind="false" unused="false" mandatory="false" enuminfo="PositionType" enuminfo2="" unitinfo="" delimiter="" requirement="" description="" csspropertyname="" normalpropertyname="" stringrc="false" defaultstringrc="false"/>
+      </PropertyInfo>
+      <MethodInfo/>
+      <EventHandlerInfo/>
+      <StatusInfo/>
+      <ControlInfo/>
+      <CSSInfo>
+        <PropertyInfo/>
+      </CSSInfo>
+    </Object>
+</MetaInfo>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NexacroObject version="1.0" type="Action">
+  <MetaInfo version="2.0" locale="ENG">
+    <Object id="nexacro.SetRowPosition">
+      <ObjectInfo classname="nexacro.SetRowPosition" inheritance="nexacro.Action" shorttypename="SetRowPosition" group="Action" registration="allow" contents="true" formats="false" contentseditor="auto" container="false" csstypename="" csscontrolname="" subgroup="Action" edittype="action" useinitvalue="false" composite="false" tabstop="false" cssstyle="false" csspseudo="" defaultwidth="" defaultheight="" popup="false" dblclickevent="" a11yprop="" finalclass="false" edittypecomponent="" requirement="" description=""/>
+      <ContentsInfo contentsformat="json" contentseditor="auto" contentstype="contents" showpreview="false" showobjtree="false" showproperties="false"/>
+      <PropertyInfo>
+        <Property name="targetdataset" group="" subgroup="" refreshinfo="" displayinfo="" edittype="DatasetID" defaultvalue="" readonly="false" configurable="true" initonly="false" hidden="false" control="false" expr="false" enumerable="true" bind="false" unused="false" mandatory="false" enuminfo="" enuminfo2="" unitinfo="" delimiter="" requirement="" description="" csspropertyname="" normalpropertyname="" stringrc="false" defaultstringrc="false"/>
+        <Property name="position" group="" subgroup="" refreshinfo="" displayinfo="" edittype="Enum" defaultvalue="" readonly="false" configurable="true" initonly="false" hidden="false" control="false" expr="false" enumerable="true" bind="false" unused="false" mandatory="false" enuminfo="PositionType" enuminfo2="" unitinfo="" delimiter="" requirement="" description="" csspropertyname="" normalpropertyname="" stringrc="false" defaultstringrc="false"/>
+      </PropertyInfo>
+      <MethodInfo/>
+      <EventHandlerInfo/>
+      <StatusInfo/>
+      <ControlInfo/>
+      <CSSInfo>
+        <PropertyInfo/>
+      </CSSInfo>
+    </Object>
+  </MetaInfo>
+  <ScriptConfig version="1.0"><![CDATA[{
+	"members": [
+		{
+			"name": "run",
+			"body": "let oForm = this._p_parent ? this._p_parent : this.parent;\nlet ds = oForm[this._p_targetdataset];\nif (!ds) { this.on_fire_onerror(\"dataset not found\"); return; }\nif (ds.rowcount == 0) { this.on_fire_onsuccess(-1); return; }\n\nlet nRow = (this._p_position == \"last\") ? ds.rowcount - 1 : 0;\nds.set_rowposition(nRow);\nthis.on_fire_onsuccess(nRow);"
+		},
+		{
+			"name": "contents",
+			"body": "nexacro.Action.prototype._setContents.call(this, v);\n\n// TODO : enter your code here."
+		},
+		{
+			"name": "property:targetdataset",
+			"body": "if (this._p_targetdataset != v)\n{\n    this._p_targetdataset = v;\n    // TODO : enter your code here.\n}"
+		},
+		{
+			"name": "property:position",
+			"body": "if (this._p_position != v)\n{\n    this._p_position = v;\n    // TODO : enter your code here.\n}"
+		}
+	]
+}]]>
+  </ScriptConfig>
+  <Script type="xscript5.1"><![CDATA[//==============================================================================
+// Define the Action.
+//==============================================================================
+//==============================================================================
+// Object : nexacro.SetRowPosition
+// Group : Action
+//==============================================================================
+if (!nexacro.SetRowPosition)
+{
+    nexacro.SetRowPosition = function (id, parent)
+    {
+        nexacro.Action.call(this, id, parent);
+    };
+
+    nexacro.SetRowPosition.prototype = nexacro._createPrototype(nexacro.Action, nexacro.SetRowPosition);
+    nexacro.SetRowPosition.prototype._type_name = "SetRowPosition";
+
+    //===============================================================
+    // nexacro.SetRowPosition : Method
+    //===============================================================
+    nexacro.SetRowPosition.prototype.run = function ()
+    {
+        let oForm = this._p_parent ? this._p_parent : this.parent;
+        let ds = oForm[this._p_targetdataset];
+        if (!ds) { this.on_fire_onerror("dataset not found"); return; }
+        if (ds.rowcount == 0) { this.on_fire_onsuccess(-1); return; }
+
+        let nRow = (this._p_position == "last") ? ds.rowcount - 1 : 0;
+        ds.set_rowposition(nRow);
+        this.on_fire_onsuccess(nRow);
+    };
+
+    //===============================================================
+    // nexacro.SetRowPosition : Contents
+    //===============================================================
+    nexacro.SetRowPosition.prototype._p_contents = "";
+    nexacro.SetRowPosition.prototype.set_contents = function (v)
+    {
+        if (this._p_contents != v)
+        {
+            this._p_contents = v;
+            this._setContents(this._p_contents);
+        }
+    };
+
+    Object.defineProperty(nexacro.SetRowPosition.prototype, "contents", {
+        get: new Function("return this._p_contents"),
+        set: nexacro.SetRowPosition.prototype["set_contents"],
+        enumerable: true,
+        configurable: true
+    });
+
+    nexacro.SetRowPosition.prototype._setContents = function (v)
+    {
+        // This function is necessary to apply contents in the run environment.
+        nexacro.Action.prototype._setContents.call(this, v);
+
+        // TODO : enter your code here.
+    };
+
+    //===============================================================
+    // nexacro.SetRowPosition : Declared Properties
+    //===============================================================
+    nexacro.SetRowPosition.prototype._p_targetdataset = "";
+    nexacro.SetRowPosition.prototype.set_targetdataset = function (v)
+    {
+        if (this._p_targetdataset != v)
+        {
+            this._p_targetdataset = v;
+            // TODO : enter your code here.
+        }
+    };
+
+    nexacro.SetRowPosition.prototype._p_position = "";
+    nexacro.SetRowPosition.prototype.set_position = function (v)
+    {
+        if (this._p_position != v)
+        {
+            this._p_position = v;
+            // TODO : enter your code here.
+        }
+    };
+
+    nexacro.SetRowPosition.prototype._properties = [{name: "targetdataset"}, {name: "position"}];
+    nexacro._defineProperties(nexacro.SetRowPosition.prototype, nexacro.SetRowPosition.prototype._properties);
+
+}]]>
+  </Script>
+  <DesignScriptConfig version="1.0"><![CDATA[{
+	"version": "1.0",
+	"body": "nexacro.SetRowPosition.prototype.run = nexacro._emptyFn;"
+}]]>
+  </DesignScriptConfig>
+  <DesignScript type="xscript5.1"><![CDATA[//==============================================================================
+//	Define the code to be applied in the Form Design of nexacrostudio.
+//==============================================================================
+//==============================================================================
+// Object : nexacro.SetRowPosition
+// Group : Action
+//==============================================================================
+if (nexacro.SetRowPosition) 
+{
+    //===============================================================
+    // nexacro.SetRowPosition : Method
+    //===============================================================
+    nexacro.SetRowPosition.prototype.run = nexacro._emptyFn;
+}]]>
+  </DesignScript>
+</NexacroObject>
