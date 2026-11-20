@@ -20,7 +20,10 @@
       "SetRowPosition.nexaobj",
       "ShuttleMove.nexaobj",
       "MasterShuttle_H.viewset",
-      "Tops_Board_Iris"
+      "Tops_Board_Iris",
+      "SummaryBarView.viewtemplate",
+      "DashboardDetail_H.viewset",
+      "RankBarChart.viewtemplate"
     ]
   },
   "contentsEditor": []

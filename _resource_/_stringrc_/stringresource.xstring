@@ -46,7 +46,8 @@
       "tops_board.requester_group.company": null,
       "tops_board.requester_group.updated_at": null,
       "tops_board.requester_map.group_id": null,
-      "tops_board.req_status.stage": null
+      "tops_board.req_status.stage": null,
+      "tops_board.req_status.dev_result": null
     }
   }
 }

@@ -534,6 +534,20 @@
     },
     {
       "type": "serverdata",
+      "id": "dev_result",
+      "key": "tops_board.req_status.dev_result",
+      "label": "dev_result",
+      "uselabel": "true",
+      "fieldtype": "Text",
+      "datatype": "string",
+      "datasize": 10,
+      "required": "true",
+      "description": "dev_result",
+      "options": "",
+      "datasource": "tops_board"
+    },
+    {
+      "type": "serverdata",
       "id": "upload_id",
       "key": "tops_board.upload_log.upload_id",
       "label": "업로드 회차",

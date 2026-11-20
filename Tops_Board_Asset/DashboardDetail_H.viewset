@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewSetInfo version="1.0">
+  <ViewSet id="DashboardDetail_H" viewsettype="viewset" description_en="A dashboard layout with summary cards on top, a chart and a main grid side by side, and a detail grid at the bottom.">
+    <Views>
+      <View id="Summary" viewtemplate="SummaryCardView.viewtemplate"/>
+      <View id="Chart" viewtemplate="RankBarChart.viewtemplate"/>
+    </Views>
+  </ViewSet>
+  <FDL version="2.1">
+    <Form id="DashboardDetail_H" width="1050" height="736" titletext="New Form">
+      <Layouts>
+        <Layout width="1050" height="736">
+          <View id="Summary" left="10" top="10" height="110" text="Summary" right="10"/>
+          <View id="Chart" left="10" top="Summary:10" width="40%" height="50%" text="Chart" viewtype="Chart"/>
+          <View id="Main" left="Chart:10" top="Summary:10" height="50%" text="Main" right="10" viewtype="Grid"/>
+          <View id="Detail" left="10" top="Chart:10" text="Detail" right="10" bottom="10" viewtype="Grid"/>
+        </Layout>
+      </Layouts>
+      <Script type="xscript5.1"><![CDATA[]]>
+      </Script>
+      <Objects/>
+      <Trigger/>
+    </Form>
+  </FDL>
+  <Thumbnail>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-45.9 -45.9 1141.8 827.8" width="320" height="200" preserveAspectRatio="xMidYMid meet">
+      <rect x="0" y="0" width="1050" height="736" rx="15.3" ry="15.3" fill="#ebebeb"/>
+      <rect x="25.3" y="25.3" width="999.4" height="79.4" rx="11.47" ry="11.47" fill="#d6d6d6"/>
+      <rect x="25.3" y="145.3" width="389.4" height="337.4" rx="11.47" ry="11.47" fill="#d6d6d6"/>
+      <rect x="455.3" y="145.3" width="569.4" height="337.4" rx="11.47" ry="11.47" fill="#d6d6d6"/>
+      <rect x="25.3" y="523.3" width="999.4" height="187.4" rx="11.47" ry="11.47" fill="#d6d6d6"/>
+      <circle cx="80.38" cy="65" r="34.42" fill="#2f88f2" stroke="#ffffff" stroke-width="7.65"/>
+      <text x="80.38" y="81.39" text-anchor="middle" font-size="46.82" font-family="sans-serif" font-weight="bold" fill="#ffffff">1</text>
+      <circle cx="80.38" cy="200.38" r="34.42" fill="#2f88f2" stroke="#ffffff" stroke-width="7.65"/>
+      <text x="80.38" y="216.77" text-anchor="middle" font-size="46.82" font-family="sans-serif" font-weight="bold" fill="#ffffff">2</text>
+    </svg>
+  </Thumbnail>
+</ViewSetInfo>

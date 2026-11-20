@@ -1,0 +1,463 @@
+/************************************************************************************************
+ * Include Declarations
+ ************************************************************************************************/
+
+/************************************************************************************************
+ * Variable Definitions
+ ************************************************************************************************/
+	// Layout
+	this.VIEW_PADDING = 10;	// View 가장자리 ~ 테두리 박스
+	this.FRAME_PADDING = 12;	// 테두리 박스 ~ 내용
+	this.HEADER_HEIGHT = 20;
+	this.HEADER_GAP = 8;
+	this.VALUE_FONT_SIZE = 22;
+	this.LABEL_FONT_PT = 9;	// 라벨/단위 글자 크기 (decorate <fs> 는 pt 단위)
+	this.CARD_GAP = 8;
+
+	// Fonts / colors (화면과 무관한 스타일 기본 값)
+	this.TEXT_FONT = "normal 12px/normal \"Malgun Gothic\"";
+	this.FRAME_BORDER = "1px solid #E0DED6";
+	this.HEADER_COLOR = "#5F5E5A";
+
+	// Default values of view properties (화면마다 다른 값은 비워두고 View Generation 속성에서 지정)
+	this.HEADER_FIELDS = "";
+	this.HEADER_FORMAT = "";
+	this.EMPTY_TEXT = "데이터가 없습니다";;
+	this.VALUE_SUFFIX = "";
+	this.CARD_COLORS = "#F1EFE8,#EAF3DE,#FAEEDA,#E6F1FB";;
+	this.LABEL_COLORS = "#5F5E5A,#3B6D11,#854F0B,#185FA5";;
+	this.VALUE_COLORS = "#444441,#27500A,#633806,#0C447C";;
+
+	// Component ids
+	this.ID_FRAME = "staFrame";
+	this.ID_HEADER = "staHeader";
+
+	// View-related variables
+	this.oFieldArray;
+	this.oContents;
+	this.oViewProperties;
+	this.arrCardIds = [];
+	this.arrCardLabels = [];
+
+/************************************************************************************************
+ * Required Function Area for NexaLAP Studio
+ ************************************************************************************************/
+
+	this.set_viewProperties = function() {
+		let oViewAttr = { "attributes": [] };
+		let oProperties;
+		// View generation options (set_viewProperties)
+
+		oProperties = {};
+		oProperties.id = "titleUse";
+		oProperties.displaytext = "Title use";
+		oProperties.edittype = "Boolean";
+		oProperties.defaultvalue = false;
+		oProperties.description = "Sets whether to display the title.";
+		oProperties.group = "Title";
+		oViewAttr.attributes.push(oProperties);
+
+		oProperties = {};
+		oProperties.id = "titletext";
+		oProperties.displaytext = "Title text";
+		oProperties.edittype = "String";
+		oProperties.defaultvalue = "";
+		oProperties.description = "Set the title text (Other fields will not be created if title text is not entered)";
+		oViewAttr.attributes.push(oProperties);
+
+		oProperties = {};
+		oProperties.id = "fieldwidth";
+		oProperties.displaytext = "Field width";
+		oProperties.edittype = "Number";
+		oProperties.defaultvalue = 300;
+		oProperties.description = "Component Width(px)";
+		oProperties.group = "Field";
+		oViewAttr.attributes.push(oProperties);
+
+		oProperties = {};
+		oProperties.id = "labelwidth";
+		oProperties.displaytext = "Label width";
+		oProperties.edittype = "Number";
+		oProperties.defaultvalue = 131;
+		oProperties.description = "Label Size(px)";
+		oProperties.group = "Label";
+		oViewAttr.attributes.push(oProperties);
+
+		return JSON.stringify(oViewAttr, null, "\t");
+	};
+
+	this.set_fieldProperties = function() {
+		let oFieldAttr = { "attributes": [] };
+
+		return JSON.stringify(oFieldAttr, null, "\t");
+	};
+
+	this.main = function(fieldarray, contents, viewproperties, extradata) {
+		if (fieldarray) {
+			this.oFieldArray = JSON.parse(fieldarray);
+		}
+
+		if (contents) {
+			this.oContents = JSON.parse(contents);
+			this.oContents.View.Model = [];
+			this.oContents.View.View[0].tag = "Layouts";
+			this.oContents.View.View[0].Layouts = [];
+		}
+
+		if (viewproperties) {
+			this.oViewProperties = JSON.parse(viewproperties);
+		}
+
+		// fn_GetModel 이 돌면서 arrBindItems·arrInnerDatasets 를 채우므로 Objects/Bind 보다 먼저다.
+		this.oContents.View.Model = this.fn_GetModel();
+		this.oContents.View.attribute.viewdataset = "${VIEW_DATASET}";
+		this.oContents.View.InitValue = [];
+		this.oContents.View.Objects = this.arrInnerDatasets;
+		this.oContents.View.Bind = this.fn_GetBind();
+		this.oContents.View.Script = this.fn_GetScript();
+
+		return JSON.stringify(this.oContents, null, "\t");
+	};
+
+	this.fn_GetModel = function() {
+		const oModel = [];
+
+		if (this.oViewProperties.attributes.titleUse == "true") {
+			this.fn_MakeTitleArea(oModel);
+		}
+
+		this.fn_MakeContents(oModel);
+		return oModel;
+	};
+
+	this.fn_GetBind = function() {
+		const sBindDataset = "${VIEW_DATASET}";
+		const oBindItems = [];
+
+		for (let i = 0; i < this.arrBindItems.length; i++) {
+			const item = this.arrBindItems[i];
+			const sCompId = item.compid;
+			const sFieldId = item.fieldid;
+			const sCompType = item.comptype;
+			const sCompClassId = item.compclassid;
+
+			let sPropid = "value";
+			if (sCompClassId == "Static" || sCompType == "static") {
+				sPropid = "text";
+			} else if (sCompClassId == "ImageViewer" || sCompType == "imageviewer") {
+				sPropid = "image";
+			} else if (sCompClassId == "ProgressBar" || sCompType == "progressbar") {
+				// 게이지는 pos(0~max). value 속성은 없다.
+				sPropid = "pos";
+			} else if (sCompClassId == "WebView" || sCompClassId == "WebBrowser" || sCompType == "webview" || sCompType == "webbrowser") {
+				sPropid = "url";
+			} else if (sCompClassId == "AbstractSelectAny" || sCompType == "selectany") {
+				sPropid = "multivalue";
+			}
+
+			const oBindItem = {
+				tag: "BindItem",
+				attribute: {
+					id: "bind_" + sCompId,
+					compid: sCompId,
+					propid: sPropid,
+					datasetid: sBindDataset,
+					columnid: sFieldId
+				}
+			};
+			oBindItems[i] = oBindItem;
+		}
+
+		return [{ tag: "Bind", Bind: oBindItems }];
+	};
+
+	this.fn_GetScript = function() {
+		const sValue = "this._fnViewOnLoad = "
+			+ nexacro.replaceAll(nexacro.replaceAll(nexacro.replaceAll(this._fnViewOnLoad.toString(), "\r", ""), "\n", ""), "\t", "")
+			+ ";";
+
+		return {
+			tag: "Script",
+			attribute: { type: "xscript5.1" },
+			value: sValue
+		};
+	};
+
+	this.fn_MakeTitleArea = function(model) {
+		const sText = this.oViewProperties.attributes.titletext;
+		if (!this.lfn_IsNull(sText)) {
+			model[model.length] = { fieldid: "", Components: [] };
+
+			const oTitle = {
+				tag: "Static",
+				attribute: {
+					id: "sta_title",
+					left: 0,
+					top: 0,
+					width: 300,
+					height: this.TITLE_HEIGHT,
+					text: sText,
+					cssclass: "sta_MF_title"
+				}
+			};
+			model[model.length - 1].Components.push(oTitle);
+		}
+
+		this.TOP_POSITION = nexacro.toNumber(this.TOP_POSITION) + nexacro.toNumber(this.TITLE_HEIGHT);
+	};
+
+	this.fn_MakeContents = function(model) {
+		// viewproperties 값은 edittype 과 무관하게 **항상 문자열**로 온다(XML 속성 유래).
+		// Int 로 선언해도 마찬가지이므로 숫자 연산 전에 변환해야 한다 —
+		// 빼기는 강제변환돼 우연히 맞지만 더하기는 문자열 결합이 된다("131" + 5 = "1315").
+		const nFieldWidth = Number(this.oViewProperties.attributes.fieldwidth);
+		const nLabelWidth = Number(this.oViewProperties.attributes.labelwidth);
+		const arrFieldList = this.oFieldArray.fields;
+		const nCompHeight = this.COMPONENT_HEIGHT;
+		const nCompWidth = nFieldWidth - nLabelWidth - this.COMPONENT_HGAP;
+
+		let nCompLeft = this.LEFT_POSITION;
+		let nCompTop = this.TOP_POSITION;
+
+		for (let i = 0; i < arrFieldList.length; i++) {
+			const oField = arrFieldList[i];
+			const sFieldId = oField.id;
+			const sLabelText = this.fn_GetLabelText(oField);
+			// 필수 필드는 라벨 오른쪽에 별도 Static(*)으로 표시한다. required 는 문자열 "true"/"false" 다(모델 필드 속성).
+			// 라벨 글자에 붙이지 않는다 — 라벨이 TEXT() 면 뒤에 붙은 글자 때문에 런타임에서 예외가 난다.
+			const bRequired = oField.required == "true";
+			const nLabelTextWidth = bRequired ? nLabelWidth - this.REQUIRED_MARK_WIDTH : nLabelWidth;
+
+			model[model.length] = { fieldid: sFieldId, Components: [] };
+			const row = model[model.length - 1];
+
+			// Label (Static)
+			row.Components.push({
+				tag: "Static",
+				attribute: {
+					id: "sta_" + sFieldId,
+					left: nCompLeft,
+					top: nCompTop,
+					height: nCompHeight,
+					width: nLabelTextWidth,
+					text: sLabelText,
+					_fieldid: sFieldId,
+					_fieldcomptype: "label"
+				}
+			});
+
+			// Required mark (Static) — 라벨 폭 안의 오른쪽 끝
+			if (bRequired) {
+				row.Components.push({
+					tag: "Static",
+					attribute: {
+						id: "sta_" + sFieldId + "_required",
+						left: nCompLeft + nLabelTextWidth,
+						top: nCompTop,
+						height: nCompHeight,
+						width: this.REQUIRED_MARK_WIDTH,
+						text: "*",
+						_fieldid: sFieldId,
+						_fieldcomptype: "required"
+					}
+				});
+			}
+
+			nCompLeft += nLabelWidth + this.COMPONENT_HGAP;
+
+			// Field — 컴포넌트는 fieldtype 이, 크기는 그 컴포넌트가 결정한다.
+			const sCompClass = this.fn_GetFieldComponent(oField.fieldtype);
+			const oSize = this.fn_GetComponentSize(sCompClass, nCompWidth, nCompHeight);
+			const sCompId = "comp_" + sFieldId;
+			const oAttr = {
+				id: sCompId,
+				left: nCompLeft,
+				top: nCompTop,
+				height: oSize.height,
+				width: oSize.width,
+				_fieldid: sFieldId,
+				_fieldcomptype: "comp"
+			};
+
+			// 유형별 추가 속성.
+			if (sCompClass == "Combo" || sCompClass == "MultiCombo") {
+				// options.innerdataset_list → 목록 Dataset. 없으면 빈 콤보.
+				const sListId = this.fn_MakeInnerDataset(sFieldId, oField.options);
+				if (sListId) {
+					oAttr.innerdataset = sListId;
+					oAttr.codecolumn = "value";
+					oAttr.datacolumn = "label";
+				}
+			} else if (sCompClass == "MaskEdit") {
+				// format/type 이 없으면 MaskEdit 가 그냥 숫자 입력칸처럼 보인다(VE27).
+				const oMask = this.fn_GetMaskEditAttrs(oField.fieldtype, oField.options);
+				oAttr.type = oMask.type;
+				oAttr.format = oMask.format;
+			} else if (sCompClass == "ProgressBar") {
+				// 연속형 게이지(샘플·csspreview 와 동일). pos 는 Bind(propid=pos) 로 온다.
+				oAttr.smooth = "true";
+			} else if (sCompClass == "Edit" || sCompClass == "TextArea") {
+				// Common UI options 의 입력 제한을 그대로 옮긴다. 값 검증은 런타임이 한다
+				// (규격 밖 값은 set_* 가 조용히 무시한다).
+				const oInput = this.fn_GetInputAttrs(oField.options);
+				// inputtype 과 inputfilter 는 둘 중 하나만 온다 — Studio 가 그렇게 저장한다.
+				// 함께 실으면 런타임이 교집합으로 처리해 아무것도 입력할 수 없게 된다.
+				if (oInput.inputtype)   { oAttr.inputtype   = oInput.inputtype; }
+				if (oInput.inputfilter) { oAttr.inputfilter = oInput.inputfilter; }
+				if (oInput.inputmode)   { oAttr.inputmode   = oInput.inputmode; }
+				// Password 도 같은 Edit 이라 else if 로 갈라 두면 한쪽이 먹히지 않는다 —
+				// 두 갈래가 함께 적용되도록 여기서 처리한다.
+				if (sCompClass == "Edit" && oField.fieldtype == "Password") {
+					oAttr.password = "true";
+				}
+			}
+
+			row.Components.push({ tag: sCompClass, attribute: oAttr });
+
+			// 필드 컴포넌트는 전부 바인드한다 — Static(fieldtype "Label")도 값을 text 로 보여준다.
+			// 왼쪽 라벨(sta_*)은 애초에 여기 담기지 않는다(캡션이라 바인드 대상이 아니다).
+			this.arrBindItems.push({ compid: sCompId, fieldid: sFieldId, compclassid: sCompClass });
+
+			nCompLeft = this.LEFT_POSITION;
+			nCompTop += oAttr.height + this.COMPONENT_VGAP;
+		}
+	};
+
+	this.fn_GetLabelText = function(oField) {
+		// 라벨 글자. 필드에 다국어 키(oField.key)가 있으면 TEXT("<key>","<label>") 로 만들어 화면이 번역되게 한다.
+		// 라벨이 이미 TEXT( 로 시작하면(NexaLAP Studio 에서 키를 붙인 라벨) 그대로 쓴다 — 감싸면 TEXT() 가 겹쳐 깨진다.
+		// 큰따옴표는 TEXT() 를 깨뜨리므로 라벨에서 뺀다.
+		const sLabel = oField.label ?? oField.id;
+		if (!oField.key || String(sLabel).trim().indexOf("TEXT(") == 0) {
+			return sLabel;
+		}
+		const sFallback = String(sLabel).replace(/"/g, "");
+		return sFallback ? "TEXT(\"" + oField.key + "\",\"" + sFallback + "\")" : "TEXT(\"" + oField.key + "\")";
+	};
+
+	this.fn_GetFieldComponent = function(fieldtype) {
+		// 모델 fieldtype → 생성할 컴포넌트. 여기를 고쳐 원하는 컴포넌트로 바꾼다.
+		switch (fieldtype) {
+			case "Boolean":        return "CheckBox";
+			case "Date":           return "Calendar";
+			case "DateTime":       return "Calendar";
+			case "FromToDate":     return "DateRangePicker";
+			case "Time":           return "MaskEdit";
+			case "Number":         return "MaskEdit";
+			case "Price":          return "MaskEdit";
+			case "Phone":          return "MaskEdit";
+			case "Select":         return "Combo";
+			case "MultiSelect":    return "MultiCombo";
+			case "LongText":       return "TextArea";
+			case "MultiLineText":  return "TextArea";
+			case "Image":          return "ImageViewer";
+			case "ProgressBar":    return "ProgressBar";
+			case "Label":          return "Static";
+			// Text · Email · Password · Custom · 미지정
+			default:               return "Edit";
+		}
+	};
+
+	this.fn_GetMaskEditAttrs = function(fieldtype, options) {
+		// MaskEdit 은 format(+ type) 이 있어야 마스크가 보인다. Studio 모델 options.dataformat
+		// (Phone/Price) 을 우선하고, 없거나 MaskEdit 마스크가 아니면 fieldtype 기본값을 쓴다.
+		// Time 의 Studio 기본 dataformat("aa h:mm:ss") 은 Calendar 용이라 MaskEdit 에 쓰지 않는다.
+		let sFormat = "";
+		if (options) {
+			const oOpt = (typeof options == "string")
+				? (function () { try { return JSON.parse(options); } catch (e) { return undefined; } })()
+				: options;
+			if (oOpt && oOpt.dataformat) {
+				sFormat = String(oOpt.dataformat);
+			}
+		}
+		const bMaskLike = sFormat.indexOf("#") >= 0 || sFormat.indexOf("@") >= 0;
+
+		switch (fieldtype) {
+			case "Time":
+				return { type: "string", format: bMaskLike ? sFormat : "##:##:##" };
+			case "Phone":
+				return { type: "string", format: bMaskLike ? sFormat : "###-####-####" };
+			case "Price":
+				return { type: "number", format: bMaskLike ? sFormat : "###,###" };
+			case "Number":
+				return { type: "number", format: bMaskLike ? sFormat : "#,###" };
+			default:
+				return { type: "number", format: bMaskLike ? sFormat : "#,###" };
+		}
+	};
+
+	this.fn_GetInputAttrs = function(options) {
+		// Studio 모델 options 의 입력 제한(Text · MultiLineText)을 Edit/TextArea 속성으로 옮긴다.
+		// 규격값을 그대로 저장하므로 번역표가 필요 없다 — 여기서는 꺼내 주기만 한다.
+		// inputtype 은 허용 목록, inputfilter 는 금지 목록이다. 한글은 inputtype 에 토큰이 없어
+		// inputfilter(영문·숫자를 막고 나머지를 받는다) 로만 표현된다.
+		// imemode 는 Windows/Android NRE 전용이라 Studio 가 아직 내보내지 않는다(보류).
+		const oResult = { inputtype: "", inputfilter: "", inputmode: "" };
+		if (!options) {
+			return oResult;
+		}
+
+		const oOpt = (typeof options == "string")
+			? (function () { try { return JSON.parse(options); } catch (e) { return undefined; } })()
+			: options;
+		if (!oOpt) {
+			return oResult;
+		}
+
+		if (oOpt.inputtype)   { oResult.inputtype   = String(oOpt.inputtype); }
+		if (oOpt.inputfilter) { oResult.inputfilter = String(oOpt.inputfilter); }
+		if (oOpt.inputmode)   { oResult.inputmode   = String(oOpt.inputmode); }
+		return oResult;
+	};
+
+	this.fn_GetComponentSize = function(compclass, availwidth, baseheight) {
+		// 컴포넌트마다 제 모양이 나오는 크기가 다르다 — 여기를 고쳐 조정한다.
+		// availwidth = fieldwidth - labelwidth - COMPONENT_HGAP (라벨 뒤 남는 폭).
+		switch (compclass) {
+			// 체크 표시 + 텍스트만 있으면 되므로 남는 폭을 다 쓰지 않는다.
+			case "CheckBox":
+				return { width: 120, height: baseheight };
+			// 헤드라인(시작/종료 날짜)이 기본 높이의 2.5 배쯤 된다 — 3 배를 줘야 안 잘린다(실측).
+			// 폭은 남는 만큼만 준다: 내부 피커가 폭에 비례해 커져 넓혀도 넘침이 같이 커진다(실측).
+			case "DateRangePicker":
+				return { width: availwidth * 3, height: baseheight * 10 };
+			// 이미지가 보이려면 면적이 필요하다.
+			case "ImageViewer":
+				return { width: availwidth * 2, height: 200 };
+			// 여러 줄 입력.
+			case "TextArea":
+				return { width: availwidth * 2, height: baseheight * 3 };
+			default:
+				return { width: availwidth, height: baseheight };
+		}
+	};
+
+	this.fn_MakeInnerDataset = function(fieldid, options) {
+		// Select/MultiSelect 의 options.innerdataset_list → Dataset(View.Objects).
+		// 목록이 없으면 만들지 않는다(빈 콤보로 남는다).
+		const arrList = options ? options.innerdataset_list : undefined;
+		if (!arrList || arrList.length == 0) {
+			return "";
+		}
+
+		const sDsId = "ds_" + fieldid;
+		let sRows = "";
+		for (let i = 0; i < arrList.length; i++) {
+			sRows += "<Row><Col id=\"value\">" + arrList[i].value + "</Col>"
+				+ "<Col id=\"label\">" + arrList[i].label + "</Col></Row>";
+		}
+
+		this.arrInnerDatasets.push({
+			tag: "Dataset",
+			attribute: { id: sDsId },
+			value: "<ColumnInfo><Column id=\"value\" type=\"STRING\" size=\"256\"/>"
+				+ "<Column id=\"label\" type=\"STRING\" size=\"256\"/></ColumnInfo>"
+				+ "<Rows>" + sRows + "</Rows>"
+		});
+		return sDsId;
+	};
+
+	this._fnViewOnLoad = function(objForm) {
+		this._ownerForm = objForm;
+	};

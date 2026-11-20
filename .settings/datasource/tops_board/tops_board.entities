@@ -69,7 +69,9 @@
           "columntype": "TIMESTAMP",
           "decimaldigits": null
         }
-      ]
+      ],
+      "nexaai_description": "",
+      "nexaai_active": false
     },
     "requester_map": {
       "schema": null,
@@ -617,6 +619,21 @@
           "columnsize": 20,
           "tablename": "req_status",
           "columndefault": "NULL",
+          "remarks": "",
+          "columntype": "VARCHAR",
+          "decimaldigits": null
+        },
+        {
+          "schema": null,
+          "isautoincrement": false,
+          "catalog": "tops_board",
+          "ordinalposition": 4,
+          "isnullable": false,
+          "columnname": "dev_result",
+          "platformdatatype": "string",
+          "columnsize": 10,
+          "tablename": "req_status",
+          "columndefault": "'REMAIN'",
           "remarks": "",
           "columntype": "VARCHAR",
           "decimaldigits": null
