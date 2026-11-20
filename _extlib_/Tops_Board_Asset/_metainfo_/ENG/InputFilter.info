@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MetaInfo version="2.0">
+    <Object id="nexacro.InputFilter">
+      <ObjectInfo classname="nexacro.InputFilter" inheritance="nexacro.Action" shorttypename="InputFilter" group="Action" registration="allow" contents="true" formats="false" contentseditor="auto" container="false" csstypename="" csscontrolname="" subgroup="Action" edittype="action" useinitvalue="false" composite="false" tabstop="false" cssstyle="false" csspseudo="" defaultwidth="" defaultheight="" popup="false" dblclickevent="" a11yprop="" finalclass="false" edittypecomponent="" requirement="" description=""/>
+      <ContentsInfo contentsformat="json" contentseditor="auto" contentstype="contents" showpreview="false" showobjtree="false" showproperties="false"/>
+      <PropertyInfo>
+        <Property name="targetview" group="" subgroup="" refreshinfo="changeView" displayinfo="" edittype="ViewObjList" readonly="false" initonly="false" hidden="false" control="false" expr="false" bind="false" deprecated="false" unused="false" mandatory="false" objectinfo="" enuminfo="" enuminfo2="" unitinfo="" delimiter="" requirement="Edge,Chrome,Safari,Firefox,Opera,Windows NRE,macOS NRE,Android NRE,iOS/iPadOS NRE,Android Default Web Browser,iOS/iPadOS Default Web Browser" description="Action을 수행할 View 오브젝트를 설정하는 속성입니다." csspropertyname="" normalpropertyname="targetview" stringrc="false" defaultstringrc="false" defaultvalue="" configurable="true" enumerable="true"/>
+        <Property name="sourcecomp" group="" subgroup="" refreshinfo="" displayinfo="" edittype="ViewChildObjList" defaultvalue="" readonly="false" configurable="true" initonly="false" hidden="false" control="false" expr="false" enumerable="true" bind="false" unused="false" mandatory="false" enuminfo="" enuminfo2="" unitinfo="" delimiter="" requirement="" description="" csspropertyname="" normalpropertyname="" stringrc="false" defaultstringrc="false"/>
+        <Property name="searchcolumns" group="" subgroup="" refreshinfo="" displayinfo="" edittype="MultiColumnID" defaultvalue="" readonly="false" configurable="true" initonly="false" hidden="false" control="false" expr="false" enumerable="true" bind="false" unused="false" mandatory="false" enuminfo="" enuminfo2="" unitinfo="" delimiter="" requirement="" description="" csspropertyname="" normalpropertyname="" stringrc="false" defaultstringrc="false"/>
+        <Property name="clearinput" group="" subgroup="" refreshinfo="" displayinfo="" edittype="Boolean" defaultvalue="false" readonly="false" configurable="true" initonly="false" hidden="false" control="false" expr="false" enumerable="true" bind="false" unused="false" mandatory="false" enuminfo="" enuminfo2="" unitinfo="" delimiter="" requirement="" description="" csspropertyname="" normalpropertyname="" stringrc="false" defaultstringrc="false"/>
+      </PropertyInfo>
+      <MethodInfo/>
+      <EventHandlerInfo/>
+      <StatusInfo/>
+      <ControlInfo/>
+      <CSSInfo>
+        <PropertyInfo/>
+      </CSSInfo>
+    </Object>
+</MetaInfo>

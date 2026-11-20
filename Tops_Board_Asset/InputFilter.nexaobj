@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<NexacroObject version="1.0" type="Action">
+  <MetaInfo version="2.0" locale="ENG">
+    <Object id="nexacro.InputFilter">
+      <ObjectInfo classname="nexacro.InputFilter" inheritance="nexacro.Action" shorttypename="InputFilter" group="Action" registration="allow" contents="true" formats="false" contentseditor="auto" container="false" csstypename="" csscontrolname="" subgroup="Action" edittype="action" useinitvalue="false" composite="false" tabstop="false" cssstyle="false" csspseudo="" defaultwidth="" defaultheight="" popup="false" dblclickevent="" a11yprop="" finalclass="false" edittypecomponent="" requirement="" description=""/>
+      <ContentsInfo contentsformat="json" contentseditor="auto" contentstype="contents" showpreview="false" showobjtree="false" showproperties="false"/>
+      <PropertyInfo>
+        <Property name="targetview" group="" subgroup="" refreshinfo="changeView" displayinfo="" edittype="ViewObjList" readonly="false" initonly="false" hidden="false" control="false" expr="false" bind="false" deprecated="false" unused="false" mandatory="false" objectinfo="" enuminfo="" enuminfo2="" unitinfo="" delimiter="" requirement="Edge,Chrome,Safari,Firefox,Opera,Windows NRE,macOS NRE,Android NRE,iOS/iPadOS NRE,Android Default Web Browser,iOS/iPadOS Default Web Browser" description="Action을 수행할 View 오브젝트를 설정하는 속성입니다." csspropertyname="" normalpropertyname="targetview" stringrc="false" defaultstringrc="false"/>
+        <Property name="sourcecomp" group="" subgroup="" refreshinfo="" displayinfo="" edittype="ViewChildObjList" defaultvalue="" readonly="false" configurable="true" initonly="false" hidden="false" control="false" expr="false" enumerable="true" bind="false" unused="false" mandatory="false" enuminfo="" enuminfo2="" unitinfo="" delimiter="" requirement="" description="" csspropertyname="" normalpropertyname="" stringrc="false" defaultstringrc="false"/>
+        <Property name="searchcolumns" group="" subgroup="" refreshinfo="" displayinfo="" edittype="MultiColumnID" defaultvalue="" readonly="false" configurable="true" initonly="false" hidden="false" control="false" expr="false" enumerable="true" bind="false" unused="false" mandatory="false" enuminfo="" enuminfo2="" unitinfo="" delimiter="" requirement="" description="" csspropertyname="" normalpropertyname="" stringrc="false" defaultstringrc="false"/>
+        <Property name="clearinput" group="" subgroup="" refreshinfo="" displayinfo="" edittype="Boolean" defaultvalue="false" readonly="false" configurable="true" initonly="false" hidden="false" control="false" expr="false" enumerable="true" bind="false" unused="false" mandatory="false" enuminfo="" enuminfo2="" unitinfo="" delimiter="" requirement="" description="" csspropertyname="" normalpropertyname="" stringrc="false" defaultstringrc="false"/>
+      </PropertyInfo>
+      <MethodInfo/>
+      <EventHandlerInfo/>
+      <StatusInfo/>
+      <ControlInfo/>
+      <CSSInfo>
+        <PropertyInfo/>
+      </CSSInfo>
+    </Object>
+  </MetaInfo>
+  <ScriptConfig version="1.0"><![CDATA[{
+	"members": [
+		{
+			"name": "run",
+			"body": "let oForm  = this._p_parent ? this._p_parent : this.parent;\nlet oView  = this.getTargetView();\nlet oScope = oView ? oView.form : oForm;            // 입력칸을 찾을 범위\nlet oCols  = this.topsParseColumns(this._p_searchcolumns);\nif (!oCols) { \n    this.on_fire_onerror(\"invalid searchcolumns\");\n    return;\n}\n\nlet oDs   = oForm[oCols.ds];\nlet oEdit = oScope[this._p_sourcecomp];\nif (!oDs || !oEdit) { \n    this.on_fire_onerror(\"dataset or component not found\");\n    return;\n}\n\nif (nexacro._toBoolean(this._p_clearinput)) {\n    oEdit.set_value(\"\");\n}\n\nlet sKey = String(oEdit.value == null ? \"\" : oEdit.value).trim().toLowerCase();\nif (sKey == \"\") {\n    oDs.filter(\"\");\n    this.on_fire_onsuccess(\"cleared\");\n    return;\n}\nsKey = sKey.replace(/\\\\/g, \"\\\\\\\\\").replace(/'/g, \"\\\\'\");\n\nlet arrCond = oCols.cols.map(function (c) {\n    return \"String(\" + c + \" == null ? '' : \" + c + \").toLowerCase().indexOf('\" + sKey + \"') > -1\";\n});\n\noDs.filter(arrCond.join(\" || \"));\nthis.on_fire_onsuccess(\"filtered\");"
+		},
+		{
+			"name": "contents",
+			"body": "nexacro.Action.prototype._setContents.call(this, v);\n\n// TODO : enter your code here."
+		},
+		{
+			"name": "property:sourcecomp",
+			"body": "if (this._p_sourcecomp != v)\n{\n    this._p_sourcecomp = v;\n    // TODO : enter your code here.\n}"
+		},
+		{
+			"name": "property:searchcolumns",
+			"body": "if (this._p_searchcolumns != v)\n{\n    this._p_searchcolumns = v;\n    // TODO : enter your code here.\n}"
+		},
+		{
+			"name": "property:clearinput",
+			"body": "if (this._p_clearinput != v)\n{\n    this._p_clearinput = v;\n    // TODO : enter your code here.\n}"
+		}
+	]
+}]]>
+  </ScriptConfig>
+  <Script type="xscript5.1"><![CDATA[//==============================================================================
+// Define the Action.
+//==============================================================================
+//==============================================================================
+// Object : nexacro.InputFilter
+// Group : Action
+//==============================================================================
+if (!nexacro.InputFilter)
+{
+    nexacro.InputFilter = function (id, parent)
+    {
+        nexacro.Action.call(this, id, parent);
+    };
+
+    nexacro.InputFilter.prototype = nexacro._createPrototype(nexacro.Action, nexacro.InputFilter);
+    nexacro.InputFilter.prototype._type_name = "InputFilter";
+
+    //===============================================================
+    // nexacro.InputFilter : Method
+    //===============================================================
+    nexacro.InputFilter.prototype.run = function ()
+    {
+        let oForm  = this._p_parent ? this._p_parent : this.parent;
+        let oView  = this.getTargetView();
+        let oScope = oView ? oView.form : oForm;            // 입력칸을 찾을 범위
+        let oCols  = this.topsParseColumns(this._p_searchcolumns);
+        if (!oCols) { 
+            this.on_fire_onerror("invalid searchcolumns");
+            return;
+        }
+
+        let oDs   = oForm[oCols.ds];
+        let oEdit = oScope[this._p_sourcecomp];
+        if (!oDs || !oEdit) { 
+            this.on_fire_onerror("dataset or component not found");
+            return;
+        }
+
+        if (nexacro._toBoolean(this._p_clearinput)) {
+            oEdit.set_value("");
+        }
+
+        let sKey = String(oEdit.value == null ? "" : oEdit.value).trim().toLowerCase();
+        if (sKey == "") {
+            oDs.filter("");
+            this.on_fire_onsuccess("cleared");
+            return;
+        }
+        sKey = sKey.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+
+        let arrCond = oCols.cols.map(function (c) {
+            return "String(" + c + " == null ? '' : " + c + ").toLowerCase().indexOf('" + sKey + "') > -1";
+        });
+
+        oDs.filter(arrCond.join(" || "));
+        this.on_fire_onsuccess("filtered");
+    };
+
+    //===============================================================
+    // nexacro.InputFilter : Contents
+    //===============================================================
+    nexacro.InputFilter.prototype._p_contents = "";
+    nexacro.InputFilter.prototype.set_contents = function (v)
+    {
+        if (this._p_contents != v)
+        {
+            this._p_contents = v;
+            this._setContents(this._p_contents);
+        }
+    };
+
+    Object.defineProperty(nexacro.InputFilter.prototype, "contents", {
+        get: new Function("return this._p_contents"),
+        set: nexacro.InputFilter.prototype["set_contents"],
+        enumerable: true,
+        configurable: true
+    });
+
+    nexacro.InputFilter.prototype._setContents = function (v)
+    {
+        // This function is necessary to apply contents in the run environment.
+        nexacro.Action.prototype._setContents.call(this, v);
+
+        // TODO : enter your code here.
+    };
+
+    //===============================================================
+    // nexacro.InputFilter : Declared Properties
+    //===============================================================
+    nexacro.InputFilter.prototype._p_sourcecomp = "";
+    nexacro.InputFilter.prototype.set_sourcecomp = function (v)
+    {
+        if (this._p_sourcecomp != v)
+        {
+            this._p_sourcecomp = v;
+            // TODO : enter your code here.
+        }
+    };
+
+    nexacro.InputFilter.prototype._p_searchcolumns = "";
+    nexacro.InputFilter.prototype.set_searchcolumns = function (v)
+    {
+        if (this._p_searchcolumns != v)
+        {
+            this._p_searchcolumns = v;
+            // TODO : enter your code here.
+        }
+    };
+
+    nexacro.InputFilter.prototype._p_clearinput = false;
+    nexacro.InputFilter.prototype.set_clearinput = function (v)
+    {
+        if (this._p_clearinput != v)
+        {
+            this._p_clearinput = v;
+            // TODO : enter your code here.
+        }
+    };
+
+    nexacro.InputFilter.prototype._properties = [{name: "sourcecomp"}, {name: "searchcolumns"}, {name: "clearinput"}];
+    nexacro._defineProperties(nexacro.InputFilter.prototype, nexacro.InputFilter.prototype._properties);
+
+}]]>
+  </Script>
+  <DesignScriptConfig version="1.0"><![CDATA[{
+	"version": "1.0",
+	"body": "nexacro.InputFilter.prototype.run = nexacro._emptyFn;"
+}]]>
+  </DesignScriptConfig>
+  <DesignScript type="xscript5.1"><![CDATA[//==============================================================================
+//	Define the code to be applied in the Form Design of nexacrostudio.
+//==============================================================================
+//==============================================================================
+// Object : nexacro.InputFilter
+// Group : Action
+//==============================================================================
+if (nexacro.InputFilter) 
+{
+    //===============================================================
+    // nexacro.InputFilter : Method
+    //===============================================================
+    nexacro.InputFilter.prototype.run = nexacro._emptyFn;
+}]]>
+  </DesignScript>
+</NexacroObject>

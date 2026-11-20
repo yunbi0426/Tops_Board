@@ -1,0 +1,575 @@
+/************************************************************************************************
+ * Include Declarations
+ ************************************************************************************************/
+	include "./_lib_/util.xjs";
+	include "./_lib_/basicCommon.xjs";
+
+/************************************************************************************************
+ * Variable Definitions
+ ************************************************************************************************/
+	// Layout
+	this.VIEW_PADDING = 0;
+	this.FRAME_PADDING = 12;
+	this.HEADER_HEIGHT = 30;
+	this.HEADER_GAP = 8;
+	this.SEARCH_WIDTH = 240;
+	this.ICON_WIDTH = 30;
+
+	// Fonts / colors
+	this.TITLE_FONT = "normal 500 13px/normal \"Malgun Gothic\"";
+	this.TITLE_COLOR = "#444441";
+	this.MUTED_COLOR = "#888780";
+	this.FRAME_BORDER = "1px solid #E0DED6";
+	this.SEARCH_ICON = "URL('theme://images/btn_WF_InputSearchN.png') no-repeat center center";
+
+	// Default values of view properties
+	this.TITLE_TEXT = "";
+	this.USE_SEARCH = "true";
+	this.SEARCH_PLACEHOLDER = "검색";
+	this.SHOW_COUNT = "true";
+	this.USE_HEAD_SORT = "true";
+	this.SORT_SELECT_FIRST = "true";
+	this.NODATA_TEXT = "데이터가 없습니다";
+	this.AUTOFIT_TYPE = "col";
+	this.DISPLAY_TYPE = "auto";
+	this.EDIT_TYPE = "none";
+	this.ARR_GRD_DISPLAY_TYPE = ["auto", "normal", "none", "buttoncontrol", "calendarcontrol", "date", "checkboxcontrol", "combocontrol", "combotext", "currency", "decoratetext", "editcontrol", "imagecontrol", "mask", "maskeditcontrol", "multicombocontrol", "number", "progressbarcontrol", "text", "textareacontrol", "treeitemcontrol"];
+	this.ARR_GRD_EDIT_TYPE = ["auto", "normal", "none", "button", "checkbox", "combo", "date", "mask", "multicombo", "readonly", "text", "textarea", "tree"];
+
+	// Component ids
+	this.ID_FRAME = "sta_frame";
+	this.ID_TITLE = "sta_title";
+	this.ID_SEARCH = "edt_filterSearch";
+	this.ID_ICON = "sta_searchIcon";
+	this.ID_CLEAR = "btn_searchClear";
+	this.ID_GRID = "grdList";
+
+	// View-related variables
+	this.oFieldArray;
+	this.oContents;
+	this.oViewProperties;
+	this.oViewPropertiesValue;
+	this.bNewLayout = false;
+
+/************************************************************************************************
+ * Required Function Area for NexaLAP Studio
+ ************************************************************************************************/
+
+	this.set_viewProperties = function() {
+		let oViewAttr = { "attributes": [] };
+		let oProperties;
+		let oProperty;
+		// View generation options (set_viewProperties)
+
+		oProperties = {};
+		oProperties.id = "titletext";
+		oProperties.displaytext = "Title text";
+		oProperties.edittype = "String";
+		oProperties.defaultvalue = this.TITLE_TEXT;
+		oProperties.description = "제목. 비우면 제목 없이 검색칸만 표시";
+		oProperties.group = "Title";
+		oViewAttr.attributes.push(oProperties);
+
+		oProperties = {};
+		oProperties.id = "showcount";
+		oProperties.displaytext = "Show count";
+		oProperties.edittype = "Boolean";
+		oProperties.defaultvalue = this.SHOW_COUNT;
+		oProperties.description = "제목 옆 건수 (필터 중이면 '보이는 건수 / 전체 건수')";
+		oProperties.group = "Title";
+		oViewAttr.attributes.push(oProperties);
+
+		oProperties = {};
+		oProperties.id = "usesearch";
+		oProperties.displaytext = "Use search";
+		oProperties.edittype = "Boolean";
+		oProperties.defaultvalue = this.USE_SEARCH;
+		oProperties.description = "검색칸(edt_filterSearch) + 지우기 버튼(btn_searchClear) 표시";
+		oProperties.group = "Search";
+		oViewAttr.attributes.push(oProperties);
+
+		oProperties = {};
+		oProperties.id = "searchplaceholder";
+		oProperties.displaytext = "Search placeholder";
+		oProperties.edittype = "String";
+		oProperties.defaultvalue = this.SEARCH_PLACEHOLDER;
+		oProperties.description = "검색칸 안내 문구";
+		oProperties.group = "Search";
+		oViewAttr.attributes.push(oProperties);
+
+		oProperties = {};
+		oProperties.id = "useheadsort";
+		oProperties.displaytext = "Use head sort";
+		oProperties.edittype = "Boolean";
+		oProperties.defaultvalue = this.USE_HEAD_SORT;
+		oProperties.description = "헤더 클릭 정렬 (다시 누르면 내림차순 / 오름차순 전환)";
+		oProperties.group = "Sort";
+		oViewAttr.attributes.push(oProperties);
+
+		oProperties = {};
+		oProperties.id = "sortselectfirst";
+		oProperties.displaytext = "Select first after sort";
+		oProperties.edittype = "Boolean";
+		oProperties.defaultvalue = this.SORT_SELECT_FIRST;
+		oProperties.description = "정렬 후 첫 행 선택 (행 변경 이벤트로 연결된 Interaction 이 이어짐)";
+		oProperties.group = "Sort";
+		oViewAttr.attributes.push(oProperties);
+
+		oProperties = {};
+		oProperties.id = "gridlayout";
+		oProperties.displaytext = "Layout";
+		oProperties.edittype = "GridLayout";
+		oProperties.description = "그리드 포맷";
+		oProperties.group = "Grid";
+		oProperties.userproperties = { "headproperties": [], "bodyproperties": [], "summproperties": [] };
+		oViewAttr.attributes.push(oProperties);
+
+		oProperties = {};
+		oProperties.id = "autofittype";
+		oProperties.displaytext = "Autofit";
+		oProperties.edittype = "Enum";
+		oProperties.enumlist = ["none", "col"];
+		oProperties.defaultvalue = this.AUTOFIT_TYPE;
+		oProperties.description = "컬럼 너비 자동 맞춤";
+		oProperties.group = "Grid";
+		oViewAttr.attributes.push(oProperties);
+
+		oProperties = {};
+		oProperties.id = "nodatatext";
+		oProperties.displaytext = "No data text";
+		oProperties.edittype = "String";
+		oProperties.defaultvalue = this.NODATA_TEXT;
+		oProperties.description = "행이 없을 때(검색 결과 0건 포함) 표시할 문구";
+		oProperties.group = "Grid";
+		oViewAttr.attributes.push(oProperties);
+
+		return JSON.stringify(oViewAttr, null, "\t");
+	};
+
+	this.set_fieldProperties = function() {
+		let oFieldAttr = { "attributes": [] };
+		let oProperties;
+
+		oProperties = {};
+		oProperties.id = "displaytype";
+		oProperties.displaytext = "Display type";
+		oProperties.edittype = "Enum";
+		oProperties.enumlist = this.ARR_GRD_DISPLAY_TYPE;
+		oProperties.defaultvalue = this.DISPLAY_TYPE;
+		oProperties.description = "셀 표시 형식";
+		oFieldAttr.attributes.push(oProperties);
+
+		oProperties = {};
+		oProperties.id = "edittype";
+		oProperties.displaytext = "Edit type";
+		oProperties.edittype = "Enum";
+		oProperties.enumlist = this.ARR_GRD_EDIT_TYPE;
+		oProperties.defaultvalue = this.EDIT_TYPE;
+		oProperties.description = "셀 편집 형식";
+		oFieldAttr.attributes.push(oProperties);
+
+		return JSON.stringify(oFieldAttr, null, "\t");
+	};
+
+	this.main = function(fieldarray, contents, viewproperties, extradata) {
+		if (fieldarray) {
+			this.oFieldArray = JSON.parse(fieldarray);
+		}
+		if (contents) {
+			this.oContents = JSON.parse(contents);
+			this.oContents.View.Model = [];
+		}
+		if (viewproperties) {
+			this.oViewProperties = JSON.parse(viewproperties);
+		}
+
+		this.fn_GetModel();
+
+		this.oContents.View.attribute.viewdataset = "${VIEW_DATASET}";
+		this.oContents.View.InitValue = [];
+		this.oContents.View.Objects = [];
+		this.oContents.View.Script = this.fn_GetScript();
+
+		/* 이전에 템플릿이 만든 컴포넌트는 지우고, 사용자가 추가한 컴포넌트는 유지 */
+		this.fn_ClearContents();
+
+		return JSON.stringify(this.oContents, null, "\t");
+	};
+
+	this.set_viewPropertiesValue = function() {
+		return this.oViewPropertiesValue ? JSON.stringify(this.oViewPropertiesValue, null, "\t") : "";
+	};
+
+
+	/************************************************************************************************
+	 * Functions Related to the main() Execution Flow
+	 ************************************************************************************************/
+		// View property value (없으면 기본값)
+		this.fn_GetProp = function(sId, vDefault) {
+			var oAttr = (this.oViewProperties && this.oViewProperties.attributes) ? this.oViewProperties.attributes : null;
+			if (oAttr && oAttr[sId] !== undefined && oAttr[sId] !== null && oAttr[sId] !== "") {
+				return oAttr[sId];
+			}
+			return vDefault;
+		};
+
+		this.fn_GetBoolProp = function(sId, vDefault) {
+			return ("" + this.fn_GetProp(sId, vDefault)).toLowerCase() == "true";
+		};
+
+		// Model 에 컴포넌트 하나 추가
+		this.fn_AddComp = function(sFieldId, sTag, oAttr) {
+			this.oContents.View.Model.push({ "fieldid": sFieldId, "Components": [{ "tag": sTag, "attribute": oAttr }] });
+		};
+
+		this.fn_GetModel = function() {
+			var nPad    = this.VIEW_PADDING;
+			var nInner  = nPad + this.FRAME_PADDING;
+			var sTitle  = this.fn_GetProp("titletext", this.TITLE_TEXT);
+			var bSearch = this.fn_GetBoolProp("usesearch", this.USE_SEARCH);
+			var bHeader = (sTitle != "") || bSearch;
+
+			//---------------- 카드 배경 (가장 먼저 = 맨 뒤에 깔림) ----------------
+			this.fn_AddComp("FRAME", "Static", {
+				"id": this.ID_FRAME, "left": nPad, "top": nPad, "right": nPad, "bottom": nPad,
+				"text": "", "border": this.FRAME_BORDER, "borderRadius": "12px", "background": "#FFFFFF",
+				"_fieldid": "FRAME", "_fieldcomptype": "label"
+			});
+
+			//---------------- 제목 (+ 건수는 실행 시점에 채움) ----------------
+			if (sTitle != "") {
+				this.fn_AddComp("TITLE", "Static", {
+					"id": this.ID_TITLE, "left": nInner, "top": nInner, "height": this.HEADER_HEIGHT,
+					"right": bSearch ? this.ID_SEARCH + ":8" : nInner,
+					"text": sTitle, "font": this.TITLE_FONT, "color": this.TITLE_COLOR, "usedecorate": "true",
+					"_fieldid": "TITLE", "_fieldcomptype": "label"
+				});
+			}
+
+			//---------------- 검색칸 + 아이콘(왼쪽 안) + 지우기 버튼(오른쪽 안) ----------------
+			if (bSearch) {
+				this.fn_AddComp("_filterSearch", "Edit", {
+					"id": this.ID_SEARCH, "top": nInner, "right": nInner, "width": this.SEARCH_WIDTH, "height": this.HEADER_HEIGHT,
+					"displaynulltext": this.fn_GetProp("searchplaceholder", this.SEARCH_PLACEHOLDER),
+					"padding": "0px " + this.ICON_WIDTH + "px 0px " + this.ICON_WIDTH + "px",
+					"_fieldid": "_filterSearch", "_fieldcomptype": "comp"
+				});
+				/* 아이콘 / 지우기 버튼은 검색칸보다 뒤에 추가해야 위에 그려짐 */
+				this.fn_AddComp("_searchIcon", "Static", {
+					"id": this.ID_ICON, "left": this.ID_SEARCH + ":-" + this.SEARCH_WIDTH, "top": nInner,
+					"width": this.ICON_WIDTH, "height": this.HEADER_HEIGHT, "text": "", "background": this.SEARCH_ICON,
+					"_fieldid": "_searchIcon", "_fieldcomptype": "label"
+				});
+				this.fn_AddComp("_searchClear", "Button", {
+					"id": this.ID_CLEAR, "top": nInner, "right": nInner, "width": this.ICON_WIDTH, "height": this.HEADER_HEIGHT,
+					"text": "✕", "tooltiptext": "검색어 지우기", "border": "0px none", "background": "transparent", "color": this.MUTED_COLOR,
+					"_fieldid": "_searchClear", "_fieldcomptype": "comp"
+				});
+			}
+
+			//---------------- 그리드 ----------------
+			var oLayout;
+			var sLayout = this.fn_GetProp("gridlayout", "");
+			if (sLayout) {
+				oLayout = (typeof sLayout == "string") ? this.lfn_StringToJson(sLayout) : sLayout;
+			} else {
+				/* Layout 속성이 비어 있으면 필드 순서대로 새로 만들고, 그 값을 Layout 속성에 돌려줌 */
+				this.bNewLayout = true;
+				oLayout = this.fn_MakeLayout();
+				this.oViewPropertiesValue = { "gridlayout": JSON.parse(JSON.stringify(oLayout)) };
+			}
+
+			var oGrid = {
+				"tag": "Grid",
+				"attribute": {
+					"id": this.ID_GRID, "left": nInner, "right": nInner, "bottom": nInner,
+					"top": bHeader ? nInner + this.HEADER_HEIGHT + this.HEADER_GAP : nInner,
+					"binddataset": "${VIEW_DATASET}",
+					"autofittype": this.fn_GetProp("autofittype", this.AUTOFIT_TYPE),
+					"nodatatext": this.fn_GetProp("nodatatext", this.NODATA_TEXT),
+					"cssclass": "grd_WF_Detail",
+					"_fieldid": "grdList", "_fieldcomptype": "comp"
+				},
+				"Grid": [{ "tag": "Formats", "attribute": {}, "Formats": [this.fn_GetFormat(oLayout)] }]
+			};
+			oGrid = this.fn_MergeField(oGrid);
+
+			var arrIds = [];
+			for (var i = 0; i < this.oFieldArray.fields.length; i++) {
+				arrIds.push(this.oFieldArray.fields[i].id);
+			}
+			this.oContents.View.Model.push({ "fieldid": arrIds.join(","), "Components": [oGrid] });
+		};
+
+		// 함수를 한 줄 문자열로 변환 (실행 함수 안에는 // 주석 금지 : 줄바꿈이 지워지면 뒤가 주석이 됨)
+		this.fn_FuncString = function(sName) {
+			var s = this[sName].toString().replace(/[\r\n\t]/g, "");
+			return "this." + sName + " = " + s + ";";
+		};
+
+		this.fn_GetScript = function() {
+			var oConf = {
+				"titleText"   : this.fn_GetProp("titletext", this.TITLE_TEXT),
+				"showCount"   : this.fn_GetBoolProp("showcount", this.SHOW_COUNT),
+				"headSort"    : this.fn_GetBoolProp("useheadsort", this.USE_HEAD_SORT),
+				"selectFirst" : this.fn_GetBoolProp("sortselectfirst", this.SORT_SELECT_FIRST),
+				"mutedColor"  : this.MUTED_COLOR
+			};
+
+			var sValue = "this.fvConf = " + JSON.stringify(oConf) + ";";
+			sValue += this.fn_FuncString("_fnViewOnLoad");
+			sValue += this.fn_FuncString("fn_ds_onchanged");
+			sValue += this.fn_FuncString("fn_updateCount");
+			sValue += this.fn_FuncString("fn_grid_onheadclick");
+
+			return { "tag": "Script", "attribute": { "type": "xscript5.1" }, "value": sValue };
+		};
+
+		/* 이전에 템플릿이 만든 컴포넌트(_fieldid 있음)는 지우고, 사용자가 추가한 컴포넌트는 Model 뒤에 붙임 */
+		this.fn_ClearContents = function() {
+			var oLayout = this.oContents.View.View[0].Layouts[0].Layout;
+			var oModel  = this.oContents.View.Model;
+			if (!oLayout) {
+				return;
+			}
+			for (var i = oLayout.length - 1; i >= 0; i--) {
+				var oComp = oLayout.splice(i, 1);
+				if (!(oComp[0].attribute && oComp[0].attribute._fieldid)) {
+					oModel.push({ "fieldid": "", "Components": oComp });
+				}
+			}
+		};
+
+		/* 다시 생성할 때 사용자가 그리드에 직접 바꾼 속성(위치 제외)은 유지 */
+		this.fn_MergeField = function(oComp) {
+			if (this.bNewLayout) {
+				return oComp;
+			}
+			var oLayout = this.oContents.View.View[0].Layouts[0].Layout;
+			if (!oLayout) {
+				return oComp;
+			}
+			var nIdx = oLayout.findIndex(function(item) {
+				return item.attribute && item.attribute._fieldid === oComp.attribute._fieldid
+				    && item.attribute._fieldcomptype === oComp.attribute._fieldcomptype;
+			});
+			if (nIdx < 0) {
+				return oComp;
+			}
+			var oOrg = oLayout.splice(nIdx, 1)[0];
+			if (oOrg.tag != oComp.tag) {
+				return oComp;
+			}
+			var arrExclude = ["top", "left", "width", "height", "right", "bottom"];
+			for (var sKey in oOrg.attribute) {
+				if (arrExclude.indexOf(sKey) < 0 && !this.lfn_IsNull(oOrg.attribute[sKey]) && this.lfn_IsNull(oComp.attribute[sKey])) {
+					oComp.attribute[sKey] = oOrg.attribute[sKey];
+				}
+			}
+			return oComp;
+		};
+
+	/************************************************************************************************
+	 * Grid Format Functions (Layout 속성 → <Format>)
+	 ************************************************************************************************/
+		/* Layout 편집기 셀 속성 목록 (head / body / summary) */
+		this.fn_GetCellProperties = function() {
+			var fnStr  = function(id, text, desc) { return { "id": id, "displaytext": text, "edittype": "String", "defaultvalue": "", "description": desc }; };
+			var fnEnum = function(id, text, list, def, desc) { return { "id": id, "displaytext": text, "edittype": "Enum", "enumlist": list, "defaultvalue": def, "description": desc }; };
+			return {
+				"headproperties": [
+					fnStr("text", "Text", "셀 글자"),
+					fnStr("cssclass", "CSS class", "셀 스타일 (XCSS class)")
+				],
+				"bodyproperties": [
+					fnStr("text", "Text", "셀 글자"),
+					fnEnum("textAlign", "Text align", ["left", "center", "right"], "center", "글자 정렬"),
+					fnStr("displayExpr", "Display expr", "표시 식"),
+					fnStr("fieldExpr", "Expr", "값 식"),
+					{ "id": "suppress", "displaytext": "Suppress", "edittype": "Number", "defaultvalue": "", "description": "같은 값 셀 합쳐 보이기" },
+					fnEnum("wordWrap", "Word wrap", ["none", "char", "english"], "none", "줄바꿈"),
+					fnStr("tooltipText", "Tooltip text", "툴팁"),
+					fnStr("maskeditformat", "Maskedit format", "마스크 형식"),
+					fnStr("cssclass", "CSS class", "셀 스타일 (XCSS class, 식이면 ? 포함)"),
+					{ "id": "progressbarsmooth", "displaytext": "Progressbar smooth", "edittype": "Boolean", "defaultvalue": "false", "description": "진행 막대를 이어진 막대로" }
+				],
+				"summproperties": []
+			};
+		};
+
+		/* Layout 속성이 없을 때 : 필드마다 컬럼 1개, 헤더 = 라벨, 바디 = 바인딩 */
+		this.fn_MakeLayout = function() {
+			var oLayout = { "columns": [], "rows": [{ "band": "head", "size": 32 }, { "band": "body", "size": 32 }], "head": [], "body": [] };
+			var arrFields = this.oFieldArray.fields;
+			for (var i = 0; i < arrFields.length; i++) {
+				oLayout.columns.push({ "band": "body", "size": 100 });
+				oLayout.head.push({ "col": i, "row": 0, "text": arrFields[i].label });
+				oLayout.body.push({ "col": i, "row": 0, "field": arrFields[i].id });
+			}
+			return oLayout;
+		};
+
+		this.fn_GetFormat = function(oLayout) {
+			var oFormat = { "tag": "Format", "attribute": { "id": "default" }, "Format": [] };
+			var i;
+
+			var arrCols = [];
+			for (i = 0; i < oLayout.columns.length; i++) {
+				arrCols.push({ "tag": "Column", "attribute": { "size": oLayout.columns[i].size, "band": oLayout.columns[i].band } });
+			}
+			oFormat.Format.push({ "tag": "Columns", "attribute": {}, "Columns": arrCols });
+
+			var arrRows = [];
+			for (i = 0; i < oLayout.rows.length; i++) {
+				arrRows.push({ "tag": "Row", "attribute": { "size": oLayout.rows[i].size, "band": oLayout.rows[i].band } });
+			}
+			oFormat.Format.push({ "tag": "Rows", "attribute": {}, "Rows": arrRows });
+
+			oFormat.Format.push({ "tag": "Band", "attribute": { "id": "head" }, "Band": this.fn_GetCells(oLayout.head, "head") });
+			oFormat.Format.push({ "tag": "Band", "attribute": { "id": "body" }, "Band": this.fn_GetCells(oLayout.body, "body") });
+			if (oLayout.summary && oLayout.summary.length > 0) {
+				oFormat.Format.push({ "tag": "Band", "attribute": { "id": "summary" }, "Band": this.fn_GetCells(oLayout.summary, "summary") });
+			}
+			return oFormat;
+		};
+
+		/* Layout 셀 → <Cell>. body 는 필드의 Display / Edit type 을 반영 */
+		this.fn_GetCells = function(arrLayout, sBand) {
+			var arrCells = [];
+			for (var i = 0; i < arrLayout.length; i++) {
+				var oItem = arrLayout[i];
+				var oCell = { "tag": "Cell", "attribute": {} };
+				var sSuffix = (sBand == "body") ? oItem.field : (sBand == "head" ? oItem.text : "");
+				oCell.attribute.id = "cell_" + sBand + "_" + oItem.col + "_" + oItem.row + (sSuffix ? "_" + sSuffix : "");
+
+				for (var sKey in oItem) {
+					if (sKey == "field") {
+						oCell.attribute.text = "bind:" + oItem[sKey];
+					} else if (sKey == "halign") {
+						oCell.attribute.textAlign = oItem[sKey];
+					} else if (sKey == "valign") {
+						oCell.attribute.verticalAlign = oItem[sKey];
+					} else if (sKey == "cssclass" && sBand == "body" && ("" + oItem[sKey]).indexOf("?") >= 0) {
+						oCell.attribute.cssclass = "expr:" + oItem[sKey];
+					} else {
+						oCell.attribute[sKey] = oItem[sKey];
+					}
+				}
+
+				if (sBand == "body") {
+					var oField = this.fn_FindField(oItem.field);
+					if (oField) {
+						var sDisplay = this.fn_GetDisplayType(oField);
+						var sEdit = oField.edittype;
+						if (sDisplay) {
+							oCell.attribute.displaytype = sDisplay;
+						}
+						if (sEdit) {
+							oCell.attribute.edittype = sEdit;
+						}
+						var oCellProp = this.lfn_GetCellProp("body", sDisplay, sEdit, oField);
+						if (oCellProp) {
+							Object.assign(oCell.attribute, oCellProp);
+						}
+					}
+				}
+				arrCells.push(oCell);
+			}
+			return arrCells;
+		};
+
+		this.fn_FindField = function(sId) {
+			var arrFields = this.oFieldArray.fields;
+			for (var i = 0; i < arrFields.length; i++) {
+				if (arrFields[i].id == sId) {
+					return arrFields[i];
+				}
+			}
+			return null;
+		};
+
+		/* Display type 이 auto 면 필드 타입으로 정함 */
+		this.fn_GetDisplayType = function(oField) {
+			var sDisplay = oField.displaytype;
+			if (sDisplay != "auto") {
+				return sDisplay;
+			}
+			var oMap = {
+				"Boolean": "checkboxcontrol", "Date": "calendarcontrol", "Image": "imagecontrol",
+				"Select": "combotext", "MultiSelect": "multicombocontrol", "Progressbar": "progressbarcontrol",
+				"Email": "mask", "Phone": "mask", "Number": "number", "Price": "number"
+			};
+			return oMap[oField.fieldtype] ? oMap[oField.fieldtype] : "normal";
+		};
+
+	/************************************************************************************************
+	 * Runtime Functions (생성된 View 안에서 실행. this = View 내부 폼)
+	 * 주의 : 한 줄로 합쳐서 넣기 때문에 슬래시 두 개 주석은 쓰면 안 됨 (블록 주석만 사용)
+	 ************************************************************************************************/
+		this._fnViewOnLoad = function(objForm) {
+			/* Sets the view form reference so that functions declared in the view can access it */
+			this._ownerForm = objForm;
+			if (!this._bSearchGridInit) {
+				var oDs = this.parent.getViewDataset();
+				if (oDs) {
+					oDs.addEventHandler("onload", this.fn_ds_onchanged, this);
+					oDs.addEventHandler("onrowsetchanged", this.fn_ds_onchanged, this);
+				}
+				if (this.fvConf.headSort && this.grdList) {
+					this.grdList.addEventHandler("onheadclick", this.fn_grid_onheadclick, this);
+				}
+				this._bSearchGridInit = true;
+			}
+			this.fn_updateCount();
+		};
+
+		this.fn_ds_onchanged = function(obj, e) {
+			this.fn_updateCount();
+		};
+
+		/* 제목 옆 건수 : 필터 중이면 보이는 건수 / 전체 건수 */
+		this.fn_updateCount = function() {
+			if (!this.sta_title) {
+				return;
+			}
+			var c = this.fvConf;
+			var sText = "<b v='true'>" + c.titleText + "</b>";
+			var oDs = this.parent.getViewDataset();
+			if (c.showCount && oDs) {
+				var nShow = oDs.getRowCount();
+				var nAll = oDs.getRowCountNF();
+				var sCount = (nShow == nAll) ? (nAll + "건") : (nShow + " / " + nAll + "건");
+				sText += "   <fc v='" + c.mutedColor + "'>" + sCount + "</fc>";
+			}
+			this.sta_title.set_text(sText);
+		};
+
+		/* 헤더 클릭 정렬 : 처음 내림차순, 같은 헤더를 다시 누르면 반대. 정렬 후 첫 행 선택 */
+		this.fn_grid_onheadclick = function(obj, e) {
+			var sBind = "" + obj.getCellProperty("body", e.cell, "text");
+			if (sBind.indexOf("bind:") != 0) {
+				return;
+			}
+			var sCol = sBind.substr(5);
+			var i;
+			if (!this._arrHeadText) {
+				this._arrHeadText = [];
+				for (i = 0; i < obj.getCellCount("head"); i++) {
+					this._arrHeadText[i] = obj.getCellProperty("head", i, "text");
+				}
+			}
+			var bDesc = !(this._sSortCol == sCol && this._bSortDesc);
+			this._sSortCol = sCol;
+			this._bSortDesc = bDesc;
+
+			var oDs = obj.getBindDataset();
+			oDs.set_keystring("S:" + (bDesc ? "-" : "+") + sCol);
+			for (i = 0; i < this._arrHeadText.length; i++) {
+				obj.setCellProperty("head", i, "text", this._arrHeadText[i] + (i == e.cell ? (bDesc ? " ▼" : " ▲") : ""));
+			}
+			/* 같은 행 번호면 이벤트가 안 나서 한 번 풀었다가 다시 선택 */
+			if (this.fvConf.selectFirst && oDs.getRowCount() > 0) {
+				oDs.set_rowposition(-1);
+				oDs.set_rowposition(0);
+			}
+		};

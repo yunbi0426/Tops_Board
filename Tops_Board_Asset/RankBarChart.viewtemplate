@@ -132,7 +132,7 @@
 				{
 					"name": "VIEW_PADDING",
 					"type": "number",
-					"value": "10",
+					"value": "0",
 					"comment": "View 가장자리 ~ 테두리 박스"
 				},
 				{
@@ -352,7 +352,7 @@
  * Variable Definitions
  ************************************************************************************************/
 	// Layout
-	this.VIEW_PADDING = 10;	// View 가장자리 ~ 테두리 박스
+	this.VIEW_PADDING = 0;	// View 가장자리 ~ 테두리 박스
 	this.FRAME_PADDING = 12;	// 테두리 박스 ~ 내용
 	this.HEADER_HEIGHT = 26;
 	this.HEADER_GAP = 8;

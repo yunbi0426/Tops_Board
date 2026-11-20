@@ -23,7 +23,13 @@
       "Tops_Board_Iris",
       "SummaryBarView.viewtemplate",
       "DashboardDetail_H.viewset",
-      "RankBarChart.viewtemplate"
+      "RankBarChart.viewtemplate",
+      "_lib_/basicCommon.xjs",
+      "_lib_/common.xjs",
+      "_lib_/util.xjs",
+      "SearchGridView.viewtemplate",
+      "SearchGridViewCopy.viewtemplate",
+      "InputFilter.nexaobj"
     ]
   },
   "contentsEditor": []

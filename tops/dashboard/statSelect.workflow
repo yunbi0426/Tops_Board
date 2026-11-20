@@ -3,8 +3,7 @@
     "version": "1.0",
     "package": "tops.dashboard",
     "name": "statSelect",
-    "alias": "statSelect",
-    "description": ""
+    "alias": "statSelect"
   },
   "workflow": [
     {
@@ -42,7 +41,7 @@
       "datasource": "tops_board",
       "target": "",
       "output": "ds_requester",
-      "sql": "SELECT COALESCE(g.display_name, SUBSTRING_INDEX(r.requester, ' -- ', 1)) AS req_name,\n       SUM(CASE WHEN COALESCE(s.dev_result, 'REMAIN') = 'EXCLUDE' THEN 0 ELSE 1 END) AS total_cnt,\n       SUM(CASE WHEN s.dev_result = 'DONE' THEN 1 ELSE 0 END) AS done_cnt,\n       SUM(CASE WHEN COALESCE(s.dev_result, 'REMAIN') = 'REMAIN' THEN 1 ELSE 0 END) AS remain_cnt\nFROM req_master r\nLEFT JOIN req_status s ON s.status = r.status\nLEFT JOIN requester_map m ON m.requester = r.requester\nLEFT JOIN requester_group g ON g.group_id = m.group_id\nGROUP BY COALESCE(g.display_name, SUBSTRING_INDEX(r.requester, ' -- ', 1))\nHAVING SUM(CASE WHEN COALESCE(s.dev_result, 'REMAIN') = 'EXCLUDE' THEN 0 ELSE 1 END) > 0\nORDER BY remain_cnt DESC, req_name",
+      "sql": "SELECT COALESCE(g.display_name, SUBSTRING_INDEX(r.requester, ' -- ', 1)) AS req_name,\n       SUM(CASE WHEN COALESCE(s.dev_result, 'REMAIN') = 'EXCLUDE' THEN 0 ELSE 1 END) AS total_cnt,\n       SUM(CASE WHEN s.dev_result = 'DONE' THEN 1 ELSE 0 END) AS done_cnt,\n       SUM(CASE WHEN COALESCE(s.dev_result, 'REMAIN') = 'REMAIN' THEN 1 ELSE 0 END) AS remain_cnt,\n       ROUND(SUM(CASE WHEN s.dev_result = 'DONE' THEN 1 ELSE 0 END) * 100\n             / NULLIF(SUM(CASE WHEN COALESCE(s.dev_result, 'REMAIN') = 'EXCLUDE' THEN 0 ELSE 1 END), 0)) AS done_rate\nFROM req_master r\nLEFT JOIN req_status s ON s.status = r.status\nLEFT JOIN requester_map m ON m.requester = r.requester\nLEFT JOIN requester_group g ON g.group_id = m.group_id\nGROUP BY COALESCE(g.display_name, SUBSTRING_INDEX(r.requester, ' -- ', 1))\nHAVING SUM(CASE WHEN COALESCE(s.dev_result, 'REMAIN') = 'EXCLUDE' THEN 0 ELSE 1 END) > 0\nORDER BY remain_cnt DESC, req_name",
       "insertquery": "",
       "updatequery": "",
       "deletequery": "",
@@ -238,25 +237,36 @@
             "name": "req_name",
             "type": "string",
             "datasize": 200,
-            "tablename": ""
+            "tablename": "",
+            "isconstant": false
           },
           {
             "name": "total_cnt",
             "type": "float",
             "datasize": 24,
-            "tablename": ""
+            "tablename": "",
+            "isconstant": false
           },
           {
             "name": "done_cnt",
             "type": "float",
             "datasize": 24,
-            "tablename": ""
+            "tablename": "",
+            "isconstant": false
           },
           {
             "name": "remain_cnt",
             "type": "float",
             "datasize": 24,
-            "tablename": ""
+            "tablename": "",
+            "isconstant": false
+          },
+          {
+            "name": "done_rate",
+            "type": "float",
+            "datasize": 28,
+            "tablename": "",
+            "isconstant": false
           }
         ],
         "datasource": ""
@@ -371,28 +381,6 @@
           }
         ],
         "datasource": ""
-      }
-    ]
-  },
-  "_test": {
-    "datasets": [
-      {
-        "name": "ds_option",
-        "columns": [
-          {
-            "name": "top_n",
-            "type": "INT",
-            "datasize": 100,
-            "tablename": "",
-            "isconstant": false
-          }
-        ],
-        "rows": [
-          {
-            "_RowType_": "N",
-            "top_n": "3"
-          }
-        ]
       }
     ]
   }

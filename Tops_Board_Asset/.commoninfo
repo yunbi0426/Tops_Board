@@ -4,4 +4,7 @@
     <Enum name="first"/>
     <Enum name="last"/>
   </EnumInfo>
+  <RefreshInfo id="changeView">
+    <Property name="sourcecomp"/>
+  </RefreshInfo>
 </CommonInfo>

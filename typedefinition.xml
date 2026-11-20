@@ -106,6 +106,7 @@
     <Component type="JavaScript" id="MasterRowFilter" classname="nexacro.MasterRowFilter"/>
     <Component type="JavaScript" id="ShuttleMove" classname="nexacro.ShuttleMove"/>
     <Component type="JavaScript" id="SetRowPosition" classname="nexacro.SetRowPosition"/>
+    <Component type="JavaScript" id="InputFilter" classname="nexacro.InputFilter"/>
   </Components>
   <Services>
     <Service prefixid="theme" type="resource" url="./_resource_/_theme_/" version="0" cachelevel="session" include_subdir="true"/>

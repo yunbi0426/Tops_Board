@@ -1,134 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="frmDashboard" width="1050" height="736" titletext="New Form">
+  <Form id="frmDashboard" width="1050" height="736">
     <Layouts>
       <Layout width="1050" height="736">
-        <View id="Summary" left="10" top="10" height="110" text="Summary" right="10" viewdataset="_dstops_dashboard_statSelect_ds_requester">
+        <View id="Summary" left="10" top="10" height="140" text="Summary" right="10" viewdataset="_dstops_dashboard_statSelect_ds_summary">
           <Layouts>
             <Layout>
-              <Static id="staFrame" left="10" top="10" right="10" bottom="10" text="" border="1px solid #E0DED6" borderRadius="12px" background="#FFFFFF"/>
-              <Static id="staCard_req_name" left="22" top="22" bottom="22" text="req_name" background="#F1EFE8" borderRadius="8px" color="#444441" padding="0px 14px" verticalAlign="middle" usedecorate="true" font="normal 500 22px/normal &quot;Malgun Gothic&quot;" _fieldid="req_name" _fieldcomptype="comp" width="23%"/>
-              <Static id="staCard_total_cnt" left="staCard_req_name:8" top="22" bottom="22" text="total_cnt" background="#EAF3DE" borderRadius="8px" color="#27500A" padding="0px 14px" verticalAlign="middle" usedecorate="true" font="normal 500 22px/normal &quot;Malgun Gothic&quot;" _fieldid="total_cnt" _fieldcomptype="comp" width="23%"/>
-              <Static id="staCard_done_cnt" left="staCard_total_cnt:8" top="22" bottom="22" text="done_cnt" background="#FAEEDA" borderRadius="8px" color="#633806" padding="0px 14px" verticalAlign="middle" usedecorate="true" font="normal 500 22px/normal &quot;Malgun Gothic&quot;" _fieldid="done_cnt" _fieldcomptype="comp" width="23%"/>
-              <Static id="staCard_remain_cnt" left="staCard_done_cnt:8" top="22" bottom="22" text="remain_cnt" background="#E6F1FB" borderRadius="8px" color="#0C447C" padding="0px 14px" verticalAlign="middle" usedecorate="true" font="normal 500 22px/normal &quot;Malgun Gothic&quot;" _fieldid="remain_cnt" _fieldcomptype="comp" right="22"/>
+              <Static id="staFrame" left="0" top="0" right="0" bottom="0" text="" border="1px solid #E0DED6" borderRadius="12px" background="#FFFFFF"/>
+              <Static id="staHeader" left="12" top="12" right="12" height="20" text="" color="#5F5E5A" font="normal 12px/normal &quot;Malgun Gothic&quot;" usedecorate="true"/>
+              <Static id="staCard_total_cnt" left="12" top="40" bottom="12" text="전체" background="#F1EFE8" borderRadius="8px" color="#444441" padding="0px 14px" verticalAlign="middle" usedecorate="true" font="normal 500 22px/normal &quot;Malgun Gothic&quot;" _fieldid="total_cnt" _fieldcomptype="comp" width="23%"/>
+              <Static id="staCard_done_cnt" left="staCard_total_cnt:8" top="40" bottom="12" text="완료" background="#EAF3DE" borderRadius="8px" color="#27500A" padding="0px 14px" verticalAlign="middle" usedecorate="true" font="normal 500 22px/normal &quot;Malgun Gothic&quot;" _fieldid="done_cnt" _fieldcomptype="comp" width="23%"/>
+              <Static id="staCard_remain_cnt" left="staCard_done_cnt:8" top="40" bottom="12" text="잔여" background="#FAEEDA" borderRadius="8px" color="#633806" padding="0px 14px" verticalAlign="middle" usedecorate="true" font="normal 500 22px/normal &quot;Malgun Gothic&quot;" _fieldid="remain_cnt" _fieldcomptype="comp" width="23%"/>
+              <Static id="staCard_done_rate" left="staCard_remain_cnt:8" top="40" bottom="12" text="완료율" background="#E6F1FB" borderRadius="8px" color="#0C447C" padding="0px 14px" verticalAlign="middle" usedecorate="true" font="normal 500 22px/normal &quot;Malgun Gothic&quot;" _fieldid="done_rate" _fieldcomptype="comp" right="12"/>
             </Layout>
           </Layouts>
           <Script><![CDATA[
-	this.fvHeaderFormat = "";
+	this.fvHeaderFormat = "반려 {exclude_cnt}건 제외";
 	this.fvEmptyText = "데이터가 없습니다";
-	this.fvValueSuffix = [];
-	this.fvCardFields = ["req_name","total_cnt","done_cnt","remain_cnt"];
-	this.fvCardLabels = ["req_name","total_cnt","done_cnt","remain_cnt"];
+	this.fvValueSuffix = ["건","건","건","%"];
+	this.fvCardFields = ["total_cnt","done_cnt","remain_cnt","done_rate"];
+	this.fvCardLabels = ["전체","완료","잔여","완료율"];
 	this.fvLabelColors = ["#5F5E5A","#3B6D11","#854F0B","#185FA5"];
 	this.fvSmallPt = 9;
 
 	this._fnViewOnLoad = function(objForm) {
-	    /* Sets the view form reference so that functions declared in the view can access it */
-	    this._ownerForm = objForm;
+			/* Sets the view form reference so that functions declared in the view can access it */
+			this._ownerForm = objForm;
 
-	    var oDs = this.parent.getViewDataset();
-	    if (oDs && !this._bSummaryInit) {
-	        /* 조회 완료(onload) / 값 변경(oncolumnchanged) / 행 이동(onrowposchanged) 때 갱신. 재호출 시 중복 등록 방지 */
-	        oDs.addEventHandler("onload", this.fn_ds_onchanged, this);
-	        oDs.addEventHandler("oncolumnchanged", this.fn_ds_onchanged, this);
-	        oDs.addEventHandler("onrowposchanged", this.fn_ds_onchanged, this);
-	        this._bSummaryInit = true;
-	    }
+			var oDs = this.parent.getViewDataset();
+			if (oDs && !this._bSummaryInit) {
+				/* 조회 완료(onload) / 값 변경(oncolumnchanged) / 행 이동(onrowposchanged) 때 갱신. 재호출 시 중복 등록 방지 */
+				oDs.addEventHandler("onload", this.fn_ds_onchanged, this);
+				oDs.addEventHandler("oncolumnchanged", this.fn_ds_onchanged, this);
+				oDs.addEventHandler("onrowposchanged", this.fn_ds_onchanged, this);
+				this._bSummaryInit = true;
+			}
 
-	    this.fn_refresh();
-	};
+			this.fn_refresh();
+		};
 
 	this.fn_ds_onchanged = function(obj, e) {
-	    this.fn_refresh();
-	};
+			this.fn_refresh();
+		};
 
 	this.fn_refresh = function() {
-	    var oDs   = this.parent.getViewDataset();
-	    var bData = oDs && oDs.getRowCount() > 0 && oDs.rowposition >= 0;
-	    var nRow  = bData ? oDs.rowposition : -1;
-	    var oThis = this;
+			var oDs   = this.parent.getViewDataset();
+			var bData = oDs && oDs.getRowCount() > 0 && oDs.rowposition >= 0;
+			var nRow  = bData ? oDs.rowposition : -1;
+			var oThis = this;
 
-	    // 제목 줄
-	    if (this.staHeader && this.fvHeaderFormat) {
-	        if (!bData) {
-	            this.staHeader.set_text(this.fvEmptyText);
-	        } else {
-	            var sText = ("" + this.fvHeaderFormat).replace(/\{([A-Za-z0-9_]+)\}/g, function(sAll, sCol) {
-	                return oThis.fn_formatValue(oDs.getColumn(nRow, sCol));
-	            });
-	            this.staHeader.set_text(sText);
-	        }
-	    }
+			// 제목 줄
+			if (this.staHeader && this.fvHeaderFormat) {
+				if (!bData) {
+					this.staHeader.set_text(this.fvEmptyText);
+				} else {
+					var sText = ("" + this.fvHeaderFormat).replace(/\{([A-Za-z0-9_]+)\}/g, function(sAll, sCol) {
+						return oThis.fn_formatValue(oDs.getColumn(nRow, sCol));
+					});
+					this.staHeader.set_text(sText);
+				}
+			}
 
-	    // 카드 : 1줄 라벨(작게, 라벨색) + 2줄 값(천 단위 쉼표) + 작은 단위
-	    var sSmall = "<fs v='" + this.fvSmallPt + "'>";
-	    for (var i = 0; i < this.fvCardFields.length; i++) {
-	        var sCol  = this.fvCardFields[i];
-	        var oCard = this["staCard_" + sCol];
-	        if (!oCard) {
-	            continue;
-	        }
+			// 카드 : 1줄 라벨(작게, 라벨색) + 2줄 값(천 단위 쉼표) + 작은 단위
+			var sSmall = "<fs v='" + this.fvSmallPt + "'>";
+			for (var i = 0; i < this.fvCardFields.length; i++) {
+				var sCol  = this.fvCardFields[i];
+				var oCard = this["staCard_" + sCol];
+				if (!oCard) {
+					continue;
+				}
 
-	        var sColor = this.fvLabelColors.length > 0 ? this.fvLabelColors[i % this.fvLabelColors.length] : "#5F5E5A";
-	        var sLabel = "<fc v='" + sColor + "'>" + sSmall + this.fvCardLabels[i] + "</fs></fc>";
+				var sColor = this.fvLabelColors.length > 0 ? this.fvLabelColors[i % this.fvLabelColors.length] : "#5F5E5A";
+				var sLabel = "<fc v='" + sColor + "'>" + sSmall + this.fvCardLabels[i] + "</fs></fc>";
 
-	        var sValue = "-";
-	        if (bData) {
-	            var v = oDs.getColumn(nRow, sCol);
-	            if (v !== undefined && v !== null && v !== "") {
-	                var sSuffix = this.fvValueSuffix.length > 0 ? this.fvValueSuffix[i % this.fvValueSuffix.length] : "";
-	                sValue = this.fn_formatNumber(v) + (sSuffix ? sSmall + " " + sSuffix + "</fs>" : "");
-	            }
-	        }
+				var sValue = "-";
+				if (bData) {
+					var v = oDs.getColumn(nRow, sCol);
+					if (v !== undefined && v !== null && v !== "") {
+						var sSuffix = this.fvValueSuffix[i] || "";
+						sValue = this.fn_formatNumber(v) + (sSuffix ? sSmall + " " + sSuffix + "</fs>" : "");
+					}
+				}
 
-	        oCard.set_text(sLabel + "\n" + sValue);
-	    }
-	};
+				oCard.set_text(sLabel + "\n" + sValue);
+			}
+		};
 
 	this.fn_formatValue = function(v) {
-	    if (v === undefined || v === null) {
-	        return "";
-	    }
-	    if (v.getFullYear) {
-	        var p = function(n) { return n < 10 ? "0" + n : "" + n; };
-	        var sDate = v.getFullYear() + "-" + p(v.getMonth() + 1) + "-" + p(v.getDate());
-	        if (v.getHours() == 0 && v.getMinutes() == 0) {
-	            return sDate;
-	        }
-	        return sDate + " " + p(v.getHours()) + ":" + p(v.getMinutes());
-	    }
-	    return "" + v;
-	};
+			if (v === undefined || v === null) {
+				return "";
+			}
+			if (v.getFullYear) {
+				var p = function(n) { return n < 10 ? "0" + n : "" + n; };
+				var sDate = v.getFullYear() + "-" + p(v.getMonth() + 1) + "-" + p(v.getDate());
+				if (v.getHours() == 0 && v.getMinutes() == 0) {
+					return sDate;
+				}
+				return sDate + " " + p(v.getHours()) + ":" + p(v.getMinutes());
+			}
+			return "" + v;
+		};
 
 	this.fn_formatNumber = function(v) {
-	    var s = "" + v;
-	    if (!/^-?\d+(\.\d+)?$/.test(s)) {
-	        return this.fn_formatValue(v);
-	    }
-	    var arr = s.split(".");
-	    arr[0] = arr[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-	    return arr.join(".");
-	};
+			var s = "" + v;
+			if (!/^-?\d+(\.\d+)?$/.test(s)) {
+				return this.fn_formatValue(v);
+			}
+			var arr = s.split(".");
+			arr[0] = arr[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			return arr.join(".");
+		};
 ]]>
           </Script>
         </View>
-        <View id="Chart" left="10" top="Summary:10" width="40%" height="50%" text="Chart" viewtype="Chart" viewdataset="_dstops_dashboard_statSelect_ds_requester">
+        <View id="Chart" left="10" top="Summary:10" width="40%" height="50%" text="Chart" viewtype="Chart" viewdataset="_dstops_dashboard_statSelect_ds_rank">
           <Layouts>
             <Layout>
-              <Static id="staFrame" left="10" top="10" right="10" bottom="10" text="" border="1px solid #E0DED6" borderRadius="12px" background="#FFFFFF"/>
-              <Spin id="spnTopN" top="22" right="22" width="64" height="26" min="1" max="15" value="5" increment="1"/>
-              <Static id="staTopN" top="22" right="spnTopN:4" width="40" height="26" text="상위" textAlign="right" color="#888780" font="normal 12px/normal &quot;Malgun Gothic&quot;"/>
-              <Static id="staTitle" left="22" top="22" right="staTopN:8" height="26" text="" color="#444441" font="normal 500 13px/normal &quot;Malgun Gothic&quot;"/>
-              <Div id="divBars" left="22" top="56" right="22" bottom="22" text="" border="0px none" background="transparent">
+              <Static id="staFrame" left="0" top="0" right="0" bottom="0" text="" border="1px solid #E0DED6" borderRadius="12px" background="#FFFFFF"/>
+              <Spin id="spnTopN" top="12" right="12" width="64" height="26" min="1" max="15" value="5" increment="1"/>
+              <Static id="staTopN" top="12" right="spnTopN:4" width="40" height="26" text="상위" textAlign="right" color="#888780" font="normal 12px/normal &quot;Malgun Gothic&quot;"/>
+              <Static id="staTitle" left="12" top="12" right="staTopN:8" height="26" text="잔여 상위 요구처" color="#444441" font="normal 500 13px/normal &quot;Malgun Gothic&quot;"/>
+              <Div id="divBars" left="12" top="46" right="12" bottom="12" text="" border="0px none" background="transparent">
                 <Layouts>
                   <Layout/>
                 </Layouts>
               </Div>
-              <Static id="staEmpty" left="22" top="56" right="22" bottom="22" text="데이터가 없습니다" textAlign="center" color="#888780" font="normal 12px/normal &quot;Malgun Gothic&quot;" visible="false"/>
+              <Static id="staEmpty" left="12" top="46" right="12" bottom="12" text="데이터가 없습니다" textAlign="center" color="#888780" font="normal 12px/normal &quot;Malgun Gothic&quot;" visible="false"/>
             </Layout>
           </Layouts>
           <Script><![CDATA[
-	this.fvConf = {"labelField":"","valueField":"","etcField":"","etcValue":"Y","barColor":"#534AB7","etcColor":"#B4B2A9","trackColor":"#F1EFE8","labelWidth":140,"rowHeight":26,"barHeight":10,"valueWidth":56,"scrollW":14,"textFont":"normal 12px/normal \"Malgun Gothic\"","textColor":"#444441","mutedColor":"#888780"};
+	this.fvConf = {"labelField":"req_name","valueField":"remain_cnt","etcField":"etc_yn","etcValue":"Y","barColor":"#534AB7","etcColor":"#B4B2A9","trackColor":"#F1EFE8","labelWidth":140,"rowHeight":26,"barHeight":10,"valueWidth":56,"scrollW":14,"textFont":"normal 12px/normal \"Malgun Gothic\"","textColor":"#444441","mutedColor":"#888780"};
 
 	this._fnViewOnLoad = function(objForm) {
 			/* Sets the view form reference so that functions declared in the view can access it */
@@ -267,13 +268,18 @@
         <View id="Main" left="Chart:10" top="Summary:10" height="50%" text="Main" right="10" viewtype="Grid" viewdataset="_dstops_dashboard_statSelect_ds_requester">
           <Layouts>
             <Layout>
-              <Grid id="grdList" left="0" top="0" right="0" bottom="0" binddataset="_dstops_dashboard_statSelect_ds_requester" autofittype="col" cssclass="grd_WF_Detail" _fieldid="grdList" _fieldcomptype="comp">
+              <Static id="sta_frame" left="0" top="0" right="0" bottom="0" text="" border="1px solid #E0DED6" borderRadius="12px" background="#FFFFFF" _fieldid="FRAME" _fieldcomptype="label"/>
+              <Edit id="edt_filterSearch" top="12" right="12" width="240" height="30" displaynulltext="검색" padding="0px 30px 0px 30px" _fieldid="_filterSearch" _fieldcomptype="comp"/>
+              <Static id="sta_searchIcon" left="edt_filterSearch:-240" top="12" width="30" height="30" text="" background="URL(&apos;theme://images/btn_WF_InputSearchN.png&apos;) no-repeat center center" _fieldid="_searchIcon" _fieldcomptype="label"/>
+              <Button id="btn_searchClear" top="12" right="12" width="30" height="30" text="✕" tooltiptext="검색어 지우기" border="0px none" background="transparent" color="#888780" _fieldid="_searchClear" _fieldcomptype="comp"/>
+              <Grid id="grdList" left="12" right="12" bottom="12" top="50" binddataset="_dstops_dashboard_statSelect_ds_requester" autofittype="col" nodatatext="데이터가 없습니다" cssclass="grd_WF_Detail" _fieldid="grdList" _fieldcomptype="comp">
                 <Formats>
                   <Format id="default">
                     <Columns>
-                      <Column size="100" band="body"/>
-                      <Column size="100" band="body"/>
-                      <Column size="100" band="body"/>
+                      <Column size="70" band="body"/>
+                      <Column size="30" band="body"/>
+                      <Column size="30" band="body"/>
+                      <Column size="30" band="body"/>
                       <Column size="100" band="body"/>
                     </Columns>
                     <Rows>
@@ -281,16 +287,18 @@
                       <Row size="32" band="body"/>
                     </Rows>
                     <Band id="head">
-                      <Cell id="cell_head_0_0_req_name" col="0" row="0" text="req_name"/>
-                      <Cell id="cell_head_1_0_total_cnt" col="1" row="0" text="total_cnt"/>
-                      <Cell id="cell_head_2_0_done_cnt" col="2" row="0" text="done_cnt"/>
-                      <Cell id="cell_head_3_0_remain_cnt" col="3" row="0" text="remain_cnt"/>
+                      <Cell id="cell_head_0_0_요구처" row="0" col="0" textAlign="center" text="요구처" tooltiptext="클릭하여 정렬"/>
+                      <Cell id="cell_head_1_0_전체" row="0" col="1" textAlign="center" text="전체" tooltiptext="클릭하여 정렬"/>
+                      <Cell id="cell_head_2_0_완료" row="0" col="2" textAlign="center" text="완료" tooltiptext="클릭하여 정렬"/>
+                      <Cell id="cell_head_3_0_잔여" row="0" col="3" textAlign="center" text="잔여" tooltiptext="클릭하여 정렬"/>
+                      <Cell id="cell_head_4_0_진행율" row="0" col="4" text="진행율" tooltiptext="클릭하여 정렬"/>
                     </Band>
                     <Band id="body">
-                      <Cell id="cell_body_0_0_req_name" col="0" row="0" text="bind:req_name" displaytype="normal" edittype="none"/>
-                      <Cell id="cell_body_1_0_total_cnt" col="1" row="0" text="bind:total_cnt" displaytype="normal" edittype="none"/>
-                      <Cell id="cell_body_2_0_done_cnt" col="2" row="0" text="bind:done_cnt" displaytype="normal" edittype="none"/>
-                      <Cell id="cell_body_3_0_remain_cnt" col="3" row="0" text="bind:remain_cnt" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_0_0_req_name" row="0" col="0" textAlign="center" text="bind:req_name" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_1_0_total_cnt" row="0" col="1" textAlign="center" text="bind:total_cnt" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_2_0_done_cnt" row="0" col="2" textAlign="center" text="bind:done_cnt" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_3_0_remain_cnt" row="0" col="3" textAlign="center" text="bind:remain_cnt" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_4_0_done_rate" row="0" col="4" progressbarsmooth="true" text="bind:done_rate" displaytype="progressbarcontrol" edittype="none"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -298,16 +306,17 @@
             </Layout>
           </Layouts>
           <Objects/>
-          <Script><![CDATA[this.cfn_FilterBtn_onclick = function(obj, e){let aComponents = this.components;for(let i = 0 ; i < aComponents.length ; i++){if(aComponents[i]._fieldcomptype == "filter"){aComponents[i].setSelectStatus(false);}}obj.setSelectStatus(true);};this._fnViewOnLoad = function(objForm){/* Sets the view form reference so that functions declared in the view can access it */this._ownerForm = objForm;this._sSearchFilterValue = "";this._sFilterValue = "";let aComponents = this.components;let oComp = null;for(let i = 0 ; i < aComponents.length ; i++){oComp = aComponents[i];if(oComp instanceof nexacro.Button){if(oComp._fieldcomptype == "filter"){oComp.addEventHandler("onclick",this.cfn_FilterBtn_onclick, this)}}}};]]>
+          <Script><![CDATA[this.fvConf = {"titleText":"","showCount":true,"headSort":true,"selectFirst":true,"mutedColor":"#888780","defaultSort":""};this._fnViewOnLoad = function(objForm) {/* Sets the view form reference so that functions declared in the view can access it */this._ownerForm = objForm;if (!this._bSearchGridInit) {var oDs = this.parent.getViewDataset();if (oDs) {oDs.addEventHandler("onload", this.fn_ds_onchanged, this);oDs.addEventHandler("onrowsetchanged", this.fn_ds_onchanged, this);}if (this.fvConf.headSort && this.grdList) {this.grdList.addEventHandler("onheadclick", this.fn_grid_onheadclick, this);}if (this.fvConf.headSort && this.grdList) {var sDef = this.fvConf.defaultSort;var nDefCell = -1;var sColDef = "";if (sDef) {sColDef = sDef.replace(/^[+-]/, "");for (var j = 0; j < this.grdList.getCellCount("body"); j++) {if (this.grdList.getCellProperty("body", j, "text") == "bind:" + sColDef) {nDefCell = j;break;}}}this.fn_applySort(this.grdList, nDefCell, nDefCell < 0 ? "" : sColDef, sDef.charAt(0) != "+", true);}this._bSearchGridInit = true;}this.fn_updateCount();};this.fn_ds_onchanged = function(obj, e) {this.fn_updateCount();};this.fn_updateCount = function() {if (!this.sta_title) {return;}var c = this.fvConf;var sText = "<b v='true'>" + c.titleText + "</b>";var oDs = this.parent.getViewDataset();if (c.showCount && oDs) {var nShow = oDs.getRowCount();var nAll = oDs.getRowCountNF();var sCount = (nShow == nAll) ? (nAll + "건") : (nShow + " / " + nAll + "건");sText += "   <fc v='" + c.mutedColor + "'>" + sCount + "</fc>";}this.sta_title.set_text(sText);};this.fn_grid_onheadclick = function(obj, e) {var sBind = "" + obj.getCellProperty("body", e.cell, "text");if (sBind.indexOf("bind:") != 0) {return;}var sCol = sBind.substr(5);var bDesc = !(this._sSortCol == sCol && this._bSortDesc);this.fn_applySort(obj, e.cell, sCol, bDesc);var oDs = obj.getBindDataset();if (this.fvConf.selectFirst && oDs.getRowCount() > 0) {oDs.set_rowposition(-1);oDs.set_rowposition(0);}this.fn_applySort(obj, e.cell, sCol, bDesc, false);};this.fn_applySort = function(oGrid, nCell, sCol, bDesc, bHint) {var i;if (!this._arrHeadText) {this._arrHeadText = [];for (i = 0; i < oGrid.getCellCount("head"); i++) {this._arrHeadText[i] = oGrid.getCellProperty("head", i, "text");}}if (sCol) {this._sSortCol = sCol;this._bSortDesc = bDesc;oGrid.getBindDataset().set_keystring("S:" + (bDesc ? "-" : "+") + sCol);}for (i = 0; i < this._arrHeadText.length; i++) {var sMark = "";if (i == nCell) {sMark = bDesc ? " ▼" : " ▲";} else if (bHint && ("" + oGrid.getCellProperty("body", i, "text")).indexOf("bind:") == 0) {sMark = " ⇅";}oGrid.setCellProperty("head", i, "text", this._arrHeadText[i] + sMark);}};]]>
           </Script>
         </View>
-        <View id="Detail" left="10" top="Chart:10" text="Detail" right="10" bottom="10" viewtype="Grid" viewdataset="_dstops_dashboard_statSelect_ds_requester">
+        <View id="Detail" left="10" top="Chart:10" text="Detail" right="10" bottom="10" viewtype="Grid" viewdataset="_dstops_dashboard_statSelect_ds_remain">
           <Layouts>
             <Layout>
-              <Grid id="grdList" left="0" top="0" right="0" bottom="0" binddataset="_dstops_dashboard_statSelect_ds_requester" autofittype="col" cssclass="grd_WF_Detail" _fieldid="grdList" _fieldcomptype="comp">
+              <Grid id="grdList" left="0" top="0" right="0" bottom="0" binddataset="_dstops_dashboard_statSelect_ds_remain" autofittype="col" cssclass="grd_WF_Detail" _fieldid="grdList" _fieldcomptype="comp">
                 <Formats>
                   <Format id="default">
                     <Columns>
+                      <Column size="100" band="body"/>
                       <Column size="100" band="body"/>
                       <Column size="100" band="body"/>
                       <Column size="100" band="body"/>
@@ -318,16 +327,18 @@
                       <Row size="32" band="body"/>
                     </Rows>
                     <Band id="head">
-                      <Cell id="cell_head_0_0_req_name" col="0" row="0" text="req_name"/>
-                      <Cell id="cell_head_1_0_total_cnt" col="1" row="0" text="total_cnt"/>
-                      <Cell id="cell_head_2_0_done_cnt" col="2" row="0" text="done_cnt"/>
-                      <Cell id="cell_head_3_0_remain_cnt" col="3" row="0" text="remain_cnt"/>
+                      <Cell id="cell_head_0_0_RP" col="0" row="0" text="RP"/>
+                      <Cell id="cell_head_1_0_제목" col="1" row="0" text="제목"/>
+                      <Cell id="cell_head_2_0_상태" col="2" row="0" text="상태"/>
+                      <Cell id="cell_head_3_0_등록일" col="3" row="0" text="등록일"/>
+                      <Cell id="cell_head_4_0_요구처" col="4" row="0" text="요구처"/>
                     </Band>
                     <Band id="body">
-                      <Cell id="cell_body_0_0_req_name" col="0" row="0" text="bind:req_name" displaytype="normal" edittype="none"/>
-                      <Cell id="cell_body_1_0_total_cnt" col="1" row="0" text="bind:total_cnt" displaytype="normal" edittype="none"/>
-                      <Cell id="cell_body_2_0_done_cnt" col="2" row="0" text="bind:done_cnt" displaytype="normal" edittype="none"/>
-                      <Cell id="cell_body_3_0_remain_cnt" col="3" row="0" text="bind:remain_cnt" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_0_0_rp" col="0" row="0" text="bind:rp" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_1_0_title" col="1" row="0" text="bind:title" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_2_0_status" col="2" row="0" text="bind:status" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_3_0_reg_date" col="3" row="0" text="bind:reg_date" displaytype="calendarcontrol" edittype="none" calendardateformat="yyyy-MM-dd" calendardisplaynulltype="none"/>
+                      <Cell id="cell_body_4_0_requester" col="4" row="0" text="bind:requester" displaytype="normal" edittype="none"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -341,31 +352,35 @@
       </Layout>
     </Layouts>
     <ViewGenerationInfo>
-      <ViewInfo viewid="Summary">
-        <ModelInfo modelserviceid="tops" serviceid="dashboard/statSelect" modelid="ds_requester" datasetid="_dstops_dashboard_statSelect_ds_requester" filepath="dashboard\.model\statSelect.model">
+      <ViewInfo viewid="Detail">
+        <ModelInfo modelserviceid="tops" serviceid="dashboard/statSelect" modelid="ds_remain" datasetid="_dstops_dashboard_statSelect_ds_remain" filepath="dashboard\.model\statSelect.model">
           <Fields>
-            <Field id="req_name"/>
-            <Field id="total_cnt"/>
-            <Field id="done_cnt"/>
-            <Field id="remain_cnt"/>
+            <Field id="req_name" used="false"/>
+            <Field id="rp"/>
+            <Field id="title"/>
+            <Field id="status" label="상태"/>
+            <Field id="reg_date" label="등록일"/>
+            <Field id="requester"/>
           </Fields>
           <Components>
-            <Component id="staFrame" fields=""/>
-            <Component id="staCard_req_name" fields="req_name"/>
-            <Component id="staCard_total_cnt" fields="total_cnt"/>
-            <Component id="staCard_done_cnt" fields="done_cnt"/>
-            <Component id="staCard_remain_cnt" fields="remain_cnt"/>
+            <Component id="grdList" fields="rp,title,status,reg_date,requester"/>
           </Components>
         </ModelInfo>
-        <ViewTemplateInfo filepath="Tops_Board_Asset/SummaryCardView.viewtemplate"/>
+        <ViewTemplateInfo filepath="NexaLAP_BasePack/Grid/FilterGridView.viewtemplate">
+          <Attribute id="gridlayout" value="{&amp;quot;columns&amp;quot;:[{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100}],&amp;quot;rows&amp;quot;:[{&amp;quot;band&amp;quot;:&amp;quot;head&amp;quot;,&amp;quot;size&amp;quot;:32},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:32}],&amp;quot;head&amp;quot;:[{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;RP&amp;quot;},{&amp;quot;col&amp;quot;:1,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;제목&amp;quot;},{&amp;quot;col&amp;quot;:2,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;상태&amp;quot;},{&amp;quot;col&amp;quot;:3,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;등록일&amp;quot;},{&amp;quot;col&amp;quot;:4,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;요구처&amp;quot;}],&amp;quot;body&amp;quot;:[{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;rp&amp;quot;},{&amp;quot;col&amp;quot;:1,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;title&amp;quot;},{&amp;quot;col&amp;quot;:2,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;status&amp;quot;},{&amp;quot;col&amp;quot;:3,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;reg_date&amp;quot;},{&amp;quot;col&amp;quot;:4,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;requester&amp;quot;}]}"/>
+        </ViewTemplateInfo>
+      </ViewInfo>
+      <ViewInfo viewid="frmDashboard">
+        <ModelInfo modelserviceid="tops" serviceid="dashboard/statSelect" modelid="ds_option" datasetid="_dstops_dashboard_statSelect_ds_option" filepath="dashboard\.model\statSelect.model"/>
+        <ViewTemplateInfo/>
       </ViewInfo>
       <ViewInfo viewid="Chart">
-        <ModelInfo modelserviceid="tops" serviceid="dashboard/statSelect" modelid="ds_requester" datasetid="_dstops_dashboard_statSelect_ds_requester" filepath="dashboard\.model\statSelect.model">
+        <ModelInfo modelserviceid="tops" serviceid="dashboard/statSelect" modelid="ds_rank" datasetid="_dstops_dashboard_statSelect_ds_rank" filepath="dashboard\.model\statSelect.model">
           <Fields>
-            <Field id="req_name"/>
-            <Field id="total_cnt"/>
-            <Field id="done_cnt"/>
-            <Field id="remain_cnt"/>
+            <Field id="req_name" barrole="label"/>
+            <Field id="remain_cnt" barrole="value"/>
+            <Field id="etc_yn" barrole="etc"/>
+            <Field id="rn"/>
           </Fields>
           <Components>
             <Component id="staFrame" fields=""/>
@@ -376,54 +391,200 @@
             <Component id="staEmpty" fields=""/>
           </Components>
         </ModelInfo>
-        <ViewTemplateInfo filepath="Tops_Board_Asset/RankBarChart.viewtemplate"/>
+        <ViewTemplateInfo filepath="Tops_Board_Asset/RankBarChart.viewtemplate">
+          <Attribute id="titletext" value="잔여 상위 요구처"/>
+          <Attribute id="topnmin" value="1"/>
+          <Attribute id="topnmax" value="15"/>
+          <Attribute id="topndefault" value="5"/>
+        </ViewTemplateInfo>
+      </ViewInfo>
+      <ViewInfo viewid="Summary">
+        <ModelInfo modelserviceid="tops" serviceid="dashboard/statSelect" modelid="ds_summary" datasetid="_dstops_dashboard_statSelect_ds_summary" filepath="dashboard\.model\statSelect.model">
+          <Fields>
+            <Field id="total_cnt" label="전체" valuesuffix="건"/>
+            <Field id="done_cnt" label="완료" valuesuffix="건"/>
+            <Field id="remain_cnt" label="잔여" valuesuffix="건"/>
+            <Field id="done_rate" label="완료율" valuesuffix="%"/>
+            <Field id="exclude_cnt" used="false"/>
+          </Fields>
+          <Components>
+            <Component id="staFrame" fields=""/>
+            <Component id="staHeader" fields=""/>
+            <Component id="staCard_total_cnt" fields="total_cnt"/>
+            <Component id="staCard_done_cnt" fields="done_cnt"/>
+            <Component id="staCard_remain_cnt" fields="remain_cnt"/>
+            <Component id="staCard_done_rate" fields="done_rate"/>
+          </Components>
+        </ModelInfo>
+        <ViewTemplateInfo filepath="Tops_Board_Asset/SummaryCardView.viewtemplate">
+          <Attribute id="headerformat" value="반려 {exclude_cnt}건 제외"/>
+        </ViewTemplateInfo>
       </ViewInfo>
       <ViewInfo viewid="Main">
         <ModelInfo modelserviceid="tops" serviceid="dashboard/statSelect" modelid="ds_requester" datasetid="_dstops_dashboard_statSelect_ds_requester" filepath="dashboard\.model\statSelect.model">
           <Fields>
-            <Field id="req_name"/>
-            <Field id="total_cnt"/>
-            <Field id="done_cnt"/>
-            <Field id="remain_cnt"/>
+            <Field id="req_name" label="요구처"/>
+            <Field id="total_cnt" label="전체"/>
+            <Field id="done_cnt" label="완료"/>
+            <Field id="remain_cnt" label="잔여"/>
+            <Field id="done_rate" label="진행율" displaytype="progressbarcontrol"/>
           </Fields>
           <Components>
-            <Component id="grdList" fields="req_name,total_cnt,done_cnt,remain_cnt"/>
+            <Component id="sta_frame" fields="FRAME"/>
+            <Component id="edt_filterSearch" fields="_filterSearch"/>
+            <Component id="sta_searchIcon" fields="_searchIcon"/>
+            <Component id="btn_searchClear" fields="_searchClear"/>
+            <Component id="grdList" fields="req_name,total_cnt,done_cnt,remain_cnt,done_rate"/>
           </Components>
         </ModelInfo>
-        <ViewTemplateInfo filepath="NexaLAP_BasePack/Grid/FilterGridView.viewtemplate">
-          <Attribute id="gridlayout" value="{&amp;quot;columns&amp;quot;:[{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100}],&amp;quot;rows&amp;quot;:[{&amp;quot;band&amp;quot;:&amp;quot;head&amp;quot;,&amp;quot;size&amp;quot;:32},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:32}],&amp;quot;head&amp;quot;:[{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;req_name&amp;quot;},{&amp;quot;col&amp;quot;:1,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;total_cnt&amp;quot;},{&amp;quot;col&amp;quot;:2,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;done_cnt&amp;quot;},{&amp;quot;col&amp;quot;:3,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;remain_cnt&amp;quot;}],&amp;quot;body&amp;quot;:[{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;req_name&amp;quot;},{&amp;quot;col&amp;quot;:1,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;total_cnt&amp;quot;},{&amp;quot;col&amp;quot;:2,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;done_cnt&amp;quot;},{&amp;quot;col&amp;quot;:3,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;remain_cnt&amp;quot;}]}"/>
-        </ViewTemplateInfo>
-      </ViewInfo>
-      <ViewInfo viewid="Detail">
-        <ModelInfo modelserviceid="tops" serviceid="dashboard/statSelect" modelid="ds_requester" datasetid="_dstops_dashboard_statSelect_ds_requester" filepath="dashboard\.model\statSelect.model">
-          <Fields>
-            <Field id="req_name"/>
-            <Field id="total_cnt"/>
-            <Field id="done_cnt"/>
-            <Field id="remain_cnt"/>
-          </Fields>
-          <Components>
-            <Component id="grdList" fields="req_name,total_cnt,done_cnt,remain_cnt"/>
-          </Components>
-        </ModelInfo>
-        <ViewTemplateInfo filepath="NexaLAP_BasePack/Grid/FilterGridView.viewtemplate">
-          <Attribute id="gridlayout" value="{&amp;quot;columns&amp;quot;:[{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100}],&amp;quot;rows&amp;quot;:[{&amp;quot;band&amp;quot;:&amp;quot;head&amp;quot;,&amp;quot;size&amp;quot;:32},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:32}],&amp;quot;head&amp;quot;:[{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;req_name&amp;quot;},{&amp;quot;col&amp;quot;:1,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;total_cnt&amp;quot;},{&amp;quot;col&amp;quot;:2,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;done_cnt&amp;quot;},{&amp;quot;col&amp;quot;:3,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;remain_cnt&amp;quot;}],&amp;quot;body&amp;quot;:[{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;req_name&amp;quot;},{&amp;quot;col&amp;quot;:1,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;total_cnt&amp;quot;},{&amp;quot;col&amp;quot;:2,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;done_cnt&amp;quot;},{&amp;quot;col&amp;quot;:3,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;remain_cnt&amp;quot;}]}"/>
+        <ViewTemplateInfo filepath="Tops_Board_Asset/SearchGridView.viewtemplate">
+          <Attribute id="gridlayout" value="{&quot;columns&quot;:[{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:70},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:30},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:30},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:30},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100}],&quot;rows&quot;:[{&quot;band&quot;:&quot;head&quot;,&quot;size&quot;:32},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:32}],&quot;head&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;요구처&quot;},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;전체&quot;},{&quot;row&quot;:0,&quot;col&quot;:2,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;완료&quot;},{&quot;row&quot;:0,&quot;col&quot;:3,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;잔여&quot;},{&quot;row&quot;:0,&quot;col&quot;:4,&quot;text&quot;:&quot;진행율&quot;}],&quot;body&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;req_name&quot;},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;total_cnt&quot;},{&quot;row&quot;:0,&quot;col&quot;:2,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;done_cnt&quot;},{&quot;row&quot;:0,&quot;col&quot;:3,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;remain_cnt&quot;},{&quot;row&quot;:0,&quot;col&quot;:4,&quot;progressbarsmooth&quot;:&quot;true&quot;,&quot;field&quot;:&quot;done_rate&quot;}],&quot;summ&quot;:[]}"/>
         </ViewTemplateInfo>
       </ViewInfo>
     </ViewGenerationInfo>
+    <DesignSettings>
+      <InteractionEditor>
+        <NodePositions>
+          <NodePosition id="action:MasterRowFilter00" x="1879" y="125"/>
+        </NodePositions>
+      </InteractionEditor>
+    </DesignSettings>
     <Script type="xscript5.1"><![CDATA[]]>
     </Script>
     <Objects>
+      <Dataset id="_dstops_dashboard_statSelect_ds_remain">
+        <ColumnInfo>
+          <Column id="req_name" type="string" size="200" description="req_name"/>
+          <Column id="rp" type="string" size="10" description="RP"/>
+          <Column id="title" type="string" size="500" description="제목"/>
+          <Column id="status" type="string" size="20" description="status"/>
+          <Column id="reg_date" type="date" size="10" description="등록일자"/>
+          <Column id="requester" type="string" size="200" description="요구처"/>
+        </ColumnInfo>
+        <Rows/>
+      </Dataset>
+      <OnLoadView id="OnLoadView00" alias="OnLoadView"/>
+      <Transaction id="Transaction00" alias="Dashboard 데이터 가져오기" servicemodel="tops::dashboard/statSelect" serviceurl="NexaLAPServer::api/v1/execute">
+        <Contents><![CDATA[{
+    "outputdatasets": [
+        {
+            "modelid": "ds_requester",
+            "datasetid": "_dstops_dashboard_statSelect_ds_requester"
+        },
+        {
+            "modelid": "ds_remain",
+            "datasetid": "_dstops_dashboard_statSelect_ds_remain"
+        },
+        {
+            "modelid": "ds_summary",
+            "datasetid": "_dstops_dashboard_statSelect_ds_summary"
+        },
+        {
+            "modelid": "ds_rank",
+            "datasetid": "_dstops_dashboard_statSelect_ds_rank"
+        }
+    ]
+}]]>
+        </Contents>
+      </Transaction>
+      <MasterRowFilter id="MasterRowFilter00" alias="잔여 목록 필터" master="_dstops_dashboard_statSelect_ds_requester.req_name" target="_dstops_dashboard_statSelect_ds_remain.req_name"/>
+      <Dataset id="_dstops_dashboard_statSelect_ds_option">
+        <ColumnInfo>
+          <Column id="top_n" type="INT" size="100" description="top_n"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <RunScript id="RunScript00" alias="잔여 상위 요구처 상위 Spin 변경">
+        <Contents><![CDATA[`var oAction = this._current_action;      // 이 RunScript Action 자신
+
+var fnApply = function(obj, e) {
+    var v = (e && e.postvalue != null) ? e.postvalue : obj.value;
+    if (v == this._nLastTopN) {
+        return;
+    }
+    this._nLastTopN = v;
+
+    var ds = this._dstops_dashboard_statSelect_ds_option;
+    if (ds.rowcount == 0) {
+        ds.addRow();
+    }
+    ds.setColumn(0, "top_n", v);
+
+    oAction.on_fire_onsuccess();         // ← Transaction01을 직접 부르지 않고 Success만 발생
+};
+
+var oSpin = this.Chart.form.spnTopN;
+oSpin.addEventHandler("onspin", fnApply, this);
+oSpin.addEventHandler("onchanged", fnApply, this);
+this._nLastTopN = oSpin.value;
+
+return false;   // 등록할 때는 Success를 안 내보냄 (화면 열 때 중복 조회 방지)`]]>
+        </Contents>
+      </RunScript>
+      <Transaction id="Transaction01" alias="상위 N 요구처 조회" servicemodel="tops::dashboard/statSelect" serviceurl="NexaLAPServer::api/v1/execute">
+        <Contents><![CDATA[{
+    "inputdatasets": [
+        {
+            "modelid": "ds_option",
+            "datasetid": "_dstops_dashboard_statSelect_ds_option"
+        }
+    ],
+    "outputdatasets": [
+        {
+            "modelid": "ds_rank",
+            "datasetid": "_dstops_dashboard_statSelect_ds_rank"
+        }
+    ]
+}]]>
+        </Contents>
+      </Transaction>
+      <InputFilter id="InputFilter00" alias="요구처 필터링" targetview="Main" sourcecomp="edt_filterSearch" searchcolumns="_dstops_dashboard_statSelect_ds_requester.req_name"/>
+      <Dataset id="_dstops_dashboard_statSelect_ds_rank">
+        <ColumnInfo>
+          <Column id="req_name" type="string" size="200" description="req_name"/>
+          <Column id="remain_cnt" type="float" size="43" description="remain_cnt"/>
+          <Column id="etc_yn" type="string" size="1" description="etc_yn"/>
+          <Column id="rn" type="bigdecimal" size="21" description="rn"/>
+        </ColumnInfo>
+        <Rows/>
+      </Dataset>
+      <Dataset id="_dstops_dashboard_statSelect_ds_summary">
+        <ColumnInfo>
+          <Column id="total_cnt" type="float" size="24" description="total_cnt"/>
+          <Column id="done_cnt" type="float" size="24" description="done_cnt"/>
+          <Column id="remain_cnt" type="float" size="24" description="remain_cnt"/>
+          <Column id="done_rate" type="float" size="28" description="done_rate"/>
+          <Column id="exclude_cnt" type="float" size="24" description="exclude_cnt"/>
+        </ColumnInfo>
+        <Rows/>
+      </Dataset>
+      <SetRowPosition id="SetRowPosition00" alias="필터링 후 첫번쨰 행 선택" targetdataset="_dstops_dashboard_statSelect_ds_requester" position="first"/>
+      <InputFilter id="InputFilter01" alias="요구처 초기화" targetview="Main" sourcecomp="edt_filterSearch" searchcolumns="_dstops_dashboard_statSelect_ds_requester.req_name" clearinput="true"/>
       <Dataset id="_dstops_dashboard_statSelect_ds_requester">
         <ColumnInfo>
           <Column id="req_name" type="string" size="200" description="req_name"/>
           <Column id="total_cnt" type="float" size="24" description="total_cnt"/>
           <Column id="done_cnt" type="float" size="24" description="done_cnt"/>
           <Column id="remain_cnt" type="float" size="24" description="remain_cnt"/>
+          <Column id="done_rate" type="float" size="28" description="done_rate"/>
         </ColumnInfo>
         <Rows/>
       </Dataset>
     </Objects>
-    <Trigger/>
+    <Trigger>
+      <TriggerItem id="item0" triggertype="onload" triggerview="" triggerobj="" targetaction="OnLoadView00"/>
+      <TriggerItem id="item1" triggertype="onload" triggerview="" triggerobj="" targetaction="Transaction00"/>
+      <TriggerItem id="item2" triggertype="onrowposchanged" triggerview="" triggerobj="_dstops_dashboard_statSelect_ds_requester" targetaction="MasterRowFilter00"/>
+      <TriggerItem id="item3" triggertype="Action Success" triggerview="" triggerobj="Transaction00" targetaction="MasterRowFilter00"/>
+      <TriggerItem id="item4" triggertype="onload" triggerview="" triggerobj="" targetaction="RunScript00"/>
+      <TriggerItem id="item5" triggertype="Action Success" triggerview="" triggerobj="RunScript00" targetaction="Transaction01"/>
+      <TriggerItem id="item6" triggertype="onkeyup" triggerview="Main" triggerobj="edt_filterSearch" targetaction="InputFilter00"/>
+      <TriggerItem id="item7" triggertype="Action Success" triggerview="" triggerobj="InputFilter00" targetaction="SetRowPosition00"/>
+      <TriggerItem id="item8" triggertype="Action Success" triggerview="" triggerobj="SetRowPosition00" targetaction="MasterRowFilter00"/>
+      <TriggerItem id="item9" triggertype="onclick" triggerview="Main" triggerobj="btn_searchClear" targetaction="InputFilter01"/>
+      <TriggerItem id="item10" triggertype="Action Success" triggerview="" triggerobj="InputFilter01" targetaction="SetRowPosition00"/>
+    </Trigger>
   </Form>
 </FDL>
