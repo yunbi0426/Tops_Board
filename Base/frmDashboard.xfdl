@@ -373,6 +373,7 @@
       <ViewInfo viewid="frmDashboard">
         <ModelInfo modelserviceid="tops" serviceid="dashboard/statSelect" modelid="ds_option" datasetid="_dstops_dashboard_statSelect_ds_option" filepath="dashboard\.model\statSelect.model"/>
         <ViewTemplateInfo/>
+        <ModelInfo modelserviceid="tops" serviceid="requirement/detailSelect" modelid="ds_param" datasetid="_dstops_requirement_detailSelect_ds_param" filepath="requirement\.model\detailSelect.model"/>
       </ViewInfo>
       <ViewInfo viewid="Chart">
         <ModelInfo modelserviceid="tops" serviceid="dashboard/statSelect" modelid="ds_rank" datasetid="_dstops_dashboard_statSelect_ds_rank" filepath="dashboard\.model\statSelect.model">
@@ -572,6 +573,17 @@ return false;   // 등록할 때는 Success를 안 내보냄 (화면 열 때 중
         </ColumnInfo>
         <Rows/>
       </Dataset>
+      <Dataset id="_dstops_requirement_detailSelect_ds_param">
+        <ColumnInfo>
+          <Column id="rp" type="STRING" size="10" description="RP"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <ClearData id="ClearData00" alias="팝업 전달 값 비우기" targetDataset="_dstops_requirement_detailSelect_ds_param"/>
+      <CopyRow id="CopyRow00" alias="선택 행 복사" sourceDataset="_dstops_dashboard_statSelect_ds_remain" targetDataset="_dstops_requirement_detailSelect_ds_param"/>
+      <OpenPopup id="OpenPopup00" alias="요구사항 상세 열기" title="요구사항 상세" formurl="Popup::popReqDetail.xfdl" paramDataset="_dstops_requirement_detailSelect_ds_param" autosize="false" popupStyle="modal"/>
     </Objects>
     <Trigger>
       <TriggerItem id="item0" triggertype="onload" triggerview="" triggerobj="" targetaction="OnLoadView00"/>
@@ -585,6 +597,9 @@ return false;   // 등록할 때는 Success를 안 내보냄 (화면 열 때 중
       <TriggerItem id="item8" triggertype="Action Success" triggerview="" triggerobj="SetRowPosition00" targetaction="MasterRowFilter00"/>
       <TriggerItem id="item9" triggertype="onclick" triggerview="Main" triggerobj="btn_searchClear" targetaction="InputFilter01"/>
       <TriggerItem id="item10" triggertype="Action Success" triggerview="" triggerobj="InputFilter01" targetaction="SetRowPosition00"/>
+      <TriggerItem id="item11" triggertype="oncelldblclick" triggerview="Detail" triggerobj="grdList" targetaction="ClearData00"/>
+      <TriggerItem id="item12" triggertype="Action Success" triggerview="" triggerobj="ClearData00" targetaction="CopyRow00"/>
+      <TriggerItem id="item13" triggertype="Action Success" triggerview="" triggerobj="CopyRow00" targetaction="OpenPopup00"/>
     </Trigger>
   </Form>
 </FDL>

@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="popReqDetail" width="1000" height="600" titletext="요구사항 상세" left="0" top="0">
+    <Layouts>
+      <Layout width="1000" height="600">
+        <View id="Master" taborder="0" viewtype="Freeform" viewdataset="_dstops_requirement_detailSelect_ds_detail" text="Master" left="10" top="10" right="10" bottom="10" fittocontents="height">
+          <Layouts>
+            <Layout type="horizontal" flexwrap="wrap">
+              <Static id="sta_rp" taborder="0" text="RP" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="rp" _fieldcomptype="label"/>
+              <Static id="starp" taborder="1" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="rp" _fieldcomptype="comp"/>
+              <Panel id="pnlRp" taborder="2" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="rp" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_rp"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="starp"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_status" taborder="2" text="상태" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="status" _fieldcomptype="label"/>
+              <Static id="stastatus" taborder="3" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="status" _fieldcomptype="comp"/>
+              <Panel id="pnlStatus" taborder="4" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="status" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_status"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="stastatus"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_req_type" taborder="4" text="요구종류" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="req_type" _fieldcomptype="label"/>
+              <Static id="stareqType" taborder="5" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="req_type" _fieldcomptype="comp"/>
+              <Panel id="pnlReqType" taborder="6" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="req_type" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_req_type"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="stareqType"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_product_module" taborder="6" text="모듈" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="product_module" _fieldcomptype="label"/>
+              <Static id="staproductModule" taborder="7" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="product_module" _fieldcomptype="comp"/>
+              <Panel id="pnlProductModule" taborder="8" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="product_module" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_product_module"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="staproductModule"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_requester" taborder="8" text="요구처" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="requester" _fieldcomptype="label"/>
+              <Static id="starequester" taborder="9" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="requester" _fieldcomptype="comp"/>
+              <Panel id="pnlRequester" taborder="10" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="requester" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_requester"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="starequester"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_work_patch" taborder="10" text="작업패치" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="work_patch" _fieldcomptype="label"/>
+              <Static id="staworkPatch" taborder="11" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="work_patch" _fieldcomptype="comp"/>
+              <Panel id="pnlWorkPatch" taborder="12" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="work_patch" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_work_patch"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="staworkPatch"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_deploy_patch" taborder="12" text="배포패치" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="deploy_patch" _fieldcomptype="label"/>
+              <Static id="stadeployPatch" taborder="13" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="deploy_patch" _fieldcomptype="comp"/>
+              <Panel id="pnlDeployPatch" taborder="14" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="deploy_patch" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_deploy_patch"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="stadeployPatch"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_reg_user" taborder="14" text="등록자" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="reg_user" _fieldcomptype="label"/>
+              <Static id="staregUser" taborder="15" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="reg_user" _fieldcomptype="comp"/>
+              <Panel id="pnlRegUser" taborder="16" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="reg_user" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_reg_user"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="staregUser"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_worker" taborder="16" text="작업자" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="worker" _fieldcomptype="label"/>
+              <Static id="staworker" taborder="17" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="worker" _fieldcomptype="comp"/>
+              <Panel id="pnlWorker" taborder="18" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="worker" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_worker"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="staworker"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_developer" taborder="18" text="개발자" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="developer" _fieldcomptype="label"/>
+              <Static id="stadeveloper" taborder="19" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="developer" _fieldcomptype="comp"/>
+              <Panel id="pnlDeveloper" taborder="20" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="developer" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_developer"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="stadeveloper"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_reg_date" taborder="20" text="등록일" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="reg_date" _fieldcomptype="label"/>
+              <Static id="staregDate" taborder="21" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="reg_date" _fieldcomptype="comp"/>
+              <Panel id="pnlRegDate" taborder="22" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="reg_date" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_reg_date"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="staregDate"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_title" taborder="22" text="제목" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="title" _fieldcomptype="label"/>
+              <Static id="statitle" taborder="23" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="title" _fieldcomptype="comp"/>
+              <Panel id="pnlTitle" taborder="24" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="title" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_title"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="statitle"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_txt_reg" taborder="24" text="등록" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="txt_reg" _fieldcomptype="label"/>
+              <TextArea id="txttxtReg" taborder="25" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="txt_reg" _fieldcomptype="comp"/>
+              <Panel id="pnlTxtReg" taborder="26" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="txt_reg" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_txt_reg"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="txttxtReg"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_txt_receipt" taborder="26" text="접수" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="txt_receipt" _fieldcomptype="label"/>
+              <TextArea id="txttxtReceipt" taborder="27" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="txt_receipt" _fieldcomptype="comp"/>
+              <Panel id="pnlTxtReceipt" taborder="28" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="txt_receipt" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_txt_receipt"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="txttxtReceipt"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_txt_analysis" taborder="28" text="분석" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="txt_analysis" _fieldcomptype="label"/>
+              <TextArea id="txttxtAnalysis" taborder="29" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="txt_analysis" _fieldcomptype="comp"/>
+              <Panel id="pnlTxtAnalysis" taborder="30" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="txt_analysis" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_txt_analysis"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="txttxtAnalysis"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_txt_design" taborder="30" text="설계" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="txt_design" _fieldcomptype="label"/>
+              <TextArea id="txttxtDesign" taborder="31" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="txt_design" _fieldcomptype="comp"/>
+              <Panel id="pnlTxtDesign" taborder="32" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="txt_design" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_txt_design"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="txttxtDesign"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_txt_impl" taborder="32" text="구현" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="txt_impl" _fieldcomptype="label"/>
+              <TextArea id="txttxtImpl" taborder="33" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="txt_impl" _fieldcomptype="comp"/>
+              <Panel id="pnlTxtImpl" taborder="34" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="txt_impl" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_txt_impl"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="txttxtImpl"/>
+                </Contents>
+              </Panel>
+              <Static id="sta_txt_inspect" taborder="34" text="검수" cssclass="sta_WF_Label" left="0" top="0" width="140" height="38" _fieldid="txt_inspect" _fieldcomptype="label"/>
+              <TextArea id="txttxtInspect" taborder="35" left="0" top="0" width="160" height="34" flexgrow="1" _fieldid="txt_inspect" _fieldcomptype="comp"/>
+              <Panel id="pnlTxtInspect" taborder="36" left="0" top="0" width="300" height="38" flexcrossaxisalign="center" flexgrow="1" horizontalgap="2" cssclass="pnl_WF_DetailBg" spacing="0px 2px 0px 0px" _fieldid="txt_inspect" _fieldcomptype="panel">
+                <Contents>
+                  <PanelItem id="PanelItem_label" componentid="sta_txt_inspect"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="txttxtInspect"/>
+                </Contents>
+              </Panel>
+            </Layout>
+          </Layouts>
+          <Objects/>
+          <Bind>
+            <BindItem id="bind_starp" compid="starp" propid="text" datasetid="_dstops_requirement_detailSelect_ds_detail" columnid="rp"/>
+            <BindItem id="bind_stastatus" compid="stastatus" propid="text" datasetid="_dstops_requirement_detailSelect_ds_detail" columnid="status"/>
+            <BindItem id="bind_stareqType" compid="stareqType" propid="text" datasetid="_dstops_requirement_detailSelect_ds_detail" columnid="req_type"/>
+            <BindItem id="bind_staproductModule" compid="staproductModule" propid="text" datasetid="_dstops_requirement_detailSelect_ds_detail" columnid="product_module"/>
+            <BindItem id="bind_starequester" compid="starequester" propid="text" datasetid="_dstops_requirement_detailSelect_ds_detail" columnid="requester"/>
+            <BindItem id="bind_staworkPatch" compid="staworkPatch" propid="text" datasetid="_dstops_requirement_detailSelect_ds_detail" columnid="work_patch"/>
+            <BindItem id="bind_stadeployPatch" compid="stadeployPatch" propid="text" datasetid="_dstops_requirement_detailSelect_ds_detail" columnid="deploy_patch"/>
+            <BindItem id="bind_staregUser" compid="staregUser" propid="text" datasetid="_dstops_requirement_detailSelect_ds_detail" columnid="reg_user"/>
+            <BindItem id="bind_staworker" compid="staworker" propid="text" datasetid="_dstops_requirement_detailSelect_ds_detail" columnid="worker"/>
+            <BindItem id="bind_stadeveloper" compid="stadeveloper" propid="text" datasetid="_dstops_requirement_detailSelect_ds_detail" columnid="developer"/>
+            <BindItem id="bind_staregDate" compid="staregDate" propid="text" datasetid="_dstops_requirement_detailSelect_ds_detail" columnid="reg_date"/>
+            <BindItem id="bind_statitle" compid="statitle" propid="text" datasetid="_dstops_requirement_detailSelect_ds_detail" columnid="title"/>
+            <BindItem id="bind_txttxtReg" compid="txttxtReg" propid="value" datasetid="_dstops_requirement_detailSelect_ds_detail" columnid="txt_reg"/>
+            <BindItem id="bind_txttxtReceipt" compid="txttxtReceipt" propid="value" datasetid="_dstops_requirement_detailSelect_ds_detail" columnid="txt_receipt"/>
+            <BindItem id="bind_txttxtAnalysis" compid="txttxtAnalysis" propid="value" datasetid="_dstops_requirement_detailSelect_ds_detail" columnid="txt_analysis"/>
+            <BindItem id="bind_txttxtDesign" compid="txttxtDesign" propid="value" datasetid="_dstops_requirement_detailSelect_ds_detail" columnid="txt_design"/>
+            <BindItem id="bind_txttxtImpl" compid="txttxtImpl" propid="value" datasetid="_dstops_requirement_detailSelect_ds_detail" columnid="txt_impl"/>
+            <BindItem id="bind_txttxtInspect" compid="txttxtInspect" propid="value" datasetid="_dstops_requirement_detailSelect_ds_detail" columnid="txt_inspect"/>
+          </Bind>
+          <Script><![CDATA[this._fnViewOnLoad = function(objForm){/* Sets the view form reference so that functions declared in the view can access it */this._ownerForm = objForm;};]]>
+          </Script>
+        </View>
+      </Layout>
+    </Layouts>
+    <ViewGenerationInfo>
+      <ViewInfo viewid="Master">
+        <ModelInfo modelserviceid="tops" serviceid="requirement/detailSelect" modelid="ds_detail" datasetid="_dstops_requirement_detailSelect_ds_detail" filepath="requirement\.model\detailSelect.model">
+          <Fields>
+            <Field id="status" label="상태" comptype="static"/>
+            <Field id="requester" comptype="static"/>
+            <Field id="req_type" comptype="static"/>
+            <Field id="product_module" label="모듈" comptype="static"/>
+            <Field id="reg_date" label="등록일" comptype="static"/>
+            <Field id="reg_user" comptype="static"/>
+            <Field id="developer" comptype="static"/>
+            <Field id="worker" comptype="static"/>
+            <Field id="work_patch" comptype="static"/>
+            <Field id="deploy_patch" comptype="static"/>
+            <Field id="txt_reg" comptype="textarea"/>
+            <Field id="txt_receipt" comptype="textarea"/>
+            <Field id="txt_analysis" comptype="textarea"/>
+            <Field id="txt_design" comptype="textarea"/>
+            <Field id="txt_impl" comptype="textarea"/>
+            <Field id="txt_inspect" comptype="textarea"/>
+            <Field id="rp" comptype="static"/>
+            <Field id="rc" used="false"/>
+            <Field id="bug_type" used="false"/>
+            <Field id="inspector" used="false"/>
+            <Field id="last_work_date" used="false"/>
+            <Field id="inspect_date" used="false"/>
+            <Field id="title" comptype="static"/>
+            <Field id="txt_impl_detail" used="false"/>
+            <Field id="upload_id" used="false"/>
+            <Field id="updated_at" used="false"/>
+          </Fields>
+          <Components>
+            <Component id="sta_rp" fields="rp"/>
+            <Component id="starp" fields="rp"/>
+            <Component id="pnlRp" fields="rp"/>
+            <Component id="sta_status" fields="status"/>
+            <Component id="stastatus" fields="status"/>
+            <Component id="pnlStatus" fields="status"/>
+            <Component id="sta_req_type" fields="req_type"/>
+            <Component id="stareqType" fields="req_type"/>
+            <Component id="pnlReqType" fields="req_type"/>
+            <Component id="sta_product_module" fields="product_module"/>
+            <Component id="staproductModule" fields="product_module"/>
+            <Component id="pnlProductModule" fields="product_module"/>
+            <Component id="sta_requester" fields="requester"/>
+            <Component id="starequester" fields="requester"/>
+            <Component id="pnlRequester" fields="requester"/>
+            <Component id="sta_work_patch" fields="work_patch"/>
+            <Component id="staworkPatch" fields="work_patch"/>
+            <Component id="pnlWorkPatch" fields="work_patch"/>
+            <Component id="sta_deploy_patch" fields="deploy_patch"/>
+            <Component id="stadeployPatch" fields="deploy_patch"/>
+            <Component id="pnlDeployPatch" fields="deploy_patch"/>
+            <Component id="sta_reg_user" fields="reg_user"/>
+            <Component id="staregUser" fields="reg_user"/>
+            <Component id="pnlRegUser" fields="reg_user"/>
+            <Component id="sta_worker" fields="worker"/>
+            <Component id="staworker" fields="worker"/>
+            <Component id="pnlWorker" fields="worker"/>
+            <Component id="sta_developer" fields="developer"/>
+            <Component id="stadeveloper" fields="developer"/>
+            <Component id="pnlDeveloper" fields="developer"/>
+            <Component id="sta_reg_date" fields="reg_date"/>
+            <Component id="staregDate" fields="reg_date"/>
+            <Component id="pnlRegDate" fields="reg_date"/>
+            <Component id="sta_title" fields="title"/>
+            <Component id="statitle" fields="title"/>
+            <Component id="pnlTitle" fields="title"/>
+            <Component id="sta_txt_reg" fields="txt_reg"/>
+            <Component id="txttxtReg" fields="txt_reg"/>
+            <Component id="pnlTxtReg" fields="txt_reg"/>
+            <Component id="sta_txt_receipt" fields="txt_receipt"/>
+            <Component id="txttxtReceipt" fields="txt_receipt"/>
+            <Component id="pnlTxtReceipt" fields="txt_receipt"/>
+            <Component id="sta_txt_analysis" fields="txt_analysis"/>
+            <Component id="txttxtAnalysis" fields="txt_analysis"/>
+            <Component id="pnlTxtAnalysis" fields="txt_analysis"/>
+            <Component id="sta_txt_design" fields="txt_design"/>
+            <Component id="txttxtDesign" fields="txt_design"/>
+            <Component id="pnlTxtDesign" fields="txt_design"/>
+            <Component id="sta_txt_impl" fields="txt_impl"/>
+            <Component id="txttxtImpl" fields="txt_impl"/>
+            <Component id="pnlTxtImpl" fields="txt_impl"/>
+            <Component id="sta_txt_inspect" fields="txt_inspect"/>
+            <Component id="txttxtInspect" fields="txt_inspect"/>
+            <Component id="pnlTxtInspect" fields="txt_inspect"/>
+          </Components>
+        </ModelInfo>
+        <ViewTemplateInfo filepath="NexaLAP_BasePack/Freeform/FluidFreeformView.viewtemplate">
+          <Attribute id="layout" value="{&quot;columnsize&quot;:[300,300,300],&quot;rowsize&quot;:[38,38,38,38,38,38,38,38,38],&quot;celllist&quot;:[{&quot;col&quot;:0,&quot;row&quot;:0,&quot;fieldlist&quot;:[&quot;rp&quot;]},{&quot;col&quot;:1,&quot;row&quot;:0,&quot;fieldlist&quot;:[&quot;rc&quot;]},{&quot;col&quot;:2,&quot;row&quot;:0,&quot;fieldlist&quot;:[&quot;status&quot;]},{&quot;col&quot;:0,&quot;row&quot;:1,&quot;fieldlist&quot;:[&quot;req_type&quot;]},{&quot;col&quot;:1,&quot;row&quot;:1,&quot;fieldlist&quot;:[&quot;bug_type&quot;]},{&quot;col&quot;:2,&quot;row&quot;:1,&quot;fieldlist&quot;:[&quot;product_module&quot;]},{&quot;col&quot;:0,&quot;row&quot;:2,&quot;fieldlist&quot;:[&quot;requester&quot;]},{&quot;col&quot;:1,&quot;row&quot;:2,&quot;fieldlist&quot;:[&quot;work_patch&quot;]},{&quot;col&quot;:2,&quot;row&quot;:2,&quot;fieldlist&quot;:[&quot;deploy_patch&quot;]},{&quot;col&quot;:0,&quot;row&quot;:3,&quot;fieldlist&quot;:[&quot;reg_user&quot;]},{&quot;col&quot;:1,&quot;row&quot;:3,&quot;fieldlist&quot;:[&quot;worker&quot;]},{&quot;col&quot;:2,&quot;row&quot;:3,&quot;fieldlist&quot;:[&quot;developer&quot;]},{&quot;col&quot;:0,&quot;row&quot;:4,&quot;fieldlist&quot;:[&quot;inspector&quot;]},{&quot;col&quot;:1,&quot;row&quot;:4,&quot;fieldlist&quot;:[&quot;reg_date&quot;]},{&quot;col&quot;:2,&quot;row&quot;:4,&quot;fieldlist&quot;:[&quot;last_work_date&quot;]},{&quot;col&quot;:0,&quot;row&quot;:5,&quot;fieldlist&quot;:[&quot;inspect_date&quot;]},{&quot;col&quot;:1,&quot;row&quot;:5,&quot;fieldlist&quot;:[&quot;title&quot;]},{&quot;col&quot;:2,&quot;row&quot;:5,&quot;fieldlist&quot;:[&quot;txt_reg&quot;]},{&quot;col&quot;:0,&quot;row&quot;:6,&quot;fieldlist&quot;:[&quot;txt_receipt&quot;]},{&quot;col&quot;:1,&quot;row&quot;:6,&quot;fieldlist&quot;:[&quot;txt_analysis&quot;]},{&quot;col&quot;:2,&quot;row&quot;:6,&quot;fieldlist&quot;:[&quot;txt_design&quot;]},{&quot;col&quot;:0,&quot;row&quot;:7,&quot;fieldlist&quot;:[&quot;txt_impl&quot;]},{&quot;col&quot;:1,&quot;row&quot;:7,&quot;fieldlist&quot;:[&quot;txt_impl_detail&quot;]},{&quot;col&quot;:2,&quot;row&quot;:7,&quot;fieldlist&quot;:[&quot;txt_inspect&quot;]},{&quot;col&quot;:0,&quot;row&quot;:8,&quot;fieldlist&quot;:[&quot;upload_id&quot;]},{&quot;col&quot;:1,&quot;row&quot;:8,&quot;fieldlist&quot;:[&quot;updated_at&quot;]}]}"/>
+        </ViewTemplateInfo>
+      </ViewInfo>
+      <ViewInfo viewid="popReqDetail">
+        <ModelInfo modelserviceid="tops" serviceid="requirement/detailSelect" modelid="ds_param" datasetid="_dstops_requirement_detailSelect_ds_param" filepath="requirement\.model\detailSelect.model"/>
+        <ViewTemplateInfo/>
+      </ViewInfo>
+    </ViewGenerationInfo>
+    <Script type="xscript5.1"><![CDATA[]]>
+    </Script>
+    <Objects>
+      <Dataset id="_dstops_requirement_detailSelect_ds_detail">
+        <ColumnInfo>
+          <Column id="rp" type="string" size="10" description="RP"/>
+          <Column id="rc" type="string" size="10" description="RC"/>
+          <Column id="status" type="string" size="20" description="status"/>
+          <Column id="req_type" type="string" size="10" description="요구종류"/>
+          <Column id="bug_type" type="string" size="20" description="버그종류"/>
+          <Column id="product_module" type="string" size="100" description="제품-모듈"/>
+          <Column id="requester" type="string" size="200" description="요구처"/>
+          <Column id="work_patch" type="string" size="50" description="작업패치"/>
+          <Column id="deploy_patch" type="string" size="50" description="배포패치"/>
+          <Column id="reg_user" type="string" size="50" description="등록자"/>
+          <Column id="worker" type="string" size="50" description="작업자"/>
+          <Column id="developer" type="string" size="50" description="개발자"/>
+          <Column id="inspector" type="string" size="50" description="검수자"/>
+          <Column id="reg_date" type="date" size="10" description="등록일자"/>
+          <Column id="last_work_date" type="date" size="10" description="최종작업일"/>
+          <Column id="inspect_date" type="date" size="10" description="검수일"/>
+          <Column id="title" type="string" size="500" description="제목"/>
+          <Column id="txt_reg" type="string" size="65535" description="등록"/>
+          <Column id="txt_receipt" type="string" size="65535" description="접수"/>
+          <Column id="txt_analysis" type="string" size="65535" description="분석"/>
+          <Column id="txt_design" type="string" size="65535" description="설계"/>
+          <Column id="txt_impl" type="string" size="65535" description="구현"/>
+          <Column id="txt_impl_detail" type="string" size="65535" description="구현상세"/>
+          <Column id="txt_inspect" type="string" size="65535" description="검수"/>
+          <Column id="upload_id" type="int" size="11" description="업로드 회차"/>
+          <Column id="updated_at" type="datetime" size="19" description="반영 시각"/>
+        </ColumnInfo>
+        <Rows/>
+      </Dataset>
+      <Dataset id="_dstops_requirement_detailSelect_ds_param">
+        <ColumnInfo>
+          <Column id="rp" type="STRING" size="10" description="RP"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <OnLoadView id="OnLoadView00" alias="View 초기화"/>
+      <CallDatasetFunction id="CallDatasetFunction00" alias="전달 값 받기" functionList="popupCopyData" targetDataset="_dstops_requirement_detailSelect_ds_param"/>
+      <Transaction id="Transaction00" alias="상세 조회" servicemodel="tops::requirement/detailSelect" serviceurl="NexaLAPServer::api/v1/execute">
+        <Contents><![CDATA[{
+    "inputdatasets": [
+        {
+            "modelid": "ds_param",
+            "datasetid": "_dstops_requirement_detailSelect_ds_param"
+        }
+    ],
+    "outputdatasets": [
+        {
+            "modelid": "ds_detail",
+            "datasetid": "_dstops_requirement_detailSelect_ds_detail"
+        }
+    ]
+}]]>
+        </Contents>
+      </Transaction>
+    </Objects>
+    <Trigger>
+      <TriggerItem id="item0" triggertype="onload" triggerview="" triggerobj="" targetaction="OnLoadView00"/>
+      <TriggerItem id="item1" triggertype="onload" triggerview="" triggerobj="" targetaction="CallDatasetFunction00"/>
+      <TriggerItem id="item2" triggertype="Action Success" triggerview="" triggerobj="CallDatasetFunction00" targetaction="Transaction00"/>
+    </Trigger>
+  </Form>
+</FDL>
