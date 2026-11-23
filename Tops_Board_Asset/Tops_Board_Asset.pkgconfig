@@ -11,25 +11,25 @@
   "contents": {
     "assets": [
       "FileUploadTransfer.nexaobj",
-      "OpenWorkForm.nexaobj",
-      "ExcelUploadView.viewtemplate",
-      "Tops_Board",
-      "ActionLib/TopsActionLib.js",
-      "SummaryCardView.viewtemplate",
+      "InputFilter.nexaobj",
       "MasterRowFilter.nexaobj",
+      "OpenWorkForm.nexaobj",
       "SetRowPosition.nexaobj",
       "ShuttleMove.nexaobj",
-      "MasterShuttle_H.viewset",
-      "Tops_Board_Iris",
-      "SummaryBarView.viewtemplate",
       "DashboardDetail_H.viewset",
-      "RankBarChart.viewtemplate",
+      "ExportReport_H.viewset",
+      "MasterShuttle_H.viewset",
       "_lib_/basicCommon.xjs",
       "_lib_/common.xjs",
       "_lib_/util.xjs",
+      "ExcelUploadView.viewtemplate",
+      "RankBarChart.viewtemplate",
       "SearchGridView.viewtemplate",
-      "SearchGridViewCopy.viewtemplate",
-      "InputFilter.nexaobj"
+      "SummaryBarView.viewtemplate",
+      "SummaryCardView.viewtemplate",
+      "Tops_Board",
+      "Tops_Board_Iris",
+      "ActionLib/TopsActionLib.js"
     ]
   },
   "contentsEditor": []

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewSetInfo version="1.0">
+  <ViewSet id="ExportReport_H" viewsettype="viewset" description_en="description of the view set">
+    <Views/>
+  </ViewSet>
+  <FDL version="2.1">
+    <Form id="ExportReport_H" width="1050" height="736" titletext="New Form">
+      <Layouts>
+        <Layout width="1050" height="736">
+          <Button id="btnExport" left="10" top="10" width="240" height="50" text="Export"/>
+          <View id="Options" left="10" top="btnExport:10" width="240" text="Options" bottom="10" viewtype="Grid"/>
+          <View id="Summary" left="Options:10" top="10" height="90" text="Summary" right="10" viewtype="Grid"/>
+          <View id="Requester" left="Options:10" top="Summary:10" height="45%" text="Requester" right="10" viewtype="Grid"/>
+          <View id="Stage" left="Options:10" top="Requester:10" text="Stage" right="10" bottom="10" viewtype="Grid"/>
+        </Layout>
+      </Layouts>
+      <Script type="xscript5.1"><![CDATA[]]>
+      </Script>
+      <Objects/>
+      <Trigger/>
+    </Form>
+  </FDL>
+  <Thumbnail>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-45.9 -45.9 1141.8 827.8" width="320" height="200" preserveAspectRatio="xMidYMid meet">
+      <rect x="0" y="0" width="1050" height="736" rx="15.3" ry="15.3" fill="#ebebeb"/>
+      <rect x="13.82" y="13.82" width="232.35" height="42.35" rx="7.65" ry="7.65" fill="#000000" fill-opacity="0.13"/>
+      <rect x="25.3" y="85.3" width="209.4" height="625.4" rx="11.47" ry="11.47" fill="#d6d6d6"/>
+      <rect x="275.3" y="25.3" width="749.4" height="59.4" rx="11.47" ry="11.47" fill="#d6d6d6"/>
+      <rect x="275.3" y="125.3" width="749.4" height="300.4" rx="11.47" ry="11.47" fill="#d6d6d6"/>
+      <rect x="275.3" y="466.3" width="749.4" height="243.4" rx="11.47" ry="11.47" fill="#d6d6d6"/>
+    </svg>
+  </Thumbnail>
+</ViewSetInfo>
