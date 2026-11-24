@@ -548,6 +548,20 @@
     },
     {
       "type": "serverdata",
+      "id": "stage_no",
+      "key": "tops_board.req_status.stage_no",
+      "label": "stage_no",
+      "uselabel": "true",
+      "fieldtype": "Number",
+      "datatype": "int",
+      "datasize": 3,
+      "required": "false",
+      "description": "stage_no",
+      "options": "",
+      "datasource": "tops_board"
+    },
+    {
+      "type": "serverdata",
       "id": "upload_id",
       "key": "tops_board.upload_log.upload_id",
       "label": "업로드 회차",

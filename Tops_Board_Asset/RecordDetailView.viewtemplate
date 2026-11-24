@@ -1,0 +1,971 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewTemplateInfo version="2.1">
+  <ViewTemplate id="RecordDetailView" viewtype="Freeform" description_en="Single record detail card: key, status badge and info list on the left, title and tabbed long-text fields on the right"/>
+  <UIConfig version="1.0"><![CDATA[{
+	"includes": [
+		{
+			"value": "include \"./_lib_/util.xjs\";"
+		},
+		{
+			"value": "include \"./_lib_/basicCommon.xjs\";"
+		}
+	],
+	"viewProperties": [
+		{
+			"id": "sidewidth",
+			"displaytext": "Side width",
+			"editType": "Number",
+			"defaultValueExpr": "this.SIDE_WIDTH",
+			"description": "왼쪽 정보 영역 폭",
+			"group": "Layout"
+		},
+		{
+			"id": "emptytext",
+			"displaytext": "Empty text",
+			"editType": "String",
+			"defaultValueExpr": "this.EMPTY_TEXT",
+			"description": "본문(body) 내용이 비었을 때 표시 문구",
+			"group": "Body"
+		},
+		{
+			"id": "defaulttab",
+			"displaytext": "Default tab",
+			"editType": "Enum",
+			"defaultValueExpr": "this.DEFAULT_TAB",
+			"enumListExpr": "this.ARR_DEFAULT_TAB",
+			"description": "처음 열 탭. last = 내용 있는 마지막 탭, first = 내용 있는 첫 탭",
+			"group": "Body"
+		},
+		{
+			"id": "tonemap",
+			"displaytext": "Badge tone map",
+			"editType": "String",
+			"defaultValueExpr": "this.TONE_MAP",
+			"description": "badgetone 값 → 배지 색(:배지 뒤 문구). 예) A:warning:잔여,B:success:완료 (색 = neutral/info/success/warning/danger)",
+			"group": "Badge"
+		}
+	],
+	"fieldProperties": [
+		{
+			"id": "fieldrole",
+			"displaytext": "Field role",
+			"editType": "Enum",
+			"defaultValueExpr": "this.FIELD_ROLE",
+			"enumListExpr": "this.ARR_FIELD_ROLE",
+			"description": "key=번호(여러 개 가능), badge=상태 배지, badgetone=배지 색 기준(표시 안 함), title=제목, info=왼쪽 정보, body=오른쪽 탭, none=표시 안 함"
+		},
+		{
+			"id": "tabgroup",
+			"displaytext": "Tab group",
+			"editType": "String",
+			"defaultValueExpr": "\"\"",
+			"description": "body 전용. 같은 이름끼리 한 탭에 위아래로 표시 (탭 이름 = 그룹 이름). 비우면 필드마다 탭 1개"
+		}
+	],
+	"mainBody": "if (fieldarray) {\n\tthis.oFieldArray = JSON.parse(fieldarray);\n}\nif (contents) {\n\tthis.oContents = JSON.parse(contents);\n\tthis.oContents.View.Model = [];\n}\nif (viewproperties) {\n\tthis.oViewProperties = JSON.parse(viewproperties);\n}\n\nthis.fn_GetModel();\n\nthis.oContents.View.attribute.viewdataset = \"${VIEW_DATASET}\";\nthis.oContents.View.InitValue = [];\nthis.oContents.View.Objects = [];\nthis.oContents.View.Script = this.fn_GetScript();\n\n/* 이전에 템플릿이 만든 컴포넌트는 지우고, 사용자가 추가한 컴포넌트는 유지 */\nthis.fn_ClearContents();\n\nreturn JSON.stringify(this.oContents, null, \"\\t\");",
+	"variableGroups": [
+		{
+			"id": "Layout",
+			"variables": [
+				{
+					"name": "VIEW_PADDING",
+					"type": "number",
+					"value": "0"
+				},
+				{
+					"name": "FRAME_PADDING",
+					"type": "number",
+					"value": "16"
+				},
+				{
+					"name": "SIDE_GAP",
+					"type": "number",
+					"value": "16"
+				},
+				{
+					"name": "KEY_HEIGHT",
+					"type": "number",
+					"value": "18"
+				},
+				{
+					"name": "BADGE_HEIGHT",
+					"type": "number",
+					"value": "22"
+				},
+				{
+					"name": "INFO_LABEL_HEIGHT",
+					"type": "number",
+					"value": "16"
+				},
+				{
+					"name": "INFO_VALUE_HEIGHT",
+					"type": "number",
+					"value": "20"
+				},
+				{
+					"name": "INFO_GAP",
+					"type": "number",
+					"value": "6"
+				},
+				{
+					"name": "SUB_HEIGHT",
+					"type": "number",
+					"value": "18"
+				},
+				{
+					"name": "BODY_TOP",
+					"type": "number",
+					"value": "12"
+				},
+				{
+					"name": "TITLE_GAP",
+					"type": "number",
+					"value": "24"
+				},
+				{
+					"name": "TAB_INSET",
+					"type": "number",
+					"value": "0"
+				},
+				{
+					"name": "TAB_BUTTON_GAP",
+					"type": "number",
+					"value": "24"
+				},
+				{
+					"name": "TAB_BUTTON_HEIGHT",
+					"type": "number",
+					"value": "34"
+				}
+			],
+			"comment": "Layout"
+		},
+		{
+			"id": "Fonts & Colors",
+			"variables": [
+				{
+					"name": "KEY_FONT",
+					"type": "string",
+					"value": "\"normal 12px/normal Consolas, \\\"Malgun Gothic\\\"\""
+				},
+				{
+					"name": "TITLE_FONT",
+					"type": "string",
+					"value": "\"normal 700 16px/normal \\\"Malgun Gothic\\\"\""
+				},
+				{
+					"name": "LABEL_FONT",
+					"type": "string",
+					"value": "\"normal 11px/normal \\\"Malgun Gothic\\\"\""
+				},
+				{
+					"name": "VALUE_FONT",
+					"type": "string",
+					"value": "\"normal 12px/normal \\\"Malgun Gothic\\\"\""
+				},
+				{
+					"name": "BADGE_FONT",
+					"type": "string",
+					"value": "\"normal 500 11px/normal \\\"Malgun Gothic\\\"\""
+				},
+				{
+					"name": "TEXT_COLOR",
+					"type": "string",
+					"value": "\"#2C2C2A\""
+				},
+				{
+					"name": "MUTED_COLOR",
+					"type": "string",
+					"value": "\"#888780\""
+				},
+				{
+					"name": "LINE_COLOR",
+					"type": "string",
+					"value": "\"#E0DED6\""
+				},
+				{
+					"name": "FRAME_BORDER",
+					"type": "string",
+					"value": "\"1px solid #E0DED6\""
+				},
+				{
+					"name": "BODY_BACKGROUND",
+					"type": "string",
+					"value": "\"#FBFAF7\""
+				},
+				{
+					"name": "SIDE_BACKGROUND",
+					"type": "string",
+					"value": "\"#F7F6F2\""
+				},
+				{
+					"name": "TAB_CSSCLASS",
+					"type": "string",
+					"value": "\"tab_WF_RecordDetail\""
+				},
+				{
+					"name": "TONES",
+					"value": "{ \"neutral\": [\"#F1EFE8\", \"#5F5E5A\"], \"info\": [\"#E6F1FB\", \"#0C447C\"], \"success\": [\"#EAF3DE\", \"#27500A\"], \"warning\": [\"#FAEEDA\", \"#854F0B\"], \"danger\": [\"#FCEBEB\", \"#A32D2D\"] }"
+				}
+			],
+			"comment": "Fonts / colors"
+		},
+		{
+			"id": "Default values of view properties",
+			"variables": [
+				{
+					"name": "SIDE_WIDTH",
+					"type": "number",
+					"value": "220"
+				},
+				{
+					"name": "EMPTY_TEXT",
+					"type": "string",
+					"value": "\"내용이 없어요\""
+				},
+				{
+					"name": "DEFAULT_TAB",
+					"type": "string",
+					"value": "\"last\""
+				},
+				{
+					"name": "TONE_MAP",
+					"type": "string",
+					"value": "\"\""
+				},
+				{
+					"name": "FIELD_ROLE",
+					"type": "string",
+					"value": "\"info\""
+				},
+				{
+					"name": "ARR_FIELD_ROLE",
+					"type": "array",
+					"items": [
+						"\"info\"",
+						"\"key\"",
+						"\"badge\"",
+						"\"badgetone\"",
+						"\"title\"",
+						"\"body\"",
+						"\"none\""
+					]
+				},
+				{
+					"name": "ARR_DEFAULT_TAB",
+					"type": "array",
+					"items": [
+						"\"last\"",
+						"\"first\""
+					]
+				}
+			],
+			"comment": "Default values of view properties"
+		},
+		{
+			"id": "Component ids",
+			"variables": [
+				{
+					"name": "ID_FRAME",
+					"type": "string",
+					"value": "\"sta_frame\""
+				},
+				{
+					"name": "ID_KEY",
+					"type": "string",
+					"value": "\"sta_key\""
+				},
+				{
+					"name": "ID_BADGE",
+					"type": "string",
+					"value": "\"sta_badge\""
+				},
+				{
+					"name": "ID_SIDE",
+					"type": "string",
+					"value": "\"sta_side\""
+				},
+				{
+					"name": "ID_TITLE",
+					"type": "string",
+					"value": "\"sta_title\""
+				},
+				{
+					"name": "ID_TAB",
+					"type": "string",
+					"value": "\"tabBody\""
+				},
+				{
+					"name": "ID_TAB_LINE",
+					"type": "string",
+					"value": "\"sta_tabLine\""
+				}
+			],
+			"comment": "Component ids"
+		},
+		{
+			"id": "View-related variables",
+			"variables": [
+				{
+					"name": "oFieldArray"
+				},
+				{
+					"name": "oContents"
+				},
+				{
+					"name": "oViewProperties"
+				},
+				{
+					"name": "oViewPropertiesValue"
+				},
+				{
+					"name": "bNewLayout",
+					"value": "false"
+				}
+			],
+			"comment": "View-related variables"
+		}
+	],
+	"sectionComments": {
+		"viewProperties": "View generation options (set_viewProperties)"
+	},
+	"functionsCode": "\n/************************************************************************************************\n * Functions Related to the main() Execution Flow\n ************************************************************************************************/\n\t/* View property value (없으면 기본값) */\n\tthis.fn_GetProp = function(sId, vDefault) {\n\t\tvar oAttr = (this.oViewProperties && this.oViewProperties.attributes) ? this.oViewProperties.attributes : null;\n\t\tif (oAttr && oAttr[sId] !== undefined && oAttr[sId] !== null && oAttr[sId] !== \"\") {\n\t\t\treturn oAttr[sId];\n\t\t}\n\t\treturn vDefault;\n\t};\n\n\t/* Field role (없으면 기본값) */\n\tthis.fn_GetRole = function(oField) {\n\t\treturn oField.fieldrole ? oField.fieldrole : this.FIELD_ROLE;\n\t};\n\n\tthis.fn_Label = function(oField) {\n\t\treturn oField.label ? oField.label : oField.id;\n\t};\n\n\t/* 탭 안 i 번째(보이는 것 중) 항목 위치 : 한 개면 꽉 채움, 여러 개면 % 로 나눔 (소제목 + 본문) */\n\tthis.fn_BodyPos = function(i, n, sSubId) {\n\t\tif (n <= 1) {\n\t\t\treturn { \"subTop\": this.BODY_TOP, \"top\": this.BODY_TOP, \"bottom\": 0 };\n\t\t}\n\t\tvar nTopPct = Math.round(i * 100 / n);\n\t\tvar nBottomPct = Math.round((n - 1 - i) * 100 / n);\n\t\treturn {\n\t\t\t\"subTop\": i == 0 ? this.BODY_TOP : nTopPct + \"%\",\n\t\t\t\"top\": sSubId + \":4\",\n\t\t\t\"bottom\": nBottomPct > 0 ? nBottomPct + \"%\" : 0\n\t\t};\n\t};\n\n\t/* Model 에 컴포넌트 하나 추가 */\n\tthis.fn_AddComp = function(sFieldId, oComp) {\n\t\toComp = this.fn_MergeField(oComp);\n\t\tthis.oContents.View.Model.push({ \"fieldid\": sFieldId, \"Components\": [oComp] });\n\t};\n\n\tthis.fn_GetModel = function() {\n\t\tvar nPad   = this.VIEW_PADDING;\n\t\tvar nIn    = nPad + this.FRAME_PADDING;\n\t\tvar nSide  = Number(this.fn_GetProp(\"sidewidth\", this.SIDE_WIDTH));\n\t\tvar nRight = nSide + this.SIDE_GAP;\n\t\tvar nInner = nSide - nIn - this.SIDE_GAP;\n\t\tvar arrFields = this.oFieldArray.fields;\n\n\t\t/* 역할별로 필드 나누기 (body 는 tabgroup 으로 묶음) */\n\t\tvar arrKey = [], oBadge = null, oTone = null, oTitle = null, arrInfo = [], arrGroups = [], oGroupIdx = {};\n\t\tfor (var i = 0; i < arrFields.length; i++) {\n\t\t\tvar oF = arrFields[i];\n\t\t\tvar sRole = this.fn_GetRole(oF);\n\t\t\tif (sRole == \"key\") { arrKey.push(oF); }\n\t\t\telse if (sRole == \"badge\" && !oBadge) { oBadge = oF; }\n\t\t\telse if (sRole == \"badgetone\" && !oTone) { oTone = oF; }\n\t\t\telse if (sRole == \"title\" && !oTitle) { oTitle = oF; }\n\t\t\telse if (sRole == \"info\") { arrInfo.push(oF); }\n\t\t\telse if (sRole == \"body\") {\n\t\t\t\tvar sGroup = oF.tabgroup ? String(oF.tabgroup) : \"\";\n\t\t\t\tif (sGroup && oGroupIdx[sGroup] !== undefined) {\n\t\t\t\t\tarrGroups[oGroupIdx[sGroup]].fields.push(oF);\n\t\t\t\t} else {\n\t\t\t\t\tif (sGroup) { oGroupIdx[sGroup] = arrGroups.length; }\n\t\t\t\t\tarrGroups.push({ \"text\": sGroup ? sGroup : this.fn_Label(oF), \"fields\": [oF] });\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tthis.oRoles = { \"key\": arrKey, \"badge\": oBadge, \"tone\": oTone, \"title\": oTitle, \"info\": arrInfo, \"groups\": arrGroups };\n\n\t\t/* 카드 배경 + 왼쪽 배경 (가장 먼저 = 맨 뒤) */\n\t\tthis.fn_AddComp(\"FRAME\", { \"tag\": \"Static\", \"attribute\": {\n\t\t\t\"id\": this.ID_FRAME,\n\t\t\t\"left\": nPad,\n\t\t\t\"top\": nPad,\n\t\t\t\"right\": nPad,\n\t\t\t\"bottom\": nPad,\n\t\t\t\"text\": \"\",\n\t\t\t\"border\": this.FRAME_BORDER,\n\t\t\t\"borderRadius\": \"12px\",\n\t\t\t\"background\": \"#FFFFFF\",\n\t\t\t\"_fieldid\": \"FRAME\",\n\t\t\t\"_fieldcomptype\": \"label\"\n\t\t\t} });\n\t\tthis.fn_AddComp(\"SIDE\", { \"tag\": \"Static\", \"attribute\": {\n\t\t\t\"id\": this.ID_SIDE,\n\t\t\t\"left\": nPad + 1,\n\t\t\t\"top\": nPad + 1,\n\t\t\t\"bottom\": nPad + 1,\n\t\t\t\"width\": nSide - nPad - 1,\n\t\t\t\"text\": \"\",\n\t\t\t\"background\": this.SIDE_BACKGROUND,\n\t\t\t\"borderRadius\": \"11px 0px 0px 11px\",\n\t\t\t\"border\": \"0px none, 1px solid \" + this.LINE_COLOR + \", 0px none, 0px none\",\n\t\t\t\"_fieldid\": \"SIDE\",\n\t\t\t\"_fieldcomptype\": \"label\"\n\t\t\t} });\n\n\t\t/* 왼쪽 : 번호 줄 → 배지 → 정보 2열 */\n\t\tvar nTop = nIn;\n\t\tif (arrKey.length > 0) {\n\t\t\tthis.fn_AddComp(arrKey.map(function(o) { return o.id; }).join(\",\"), { \"tag\": \"Static\", \"attribute\": {\n\t\t\t\t\"id\": this.ID_KEY,\n\t\t\t\t\"left\": nIn,\n\t\t\t\t\"top\": nTop,\n\t\t\t\t\"width\": nInner,\n\t\t\t\t\"height\": this.KEY_HEIGHT,\n\t\t\t\t\"text\": \"\",\n\t\t\t\t\"font\": this.KEY_FONT,\n\t\t\t\t\"color\": this.MUTED_COLOR,\n\t\t\t\t\"_fieldid\": \"KEY\",\n\t\t\t\t\"_fieldcomptype\": \"comp\"\n\t\t\t\t} });\n\t\t\tnTop += this.KEY_HEIGHT + 6;\n\t\t}\n\t\tif (oBadge) {\n\t\t\tthis.fn_AddComp(oBadge.id, { \"tag\": \"Static\", \"attribute\": {\n\t\t\t\t\"id\": this.ID_BADGE,\n\t\t\t\t\"left\": nIn,\n\t\t\t\t\"top\": nTop,\n\t\t\t\t\"height\": this.BADGE_HEIGHT,\n\t\t\t\t\"width\": 80,\n\t\t\t\t\"maxwidth\": nInner,\n\t\t\t\t\"fittocontents\": \"width\",\n\t\t\t\t\"text\": \"\",\n\t\t\t\t\"font\": this.BADGE_FONT,\n\t\t\t\t\"padding\": \"0px 10px\",\n\t\t\t\t\"borderRadius\": \"6px\",\n\t\t\t\t\"background\": this.TONES.neutral[0],\n\t\t\t\t\"color\": this.TONES.neutral[1],\n\t\t\t\t\"_fieldid\": oBadge.id,\n\t\t\t\t\"_fieldcomptype\": \"comp\"\n\t\t\t\t} });\n\t\t\tnTop += this.BADGE_HEIGHT;\n\t\t}\n\t\tnTop += 18;\n\t\tfor (var j = 0; j < arrInfo.length; j++) {\n\t\t\tvar oI = arrInfo[j];\n\t\t\tthis.fn_AddComp(oI.id, { \"tag\": \"Static\", \"attribute\": {\n\t\t\t\t\"id\": \"sta_infoLabel\" + j,\n\t\t\t\t\"left\": nIn,\n\t\t\t\t\"top\": nTop,\n\t\t\t\t\"width\": nInner,\n\t\t\t\t\"height\": this.INFO_LABEL_HEIGHT,\n\t\t\t\t\"text\": this.fn_Label(oI),\n\t\t\t\t\"font\": this.LABEL_FONT,\n\t\t\t\t\"color\": this.MUTED_COLOR,\n\t\t\t\t\"_fieldid\": oI.id,\n\t\t\t\t\"_fieldcomptype\": \"label\"\n\t\t\t\t} });\n\t\t\tthis.fn_AddComp(oI.id, { \"tag\": \"Static\", \"attribute\": {\n\t\t\t\t\"id\": \"sta_infoValue\" + j,\n\t\t\t\t\"left\": nIn,\n\t\t\t\t\"top\": nTop + this.INFO_LABEL_HEIGHT,\n\t\t\t\t\"width\": nInner,\n\t\t\t\t\"height\": this.INFO_VALUE_HEIGHT,\n\t\t\t\t\"text\": \"-\",\n\t\t\t\t\"font\": this.VALUE_FONT,\n\t\t\t\t\"color\": this.TEXT_COLOR,\n\t\t\t\t\"_fieldid\": oI.id,\n\t\t\t\t\"_fieldcomptype\": \"comp\"\n\t\t\t\t} });\n\t\t\tnTop += this.INFO_LABEL_HEIGHT + this.INFO_VALUE_HEIGHT + this.INFO_GAP;\n\t\t}\n\n\t\t/* 오른쪽 : 제목 (내용 높이에 맞춤) */\n\t\tif (oTitle) {\n\t\t\tthis.fn_AddComp(oTitle.id, { \"tag\": \"Static\", \"attribute\": {\n\t\t\t\t\"id\": this.ID_TITLE,\n\t\t\t\t\"left\": nRight,\n\t\t\t\t\"top\": nIn,\n\t\t\t\t\"right\": nIn,\n\t\t\t\t\"height\": 24,\n\t\t\t\t\"fittocontents\": \"height\",\n\t\t\t\t\"text\": \"\",\n\t\t\t\t\"font\": this.TITLE_FONT,\n\t\t\t\t\"color\": this.TEXT_COLOR,\n\t\t\t\t\"wordWrap\": \"char\",\n\t\t\t\t\"_fieldid\": oTitle.id,\n\t\t\t\t\"_fieldcomptype\": \"comp\"\n\t\t\t\t} });\n\t\t}\n\n\t\t/* 오른쪽 : 본문 탭. 탭 안은 세로 Layout (소제목 + 본문 박스 반복, 숨긴 항목은 자리 차지 안 함) */\n\t\tif (arrGroups.length > 0) {\n\t\t\tvar arrPages = [];\n\t\t\tvar arrBind = [];\n\t\t\tvar sEmpty = this.fn_GetProp(\"emptytext\", this.EMPTY_TEXT);\n\t\t\tfor (var k = 0; k < arrGroups.length; k++) {\n\t\t\t\tvar oG = arrGroups[k];\n\t\t\t\tvar arrComps = [];\n\t\t\t\tvar nCnt = oG.fields.length;\n\t\t\t\tfor (var m = 0; m < nCnt; m++) {\n\t\t\t\t\tvar oB = oG.fields[m];\n\t\t\t\t\tvar sSub = \"staSub\" + k + \"_\" + m;\n\t\t\t\t\tvar sText = \"txtBody\" + k + \"_\" + m;\n\t\t\t\t\tvar oPos = this.fn_BodyPos(m, nCnt, sSub);\n\t\t\t\t\tarrComps.push({ \"tag\": \"Static\", \"attribute\": {\n\t\t\t\t\t\t\"id\": sSub,\n\t\t\t\t\t\t\"left\": this.TAB_INSET,\n\t\t\t\t\t\t\"top\": oPos.subTop,\n\t\t\t\t\t\t\"right\": 0,\n\t\t\t\t\t\t\"height\": m == 0 ? this.SUB_HEIGHT : this.SUB_HEIGHT + 10,\n\t\t\t\t\t\t\"verticalAlign\": \"bottom\",\n\t\t\t\t\t\t\"text\": this.fn_Label(oB),\n\t\t\t\t\t\t\"font\": this.LABEL_FONT,\n\t\t\t\t\t\t\"color\": this.MUTED_COLOR,\n\t\t\t\t\t\t\"visible\": nCnt > 1 ? \"true\" : \"false\"\n\t\t\t\t\t\t} });\n\t\t\t\t\tarrComps.push({ \"tag\": \"TextArea\", \"attribute\": {\n\t\t\t\t\t\t\"id\": sText,\n\t\t\t\t\t\t\"left\": this.TAB_INSET,\n\t\t\t\t\t\t\"top\": oPos.top,\n\t\t\t\t\t\t\"right\": 0,\n\t\t\t\t\t\t\"bottom\": oPos.bottom,\n\t\t\t\t\t\t\"readonly\": \"true\",\n\t\t\t\t\t\t\"wordWrap\": \"char\",\n\t\t\t\t\t\t\"border\": \"1px solid \" + this.LINE_COLOR,\n\t\t\t\t\t\t\"borderRadius\": \"8px\",\n\t\t\t\t\t\t\"padding\": \"10px 12px\",\n\t\t\t\t\t\t\"background\": this.BODY_BACKGROUND,\n\t\t\t\t\t\t\"font\": this.VALUE_FONT,\n\t\t\t\t\t\t\"color\": this.TEXT_COLOR,\n\t\t\t\t\t\t\"displaynulltext\": sEmpty\n\t\t\t\t\t\t} });\n\t\t\t\t\tarrBind.push({ \"tag\": \"BindItem\", \"attribute\": {\n\t\t\t\t\t\t\"id\": \"bind_\" + sText,\n\t\t\t\t\t\t\"compid\": this.ID_TAB + \".tp\" + k + \".form.\" + sText,\n\t\t\t\t\t\t\"propid\": \"value\",\n\t\t\t\t\t\t\"datasetid\": \"${VIEW_DATASET}\",\n\t\t\t\t\t\t\"columnid\": oB.id\n\t\t\t\t\t\t} });\n\t\t\t\t}\n\t\t\t\tarrPages.push({ \"tag\": \"Tabpage\", \"attribute\": { \"id\": \"tp\" + k, \"text\": oG.text },\n\t\t\t\t\t\"Tabpage\": [{ \"tag\": \"Layouts\", \"attribute\": {}, \"Layouts\": [{ \"tag\": \"Layout\", \"attribute\": {},\n\t\t\t\t\t\t\"Layout\": arrComps }] }] });\n\t\t\t}\n\t\t\tvar vTabTop = oTitle ? this.ID_TITLE + \":\" + this.TITLE_GAP : nIn;\n\t\t\tthis.fn_AddComp(\"BODY\", { \"tag\": \"Tab\", \"attribute\": {\n\t\t\t\t\"id\": this.ID_TAB,\n\t\t\t\t\"left\": nRight - this.TAB_INSET,\n\t\t\t\t\"top\": vTabTop,\n\t\t\t\t\"right\": nIn,\n\t\t\t\t\"bottom\": nIn,\n\t\t\t\t\"tabindex\": 0,\n\t\t\t\t\"tabbuttonheight\": this.TAB_BUTTON_HEIGHT,\n\t\t\t\t\"tabbuttongap\": this.TAB_BUTTON_GAP,\n\t\t\t\t\"cssclass\": this.TAB_CSSCLASS,\n\t\t\t\t\"border\": \"0px none\",\n\t\t\t\t\"_fieldid\": \"BODY\",\n\t\t\t\t\"_fieldcomptype\": \"comp\"\n\t\t\t\t},\n\t\t\t\t\"Tab\": [{ \"tag\": \"Tabpages\", \"attribute\": {}, \"Tabpages\": arrPages }] });\n\t\t\t/* 탭 버튼 아래 전체 폭 구분선 (Tab 보다 뒤에 추가 = 위에 그려짐) */\n\t\t\tthis.fn_AddComp(\"TABLINE\", { \"tag\": \"Static\", \"attribute\": {\n\t\t\t\t\"id\": this.ID_TAB_LINE,\n\t\t\t\t\"left\": nRight,\n\t\t\t\t\"right\": nIn,\n\t\t\t\t\"height\": 1,\n\t\t\t\t\"text\": \"\",\n\t\t\t\t\"top\": oTitle ? this.ID_TITLE + \":\" + (this.TITLE_GAP + this.TAB_BUTTON_HEIGHT - 1) : nIn + this.TAB_BUTTON_HEIGHT - 1,\n\t\t\t\t\"background\": this.LINE_COLOR,\n\t\t\t\t\"_fieldid\": \"TABLINE\",\n\t\t\t\t\"_fieldcomptype\": \"label\"\n\t\t\t\t} });\n\t\t\tthis.oContents.View.Bind = [{ \"tag\": \"Bind\", \"Bind\": arrBind }];\n\t\t} else {\n\t\t\tthis.oContents.View.Bind = [];\n\t\t}\n\t};\n\n\t/* \"A:warning:잔여,B:success:완료\" → { A: [\"warning\", \"잔여\"], ... } */\n\tthis.fn_ParseToneMap = function(sValue) {\n\t\tvar oMap = {};\n\t\tvar arr = String(sValue ? sValue : \"\").split(\",\");\n\t\tfor (var i = 0; i < arr.length; i++) {\n\t\t\tvar arrPart = arr[i].split(\":\");\n\t\t\tif (arrPart.length >= 2 && arrPart[0].trim() != \"\") {\n\t\t\t\toMap[arrPart[0].trim()] = [arrPart[1].trim(), arrPart.length > 2 ? arrPart[2].trim() : \"\"];\n\t\t\t}\n\t\t}\n\t\treturn oMap;\n\t};\n\n\t/* 함수를 한 줄 문자열로 변환 (실행 함수 안에는 슬래시 두 개 주석 금지) */\n\tthis.fn_FuncString = function(sName) {\n\t\tvar s = this[sName].toString().replace(/[\\r\\n\\t]/g, \"\");\n\t\treturn \"this.\" + sName + \" = \" + s + \";\";\n\t};\n\n\tthis.fn_GetScript = function() {\n\t\tvar r = this.oRoles;\n\t\tvar oConf = {\n\t\t\t\"keys\"      : r.key.map(function(o) { return [o.id, o.label ? o.label : o.id]; }),\n\t\t\t\"badgeCol\"  : r.badge ? r.badge.id : \"\",\n\t\t\t\"toneCol\"   : r.tone ? r.tone.id : \"\",\n\t\t\t\"titleCol\"  : r.title ? r.title.id : \"\",\n\t\t\t\"infoCols\"  : r.info.map(function(o) { return o.id; }),\n\t\t\t\"groups\"    : r.groups.map(function(g) { return g.fields.map(function(o) { return o.id; }); }),\n\t\t\t\"defaultTab\": this.fn_GetProp(\"defaulttab\", this.DEFAULT_TAB),\n\t\t\t\"toneMap\"   : this.fn_ParseToneMap(this.fn_GetProp(\"tonemap\", this.TONE_MAP)),\n\t\t\t\"tones\"     : this.TONES,\n\t\t\t\"bodyTop\"   : this.BODY_TOP,\n\t\t\t\"subHeight\" : this.SUB_HEIGHT,\n\t\t\t\"inset\"     : this.TAB_INSET\n\t\t};\n\t\tvar sValue = \"this.fvConf = \" + JSON.stringify(oConf) + \";\";\n\t\tsValue += this.fn_FuncString(\"_fnViewOnLoad\");\n\t\tsValue += this.fn_FuncString(\"fn_detail_ondatachange\");\n\t\tsValue += this.fn_FuncString(\"fn_detail_refresh\");\n\t\treturn { \"tag\": \"Script\", \"attribute\": { \"type\": \"xscript5.1\" }, \"value\": sValue };\n\t};\n\n\t/* 이전에 템플릿이 만든 컴포넌트(_fieldid 있음)는 지우고, 사용자가 추가한 컴포넌트는 Model 뒤에 붙임 */\n\tthis.fn_ClearContents = function() {\n\t\tvar oLayout = this.oContents.View.View[0].Layouts[0].Layout;\n\t\tvar oModel  = this.oContents.View.Model;\n\t\tif (!oLayout) {\n\t\t\treturn;\n\t\t}\n\t\tfor (var i = oLayout.length - 1; i >= 0; i--) {\n\t\t\tvar oComp = oLayout.splice(i, 1);\n\t\t\tif (!(oComp[0].attribute && oComp[0].attribute._fieldid)) {\n\t\t\t\toModel.push({ \"fieldid\": \"\", \"Components\": oComp });\n\t\t\t}\n\t\t}\n\t};\n\n\t/* 다시 생성할 때 사용자가 직접 바꾼 속성(위치·문구·자식 제외)은 유지 */\n\tthis.fn_MergeField = function(oComp) {\n\t\tif (!this.oContents.View.View || !this.oContents.View.View[0].Layouts) {\n\t\t\treturn oComp;\n\t\t}\n\t\tvar oLayout = this.oContents.View.View[0].Layouts[0].Layout;\n\t\tif (!oLayout) {\n\t\t\treturn oComp;\n\t\t}\n\t\tvar nIdx = oLayout.findIndex(function(item) {\n\t\t\treturn item.attribute && item.attribute.id === oComp.attribute.id;\n\t\t});\n\t\tif (nIdx < 0) {\n\t\t\treturn oComp;\n\t\t}\n\t\tvar oOrg = oLayout.splice(nIdx, 1)[0];\n\t\tif (oOrg.tag != oComp.tag) {\n\t\t\treturn oComp;\n\t\t}\n\t\tvar arrExclude = [\"top\", \"left\", \"width\", \"height\", \"right\", \"bottom\", \"text\", \"id\", \"_fieldid\", \"_fieldcomptype\"];\n\t\tfor (var sKey in oOrg.attribute) {\n\t\t\tif (arrExclude.indexOf(sKey) < 0 && !this.lfn_IsNull(oOrg.attribute[sKey]) && this.lfn_IsNull(oComp.attribute[sKey])) {\n\t\t\t\toComp.attribute[sKey] = oOrg.attribute[sKey];\n\t\t\t}\n\t\t}\n\t\treturn oComp;\n\t};\n\n/************************************************************************************************\n * Runtime Functions (생성된 View 안에서 실행. this = View 내부 폼)\n * 주의 : 한 줄로 합쳐서 넣기 때문에 슬래시 두 개 주석은 쓰면 안 됨 (블록 주석만 사용)\n ************************************************************************************************/\n\tthis._fnViewOnLoad = function(objForm) {\n\t\tthis._ownerForm = objForm;\n\t\tif (!this._bDetailInit) {\n\t\t\tvar oDs = this.parent.getViewDataset();\n\t\t\tif (oDs) {\n\t\t\t\toDs.addEventHandler(\"onload\", this.fn_detail_ondatachange, this);\n\t\t\t\toDs.addEventHandler(\"onrowposchanged\", this.fn_detail_ondatachange, this);\n\t\t\t\toDs.addEventHandler(\"oncolumnchanged\", this.fn_detail_ondatachange, this);\n\t\t\t}\n\t\t\tthis._bDetailInit = true;\n\t\t}\n\t\tthis.fn_detail_refresh();\n\t};\n\n\tthis.fn_detail_ondatachange = function(obj, e) {\n\t\tthis.fn_detail_refresh();\n\t};\n\n\t/* 값 채우기, 배지 색, 탭 안 항목 보이기/숨기기, 빈 탭 비활성, 기본 탭 선택 */\n\tthis.fn_detail_refresh = function() {\n\t\tvar c = this.fvConf;\n\t\tvar oDs = this.parent.getViewDataset();\n\t\tvar nRow = oDs ? oDs.rowposition : -1;\n\t\tvar fnVal = function(sCol) {\n\t\t\tif (!oDs || nRow < 0 || !sCol) { return \"\"; }\n\t\t\tvar v = oDs.getColumn(nRow, sCol);\n\t\t\tif (v == null) { return \"\"; }\n\t\t\tif (typeof v == \"object\" && v.getFullYear) {\n\t\t\t\tvar m = v.getMonth() + 1, d = v.getDate();\n\t\t\t\treturn v.getFullYear() + \"-\" + (m > 9 ? \"\" : \"0\") + m + \"-\" + (d > 9 ? \"\" : \"0\") + d;\n\t\t\t}\n\t\t\treturn String(v);\n\t\t};\n\n\t\tif (this.sta_key) {\n\t\t\tvar arrKey = [];\n\t\t\tfor (var k = 0; k < c.keys.length; k++) {\n\t\t\t\tvar sKey = fnVal(c.keys[k][0]);\n\t\t\t\tif (sKey != \"\") { arrKey.push(c.keys[k][1] + \" \" + sKey); }\n\t\t\t}\n\t\t\tthis.sta_key.set_text(arrKey.join(\"  ·  \"));\n\t\t}\n\t\tif (this.sta_title) { this.sta_title.set_text(fnVal(c.titleCol)); this.resetScroll(); }\n\t\tif (this.sta_badge) {\n\t\t\tvar sBadge = fnVal(c.badgeCol);\n\t\t\tvar arrTone = c.toneMap[fnVal(c.toneCol)];\n\t\t\tvar oTone = (arrTone && c.tones[arrTone[0]]) ? c.tones[arrTone[0]] : c.tones.neutral;\n\t\t\tif (sBadge != \"\" && arrTone && arrTone[1]) { sBadge += \"  ·  \" + arrTone[1]; }\n\t\t\tthis.sta_badge.set_text(sBadge);\n\t\t\tthis.sta_badge.set_visible(sBadge != \"\");\n\t\t\tthis.sta_badge.set_background(oTone[0]);\n\t\t\tthis.sta_badge.set_color(oTone[1]);\n\t\t}\n\t\tfor (var i = 0; i < c.infoCols.length; i++) {\n\t\t\tvar oValue = this[\"sta_infoValue\" + i];\n\t\t\tif (oValue) {\n\t\t\t\tvar sInfo = fnVal(c.infoCols[i]);\n\t\t\t\toValue.set_text(sInfo == \"\" ? \"-\" : sInfo);\n\t\t\t\toValue.set_tooltiptext(sInfo);\n\t\t\t}\n\t\t}\n\n\t\tvar oTab = this.tabBody;\n\t\tif (!oTab) { return; }\n\t\tvar nFirst = -1, nLast = -1;\n\t\tfor (var g = 0; g < c.groups.length; g++) {\n\t\t\tvar oPage = oTab[\"tp\" + g];\n\t\t\tif (!oPage) { continue; }\n\t\t\tvar arrCols = c.groups[g];\n\t\t\tvar arrHas = [];\n\t\t\tvar nHas = 0;\n\t\t\tfor (var f = 0; f < arrCols.length; f++) {\n\t\t\t\tarrHas[f] = fnVal(arrCols[f]).replace(/\\s/g, \"\") != \"\";\n\t\t\t\tif (arrHas[f]) { nHas++; }\n\t\t\t}\n\t\t\tvar nShow = nHas > 0 ? nHas : 1;\n\t\t\tvar nIdx = 0;\n\t\t\tfor (var f2 = 0; f2 < arrCols.length; f2++) {\n\t\t\t\tvar oSub = oPage.form[\"staSub\" + g + \"_\" + f2];\n\t\t\t\tvar oText = oPage.form[\"txtBody\" + g + \"_\" + f2];\n\t\t\t\tvar bShow = arrHas[f2] || (nHas == 0 && f2 == 0);\n\t\t\t\tif (oText) { oText.set_visible(bShow); }\n\t\t\t\tif (oSub) { oSub.set_visible(bShow && nShow > 1); }\n\t\t\t\tif (!bShow || !oText) { continue; }\n\t\t\t\tif (nShow == 1) {\n\t\t\t\t\toText.move(c.inset, c.bodyTop, null, null, 0, 0);\n\t\t\t\t} else {\n\t\t\t\t\tvar nTopPct = Math.round(nIdx * 100 / nShow);\n\t\t\t\t\tvar nBottomPct = Math.round((nShow - 1 - nIdx) * 100 / nShow);\n\t\t\t\t\tif (oSub) { oSub.move(c.inset, nIdx == 0 ? c.bodyTop : nTopPct + \"%\", null, nIdx == 0 ? c.subHeight : c.subHeight + 10, 0, null); }\n\t\t\t\t\toText.move(c.inset, oSub ? oSub.id + \":4\" : nTopPct + \"%\", null, null, 0, nBottomPct > 0 ? nBottomPct + \"%\" : 0);\n\t\t\t\t}\n\t\t\t\tnIdx++;\n\t\t\t}\n\t\t\toPage.set_enable(nHas > 0);\n\t\t\tif (nHas > 0) { if (nFirst < 0) { nFirst = g; } nLast = g; }\n\t\t}\n\t\tif (nFirst < 0) {\n\t\t\tif (oTab.tp0) { oTab.tp0.set_enable(true); }\n\t\t\toTab.set_tabindex(0);\n\t\t\treturn;\n\t\t}\n\t\toTab.set_tabindex(c.defaultTab == \"first\" ? nFirst : nLast);\n\t};\n",
+	"viewPropertiesValueBody": "return this.oViewPropertiesValue ? JSON.stringify(this.oViewPropertiesValue, null, \"\\t\") : \"\";"
+}]]>
+  </UIConfig>
+  <Script version="1.0" type="xscript5.1"><![CDATA[/************************************************************************************************
+ * Include Declarations
+ ************************************************************************************************/
+	include "./_lib_/util.xjs";
+	include "./_lib_/basicCommon.xjs";
+
+/************************************************************************************************
+ * Variable Definitions
+ ************************************************************************************************/
+	// Layout
+	this.VIEW_PADDING = 0;
+	this.FRAME_PADDING = 16;
+	this.SIDE_GAP = 16;
+	this.KEY_HEIGHT = 18;
+	this.BADGE_HEIGHT = 22;
+	this.INFO_LABEL_HEIGHT = 16;
+	this.INFO_VALUE_HEIGHT = 20;
+	this.INFO_GAP = 6;
+	this.SUB_HEIGHT = 18;
+	this.BODY_TOP = 12;
+	this.TITLE_GAP = 24;
+	this.TAB_INSET = 0;
+	this.TAB_BUTTON_GAP = 24;
+	this.TAB_BUTTON_HEIGHT = 34;
+
+	// Fonts / colors
+	this.KEY_FONT = "normal 12px/normal Consolas, \"Malgun Gothic\"";
+	this.TITLE_FONT = "normal 700 16px/normal \"Malgun Gothic\"";
+	this.LABEL_FONT = "normal 11px/normal \"Malgun Gothic\"";
+	this.VALUE_FONT = "normal 12px/normal \"Malgun Gothic\"";
+	this.BADGE_FONT = "normal 500 11px/normal \"Malgun Gothic\"";
+	this.TEXT_COLOR = "#2C2C2A";
+	this.MUTED_COLOR = "#888780";
+	this.LINE_COLOR = "#E0DED6";
+	this.FRAME_BORDER = "1px solid #E0DED6";
+	this.BODY_BACKGROUND = "#FBFAF7";
+	this.SIDE_BACKGROUND = "#F7F6F2";
+	this.TAB_CSSCLASS = "tab_WF_RecordDetail";
+	this.TONES = { "neutral": ["#F1EFE8", "#5F5E5A"], "info": ["#E6F1FB", "#0C447C"], "success": ["#EAF3DE", "#27500A"], "warning": ["#FAEEDA", "#854F0B"], "danger": ["#FCEBEB", "#A32D2D"] };
+
+	// Default values of view properties
+	this.SIDE_WIDTH = 220;
+	this.EMPTY_TEXT = "내용이 없어요";
+	this.DEFAULT_TAB = "last";
+	this.TONE_MAP = "";
+	this.FIELD_ROLE = "info";
+	this.ARR_FIELD_ROLE = ["info", "key", "badge", "badgetone", "title", "body", "none"];
+	this.ARR_DEFAULT_TAB = ["last", "first"];
+
+	// Component ids
+	this.ID_FRAME = "sta_frame";
+	this.ID_KEY = "sta_key";
+	this.ID_BADGE = "sta_badge";
+	this.ID_SIDE = "sta_side";
+	this.ID_TITLE = "sta_title";
+	this.ID_TAB = "tabBody";
+	this.ID_TAB_LINE = "sta_tabLine";
+
+	// View-related variables
+	this.oFieldArray;
+	this.oContents;
+	this.oViewProperties;
+	this.oViewPropertiesValue;
+	this.bNewLayout = false;
+
+/************************************************************************************************
+ * Required Function Area for NexaLAP Studio
+ ************************************************************************************************/
+
+	this.set_viewProperties = function() {
+		let oViewAttr = { "attributes": [] };
+		let oProperties;
+		// View generation options (set_viewProperties)
+
+		oProperties = {};
+		oProperties.id = "sidewidth";
+		oProperties.displaytext = "Side width";
+		oProperties.edittype = "Number";
+		oProperties.defaultvalue = this.SIDE_WIDTH;
+		oProperties.description = "왼쪽 정보 영역 폭";
+		oProperties.group = "Layout";
+		oViewAttr.attributes.push(oProperties);
+
+		oProperties = {};
+		oProperties.id = "emptytext";
+		oProperties.displaytext = "Empty text";
+		oProperties.edittype = "String";
+		oProperties.defaultvalue = this.EMPTY_TEXT;
+		oProperties.description = "본문(body) 내용이 비었을 때 표시 문구";
+		oProperties.group = "Body";
+		oViewAttr.attributes.push(oProperties);
+
+		oProperties = {};
+		oProperties.id = "defaulttab";
+		oProperties.displaytext = "Default tab";
+		oProperties.edittype = "Enum";
+		oProperties.enumlist = this.ARR_DEFAULT_TAB;
+		oProperties.defaultvalue = this.DEFAULT_TAB;
+		oProperties.description = "처음 열 탭. last = 내용 있는 마지막 탭, first = 내용 있는 첫 탭";
+		oProperties.group = "Body";
+		oViewAttr.attributes.push(oProperties);
+
+		oProperties = {};
+		oProperties.id = "tonemap";
+		oProperties.displaytext = "Badge tone map";
+		oProperties.edittype = "String";
+		oProperties.defaultvalue = this.TONE_MAP;
+		oProperties.description = "badgetone 값 → 배지 색(:배지 뒤 문구). 예) A:warning:잔여,B:success:완료 (색 = neutral/info/success/warning/danger)";
+		oProperties.group = "Badge";
+		oViewAttr.attributes.push(oProperties);
+
+		return JSON.stringify(oViewAttr, null, "\t");
+	};
+
+	this.set_fieldProperties = function() {
+		let oFieldAttr = { "attributes": [] };
+		let oProperties;
+
+		oProperties = {};
+		oProperties.id = "fieldrole";
+		oProperties.displaytext = "Field role";
+		oProperties.edittype = "Enum";
+		oProperties.enumlist = this.ARR_FIELD_ROLE;
+		oProperties.defaultvalue = this.FIELD_ROLE;
+		oProperties.description = "key=번호(여러 개 가능), badge=상태 배지, badgetone=배지 색 기준(표시 안 함), title=제목, info=왼쪽 정보, body=오른쪽 탭, none=표시 안 함";
+		oFieldAttr.attributes.push(oProperties);
+
+		oProperties = {};
+		oProperties.id = "tabgroup";
+		oProperties.displaytext = "Tab group";
+		oProperties.edittype = "String";
+		oProperties.defaultvalue = "";
+		oProperties.description = "body 전용. 같은 이름끼리 한 탭에 위아래로 표시 (탭 이름 = 그룹 이름). 비우면 필드마다 탭 1개";
+		oFieldAttr.attributes.push(oProperties);
+
+		return JSON.stringify(oFieldAttr, null, "\t");
+	};
+
+	this.main = function(fieldarray, contents, viewproperties, extradata) {
+		if (fieldarray) {
+			this.oFieldArray = JSON.parse(fieldarray);
+		}
+		if (contents) {
+			this.oContents = JSON.parse(contents);
+			this.oContents.View.Model = [];
+		}
+		if (viewproperties) {
+			this.oViewProperties = JSON.parse(viewproperties);
+		}
+
+		this.fn_GetModel();
+
+		this.oContents.View.attribute.viewdataset = "${VIEW_DATASET}";
+		this.oContents.View.InitValue = [];
+		this.oContents.View.Objects = [];
+		this.oContents.View.Script = this.fn_GetScript();
+
+		/* 이전에 템플릿이 만든 컴포넌트는 지우고, 사용자가 추가한 컴포넌트는 유지 */
+		this.fn_ClearContents();
+
+		return JSON.stringify(this.oContents, null, "\t");
+	};
+
+	this.set_viewPropertiesValue = function() {
+		return this.oViewPropertiesValue ? JSON.stringify(this.oViewPropertiesValue, null, "\t") : "";
+	};
+
+
+	/************************************************************************************************
+	 * Functions Related to the main() Execution Flow
+	 ************************************************************************************************/
+		/* View property value (없으면 기본값) */
+		this.fn_GetProp = function(sId, vDefault) {
+			var oAttr = (this.oViewProperties && this.oViewProperties.attributes) ? this.oViewProperties.attributes : null;
+			if (oAttr && oAttr[sId] !== undefined && oAttr[sId] !== null && oAttr[sId] !== "") {
+				return oAttr[sId];
+			}
+			return vDefault;
+		};
+
+		/* Field role (없으면 기본값) */
+		this.fn_GetRole = function(oField) {
+			return oField.fieldrole ? oField.fieldrole : this.FIELD_ROLE;
+		};
+
+		this.fn_Label = function(oField) {
+			return oField.label ? oField.label : oField.id;
+		};
+
+		/* 탭 안 i 번째(보이는 것 중) 항목 위치 : 한 개면 꽉 채움, 여러 개면 % 로 나눔 (소제목 + 본문) */
+		this.fn_BodyPos = function(i, n, sSubId) {
+			if (n <= 1) {
+				return { "subTop": this.BODY_TOP, "top": this.BODY_TOP, "bottom": 0 };
+			}
+			var nTopPct = Math.round(i * 100 / n);
+			var nBottomPct = Math.round((n - 1 - i) * 100 / n);
+			return {
+				"subTop": i == 0 ? this.BODY_TOP : nTopPct + "%",
+				"top": sSubId + ":4",
+				"bottom": nBottomPct > 0 ? nBottomPct + "%" : 0
+			};
+		};
+
+		/* Model 에 컴포넌트 하나 추가 */
+		this.fn_AddComp = function(sFieldId, oComp) {
+			oComp = this.fn_MergeField(oComp);
+			this.oContents.View.Model.push({ "fieldid": sFieldId, "Components": [oComp] });
+		};
+
+		this.fn_GetModel = function() {
+			var nPad   = this.VIEW_PADDING;
+			var nIn    = nPad + this.FRAME_PADDING;
+			var nSide  = Number(this.fn_GetProp("sidewidth", this.SIDE_WIDTH));
+			var nRight = nSide + this.SIDE_GAP;
+			var nInner = nSide - nIn - this.SIDE_GAP;
+			var arrFields = this.oFieldArray.fields;
+
+			/* 역할별로 필드 나누기 (body 는 tabgroup 으로 묶음) */
+			var arrKey = [], oBadge = null, oTone = null, oTitle = null, arrInfo = [], arrGroups = [], oGroupIdx = {};
+			for (var i = 0; i < arrFields.length; i++) {
+				var oF = arrFields[i];
+				var sRole = this.fn_GetRole(oF);
+				if (sRole == "key") { arrKey.push(oF); }
+				else if (sRole == "badge" && !oBadge) { oBadge = oF; }
+				else if (sRole == "badgetone" && !oTone) { oTone = oF; }
+				else if (sRole == "title" && !oTitle) { oTitle = oF; }
+				else if (sRole == "info") { arrInfo.push(oF); }
+				else if (sRole == "body") {
+					var sGroup = oF.tabgroup ? String(oF.tabgroup) : "";
+					if (sGroup && oGroupIdx[sGroup] !== undefined) {
+						arrGroups[oGroupIdx[sGroup]].fields.push(oF);
+					} else {
+						if (sGroup) { oGroupIdx[sGroup] = arrGroups.length; }
+						arrGroups.push({ "text": sGroup ? sGroup : this.fn_Label(oF), "fields": [oF] });
+					}
+				}
+			}
+			this.oRoles = { "key": arrKey, "badge": oBadge, "tone": oTone, "title": oTitle, "info": arrInfo, "groups": arrGroups };
+
+			/* 카드 배경 + 왼쪽 배경 (가장 먼저 = 맨 뒤) */
+			this.fn_AddComp("FRAME", { "tag": "Static", "attribute": {
+				"id": this.ID_FRAME,
+				"left": nPad,
+				"top": nPad,
+				"right": nPad,
+				"bottom": nPad,
+				"text": "",
+				"border": this.FRAME_BORDER,
+				"borderRadius": "12px",
+				"background": "#FFFFFF",
+				"_fieldid": "FRAME",
+				"_fieldcomptype": "label"
+				} });
+			this.fn_AddComp("SIDE", { "tag": "Static", "attribute": {
+				"id": this.ID_SIDE,
+				"left": nPad + 1,
+				"top": nPad + 1,
+				"bottom": nPad + 1,
+				"width": nSide - nPad - 1,
+				"text": "",
+				"background": this.SIDE_BACKGROUND,
+				"borderRadius": "11px 0px 0px 11px",
+				"border": "0px none, 1px solid " + this.LINE_COLOR + ", 0px none, 0px none",
+				"_fieldid": "SIDE",
+				"_fieldcomptype": "label"
+				} });
+
+			/* 왼쪽 : 번호 줄 → 배지 → 정보 2열 */
+			var nTop = nIn;
+			if (arrKey.length > 0) {
+				this.fn_AddComp(arrKey.map(function(o) { return o.id; }).join(","), { "tag": "Static", "attribute": {
+					"id": this.ID_KEY,
+					"left": nIn,
+					"top": nTop,
+					"width": nInner,
+					"height": this.KEY_HEIGHT,
+					"text": "",
+					"font": this.KEY_FONT,
+					"color": this.MUTED_COLOR,
+					"_fieldid": "KEY",
+					"_fieldcomptype": "comp"
+					} });
+				nTop += this.KEY_HEIGHT + 6;
+			}
+			if (oBadge) {
+				this.fn_AddComp(oBadge.id, { "tag": "Static", "attribute": {
+					"id": this.ID_BADGE,
+					"left": nIn,
+					"top": nTop,
+					"height": this.BADGE_HEIGHT,
+					"width": 80,
+					"maxwidth": nInner,
+					"fittocontents": "width",
+					"text": "",
+					"font": this.BADGE_FONT,
+					"padding": "0px 10px",
+					"borderRadius": "6px",
+					"background": this.TONES.neutral[0],
+					"color": this.TONES.neutral[1],
+					"_fieldid": oBadge.id,
+					"_fieldcomptype": "comp"
+					} });
+				nTop += this.BADGE_HEIGHT;
+			}
+			nTop += 18;
+			for (var j = 0; j < arrInfo.length; j++) {
+				var oI = arrInfo[j];
+				this.fn_AddComp(oI.id, { "tag": "Static", "attribute": {
+					"id": "sta_infoLabel" + j,
+					"left": nIn,
+					"top": nTop,
+					"width": nInner,
+					"height": this.INFO_LABEL_HEIGHT,
+					"text": this.fn_Label(oI),
+					"font": this.LABEL_FONT,
+					"color": this.MUTED_COLOR,
+					"_fieldid": oI.id,
+					"_fieldcomptype": "label"
+					} });
+				this.fn_AddComp(oI.id, { "tag": "Static", "attribute": {
+					"id": "sta_infoValue" + j,
+					"left": nIn,
+					"top": nTop + this.INFO_LABEL_HEIGHT,
+					"width": nInner,
+					"height": this.INFO_VALUE_HEIGHT,
+					"text": "-",
+					"font": this.VALUE_FONT,
+					"color": this.TEXT_COLOR,
+					"_fieldid": oI.id,
+					"_fieldcomptype": "comp"
+					} });
+				nTop += this.INFO_LABEL_HEIGHT + this.INFO_VALUE_HEIGHT + this.INFO_GAP;
+			}
+
+			/* 오른쪽 : 제목 (내용 높이에 맞춤) */
+			if (oTitle) {
+				this.fn_AddComp(oTitle.id, { "tag": "Static", "attribute": {
+					"id": this.ID_TITLE,
+					"left": nRight,
+					"top": nIn,
+					"right": nIn,
+					"height": 24,
+					"fittocontents": "height",
+					"text": "",
+					"font": this.TITLE_FONT,
+					"color": this.TEXT_COLOR,
+					"wordWrap": "char",
+					"_fieldid": oTitle.id,
+					"_fieldcomptype": "comp"
+					} });
+			}
+
+			/* 오른쪽 : 본문 탭. 탭 안은 세로 Layout (소제목 + 본문 박스 반복, 숨긴 항목은 자리 차지 안 함) */
+			if (arrGroups.length > 0) {
+				var arrPages = [];
+				var arrBind = [];
+				var sEmpty = this.fn_GetProp("emptytext", this.EMPTY_TEXT);
+				for (var k = 0; k < arrGroups.length; k++) {
+					var oG = arrGroups[k];
+					var arrComps = [];
+					var nCnt = oG.fields.length;
+					for (var m = 0; m < nCnt; m++) {
+						var oB = oG.fields[m];
+						var sSub = "staSub" + k + "_" + m;
+						var sText = "txtBody" + k + "_" + m;
+						var oPos = this.fn_BodyPos(m, nCnt, sSub);
+						arrComps.push({ "tag": "Static", "attribute": {
+							"id": sSub,
+							"left": this.TAB_INSET,
+							"top": oPos.subTop,
+							"right": 0,
+							"height": m == 0 ? this.SUB_HEIGHT : this.SUB_HEIGHT + 10,
+							"verticalAlign": "bottom",
+							"text": this.fn_Label(oB),
+							"font": this.LABEL_FONT,
+							"color": this.MUTED_COLOR,
+							"visible": nCnt > 1 ? "true" : "false"
+							} });
+						arrComps.push({ "tag": "TextArea", "attribute": {
+							"id": sText,
+							"left": this.TAB_INSET,
+							"top": oPos.top,
+							"right": 0,
+							"bottom": oPos.bottom,
+							"readonly": "true",
+							"wordWrap": "char",
+							"border": "1px solid " + this.LINE_COLOR,
+							"borderRadius": "8px",
+							"padding": "10px 12px",
+							"background": this.BODY_BACKGROUND,
+							"font": this.VALUE_FONT,
+							"color": this.TEXT_COLOR,
+							"displaynulltext": sEmpty
+							} });
+						arrBind.push({ "tag": "BindItem", "attribute": {
+							"id": "bind_" + sText,
+							"compid": this.ID_TAB + ".tp" + k + ".form." + sText,
+							"propid": "value",
+							"datasetid": "${VIEW_DATASET}",
+							"columnid": oB.id
+							} });
+					}
+					arrPages.push({ "tag": "Tabpage", "attribute": { "id": "tp" + k, "text": oG.text },
+						"Tabpage": [{ "tag": "Layouts", "attribute": {}, "Layouts": [{ "tag": "Layout", "attribute": {},
+							"Layout": arrComps }] }] });
+				}
+				var vTabTop = oTitle ? this.ID_TITLE + ":" + this.TITLE_GAP : nIn;
+				this.fn_AddComp("BODY", { "tag": "Tab", "attribute": {
+					"id": this.ID_TAB,
+					"left": nRight - this.TAB_INSET,
+					"top": vTabTop,
+					"right": nIn,
+					"bottom": nIn,
+					"tabindex": 0,
+					"tabbuttonheight": this.TAB_BUTTON_HEIGHT,
+					"tabbuttongap": this.TAB_BUTTON_GAP,
+					"cssclass": this.TAB_CSSCLASS,
+					"border": "0px none",
+					"_fieldid": "BODY",
+					"_fieldcomptype": "comp"
+					},
+					"Tab": [{ "tag": "Tabpages", "attribute": {}, "Tabpages": arrPages }] });
+				/* 탭 버튼 아래 전체 폭 구분선 (Tab 보다 뒤에 추가 = 위에 그려짐) */
+				this.fn_AddComp("TABLINE", { "tag": "Static", "attribute": {
+					"id": this.ID_TAB_LINE,
+					"left": nRight,
+					"right": nIn,
+					"height": 1,
+					"text": "",
+					"top": oTitle ? this.ID_TITLE + ":" + (this.TITLE_GAP + this.TAB_BUTTON_HEIGHT - 1) : nIn + this.TAB_BUTTON_HEIGHT - 1,
+					"background": this.LINE_COLOR,
+					"_fieldid": "TABLINE",
+					"_fieldcomptype": "label"
+					} });
+				this.oContents.View.Bind = [{ "tag": "Bind", "Bind": arrBind }];
+			} else {
+				this.oContents.View.Bind = [];
+			}
+		};
+
+		/* "A:warning:잔여,B:success:완료" → { A: ["warning", "잔여"], ... } */
+		this.fn_ParseToneMap = function(sValue) {
+			var oMap = {};
+			var arr = String(sValue ? sValue : "").split(",");
+			for (var i = 0; i < arr.length; i++) {
+				var arrPart = arr[i].split(":");
+				if (arrPart.length >= 2 && arrPart[0].trim() != "") {
+					oMap[arrPart[0].trim()] = [arrPart[1].trim(), arrPart.length > 2 ? arrPart[2].trim() : ""];
+				}
+			}
+			return oMap;
+		};
+
+		/* 함수를 한 줄 문자열로 변환 (실행 함수 안에는 슬래시 두 개 주석 금지) */
+		this.fn_FuncString = function(sName) {
+			var s = this[sName].toString().replace(/[\r\n\t]/g, "");
+			return "this." + sName + " = " + s + ";";
+		};
+
+		this.fn_GetScript = function() {
+			var r = this.oRoles;
+			var oConf = {
+				"keys"      : r.key.map(function(o) { return [o.id, o.label ? o.label : o.id]; }),
+				"badgeCol"  : r.badge ? r.badge.id : "",
+				"toneCol"   : r.tone ? r.tone.id : "",
+				"titleCol"  : r.title ? r.title.id : "",
+				"infoCols"  : r.info.map(function(o) { return o.id; }),
+				"groups"    : r.groups.map(function(g) { return g.fields.map(function(o) { return o.id; }); }),
+				"defaultTab": this.fn_GetProp("defaulttab", this.DEFAULT_TAB),
+				"toneMap"   : this.fn_ParseToneMap(this.fn_GetProp("tonemap", this.TONE_MAP)),
+				"tones"     : this.TONES,
+				"bodyTop"   : this.BODY_TOP,
+				"subHeight" : this.SUB_HEIGHT,
+				"inset"     : this.TAB_INSET
+			};
+			var sValue = "this.fvConf = " + JSON.stringify(oConf) + ";";
+			sValue += this.fn_FuncString("_fnViewOnLoad");
+			sValue += this.fn_FuncString("fn_detail_ondatachange");
+			sValue += this.fn_FuncString("fn_detail_refresh");
+			return { "tag": "Script", "attribute": { "type": "xscript5.1" }, "value": sValue };
+		};
+
+		/* 이전에 템플릿이 만든 컴포넌트(_fieldid 있음)는 지우고, 사용자가 추가한 컴포넌트는 Model 뒤에 붙임 */
+		this.fn_ClearContents = function() {
+			var oLayout = this.oContents.View.View[0].Layouts[0].Layout;
+			var oModel  = this.oContents.View.Model;
+			if (!oLayout) {
+				return;
+			}
+			for (var i = oLayout.length - 1; i >= 0; i--) {
+				var oComp = oLayout.splice(i, 1);
+				if (!(oComp[0].attribute && oComp[0].attribute._fieldid)) {
+					oModel.push({ "fieldid": "", "Components": oComp });
+				}
+			}
+		};
+
+		/* 다시 생성할 때 사용자가 직접 바꾼 속성(위치·문구·자식 제외)은 유지 */
+		this.fn_MergeField = function(oComp) {
+			if (!this.oContents.View.View || !this.oContents.View.View[0].Layouts) {
+				return oComp;
+			}
+			var oLayout = this.oContents.View.View[0].Layouts[0].Layout;
+			if (!oLayout) {
+				return oComp;
+			}
+			var nIdx = oLayout.findIndex(function(item) {
+				return item.attribute && item.attribute.id === oComp.attribute.id;
+			});
+			if (nIdx < 0) {
+				return oComp;
+			}
+			var oOrg = oLayout.splice(nIdx, 1)[0];
+			if (oOrg.tag != oComp.tag) {
+				return oComp;
+			}
+			var arrExclude = ["top", "left", "width", "height", "right", "bottom", "text", "id", "_fieldid", "_fieldcomptype"];
+			for (var sKey in oOrg.attribute) {
+				if (arrExclude.indexOf(sKey) < 0 && !this.lfn_IsNull(oOrg.attribute[sKey]) && this.lfn_IsNull(oComp.attribute[sKey])) {
+					oComp.attribute[sKey] = oOrg.attribute[sKey];
+				}
+			}
+			return oComp;
+		};
+
+	/************************************************************************************************
+	 * Runtime Functions (생성된 View 안에서 실행. this = View 내부 폼)
+	 * 주의 : 한 줄로 합쳐서 넣기 때문에 슬래시 두 개 주석은 쓰면 안 됨 (블록 주석만 사용)
+	 ************************************************************************************************/
+		this._fnViewOnLoad = function(objForm) {
+			this._ownerForm = objForm;
+			if (!this._bDetailInit) {
+				var oDs = this.parent.getViewDataset();
+				if (oDs) {
+					oDs.addEventHandler("onload", this.fn_detail_ondatachange, this);
+					oDs.addEventHandler("onrowposchanged", this.fn_detail_ondatachange, this);
+					oDs.addEventHandler("oncolumnchanged", this.fn_detail_ondatachange, this);
+				}
+				this._bDetailInit = true;
+			}
+			this.fn_detail_refresh();
+		};
+
+		this.fn_detail_ondatachange = function(obj, e) {
+			this.fn_detail_refresh();
+		};
+
+		/* 값 채우기, 배지 색, 탭 안 항목 보이기/숨기기, 빈 탭 비활성, 기본 탭 선택 */
+		this.fn_detail_refresh = function() {
+			var c = this.fvConf;
+			var oDs = this.parent.getViewDataset();
+			var nRow = oDs ? oDs.rowposition : -1;
+			var fnVal = function(sCol) {
+				if (!oDs || nRow < 0 || !sCol) { return ""; }
+				var v = oDs.getColumn(nRow, sCol);
+				if (v == null) { return ""; }
+				if (typeof v == "object" && v.getFullYear) {
+					var m = v.getMonth() + 1, d = v.getDate();
+					return v.getFullYear() + "-" + (m > 9 ? "" : "0") + m + "-" + (d > 9 ? "" : "0") + d;
+				}
+				return String(v);
+			};
+
+			if (this.sta_key) {
+				var arrKey = [];
+				for (var k = 0; k < c.keys.length; k++) {
+					var sKey = fnVal(c.keys[k][0]);
+					if (sKey != "") { arrKey.push(c.keys[k][1] + " " + sKey); }
+				}
+				this.sta_key.set_text(arrKey.join("  ·  "));
+			}
+			if (this.sta_title) { this.sta_title.set_text(fnVal(c.titleCol)); this.resetScroll(); }
+			if (this.sta_badge) {
+				var sBadge = fnVal(c.badgeCol);
+				var arrTone = c.toneMap[fnVal(c.toneCol)];
+				var oTone = (arrTone && c.tones[arrTone[0]]) ? c.tones[arrTone[0]] : c.tones.neutral;
+				if (sBadge != "" && arrTone && arrTone[1]) { sBadge += "  ·  " + arrTone[1]; }
+				this.sta_badge.set_text(sBadge);
+				this.sta_badge.set_visible(sBadge != "");
+				this.sta_badge.set_background(oTone[0]);
+				this.sta_badge.set_color(oTone[1]);
+			}
+			for (var i = 0; i < c.infoCols.length; i++) {
+				var oValue = this["sta_infoValue" + i];
+				if (oValue) {
+					var sInfo = fnVal(c.infoCols[i]);
+					oValue.set_text(sInfo == "" ? "-" : sInfo);
+					oValue.set_tooltiptext(sInfo);
+				}
+			}
+
+			var oTab = this.tabBody;
+			if (!oTab) { return; }
+			var nFirst = -1, nLast = -1;
+			for (var g = 0; g < c.groups.length; g++) {
+				var oPage = oTab["tp" + g];
+				if (!oPage) { continue; }
+				var arrCols = c.groups[g];
+				var arrHas = [];
+				var nHas = 0;
+				for (var f = 0; f < arrCols.length; f++) {
+					arrHas[f] = fnVal(arrCols[f]).replace(/\s/g, "") != "";
+					if (arrHas[f]) { nHas++; }
+				}
+				var nShow = nHas > 0 ? nHas : 1;
+				var nIdx = 0;
+				for (var f2 = 0; f2 < arrCols.length; f2++) {
+					var oSub = oPage.form["staSub" + g + "_" + f2];
+					var oText = oPage.form["txtBody" + g + "_" + f2];
+					var bShow = arrHas[f2] || (nHas == 0 && f2 == 0);
+					if (oText) { oText.set_visible(bShow); }
+					if (oSub) { oSub.set_visible(bShow && nShow > 1); }
+					if (!bShow || !oText) { continue; }
+					if (nShow == 1) {
+						oText.move(c.inset, c.bodyTop, null, null, 0, 0);
+					} else {
+						var nTopPct = Math.round(nIdx * 100 / nShow);
+						var nBottomPct = Math.round((nShow - 1 - nIdx) * 100 / nShow);
+						if (oSub) { oSub.move(c.inset, nIdx == 0 ? c.bodyTop : nTopPct + "%", null, nIdx == 0 ? c.subHeight : c.subHeight + 10, 0, null); }
+						oText.move(c.inset, oSub ? oSub.id + ":4" : nTopPct + "%", null, null, 0, nBottomPct > 0 ? nBottomPct + "%" : 0);
+					}
+					nIdx++;
+				}
+				oPage.set_enable(nHas > 0);
+				if (nHas > 0) { if (nFirst < 0) { nFirst = g; } nLast = g; }
+			}
+			if (nFirst < 0) {
+				if (oTab.tp0) { oTab.tp0.set_enable(true); }
+				oTab.set_tabindex(0);
+				return;
+			}
+			oTab.set_tabindex(c.defaultTab == "first" ? nFirst : nLast);
+		};
+]]>
+  </Script>
+</ViewTemplateInfo>

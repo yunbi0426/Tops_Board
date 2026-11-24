@@ -637,6 +637,21 @@
           "remarks": "",
           "columntype": "VARCHAR",
           "decimaldigits": null
+        },
+        {
+          "schema": null,
+          "isautoincrement": false,
+          "catalog": "tops_board",
+          "ordinalposition": 5,
+          "isnullable": true,
+          "columnname": "stage_no",
+          "platformdatatype": "int",
+          "columnsize": 3,
+          "tablename": "req_status",
+          "columndefault": "NULL",
+          "remarks": "",
+          "columntype": "TINYINT",
+          "decimaldigits": "0"
         }
       ],
       "nexaai_description": "",
