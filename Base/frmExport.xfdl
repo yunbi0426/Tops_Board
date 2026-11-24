@@ -3,8 +3,8 @@
   <Form id="frmExport" width="1050" height="736" titletext="New Form">
     <Layouts>
       <Layout width="1050" height="736">
-        <Button id="btnExport" left="10" top="10" width="25%" height="50" text="Export Excel"/>
-        <View id="Options" left="10" top="btnExport:10" width="25.05%" text="Options" bottom="10" viewtype="Grid" viewdataset="_dstops_report_summarySelect_ds_requester">
+        <Button id="btnExport" left="10" top="10" width="14%" height="50" text="Export Excel"/>
+        <View id="Options" left="10" top="btnExport:10" width="14%" text="Options" bottom="10" viewtype="Grid" viewdataset="_dstops_report_summarySelect_ds_sheet_option">
           <Layouts>
             <Layout>
               <Static id="sta_frame" left="0" top="0" right="0" bottom="0" text="" border="1px solid #E0DED6" borderRadius="12px" background="#FFFFFF" _fieldid="FRAME" _fieldcomptype="label"/>
@@ -12,13 +12,12 @@
               <Edit id="edt_filterSearch" top="12" right="12" width="240" height="30" displaynulltext="요구처 검색" padding="0px 30px 0px 30px" _fieldid="_filterSearch" _fieldcomptype="comp"/>
               <Static id="sta_searchIcon" left="edt_filterSearch:-240" top="12" width="30" height="30" text="" background="URL(&apos;theme://images/btn_WF_InputSearchN.png&apos;) no-repeat center center" _fieldid="_searchIcon" _fieldcomptype="label"/>
               <Button id="btn_searchClear" top="12" right="12" width="30" height="30" text="✕" tooltiptext="검색어 지우기" border="0px none" background="transparent" color="#888780" _fieldid="_searchClear" _fieldcomptype="comp"/>
-              <Grid id="grdList" left="12" right="12" bottom="12" top="50" binddataset="_dstops_report_summarySelect_ds_requester" autofittype="col" nodatatext="요구처가 없습니다." cssclass="grd_WF_Detail" _fieldid="grdList" _fieldcomptype="comp">
+              <Grid id="grdList" left="12" right="12" bottom="12" top="50" binddataset="_dstops_report_summarySelect_ds_sheet_option" autofittype="col" nodatatext="요구처가 없습니다." cssclass="grd_WF_Detail" _fieldid="grdList" _fieldcomptype="comp">
                 <Formats>
                   <Format id="default">
                     <Columns>
                       <Column size="30" band="body"/>
                       <Column size="100" band="body"/>
-                      <Column size="50" band="body"/>
                     </Columns>
                     <Rows>
                       <Row size="32" band="head"/>
@@ -27,12 +26,10 @@
                     <Band id="head">
                       <Cell id="cell_head_0_0" row="0" col="0"/>
                       <Cell id="cell_head_1_0_요구처" row="0" col="1" textAlign="center" text="요구처"/>
-                      <Cell id="cell_head_2_0_잔여" row="0" col="2" textAlign="center" text="잔여"/>
                     </Band>
                     <Band id="body">
                       <Cell id="cell_body_0_0_chk" row="0" col="0" text="bind:chk" displaytype="checkboxcontrol" edittype="checkbox"/>
                       <Cell id="cell_body_1_0_req_name" row="0" col="1" textAlign="center" text="bind:req_name" displaytype="normal" edittype="none"/>
-                      <Cell id="cell_body_2_0_remain_cnt" row="0" col="2" textAlign="center" text="bind:remain_cnt" displaytype="normal" edittype="none"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -41,6 +38,47 @@
           </Layouts>
           <Objects/>
           <Script><![CDATA[this.fvConf = {"titleText":"요구처 시트","showCount":false,"headSort":false,"selectFirst":true,"mutedColor":"#888780","defaultSort":""};this._fnViewOnLoad = function(objForm) {/* Sets the view form reference so that functions declared in the view can access it */this._ownerForm = objForm;if (!this._bSearchGridInit) {var oDs = this.parent.getViewDataset();if (oDs) {oDs.addEventHandler("onload", this.fn_ds_onchanged, this);oDs.addEventHandler("onrowsetchanged", this.fn_ds_onchanged, this);}if (this.fvConf.headSort && this.grdList) {this.grdList.addEventHandler("onheadclick", this.fn_grid_onheadclick, this);}if (this.fvConf.headSort && this.grdList) {var sDef = this.fvConf.defaultSort;var nDefCell = -1;var sColDef = "";if (sDef) {sColDef = sDef.replace(/^[+-]/, "");for (var j = 0; j < this.grdList.getCellCount("body"); j++) {if (this.grdList.getCellProperty("body", j, "text") == "bind:" + sColDef) {nDefCell = j;break;}}}this.fn_applySort(this.grdList, nDefCell, nDefCell < 0 ? "" : sColDef, sDef.charAt(0) != "+", true);}this._bSearchGridInit = true;}this.fn_updateCount();};this.fn_ds_onchanged = function(obj, e) {this.fn_updateCount();};this.fn_updateCount = function() {if (!this.sta_title) {return;}var c = this.fvConf;var sText = "<b v='true'>" + c.titleText + "</b>";var oDs = this.parent.getViewDataset();if (c.showCount && oDs) {var nShow = oDs.getRowCount();var nAll = oDs.getRowCountNF();var sCount = (nShow == nAll) ? (nAll + "건") : (nShow + " / " + nAll + "건");sText += "   <fc v='" + c.mutedColor + "'>" + sCount + "</fc>";}this.sta_title.set_text(sText);};this.fn_grid_onheadclick = function(obj, e) {var sBind = "" + obj.getCellProperty("body", e.cell, "text");if (sBind.indexOf("bind:") != 0) {return;}var sCol = sBind.substr(5);var bDesc = !(this._sSortCol == sCol && this._bSortDesc);this.fn_applySort(obj, e.cell, sCol, bDesc);var oDs = obj.getBindDataset();if (this.fvConf.selectFirst && oDs.getRowCount() > 0) {oDs.set_rowposition(-1);oDs.set_rowposition(0);}this.fn_applySort(obj, e.cell, sCol, bDesc, false);};this.fn_applySort = function(oGrid, nCell, sCol, bDesc, bHint) {var i;if (!this._arrHeadText) {this._arrHeadText = [];for (i = 0; i < oGrid.getCellCount("head"); i++) {this._arrHeadText[i] = oGrid.getCellProperty("head", i, "text");}}if (sCol) {this._sSortCol = sCol;this._bSortDesc = bDesc;oGrid.getBindDataset().set_keystring("S:" + (bDesc ? "-" : "+") + sCol);}for (i = 0; i < this._arrHeadText.length; i++) {var sMark = "";if (i == nCell) {sMark = bDesc ? " ▼" : " ▲";} else if (bHint && ("" + oGrid.getCellProperty("body", i, "text")).indexOf("bind:") == 0) {sMark = " ⇅";}oGrid.setCellProperty("head", i, "text", this._arrHeadText[i] + sMark);}};]]>
+          </Script>
+        </View>
+        <View id="SummaryExcel" left="0" top="790" taborder="0" width="200" height="150" text="SummaryExcel" viewdataset="_dstops_report_summarySelect_ds_summary" visible="false">
+          <Layouts>
+            <Layout>
+              <Static id="sta_frame" left="0" top="0" right="0" bottom="0" text="" border="1px solid #E0DED6" borderRadius="12px" background="#FFFFFF" _fieldid="FRAME" _fieldcomptype="label"/>
+              <Grid id="grdList" left="12" right="12" bottom="12" top="12" binddataset="_dstops_report_summarySelect_ds_summary" autofittype="col" nodatatext="데이터가 없습니다" cssclass="grd_WF_Detail" _fieldid="grdList" _fieldcomptype="comp">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="32" band="head"/>
+                      <Row size="32" band="body"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell id="cell_head_0_0_전체" row="0" col="0" text="전체" tooltiptext="클릭하여 정렬"/>
+                      <Cell id="cell_head_1_0_완료" row="0" col="1" text="완료" tooltiptext="클릭하여 정렬"/>
+                      <Cell id="cell_head_2_0_잔여" row="0" col="2" text="잔여" tooltiptext="클릭하여 정렬"/>
+                      <Cell id="cell_head_3_0_반려" row="0" col="3" text="반려" tooltiptext="클릭하여 정렬"/>
+                      <Cell id="cell_head_4_0_완료율" row="0" col="4" text="완료율" tooltiptext="클릭하여 정렬"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell id="cell_body_0_0_total_cnt" row="0" col="0" text="bind:total_cnt" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_1_0_done_cnt" row="0" col="1" text="bind:done_cnt" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_2_0_remain_cnt" row="0" col="2" text="bind:remain_cnt" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_3_0_exclude_cnt" row="0" col="3" text="bind:exclude_cnt" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_4_0_done_rate" row="0" col="4" text="expr:done_rate + &apos;%&apos;" displaytype="normal" edittype="none"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+            </Layout>
+          </Layouts>
+          <Objects/>
+          <Script><![CDATA[this.fvConf = {"titleText":"","showCount":true,"headSort":true,"selectFirst":true,"mutedColor":"#888780","defaultSort":""};this._fnViewOnLoad = function(objForm) {/* Sets the view form reference so that functions declared in the view can access it */this._ownerForm = objForm;if (!this._bSearchGridInit) {var oDs = this.parent.getViewDataset();if (oDs) {oDs.addEventHandler("onload", this.fn_ds_onchanged, this);oDs.addEventHandler("onrowsetchanged", this.fn_ds_onchanged, this);}if (this.fvConf.headSort && this.grdList) {this.grdList.addEventHandler("onheadclick", this.fn_grid_onheadclick, this);}if (this.fvConf.headSort && this.grdList) {var sDef = this.fvConf.defaultSort;var nDefCell = -1;var sColDef = "";if (sDef) {sColDef = sDef.replace(/^[+-]/, "");for (var j = 0; j < this.grdList.getCellCount("body"); j++) {if (this.grdList.getCellProperty("body", j, "text") == "bind:" + sColDef) {nDefCell = j;break;}}}this.fn_applySort(this.grdList, nDefCell, nDefCell < 0 ? "" : sColDef, sDef.charAt(0) != "+", true);}this._bSearchGridInit = true;}this.fn_updateCount();};this.fn_ds_onchanged = function(obj, e) {this.fn_updateCount();};this.fn_updateCount = function() {if (!this.sta_title) {return;}var c = this.fvConf;var sText = "<b v='true'>" + c.titleText + "</b>";var oDs = this.parent.getViewDataset();if (c.showCount && oDs) {var nShow = oDs.getRowCount();var nAll = oDs.getRowCountNF();var sCount = (nShow == nAll) ? (nAll + "건") : (nShow + " / " + nAll + "건");sText += "   <fc v='" + c.mutedColor + "'>" + sCount + "</fc>";}this.sta_title.set_text(sText);};this.fn_grid_onheadclick = function(obj, e) {var sBind = "" + obj.getCellProperty("body", e.cell, "text");if (sBind.indexOf("bind:") != 0) {return;}var sCol = sBind.substr(5);var bDesc = !(this._sSortCol == sCol && this._bSortDesc);this.fn_applySort(obj, e.cell, sCol, bDesc);var oDs = obj.getBindDataset();if (this.fvConf.selectFirst && oDs.getRowCount() > 0) {oDs.set_rowposition(-1);oDs.set_rowposition(0);}this.fn_applySort(obj, e.cell, sCol, bDesc, false);};this.fn_applySort = function(oGrid, nCell, sCol, bDesc, bHint) {var i;if (!this._arrHeadText) {this._arrHeadText = [];for (i = 0; i < oGrid.getCellCount("head"); i++) {this._arrHeadText[i] = oGrid.getCellProperty("head", i, "text");}}if (sCol) {this._sSortCol = sCol;this._bSortDesc = bDesc;oGrid.getBindDataset().set_keystring("S:" + (bDesc ? "-" : "+") + sCol);}for (i = 0; i < this._arrHeadText.length; i++) {var sMark = "";if (i == nCell) {sMark = bDesc ? " ▼" : " ▲";} else if (bHint && ("" + oGrid.getCellProperty("body", i, "text")).indexOf("bind:") == 0) {sMark = " ⇅";}oGrid.setCellProperty("head", i, "text", this._arrHeadText[i] + sMark);}};]]>
           </Script>
         </View>
         <View id="Summary" left="Options:10" top="10" height="130" text="Summary" right="10" viewtype="Grid" viewdataset="_dstops_report_summarySelect_ds_summary">
@@ -184,14 +222,114 @@
           <Script><![CDATA[this.fvConf = {"titleText":"구분 X 단계","showCount":false,"headSort":false,"selectFirst":true,"mutedColor":"#888780","defaultSort":""};this._fnViewOnLoad = function(objForm) {/* Sets the view form reference so that functions declared in the view can access it */this._ownerForm = objForm;if (!this._bSearchGridInit) {var oDs = this.parent.getViewDataset();if (oDs) {oDs.addEventHandler("onload", this.fn_ds_onchanged, this);oDs.addEventHandler("onrowsetchanged", this.fn_ds_onchanged, this);}if (this.fvConf.headSort && this.grdList) {this.grdList.addEventHandler("onheadclick", this.fn_grid_onheadclick, this);}if (this.fvConf.headSort && this.grdList) {var sDef = this.fvConf.defaultSort;var nDefCell = -1;var sColDef = "";if (sDef) {sColDef = sDef.replace(/^[+-]/, "");for (var j = 0; j < this.grdList.getCellCount("body"); j++) {if (this.grdList.getCellProperty("body", j, "text") == "bind:" + sColDef) {nDefCell = j;break;}}}this.fn_applySort(this.grdList, nDefCell, nDefCell < 0 ? "" : sColDef, sDef.charAt(0) != "+", true);}this._bSearchGridInit = true;}this.fn_updateCount();};this.fn_ds_onchanged = function(obj, e) {this.fn_updateCount();};this.fn_updateCount = function() {if (!this.sta_title) {return;}var c = this.fvConf;var sText = "<b v='true'>" + c.titleText + "</b>";var oDs = this.parent.getViewDataset();if (c.showCount && oDs) {var nShow = oDs.getRowCount();var nAll = oDs.getRowCountNF();var sCount = (nShow == nAll) ? (nAll + "건") : (nShow + " / " + nAll + "건");sText += "   <fc v='" + c.mutedColor + "'>" + sCount + "</fc>";}this.sta_title.set_text(sText);};this.fn_grid_onheadclick = function(obj, e) {var sBind = "" + obj.getCellProperty("body", e.cell, "text");if (sBind.indexOf("bind:") != 0) {return;}var sCol = sBind.substr(5);var bDesc = !(this._sSortCol == sCol && this._bSortDesc);this.fn_applySort(obj, e.cell, sCol, bDesc);var oDs = obj.getBindDataset();if (this.fvConf.selectFirst && oDs.getRowCount() > 0) {oDs.set_rowposition(-1);oDs.set_rowposition(0);}this.fn_applySort(obj, e.cell, sCol, bDesc, false);};this.fn_applySort = function(oGrid, nCell, sCol, bDesc, bHint) {var i;if (!this._arrHeadText) {this._arrHeadText = [];for (i = 0; i < oGrid.getCellCount("head"); i++) {this._arrHeadText[i] = oGrid.getCellProperty("head", i, "text");}}if (sCol) {this._sSortCol = sCol;this._bSortDesc = bDesc;oGrid.getBindDataset().set_keystring("S:" + (bDesc ? "-" : "+") + sCol);}for (i = 0; i < this._arrHeadText.length; i++) {var sMark = "";if (i == nCell) {sMark = bDesc ? " ▼" : " ▲";} else if (bHint && ("" + oGrid.getCellProperty("body", i, "text")).indexOf("bind:") == 0) {sMark = " ⇅";}oGrid.setCellProperty("head", i, "text", this._arrHeadText[i] + sMark);}};]]>
           </Script>
         </View>
+        <View id="GroupStageExcel" left="222" top="791" taborder="1" width="200" height="150" text="GroupStageExcel" viewdataset="_dstops_report_summarySelect_ds_group_stage" visible="false">
+          <Layouts>
+            <Layout>
+              <Static id="sta_frame" left="0" top="0" right="0" bottom="0" text="" border="1px solid #E0DED6" borderRadius="12px" background="#FFFFFF" _fieldid="FRAME" _fieldcomptype="label"/>
+              <Grid id="grdList" left="12" right="12" bottom="12" top="12" binddataset="_dstops_report_summarySelect_ds_group_stage" autofittype="col" nodatatext="데이터가 없습니다" cssclass="grd_WF_Detail" _fieldid="grdList" _fieldcomptype="comp">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="32" band="head"/>
+                      <Row size="32" band="body"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell id="cell_head_0_0_구분" col="0" row="0" text="구분" tooltiptext="클릭하여 정렬"/>
+                      <Cell id="cell_head_1_0_접수·분석" col="1" row="0" text="접수·분석" tooltiptext="클릭하여 정렬"/>
+                      <Cell id="cell_head_2_0_설계·개발" col="2" row="0" text="설계·개발" tooltiptext="클릭하여 정렬"/>
+                      <Cell id="cell_head_3_0_검토" col="3" row="0" text="검토" tooltiptext="클릭하여 정렬"/>
+                      <Cell id="cell_head_4_0_개발답변" col="4" row="0" text="개발답변" tooltiptext="클릭하여 정렬"/>
+                      <Cell id="cell_head_5_0_검수·배포대기" col="5" row="0" text="검수·배포대기" tooltiptext="클릭하여 정렬"/>
+                      <Cell id="cell_head_6_0_배포완료" col="6" row="0" text="배포완료" tooltiptext="클릭하여 정렬"/>
+                      <Cell id="cell_head_7_0_반려" col="7" row="0" text="반려" tooltiptext="클릭하여 정렬"/>
+                      <Cell id="cell_head_8_0_합계" col="8" row="0" text="합계" tooltiptext="클릭하여 정렬"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell id="cell_body_0_0_req_type" col="0" row="0" text="bind:req_type" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_1_0_st1" col="1" row="0" text="bind:st1" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_2_0_st2" col="2" row="0" text="bind:st2" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_3_0_st3" col="3" row="0" text="bind:st3" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_4_0_st4" col="4" row="0" text="bind:st4" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_5_0_st5" col="5" row="0" text="bind:st5" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_6_0_st6" col="6" row="0" text="bind:st6" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_7_0_st7" col="7" row="0" text="bind:st7" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_8_0_total_cnt" col="8" row="0" text="bind:total_cnt" displaytype="normal" edittype="none"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+            </Layout>
+          </Layouts>
+          <Objects/>
+          <Script><![CDATA[this.fvConf = {"titleText":"","showCount":true,"headSort":true,"selectFirst":true,"mutedColor":"#888780","defaultSort":""};this._fnViewOnLoad = function(objForm) {/* Sets the view form reference so that functions declared in the view can access it */this._ownerForm = objForm;if (!this._bSearchGridInit) {var oDs = this.parent.getViewDataset();if (oDs) {oDs.addEventHandler("onload", this.fn_ds_onchanged, this);oDs.addEventHandler("onrowsetchanged", this.fn_ds_onchanged, this);}if (this.fvConf.headSort && this.grdList) {this.grdList.addEventHandler("onheadclick", this.fn_grid_onheadclick, this);}if (this.fvConf.headSort && this.grdList) {var sDef = this.fvConf.defaultSort;var nDefCell = -1;var sColDef = "";if (sDef) {sColDef = sDef.replace(/^[+-]/, "");for (var j = 0; j < this.grdList.getCellCount("body"); j++) {if (this.grdList.getCellProperty("body", j, "text") == "bind:" + sColDef) {nDefCell = j;break;}}}this.fn_applySort(this.grdList, nDefCell, nDefCell < 0 ? "" : sColDef, sDef.charAt(0) != "+", true);}this._bSearchGridInit = true;}this.fn_updateCount();};this.fn_ds_onchanged = function(obj, e) {this.fn_updateCount();};this.fn_updateCount = function() {if (!this.sta_title) {return;}var c = this.fvConf;var sText = "<b v='true'>" + c.titleText + "</b>";var oDs = this.parent.getViewDataset();if (c.showCount && oDs) {var nShow = oDs.getRowCount();var nAll = oDs.getRowCountNF();var sCount = (nShow == nAll) ? (nAll + "건") : (nShow + " / " + nAll + "건");sText += "   <fc v='" + c.mutedColor + "'>" + sCount + "</fc>";}this.sta_title.set_text(sText);};this.fn_grid_onheadclick = function(obj, e) {var sBind = "" + obj.getCellProperty("body", e.cell, "text");if (sBind.indexOf("bind:") != 0) {return;}var sCol = sBind.substr(5);var bDesc = !(this._sSortCol == sCol && this._bSortDesc);this.fn_applySort(obj, e.cell, sCol, bDesc);var oDs = obj.getBindDataset();if (this.fvConf.selectFirst && oDs.getRowCount() > 0) {oDs.set_rowposition(-1);oDs.set_rowposition(0);}this.fn_applySort(obj, e.cell, sCol, bDesc, false);};this.fn_applySort = function(oGrid, nCell, sCol, bDesc, bHint) {var i;if (!this._arrHeadText) {this._arrHeadText = [];for (i = 0; i < oGrid.getCellCount("head"); i++) {this._arrHeadText[i] = oGrid.getCellProperty("head", i, "text");}}if (sCol) {this._sSortCol = sCol;this._bSortDesc = bDesc;oGrid.getBindDataset().set_keystring("S:" + (bDesc ? "-" : "+") + sCol);}for (i = 0; i < this._arrHeadText.length; i++) {var sMark = "";if (i == nCell) {sMark = bDesc ? " ▼" : " ▲";} else if (bHint && ("" + oGrid.getCellProperty("body", i, "text")).indexOf("bind:") == 0) {sMark = " ⇅";}oGrid.setCellProperty("head", i, "text", this._arrHeadText[i] + sMark);}};]]>
+          </Script>
+        </View>
+        <View id="RemainExcel" left="450" top="790" taborder="2" width="200" height="150" text="RemainExcel" viewdataset="_dstops_report_summarySelect_ds_remain" visible="false">
+          <Layouts>
+            <Layout>
+              <Static id="sta_frame" left="0" top="0" right="0" bottom="0" text="" border="1px solid #E0DED6" borderRadius="12px" background="#FFFFFF" _fieldid="FRAME" _fieldcomptype="label"/>
+              <Grid id="grdList" left="12" right="12" bottom="12" top="12" binddataset="_dstops_report_summarySelect_ds_remain" autofittype="col" nodatatext="데이터가 없습니다" cssclass="grd_WF_Detail" _fieldid="grdList" _fieldcomptype="comp">
+                <Formats>
+                  <Format id="default">
+                    <Columns>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                      <Column size="100" band="body"/>
+                    </Columns>
+                    <Rows>
+                      <Row size="32" band="head"/>
+                      <Row size="32" band="body"/>
+                    </Rows>
+                    <Band id="head">
+                      <Cell id="cell_head_0_0_RP" col="0" row="0" text="RP" tooltiptext="클릭하여 정렬"/>
+                      <Cell id="cell_head_1_0_구분" col="1" row="0" text="구분" tooltiptext="클릭하여 정렬"/>
+                      <Cell id="cell_head_2_0_상태" col="2" row="0" text="상태" tooltiptext="클릭하여 정렬"/>
+                      <Cell id="cell_head_3_0_제목" col="3" row="0" text="제목" tooltiptext="클릭하여 정렬"/>
+                      <Cell id="cell_head_4_0_등록일" col="4" row="0" text="등록일" tooltiptext="클릭하여 정렬"/>
+                      <Cell id="cell_head_5_0_개발자" col="5" row="0" text="개발자" tooltiptext="클릭하여 정렬"/>
+                      <Cell id="cell_head_6_0_경과일" col="6" row="0" text="경과일" tooltiptext="클릭하여 정렬"/>
+                    </Band>
+                    <Band id="body">
+                      <Cell id="cell_body_0_0_rp" col="0" row="0" text="bind:rp" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_1_0_req_type" col="1" row="0" text="bind:req_type" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_2_0_status" col="2" row="0" text="bind:status" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_3_0_title" col="3" row="0" text="bind:title" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_4_0_reg_date" col="4" row="0" text="bind:reg_date" displaytype="calendarcontrol" edittype="none" calendardateformat="yyyy-MM-dd" calendardisplaynulltype="none"/>
+                      <Cell id="cell_body_5_0_developer" col="5" row="0" text="bind:developer" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_6_0_elapsed_days" col="6" row="0" text="bind:elapsed_days" displaytype="normal" edittype="none"/>
+                    </Band>
+                  </Format>
+                </Formats>
+              </Grid>
+            </Layout>
+          </Layouts>
+          <Objects/>
+          <Script><![CDATA[this.fvConf = {"titleText":"","showCount":true,"headSort":true,"selectFirst":true,"mutedColor":"#888780","defaultSort":""};this._fnViewOnLoad = function(objForm) {/* Sets the view form reference so that functions declared in the view can access it */this._ownerForm = objForm;if (!this._bSearchGridInit) {var oDs = this.parent.getViewDataset();if (oDs) {oDs.addEventHandler("onload", this.fn_ds_onchanged, this);oDs.addEventHandler("onrowsetchanged", this.fn_ds_onchanged, this);}if (this.fvConf.headSort && this.grdList) {this.grdList.addEventHandler("onheadclick", this.fn_grid_onheadclick, this);}if (this.fvConf.headSort && this.grdList) {var sDef = this.fvConf.defaultSort;var nDefCell = -1;var sColDef = "";if (sDef) {sColDef = sDef.replace(/^[+-]/, "");for (var j = 0; j < this.grdList.getCellCount("body"); j++) {if (this.grdList.getCellProperty("body", j, "text") == "bind:" + sColDef) {nDefCell = j;break;}}}this.fn_applySort(this.grdList, nDefCell, nDefCell < 0 ? "" : sColDef, sDef.charAt(0) != "+", true);}this._bSearchGridInit = true;}this.fn_updateCount();};this.fn_ds_onchanged = function(obj, e) {this.fn_updateCount();};this.fn_updateCount = function() {if (!this.sta_title) {return;}var c = this.fvConf;var sText = "<b v='true'>" + c.titleText + "</b>";var oDs = this.parent.getViewDataset();if (c.showCount && oDs) {var nShow = oDs.getRowCount();var nAll = oDs.getRowCountNF();var sCount = (nShow == nAll) ? (nAll + "건") : (nShow + " / " + nAll + "건");sText += "   <fc v='" + c.mutedColor + "'>" + sCount + "</fc>";}this.sta_title.set_text(sText);};this.fn_grid_onheadclick = function(obj, e) {var sBind = "" + obj.getCellProperty("body", e.cell, "text");if (sBind.indexOf("bind:") != 0) {return;}var sCol = sBind.substr(5);var bDesc = !(this._sSortCol == sCol && this._bSortDesc);this.fn_applySort(obj, e.cell, sCol, bDesc);var oDs = obj.getBindDataset();if (this.fvConf.selectFirst && oDs.getRowCount() > 0) {oDs.set_rowposition(-1);oDs.set_rowposition(0);}this.fn_applySort(obj, e.cell, sCol, bDesc, false);};this.fn_applySort = function(oGrid, nCell, sCol, bDesc, bHint) {var i;if (!this._arrHeadText) {this._arrHeadText = [];for (i = 0; i < oGrid.getCellCount("head"); i++) {this._arrHeadText[i] = oGrid.getCellProperty("head", i, "text");}}if (sCol) {this._sSortCol = sCol;this._bSortDesc = bDesc;oGrid.getBindDataset().set_keystring("S:" + (bDesc ? "-" : "+") + sCol);}for (i = 0; i < this._arrHeadText.length; i++) {var sMark = "";if (i == nCell) {sMark = bDesc ? " ▼" : " ▲";} else if (bHint && ("" + oGrid.getCellProperty("body", i, "text")).indexOf("bind:") == 0) {sMark = " ⇅";}oGrid.setCellProperty("head", i, "text", this._arrHeadText[i] + sMark);}};]]>
+          </Script>
+        </View>
+        <Div id="Div00" left="0" top="750" taborder="3" width="384" height="30" text="=&gt; Excel 파일 생성에 필요한 정보가 포함된 Grid를 숨김 상태로 저장" background="#FFF59D" visible="false">
+          <Layouts>
+            <Layout/>
+          </Layouts>
+        </Div>
       </Layout>
     </Layouts>
     <ViewGenerationInfo>
-      <ViewInfo viewid="frmExport">
-        <ModelInfo modelserviceid="tops" serviceid="report/summarySelect" modelid="ds_group_stage" datasetid="_dstops_report_summarySelect_ds_group_stage" filepath="report\.model\summarySelect.model"/>
-        <ViewTemplateInfo/>
-        <ModelInfo modelserviceid="tops" serviceid="report/summarySelect" modelid="ds_remain" datasetid="_dstops_report_summarySelect_ds_remain" filepath="report\.model\summarySelect.model"/>
-      </ViewInfo>
       <ViewInfo viewid="Summary">
         <ModelInfo modelserviceid="tops" serviceid="report/summarySelect" modelid="ds_summary" datasetid="_dstops_report_summarySelect_ds_summary" filepath="report\.model\summarySelect.model">
           <Fields>
@@ -270,16 +408,80 @@
           <Attribute id="nodatatext" value="데이터가 없습니다."/>
         </ViewTemplateInfo>
       </ViewInfo>
-      <ViewInfo viewid="Options">
-        <ModelInfo modelserviceid="tops" serviceid="report/summarySelect" modelid="ds_requester" datasetid="_dstops_report_summarySelect_ds_requester" filepath="report\.model\summarySelect.model">
+      <ViewInfo viewid="frmExport">
+        <ViewTemplateInfo/>
+      </ViewInfo>
+      <ViewInfo viewid="GroupStageExcel">
+        <ModelInfo modelserviceid="tops" serviceid="report/summarySelect" modelid="ds_group_stage" datasetid="_dstops_report_summarySelect_ds_group_stage" filepath="report\.model\summarySelect.model">
           <Fields>
-            <Field id="chk" label="" displaytype="checkboxcontrol" edittype="checkbox"/>
-            <Field id="req_name" label="요구처"/>
-            <Field id="total_cnt" used="false"/>
-            <Field id="done_cnt" used="false"/>
+            <Field id="req_name" used="false"/>
+            <Field id="req_type" label="구분"/>
+            <Field id="st1" label="접수·분석"/>
+            <Field id="st2" label="설계·개발"/>
+            <Field id="st3" label="검토"/>
+            <Field id="st4" label="개발답변"/>
+            <Field id="st5" label="검수·배포대기"/>
+            <Field id="st6" label="배포완료"/>
+            <Field id="st7" label="반려"/>
+            <Field id="total_cnt" label="합계"/>
+          </Fields>
+          <Components>
+            <Component id="sta_frame" fields="FRAME"/>
+            <Component id="grdList" fields="req_type,st1,st2,st3,st4,st5,st6,st7,total_cnt"/>
+          </Components>
+        </ModelInfo>
+        <ViewTemplateInfo filepath="Tops_Board_Asset/SearchGridView.viewtemplate">
+          <Attribute id="usesearch" value="false"/>
+          <Attribute id="gridlayout" value="{&amp;quot;columns&amp;quot;:[{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100}],&amp;quot;rows&amp;quot;:[{&amp;quot;band&amp;quot;:&amp;quot;head&amp;quot;,&amp;quot;size&amp;quot;:32},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:32}],&amp;quot;head&amp;quot;:[{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;구분&amp;quot;},{&amp;quot;col&amp;quot;:1,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;접수·분석&amp;quot;},{&amp;quot;col&amp;quot;:2,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;설계·개발&amp;quot;},{&amp;quot;col&amp;quot;:3,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;검토&amp;quot;},{&amp;quot;col&amp;quot;:4,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;개발답변&amp;quot;},{&amp;quot;col&amp;quot;:5,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;검수·배포대기&amp;quot;},{&amp;quot;col&amp;quot;:6,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;배포완료&amp;quot;},{&amp;quot;col&amp;quot;:7,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;반려&amp;quot;},{&amp;quot;col&amp;quot;:8,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;합계&amp;quot;}],&amp;quot;body&amp;quot;:[{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;req_type&amp;quot;},{&amp;quot;col&amp;quot;:1,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;st1&amp;quot;},{&amp;quot;col&amp;quot;:2,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;st2&amp;quot;},{&amp;quot;col&amp;quot;:3,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;st3&amp;quot;},{&amp;quot;col&amp;quot;:4,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;st4&amp;quot;},{&amp;quot;col&amp;quot;:5,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;st5&amp;quot;},{&amp;quot;col&amp;quot;:6,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;st6&amp;quot;},{&amp;quot;col&amp;quot;:7,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;st7&amp;quot;},{&amp;quot;col&amp;quot;:8,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;total_cnt&amp;quot;}]}"/>
+        </ViewTemplateInfo>
+      </ViewInfo>
+      <ViewInfo viewid="RemainExcel">
+        <ModelInfo modelserviceid="tops" serviceid="report/summarySelect" modelid="ds_remain" datasetid="_dstops_report_summarySelect_ds_remain" filepath="report\.model\summarySelect.model">
+          <Fields>
+            <Field id="req_name" used="false"/>
+            <Field id="rp"/>
+            <Field id="req_type" label="구분"/>
+            <Field id="status" label="상태"/>
+            <Field id="title"/>
+            <Field id="reg_date" label="등록일"/>
+            <Field id="developer"/>
+            <Field id="elapsed_days" label="경과일"/>
+          </Fields>
+          <Components>
+            <Component id="sta_frame" fields="FRAME"/>
+            <Component id="grdList" fields="rp,req_type,status,title,reg_date,developer,elapsed_days"/>
+          </Components>
+        </ModelInfo>
+        <ViewTemplateInfo filepath="Tops_Board_Asset/SearchGridView.viewtemplate">
+          <Attribute id="usesearch" value="false"/>
+          <Attribute id="gridlayout" value="{&amp;quot;columns&amp;quot;:[{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:100}],&amp;quot;rows&amp;quot;:[{&amp;quot;band&amp;quot;:&amp;quot;head&amp;quot;,&amp;quot;size&amp;quot;:32},{&amp;quot;band&amp;quot;:&amp;quot;body&amp;quot;,&amp;quot;size&amp;quot;:32}],&amp;quot;head&amp;quot;:[{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;RP&amp;quot;},{&amp;quot;col&amp;quot;:1,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;구분&amp;quot;},{&amp;quot;col&amp;quot;:2,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;상태&amp;quot;},{&amp;quot;col&amp;quot;:3,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;제목&amp;quot;},{&amp;quot;col&amp;quot;:4,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;등록일&amp;quot;},{&amp;quot;col&amp;quot;:5,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;개발자&amp;quot;},{&amp;quot;col&amp;quot;:6,&amp;quot;row&amp;quot;:0,&amp;quot;text&amp;quot;:&amp;quot;경과일&amp;quot;}],&amp;quot;body&amp;quot;:[{&amp;quot;col&amp;quot;:0,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;rp&amp;quot;},{&amp;quot;col&amp;quot;:1,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;req_type&amp;quot;},{&amp;quot;col&amp;quot;:2,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;status&amp;quot;},{&amp;quot;col&amp;quot;:3,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;title&amp;quot;},{&amp;quot;col&amp;quot;:4,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;reg_date&amp;quot;},{&amp;quot;col&amp;quot;:5,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;developer&amp;quot;},{&amp;quot;col&amp;quot;:6,&amp;quot;row&amp;quot;:0,&amp;quot;field&amp;quot;:&amp;quot;elapsed_days&amp;quot;}]}"/>
+        </ViewTemplateInfo>
+      </ViewInfo>
+      <ViewInfo viewid="SummaryExcel">
+        <ModelInfo modelserviceid="tops" serviceid="report/summarySelect" modelid="ds_summary" datasetid="_dstops_report_summarySelect_ds_summary" filepath="report\.model\summarySelect.model">
+          <Fields>
+            <Field id="total_cnt" label="전체"/>
+            <Field id="done_cnt" label="완료"/>
             <Field id="remain_cnt" label="잔여"/>
-            <Field id="done_rate" used="false"/>
-            <Field id="exclude_cnt" used="false"/>
+            <Field id="exclude_cnt" label="반려"/>
+            <Field id="done_rate" label="완료율"/>
+          </Fields>
+          <Components>
+            <Component id="sta_frame" fields="FRAME"/>
+            <Component id="grdList" fields="total_cnt,done_cnt,remain_cnt,exclude_cnt,done_rate"/>
+          </Components>
+        </ModelInfo>
+        <ViewTemplateInfo filepath="Tops_Board_Asset/SearchGridView.viewtemplate">
+          <Attribute id="usesearch" value="false"/>
+          <Attribute id="gridlayout" value="{&quot;columns&quot;:[{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100}],&quot;rows&quot;:[{&quot;band&quot;:&quot;head&quot;,&quot;size&quot;:32},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:32}],&quot;head&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0,&quot;text&quot;:&quot;전체&quot;},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;text&quot;:&quot;완료&quot;},{&quot;row&quot;:0,&quot;col&quot;:2,&quot;text&quot;:&quot;잔여&quot;},{&quot;row&quot;:0,&quot;col&quot;:3,&quot;text&quot;:&quot;반려&quot;},{&quot;row&quot;:0,&quot;col&quot;:4,&quot;text&quot;:&quot;완료율&quot;}],&quot;body&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0,&quot;field&quot;:&quot;total_cnt&quot;},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;field&quot;:&quot;done_cnt&quot;},{&quot;row&quot;:0,&quot;col&quot;:2,&quot;field&quot;:&quot;remain_cnt&quot;},{&quot;row&quot;:0,&quot;col&quot;:3,&quot;field&quot;:&quot;exclude_cnt&quot;},{&quot;row&quot;:0,&quot;col&quot;:4,&quot;text&quot;:&quot;expr:done_rate + &apos;%&apos;&quot;,&quot;field&quot;:&quot;done_rate&quot;}],&quot;summ&quot;:[]}"/>
+        </ViewTemplateInfo>
+      </ViewInfo>
+      <ViewInfo viewid="Options">
+        <ModelInfo modelserviceid="tops" serviceid="report/summarySelect" modelid="ds_sheet_option" datasetid="_dstops_report_summarySelect_ds_sheet_option" filepath="report\.model\summarySelect.model">
+          <Fields>
+            <Field id="chk" displaytype="checkboxcontrol" edittype="checkbox"/>
+            <Field id="req_name" label="요구처"/>
+            <Field id="remain_cnt" used="false"/>
           </Fields>
           <Components>
             <Component id="sta_frame" fields="FRAME"/>
@@ -287,7 +489,7 @@
             <Component id="edt_filterSearch" fields="_filterSearch"/>
             <Component id="sta_searchIcon" fields="_searchIcon"/>
             <Component id="btn_searchClear" fields="_searchClear"/>
-            <Component id="grdList" fields="chk,req_name,remain_cnt"/>
+            <Component id="grdList" fields="chk,req_name"/>
           </Components>
         </ModelInfo>
         <ViewTemplateInfo filepath="Tops_Board_Asset/SearchGridView.viewtemplate">
@@ -295,7 +497,7 @@
           <Attribute id="showcount" value="false"/>
           <Attribute id="searchplaceholder" value="요구처 검색"/>
           <Attribute id="useheadsort" value="false"/>
-          <Attribute id="gridlayout" value="{&quot;columns&quot;:[{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:30},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:50}],&quot;rows&quot;:[{&quot;band&quot;:&quot;head&quot;,&quot;size&quot;:32},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:32}],&quot;head&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;요구처&quot;},{&quot;row&quot;:0,&quot;col&quot;:2,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;잔여&quot;}],&quot;body&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0,&quot;field&quot;:&quot;chk&quot;},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;req_name&quot;},{&quot;row&quot;:0,&quot;col&quot;:2,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;remain_cnt&quot;}],&quot;summ&quot;:[]}"/>
+          <Attribute id="gridlayout" value="{&quot;columns&quot;:[{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:30},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100}],&quot;rows&quot;:[{&quot;band&quot;:&quot;head&quot;,&quot;size&quot;:32},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:32}],&quot;head&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;요구처&quot;}],&quot;body&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0,&quot;field&quot;:&quot;chk&quot;},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;req_name&quot;}],&quot;summ&quot;:[]}"/>
           <Attribute id="nodatatext" value="요구처가 없습니다."/>
         </ViewTemplateInfo>
       </ViewInfo>
@@ -338,11 +540,39 @@
         {
             "modelid": "ds_remain",
             "datasetid": "_dstops_report_summarySelect_ds_remain"
+        },
+        {
+            "modelid": "ds_sheet_option",
+            "datasetid": "_dstops_report_summarySelect_ds_sheet_option"
         }
     ]
 }]]>
         </Contents>
       </Transaction>
+      <Dataset id="_dstops_report_summarySelect_ds_summary">
+        <ColumnInfo>
+          <Column id="total_cnt" type="bigdecimal" size="24" description="total_cnt"/>
+          <Column id="done_cnt" type="bigdecimal" size="24" description="done_cnt"/>
+          <Column id="remain_cnt" type="bigdecimal" size="24" description="remain_cnt"/>
+          <Column id="done_rate" type="bigdecimal" size="28" description="done_rate"/>
+          <Column id="exclude_cnt" type="bigdecimal" size="24" description="exclude_cnt"/>
+        </ColumnInfo>
+        <Rows/>
+      </Dataset>
+      <Dataset id="_dstops_report_summarySelect_ds_stage">
+        <ColumnInfo>
+          <Column id="req_type" type="string" size="10" description="요구종류"/>
+          <Column id="st1" type="bigdecimal" size="24" description="st1"/>
+          <Column id="st2" type="bigdecimal" size="24" description="st2"/>
+          <Column id="st3" type="bigdecimal" size="24" description="st3"/>
+          <Column id="st4" type="bigdecimal" size="24" description="st4"/>
+          <Column id="st5" type="bigdecimal" size="24" description="st5"/>
+          <Column id="st6" type="bigdecimal" size="24" description="st6"/>
+          <Column id="st7" type="bigdecimal" size="24" description="st7"/>
+          <Column id="total_cnt" type="bigdecimal" size="21" description="total_cnt"/>
+        </ColumnInfo>
+        <Rows/>
+      </Dataset>
       <Dataset id="_dstops_report_summarySelect_ds_group_stage">
         <ColumnInfo>
           <Column id="req_name" type="string" size="200" description="req_name"/>
@@ -371,34 +601,28 @@
         </ColumnInfo>
         <Rows/>
       </Dataset>
-      <Dataset id="_dstops_report_summarySelect_ds_summary">
+      <ExportExcelReport id="ExportExcelReport00" alias="Export Report Excel" exportfilename="TOPS_요구사항_현황" mainviews="SummaryExcel,Requester,Stage" splitdataset="_dstops_report_summarySelect_ds_sheet_option" splitcheck="chk" splitkey="req_name" splitviews="Requester,GroupStageExcel,RemainExcel" sheettitle="{sheet} 요구사항 현황 · 기준 {date}" rowgap="3"/>
+      <InputFilter id="InputFilter00" alias="요구처 검색" targetview="Options" sourcecomp="edt_filterSearch" searchcolumns="_dstops_report_summarySelect_ds_sheet_option.req_name"/>
+      <InputFilter id="InputFilter01" alias="필터 초기화" targetview="Options" sourcecomp="edt_filterSearch" searchcolumns="_dstops_report_summarySelect_ds_sheet_option.req_name" clearinput="true"/>
+      <Dataset id="_dstops_report_summarySelect_ds_sheet_option">
         <ColumnInfo>
-          <Column id="total_cnt" type="bigdecimal" size="24" description="total_cnt"/>
-          <Column id="done_cnt" type="bigdecimal" size="24" description="done_cnt"/>
+          <Column id="chk" type="string" size="1" description="chk"/>
+          <Column id="req_name" type="string" size="200" description="req_name"/>
           <Column id="remain_cnt" type="bigdecimal" size="24" description="remain_cnt"/>
-          <Column id="done_rate" type="bigdecimal" size="28" description="done_rate"/>
-          <Column id="exclude_cnt" type="bigdecimal" size="24" description="exclude_cnt"/>
         </ColumnInfo>
         <Rows/>
       </Dataset>
-      <Dataset id="_dstops_report_summarySelect_ds_stage">
-        <ColumnInfo>
-          <Column id="req_type" type="string" size="10" description="요구종류"/>
-          <Column id="st1" type="bigdecimal" size="24" description="st1"/>
-          <Column id="st2" type="bigdecimal" size="24" description="st2"/>
-          <Column id="st3" type="bigdecimal" size="24" description="st3"/>
-          <Column id="st4" type="bigdecimal" size="24" description="st4"/>
-          <Column id="st5" type="bigdecimal" size="24" description="st5"/>
-          <Column id="st6" type="bigdecimal" size="24" description="st6"/>
-          <Column id="st7" type="bigdecimal" size="24" description="st7"/>
-          <Column id="total_cnt" type="bigdecimal" size="21" description="total_cnt"/>
-        </ColumnInfo>
-        <Rows/>
-      </Dataset>
+      <InputFilter id="InputFilter02" alias="요구처 검색" targetview="Requester" sourcecomp="edt_filterSearch" searchcolumns="_dstops_report_summarySelect_ds_requester.req_name"/>
+      <InputFilter id="InputFilter03" alias="필터 초기화" targetview="Requester" sourcecomp="edt_filterSearch" searchcolumns="_dstops_report_summarySelect_ds_requester.req_name" clearinput="true"/>
     </Objects>
     <Trigger>
       <TriggerItem id="item0" triggertype="onload" triggerview="" triggerobj="" targetaction="OnLoadView00"/>
       <TriggerItem id="item1" triggertype="onload" triggerview="" triggerobj="" targetaction="Transaction00"/>
+      <TriggerItem id="item2" triggertype="onclick" triggerview="" triggerobj="btnExport" targetaction="ExportExcelReport00"/>
+      <TriggerItem id="item3" triggertype="onkeyup" triggerview="Options" triggerobj="edt_filterSearch" targetaction="InputFilter00"/>
+      <TriggerItem id="item4" triggertype="onclick" triggerview="Options" triggerobj="btn_searchClear" targetaction="InputFilter01"/>
+      <TriggerItem id="item5" triggertype="onkeyup" triggerview="Requester" triggerobj="edt_filterSearch" targetaction="InputFilter02"/>
+      <TriggerItem id="item6" triggertype="onclick" triggerview="Requester" triggerobj="btn_searchClear" targetaction="InputFilter03"/>
     </Trigger>
   </Form>
 </FDL>

@@ -65,6 +65,73 @@
           ],
           "branches": []
         }
+      },
+      {
+        "id": "f72b3813-11f6-43cf-87c9-f7336daa6bfe",
+        "name": "그리드 필터링",
+        "root": {
+          "className": "nexacro.InputFilter",
+          "alias": "요구처 검색",
+          "properties": [
+            {
+              "name": "alias",
+              "value": "요구처 검색",
+              "valuetype": "2"
+            },
+            {
+              "name": "targetview",
+              "value": "Options",
+              "valuetype": "2"
+            },
+            {
+              "name": "sourcecomp",
+              "value": "edt_filterSearch",
+              "valuetype": "2"
+            },
+            {
+              "name": "searchcolumns",
+              "value": "_dstops_report_summarySelect_ds_sheet_option.req_name",
+              "valuetype": "2"
+            }
+          ],
+          "branches": []
+        }
+      },
+      {
+        "id": "04fc76d6-61b5-4485-acdd-d3a37a9b9102",
+        "name": "그리드 필터 초기화",
+        "root": {
+          "className": "nexacro.InputFilter",
+          "alias": "필터 초기화",
+          "properties": [
+            {
+              "name": "alias",
+              "value": "필터 초기화",
+              "valuetype": "2"
+            },
+            {
+              "name": "targetview",
+              "value": "Options",
+              "valuetype": "2"
+            },
+            {
+              "name": "sourcecomp",
+              "value": "edt_filterSearch",
+              "valuetype": "2"
+            },
+            {
+              "name": "searchcolumns",
+              "value": "_dstops_report_summarySelect_ds_requester.req_name",
+              "valuetype": "2"
+            },
+            {
+              "name": "clearinput",
+              "value": "true",
+              "valuetype": "2"
+            }
+          ],
+          "branches": []
+        }
       }
     ]
   }

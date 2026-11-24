@@ -7,4 +7,8 @@
   <RefreshInfo id="changeView">
     <Property name="sourcecomp"/>
   </RefreshInfo>
+  <RefreshInfo id="changeReportDs">
+    <Property name="splitcheck"/>
+    <Property name="splitkey"/>
+  </RefreshInfo>
 </MetaInfo>

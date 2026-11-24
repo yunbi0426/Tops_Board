@@ -4,7 +4,7 @@
     <Layouts>
       <Layout width="1280" height="670">
         <Static id="staPageTitle" left="0" top="0" taborder="1" height="50" right="0" usedecorate="true" padding="0px 20px"/>
-        <Div id="div_work" left="0" top="staPageTitle:0" taborder="0" text="div_work" right="0" bottom="0" url="Base::frmExport.xfdl">
+        <Div id="div_work" left="0" top="staPageTitle:0" taborder="0" text="div_work" right="0" bottom="0" url="Base::frmDashboard.xfdl">
           <Layouts>
             <Layout/>
           </Layouts>
