@@ -266,22 +266,22 @@
                       <Row size="40" band="body"/>
                     </Rows>
                     <Band id="head">
-                      <Cell id="cell_head_0_0_회차" col="0" row="0" text="회차"/>
-                      <Cell id="cell_head_1_0_기준일" col="1" row="0" text="기준일"/>
-                      <Cell id="cell_head_2_0_파일명" col="2" row="0" text="파일명"/>
-                      <Cell id="cell_head_3_0_전체" col="3" row="0" text="전체"/>
-                      <Cell id="cell_head_4_0_신규" col="4" row="0" text="신규"/>
-                      <Cell id="cell_head_5_0_변경" col="5" row="0" text="변경"/>
-                      <Cell id="cell_head_6_0_업로드 시각" col="6" row="0" text="업로드 시각"/>
+                      <Cell id="cell_head_0_0_회차" row="0" col="0" textAlign="center" text="회차"/>
+                      <Cell id="cell_head_1_0_기준일" row="0" col="1" textAlign="center" text="기준일"/>
+                      <Cell id="cell_head_2_0_파일명" row="0" col="2" textAlign="center" text="파일명"/>
+                      <Cell id="cell_head_3_0_전체" row="0" col="3" textAlign="center" text="전체"/>
+                      <Cell id="cell_head_4_0_신규" row="0" col="4" textAlign="center" text="신규"/>
+                      <Cell id="cell_head_5_0_변경" row="0" col="5" textAlign="center" text="변경"/>
+                      <Cell id="cell_head_6_0_업로드 시각" row="0" col="6" textAlign="center" text="업로드 시각"/>
                     </Band>
                     <Band id="body">
-                      <Cell id="cell_body_0_0_upload_id" col="0" row="0" text="bind:upload_id" displaytype="number" edittype="none"/>
-                      <Cell id="cell_body_1_0_base_date" col="1" row="0" text="bind:base_date" displaytype="date" edittype="normal" calendardateformat="yyyy-MM-dd" calendardisplaynulltype="none"/>
-                      <Cell id="cell_body_2_0_file_name" col="2" row="0" text="bind:file_name" displaytype="normal" edittype="none"/>
-                      <Cell id="cell_body_3_0_row_count" col="3" row="0" text="bind:row_count" displaytype="number" edittype="none"/>
-                      <Cell id="cell_body_4_0_new_count" col="4" row="0" text="bind:new_count" displaytype="number" edittype="none"/>
-                      <Cell id="cell_body_5_0_changed_count" col="5" row="0" text="bind:changed_count" displaytype="number" edittype="none"/>
-                      <Cell id="cell_body_6_0_uploaded_at" col="6" row="0" text="bind:uploaded_at" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_0_0_upload_id" row="0" col="0" textAlign="center" text="bind:upload_id" displaytype="number" edittype="none"/>
+                      <Cell id="cell_body_1_0_base_date" row="0" col="1" textAlign="center" text="bind:base_date" displaytype="date" edittype="normal" calendardateformat="yyyy-MM-dd" calendardisplaynulltype="none"/>
+                      <Cell id="cell_body_2_0_file_name" row="0" col="2" textAlign="center" text="bind:file_name" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_3_0_row_count" row="0" col="3" textAlign="center" text="bind:row_count" displaytype="number" edittype="none"/>
+                      <Cell id="cell_body_4_0_new_count" row="0" col="4" textAlign="center" text="bind:new_count" displaytype="number" edittype="none"/>
+                      <Cell id="cell_body_5_0_changed_count" row="0" col="5" textAlign="center" text="bind:changed_count" displaytype="number" edittype="none"/>
+                      <Cell id="cell_body_6_0_uploaded_at" row="0" col="6" textAlign="center" text="bind:uploaded_at" displaytype="normal" edittype="none"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -422,25 +422,6 @@
           <Attribute id="valuesuffix" value="건"/>
         </ViewTemplateInfo>
       </ViewInfo>
-      <ViewInfo viewid="viewHistory">
-        <ModelInfo modelserviceid="tops" serviceid="uploadLogSelect" modelid="ds_output" datasetid="_dstops_uploadLogSelect_ds_output" filepath=".model\uploadLogSelect.model">
-          <Fields>
-            <Field id="upload_id" label="회차"/>
-            <Field id="base_date" displaytype="date" edittype="normal"/>
-            <Field id="file_name"/>
-            <Field id="row_count" label="전체"/>
-            <Field id="new_count" label="신규"/>
-            <Field id="changed_count" label="변경"/>
-            <Field id="uploaded_at" fieldtype="Date" options="{&amp;quot;dataformat&amp;quot;:&amp;quot;yyyy-MM-dd HH:mm:ss&amp;quot;}" displaytype="normal"/>
-          </Fields>
-          <Components>
-            <Component id="grdList" fields="upload_id,base_date,file_name,row_count,new_count,changed_count,uploaded_at"/>
-          </Components>
-        </ModelInfo>
-        <ViewTemplateInfo filepath="NexaLAP_BasePack/Grid/GridView.viewtemplate">
-          <Attribute id="gridlayout" value="{&quot;columns&quot;:[{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100}],&quot;rows&quot;:[{&quot;band&quot;:&quot;head&quot;,&quot;size&quot;:40},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:40}],&quot;head&quot;:[{&quot;col&quot;:0,&quot;row&quot;:0,&quot;text&quot;:&quot;회차&quot;},{&quot;col&quot;:1,&quot;row&quot;:0,&quot;text&quot;:&quot;기준일&quot;},{&quot;col&quot;:2,&quot;row&quot;:0,&quot;text&quot;:&quot;파일명&quot;},{&quot;col&quot;:3,&quot;row&quot;:0,&quot;text&quot;:&quot;전체&quot;},{&quot;col&quot;:4,&quot;row&quot;:0,&quot;text&quot;:&quot;신규&quot;},{&quot;col&quot;:5,&quot;row&quot;:0,&quot;text&quot;:&quot;변경&quot;},{&quot;col&quot;:6,&quot;row&quot;:0,&quot;text&quot;:&quot;업로드 시각&quot;}],&quot;body&quot;:[{&quot;col&quot;:0,&quot;row&quot;:0,&quot;field&quot;:&quot;upload_id&quot;},{&quot;col&quot;:1,&quot;row&quot;:0,&quot;field&quot;:&quot;base_date&quot;},{&quot;col&quot;:2,&quot;row&quot;:0,&quot;field&quot;:&quot;file_name&quot;},{&quot;col&quot;:3,&quot;row&quot;:0,&quot;field&quot;:&quot;row_count&quot;},{&quot;col&quot;:4,&quot;row&quot;:0,&quot;field&quot;:&quot;new_count&quot;},{&quot;col&quot;:5,&quot;row&quot;:0,&quot;field&quot;:&quot;changed_count&quot;},{&quot;col&quot;:6,&quot;row&quot;:0,&quot;field&quot;:&quot;uploaded_at&quot;}]}"/>
-        </ViewTemplateInfo>
-      </ViewInfo>
       <ViewInfo viewid="viewUpload">
         <ModelInfo modelserviceid="tops" serviceid="importTopsExcel" modelid="ds_input" datasetid="_dstops_importTopsExcel_ds_input" filepath=".model\importTopsExcel.model">
           <Fields>
@@ -458,6 +439,25 @@
         </ModelInfo>
         <ViewTemplateInfo filepath="Tops_Board_Asset/ExcelUploadView.viewtemplate">
           <Attribute id="uploadtext" value="업로드"/>
+        </ViewTemplateInfo>
+      </ViewInfo>
+      <ViewInfo viewid="viewHistory">
+        <ModelInfo modelserviceid="tops" serviceid="uploadLogSelect" modelid="ds_output" datasetid="_dstops_uploadLogSelect_ds_output" filepath=".model\uploadLogSelect.model">
+          <Fields>
+            <Field id="upload_id" label="회차"/>
+            <Field id="base_date" displaytype="date" edittype="normal"/>
+            <Field id="file_name"/>
+            <Field id="row_count" label="전체"/>
+            <Field id="new_count" label="신규"/>
+            <Field id="changed_count" label="변경"/>
+            <Field id="uploaded_at" fieldtype="Date" options="{&quot;dataformat&quot;:&quot;yyyy-MM-dd HH:mm:ss&quot;}" displaytype="normal"/>
+          </Fields>
+          <Components>
+            <Component id="grdList" fields="upload_id,base_date,file_name,row_count,new_count,changed_count,uploaded_at"/>
+          </Components>
+        </ModelInfo>
+        <ViewTemplateInfo filepath="NexaLAP_BasePack/Grid/GridView.viewtemplate">
+          <Attribute id="gridlayout" value="{&quot;columns&quot;:[{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100}],&quot;rows&quot;:[{&quot;band&quot;:&quot;head&quot;,&quot;size&quot;:40},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:40}],&quot;head&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;회차&quot;},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;기준일&quot;},{&quot;row&quot;:0,&quot;col&quot;:2,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;파일명&quot;},{&quot;row&quot;:0,&quot;col&quot;:3,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;전체&quot;},{&quot;row&quot;:0,&quot;col&quot;:4,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;신규&quot;},{&quot;row&quot;:0,&quot;col&quot;:5,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;변경&quot;},{&quot;row&quot;:0,&quot;col&quot;:6,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;업로드 시각&quot;}],&quot;body&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;upload_id&quot;},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;base_date&quot;},{&quot;row&quot;:0,&quot;col&quot;:2,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;file_name&quot;},{&quot;row&quot;:0,&quot;col&quot;:3,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;row_count&quot;},{&quot;row&quot;:0,&quot;col&quot;:4,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;new_count&quot;},{&quot;row&quot;:0,&quot;col&quot;:5,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;changed_count&quot;},{&quot;row&quot;:0,&quot;col&quot;:6,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;uploaded_at&quot;}],&quot;summ&quot;:[]}"/>
         </ViewTemplateInfo>
       </ViewInfo>
     </ViewGenerationInfo>

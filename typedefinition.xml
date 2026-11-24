@@ -120,7 +120,6 @@
     <Service prefixid="Base" type="form" url="./Base/" version="0" cachelevel="session" communicationversion="0" include_subdir="true"/>
     <Service prefixid="NexaFrame" type="form" url="./NexaFrame/" version="0" cachelevel="session" include_subdir="true" communicationversion="0"/>
     <Service prefixid="tops" type="model" url="./tops/" include_subdir="true" version="0" cachelevel="session" communicationversion="0"/>
-    <Service prefixid="Test" type="form" url="./Test/" include_subdir="true" version="0" cachelevel="session" communicationversion="0"/>
     <Service prefixid="Popup" type="form" url="./Popup/" include_subdir="true" version="0" cachelevel="session" communicationversion="0"/>
     <Service prefixid="xeni" type="none" url="http://localhost:3333/XExportImport" include_subdir="true" version="0" cachelevel="session" communicationversion="0"/>
   </Services>
