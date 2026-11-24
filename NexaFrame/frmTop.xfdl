@@ -3,9 +3,9 @@
   <Form id="frmTop" width="1280" height="50" onload="form_onload">
     <Layouts>
       <Layout width="1280" height="50">
-        <Static id="staBg" left="0" top="0" right="0" bottom="0" cssclass="sta_TF_Bg"/>
-        <Static id="staLogo" taborder="0" text="TOBESOFT" left="0" top="0" cssclass="sta_TF_Logo" onclick="staLogo_onclick" width="200" height="50" cursor="pointer" textAlign="center"/>
-        <Div id="divTopMenu" taborder="1" text="TopMenu" left="200" top="0" right="0" formscrollbartype="none" height="50" background="#3e4f6a">
+        <Static id="staBg" left="0" top="0" right="0" bottom="0" cssclass="sta_TF_Bg" background="#18181B" border="0px none"/>
+        <Static id="staLogo" taborder="0" text="TOPS Board" left="0" top="0" cssclass="sta_TF_Logo" onclick="staLogo_onclick" width="180" height="50" cursor="pointer" textAlign="left" padding="0px 0px 0px 24px" color="#FFFFFF" font="normal 700 15px/normal &quot;NotoSansKR-Bold&quot;"/>
+        <Div id="divTopMenu" taborder="1" text="TopMenu" left="180" top="0" right="0" formscrollbartype="none" height="50" background="transparent" border="0px none">
           <Layouts>
             <Layout type="horizontal"/>
           </Layouts>
@@ -55,7 +55,7 @@ this.fnCreateMenuButton = function (sMenuId, sName, sMenuUrl) {
 	objBtn.set_fittocontents("width");
 	var nWidth = objBtn.getOffsetWidth();
 	objBtn.set_fittocontents("none");
-	objBtn.set_width(nWidth + 20);
+	objBtn.set_width(nWidth + 8);
 	
 	objBtn.setEventHandler("onclick", this.btnMenu_onclick, this);	
     return objBtn;

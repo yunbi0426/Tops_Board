@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ENV version="2.1">
-  <Environment themeid="theme::Tops_Board_Iris" datatyperule="2.0" onload="Environment_onload" usestringresource="true">
+  <Environment themeid="theme::Tops_Board_Mono" datatyperule="2.0" onload="Environment_onload" usestringresource="true">
     <ScreenDefinition>
       <Screen id="Desktop_screen" type="desktop"/>
     </ScreenDefinition>
