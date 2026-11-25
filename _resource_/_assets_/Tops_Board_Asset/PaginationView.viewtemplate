@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ViewTemplateInfo version="2.1">
+  <ViewTemplate id="PaginationView" viewtype="Others" version="1.0.0" description_en="description of the view template" description_ko="목록 하단 페이지 이동: 건수 정보 + 이전/번호/다음 버튼"/>
+  <UIConfig version="1.0"><![CDATA[{
+	"includes": [
+		{
+			"value": "include \"./_lib_/util.xjs\";"
+		},
+		{
+			"value": "include \"./_lib_/basicCommon.xjs\";"
+		}
+	],
+	"viewProperties": [
+		{
+			"id": "pagesize",
+			"displaytext": "Page size",
+			"editType": "Number",
+			"defaultValueExpr": "this.PAGE_SIZE",
+			"description": "한 페이지에 보여줄 건수",
+			"group": "Paging"
+		},
+		{
+			"id": "buttoncount",
+			"displaytext": "Button count",
+			"editType": "Number",
+			"defaultValueExpr": "this.BUTTON_COUNT",
+			"description": "한 번에 보여줄 번호 버튼 수 (1~10)",
+			"group": "Paging"
+		},
+		{
+			"id": "infoformat",
+			"displaytext": "Info format",
+			"editType": "String",
+			"defaultValueExpr": "this.INFO_FORMAT",
+			"description": "{total} 전체 건수, {page} 현재 페이지, {pages} 전체 페이지, {from}~{to} 현재 범위. 비우면 건수 문구 숨김",
+			"group": "Info"
+		},
+		{
+			"id": "align",
+			"displaytext": "Align",
+			"editType": "Enum",
+			"defaultValueExpr": "this.ALIGN",
+			"enumListExpr": "this.ARR_ALIGN",
+			"description": "버튼 묶음 위치",
+			"group": "Layout"
+		}
+	],
+	"fieldProperties": [
+		{
+			"id": "pagerole",
+			"displaytext": "Page role",
+			"editType": "Enum",
+			"defaultValueExpr": "this.PAGE_ROLE",
+			"enumListExpr": "this.ARR_PAGE_ROLE",
+			"description": "index=현재 페이지, size=페이지 크기, total=전체 건수, pages=전체 페이지 수(없으면 total÷size 로 계산), none=안 씀"
+		}
+	],
+	"mainBody": "if (fieldarray) {\n\tthis.oFieldArray = JSON.parse(fieldarray);\n}\nif (contents) {\n\tthis.oContents = JSON.parse(contents);\n\tthis.oContents.View.Model = [];\n}\nif (viewproperties) {\n\tthis.oViewProperties = JSON.parse(viewproperties);\n}\n\nthis.fn_GetModel();\n\nthis.oContents.View.attribute.viewdataset = \"${VIEW_DATASET}\";\nthis.oContents.View.InitValue = [];\nthis.oContents.View.Objects = [];\nthis.oContents.View.Script = this.fn_GetScript();\n\n/* 이전에 템플릿이 만든 컴포넌트는 지우고, 사용자가 추가한 컴포넌트는 유지 */\nthis.fn_ClearContents();\n\nreturn JSON.stringify(this.oContents, null, \"\\t\");",
+	"variableGroups": [
+		{
+			"id": "Layout",
+			"comment": "Layout",
+			"variables": [
+				{
+					"name": "BUTTON_SIZE",
+					"type": "number",
+					"value": "28",
+					"comment": "번호 버튼 한 변 크기"
+				},
+				{
+					"name": "BUTTON_GAP",
+					"type": "number",
+					"value": "4",
+					"comment": "버튼 사이 간격"
+				},
+				{
+					"name": "INFO_WIDTH",
+					"type": "number",
+					"value": "240",
+					"comment": "건수 문구 폭"
+				}
+			]
+		},
+		{
+			"id": "Style",
+			"comment": "Style",
+			"variables": [
+				{
+					"name": "INFO_FONT",
+					"type": "string",
+					"value": "\"normal 12px/normal \\\"Malgun Gothic\\\"\"",
+					"comment": "건수 문구 글꼴"
+				},
+				{
+					"name": "INFO_COLOR",
+					"type": "string",
+					"value": "\"#888780\"",
+					"comment": "건수 문구 색"
+				},
+				{
+					"name": "BUTTON_CSSCLASS",
+					"type": "string",
+					"value": "\"btn_WF_Page\"",
+					"comment": "번호/이전/다음 버튼 클래스 (선택 페이지 = [userstatus=selected])"
+				},
+				{
+					"name": "PREV_TEXT",
+					"type": "string",
+					"value": "\"‹\"",
+					"comment": "이전 묶음 버튼 글자"
+				},
+				{
+					"name": "NEXT_TEXT",
+					"type": "string",
+					"value": "\"›\"",
+					"comment": "다음 묶음 버튼 글자"
+				}
+			]
+		},
+		{
+			"id": "Default values of view properties",
+			"comment": "Default values of view properties",
+			"variables": [
+				{
+					"name": "PAGE_SIZE",
+					"type": "number",
+					"value": "50",
+					"comment": "한 페이지 건수 기본값"
+				},
+				{
+					"name": "BUTTON_COUNT",
+					"type": "number",
+					"value": "5",
+					"comment": "번호 버튼 개수 기본값"
+				},
+				{
+					"name": "INFO_FORMAT",
+					"type": "string",
+					"value": "\"총 {total}건 · {page} / {pages} 페이지\"",
+					"comment": "건수 문구 형식"
+				},
+				{
+					"name": "ALIGN",
+					"type": "string",
+					"value": "\"right\"",
+					"comment": "버튼 묶음 위치 기본값"
+				},
+				{
+					"name": "ARR_ALIGN",
+					"type": "array",
+					"items": [
+						"\"left\"",
+						"\"center\"",
+						"\"right\""
+					],
+					"comment": "위치 선택지"
+				},
+				{
+					"name": "PAGE_ROLE",
+					"type": "string",
+					"value": "\"none\"",
+					"comment": "필드 역할 기본값"
+				},
+				{
+					"name": "ARR_PAGE_ROLE",
+					"type": "array",
+					"items": [
+						"\"none\"",
+						"\"index\"",
+						"\"size\"",
+						"\"total\"",
+						"\"pages\""
+					],
+					"comment": "필드 역할 선택지"
+				}
+			]
+		},
+		{
+			"id": "Component ids",
+			"comment": "Component ids",
+			"variables": [
+				{
+					"name": "ID_INFO",
+					"type": "string",
+					"value": "\"sta_pageInfo\""
+				},
+				{
+					"name": "ID_DIV",
+					"type": "string",
+					"value": "\"div_page\""
+				},
+				{
+					"name": "ID_PREV",
+					"type": "string",
+					"value": "\"btn_prev\""
+				},
+				{
+					"name": "ID_NEXT",
+					"type": "string",
+					"value": "\"btn_next\""
+				},
+				{
+					"name": "ID_PAGE_PREFIX",
+					"type": "string",
+					"value": "\"btn_page\"",
+					"comment": "번호 버튼 id 앞부분 (btn_page1 …)"
+				},
+				{
+					"name": "ID_CHANGE",
+					"type": "string",
+					"value": "\"btn_pagechange\"",
+					"comment": "숨김 버튼. 트리거 연결용"
+				},
+				{
+					"name": "ID_CENTER",
+					"type": "string",
+					"value": "\"sta_pageCenter\"",
+					"comment": "align=center 일 때 가운데 기준선 (숨김)"
+				}
+			]
+		},
+		{
+			"id": "View-related variables",
+			"comment": "View-related variables",
+			"variables": [
+				{
+					"name": "oFieldArray"
+				},
+				{
+					"name": "oContents"
+				},
+				{
+					"name": "oViewProperties"
+				},
+				{
+					"name": "oViewPropertiesValue"
+				}
+			]
+		}
+	],
+	"sectionComments": {
+		"viewProperties": "View generation options (set_viewProperties)"
+	},
+	"functionsCode": "/************************************************************************************************\n * Functions Related to the main() Execution Flow\n ************************************************************************************************/\n\t/* View property value (없으면 기본값) */\n\tthis.fn_GetProp = function(sId, vDefault) {\n\t\tvar oAttr = (this.oViewProperties && this.oViewProperties.attributes) ? this.oViewProperties.attributes : null;\n\t\tif (oAttr && oAttr[sId] !== undefined && oAttr[sId] !== null && oAttr[sId] !== \"\") {\n\t\t\treturn oAttr[sId];\n\t\t}\n\t\treturn vDefault;\n\t};\n\n\t/* Field 의 pagerole (없으면 기본값) */\n\tthis.fn_GetRole = function(oField) {\n\t\treturn oField.pagerole ? oField.pagerole : this.PAGE_ROLE;\n\t};\n\n\t/* 화면 구성 : 건수 Static + [이전 / 번호 1..N / 다음] 버튼 Div + 숨김 버튼(트리거 연결용) */\n\tthis.fn_GetModel = function() {\n\t\tvar nSize   = this.BUTTON_SIZE;\n\t\tvar nGap    = this.BUTTON_GAP;\n\t\tvar nCount  = Math.max(1, Math.min(10, Number(this.fn_GetProp(\"buttoncount\", this.BUTTON_COUNT))));\n\t\tvar sAlign  = this.fn_GetProp(\"align\", this.ALIGN);\n\t\tvar oAttr   = (this.oViewProperties && this.oViewProperties.attributes) ? this.oViewProperties.attributes : {};\n\t\tvar bInfo   = (oAttr.infoformat === undefined || oAttr.infoformat === null) ? this.INFO_FORMAT != \"\" : String(oAttr.infoformat) != \"\";\n\t\tvar oRef    = this.oContents.View.referenceinfo;\n\t\tvar nHeight = (oRef && oRef.realheight) ? Number(oRef.realheight) : nSize;\n\t\tvar nTop    = Math.max(0, Math.round((nHeight - nSize) / 2));\n\t\tvar nDivW   = (nCount + 2) * nSize + (nCount + 1) * nGap;\n\n\t\t/* 필드 역할 정리 (런타임 스크립트에서 사용) */\n\t\tthis.oRoles = { \"index\": \"\", \"size\": \"\", \"total\": \"\", \"pages\": \"\" };\n\t\tvar arrField = this.oFieldArray ? this.oFieldArray.fields : [];\n\t\tfor (var i = 0; i < arrField.length; i++) {\n\t\t\tvar sRole = this.fn_GetRole(arrField[i]);\n\t\t\tif (this.oRoles[sRole] === \"\") {\n\t\t\t\tthis.oRoles[sRole] = arrField[i].id;\n\t\t\t}\n\t\t}\n\n\t\t/* 건수 문구 (왼쪽) */\n\t\tthis.fn_AddComp(\"_info\", { \"tag\": \"Static\", \"attribute\": {\n\t\t\t\"id\": this.ID_INFO,\n\t\t\t\"left\": 0,\n\t\t\t\"top\": 0,\n\t\t\t\"bottom\": 0,\n\t\t\t\"width\": this.INFO_WIDTH,\n\t\t\t\"text\": \"\",\n\t\t\t\"verticalAlign\": \"middle\",\n\t\t\t\"font\": this.INFO_FONT,\n\t\t\t\"color\": this.INFO_COLOR,\n\t\t\t\"visible\": bInfo ? \"true\" : \"false\",\n\t\t\t\"_fieldid\": \"_info\",\n\t\t\t\"_fieldcomptype\": \"comp\"\n\t\t\t} });\n\n\t\t/* 버튼 묶음 위치 : right = 오른쪽 끝, left = 건수 문구 뒤, center = 가운데 */\n\t\tvar oPos = { \"top\": nTop, \"width\": nDivW, \"height\": nSize };\n\t\tif (sAlign == \"left\") {\n\t\t\toPos.left = bInfo ? this.ID_INFO + \":12\" : 0;\n\t\t} else if (sAlign == \"center\") {\n\t\t\t/* 가운데 기준선(폭 1, 숨김) 왼쪽으로 Div 폭의 절반만큼 */\n\t\t\tthis.fn_AddComp(\"_center\", { \"tag\": \"Static\", \"attribute\": {\n\t\t\t\t\"id\": this.ID_CENTER,\n\t\t\t\t\"left\": \"50%\",\n\t\t\t\t\"top\": 0,\n\t\t\t\t\"bottom\": 0,\n\t\t\t\t\"width\": 1,\n\t\t\t\t\"text\": \"\",\n\t\t\t\t\"visible\": \"false\",\n\t\t\t\t\"_fieldid\": \"_center\",\n\t\t\t\t\"_fieldcomptype\": \"comp\"\n\t\t\t\t} });\n\t\t\toPos.left = this.ID_CENTER + \":-\" + Math.round(nDivW / 2);\n\t\t} else {\n\t\t\toPos.right = 0;\n\t\t}\n\n\t\t/* 버튼들 (Div 안) */\n\t\tvar arrBtn = [];\n\t\tvar nLeft = 0;\n\t\tvar fnBtn = function(sId, sText) {\n\t\t\tarrBtn.push({ \"tag\": \"Button\", \"attribute\": {\n\t\t\t\t\"id\": sId,\n\t\t\t\t\"left\": nLeft,\n\t\t\t\t\"top\": 0,\n\t\t\t\t\"width\": nSize,\n\t\t\t\t\"height\": nSize,\n\t\t\t\t\"text\": sText,\n\t\t\t\t\"cssclass\": this.BUTTON_CSSCLASS\n\t\t\t\t} });\n\t\t\tnLeft += nSize + nGap;\n\t\t}.bind(this);\n\t\tfnBtn(this.ID_PREV, this.PREV_TEXT);\n\t\tfor (var n = 1; n <= nCount; n++) {\n\t\t\tfnBtn(this.ID_PAGE_PREFIX + n, String(n));\n\t\t}\n\t\tfnBtn(this.ID_NEXT, this.NEXT_TEXT);\n\n\t\tvar oDivAttr = {\n\t\t\t\"id\": this.ID_DIV,\n\t\t\t\"text\": \"\",\n\t\t\t\"border\": \"0px none\",\n\t\t\t\"background\": \"transparent\",\n\t\t\t\"_fieldid\": \"_paging\",\n\t\t\t\"_fieldcomptype\": \"comp\"\n\t\t};\n\t\tfor (var k in oPos) {\n\t\t\toDivAttr[k] = oPos[k];\n\t\t}\n\t\tthis.fn_AddComp(\"_paging\", {\n\t\t\t\"tag\": \"Div\",\n\t\t\t\"attribute\": oDivAttr,\n\t\t\t\"Div\": [{\n\t\t\t\t\"tag\": \"Layouts\",\n\t\t\t\t\"Layouts\": [{\n\t\t\t\t\t\"tag\": \"Layout\",\n\t\t\t\t\t\"Layout\": arrBtn\n\t\t\t\t}]\n\t\t\t}]\n\t\t});\n\n\t\t/* 숨김 버튼 : 페이지가 바뀌면 런타임이 click() → Interaction 에서 조회 Action 연결 */\n\t\tthis.fn_AddComp(\"_change\", { \"tag\": \"Button\", \"attribute\": {\n\t\t\t\"id\": this.ID_CHANGE,\n\t\t\t\"left\": 0,\n\t\t\t\"top\": 0,\n\t\t\t\"width\": 1,\n\t\t\t\"height\": 1,\n\t\t\t\"text\": \"\",\n\t\t\t\"visible\": \"false\",\n\t\t\t\"_fieldid\": \"_change\",\n\t\t\t\"_fieldcomptype\": \"comp\"\n\t\t\t} });\n\n\t\tthis.oContents.View.Bind = [];\n\t};\n\n\t/* Model 에 컴포넌트 하나 추가 (사용자가 바꾼 스타일 속성은 유지) */\n\tthis.fn_AddComp = function(sFieldId, oComp) {\n\t\toComp = this.fn_MergeField(oComp);\n\t\tthis.oContents.View.Model.push({ \"fieldid\": sFieldId, \"Components\": [oComp] });\n\t};\n\n\t/* 이전 생성 결과에 같은 id 가 있으면 위치/텍스트를 뺀 속성(색, 글꼴 등)을 이어받음 */\n\tthis.fn_MergeField = function(oComp) {\n\t\tif (!this.oContents.View.View || !this.oContents.View.View[0].Layouts) {\n\t\t\treturn oComp;\n\t\t}\n\t\tvar oLayout = this.oContents.View.View[0].Layouts[0].Layout;\n\t\tif (!oLayout) {\n\t\t\treturn oComp;\n\t\t}\n\t\tvar nIdx = oLayout.findIndex(function(item) {\n\t\t\treturn item.attribute && item.attribute.id === oComp.attribute.id;\n\t\t});\n\t\tif (nIdx < 0) {\n\t\t\treturn oComp;\n\t\t}\n\t\tvar oOrg = oLayout.splice(nIdx, 1)[0];\n\t\tif (oOrg.tag != oComp.tag) {\n\t\t\treturn oComp;\n\t\t}\n\t\tvar arrExclude = [\"top\", \"left\", \"width\", \"height\", \"right\", \"bottom\", \"text\", \"id\", \"visible\", \"_fieldid\", \"_fieldcomptype\"];\n\t\tfor (var sKey in oOrg.attribute) {\n\t\t\tif (arrExclude.indexOf(sKey) < 0 && !this.lfn_IsNull(oOrg.attribute[sKey]) && this.lfn_IsNull(oComp.attribute[sKey])) {\n\t\t\t\toComp.attribute[sKey] = oOrg.attribute[sKey];\n\t\t\t}\n\t\t}\n\t\treturn oComp;\n\t};\n\n\t/* View Script : 설정값(fvPager) + 런타임 라이브러리(ViewTemplateLib/PaginationView.js) 호출만 넣음 */\n\tthis.fn_GetScript = function() {\n\t\tvar nCount = Math.max(1, Math.min(10, Number(this.fn_GetProp(\"buttoncount\", this.BUTTON_COUNT))));\n\t\tvar oAttr  = (this.oViewProperties && this.oViewProperties.attributes) ? this.oViewProperties.attributes : {};\n\t\tvar oConf = {\n\t\t\t\"roles\"     : this.oRoles,\n\t\t\t\"pageSize\"  : Number(this.fn_GetProp(\"pagesize\", this.PAGE_SIZE)),\n\t\t\t\"count\"     : nCount,\n\t\t\t\"format\"    : (oAttr.infoformat === undefined || oAttr.infoformat === null) ? this.INFO_FORMAT : String(oAttr.infoformat),\n\t\t\t\"align\"     : this.fn_GetProp(\"align\", this.ALIGN),\n\t\t\t\"size\"      : this.BUTTON_SIZE,\n\t\t\t\"gap\"       : this.BUTTON_GAP,\n\t\t\t\"cssclass\"  : this.BUTTON_CSSCLASS,\n\t\t\t\"ids\"       : {\n\t\t\t\t\"info\"  : this.ID_INFO,\n\t\t\t\t\"div\"   : this.ID_DIV,\n\t\t\t\t\"prev\"  : this.ID_PREV,\n\t\t\t\t\"next\"  : this.ID_NEXT,\n\t\t\t\t\"page\"  : this.ID_PAGE_PREFIX,\n\t\t\t\t\"change\": this.ID_CHANGE,\n\t\t\t\t\"center\": this.ID_CENTER\n\t\t\t}\n\t\t};\n\t\tvar sValue = \"this.fvPager = \" + JSON.stringify(oConf) + \";\"\n\t\t\t+ \"this._fnViewOnLoad = function(objForm) { topsPagination.init(this, objForm); };\"\n\t\t\t+ \"this.fn_paging_reset = function() { topsPagination.reset(this); };\";\n\t\treturn { \"tag\": \"Script\", \"attribute\": { \"type\": \"xscript5.1\" }, \"value\": sValue };\n\t};\n\n\t/* 이전에 템플릿이 만든 컴포넌트(_fieldid 있음)는 지우고, 사용자가 추가한 컴포넌트는 Model 뒤에 붙임 */\n\tthis.fn_ClearContents = function() {\n\t\tvar oLayout = this.oContents.View.View[0].Layouts[0].Layout;\n\t\tvar oModel  = this.oContents.View.Model;\n\t\tif (!oLayout) {\n\t\t\treturn;\n\t\t}\n\t\tfor (var i = oLayout.length - 1; i >= 0; i--) {\n\t\t\tvar oComp = oLayout.splice(i, 1);\n\t\t\tif (!(oComp[0].attribute && oComp[0].attribute._fieldid)) {\n\t\t\t\toModel.push({ \"fieldid\": \"\", \"Components\": oComp });\n\t\t\t}\n\t\t}\n\t};\n",
+	"viewPropertiesValueBody": "return this.oViewPropertiesValue ? JSON.stringify(this.oViewPropertiesValue, null, \"\\t\") : \"\";"
+}]]>
+  </UIConfig>
+  <Script version="1.0" type="xscript5.1"><![CDATA[/************************************************************************************************
+ * Include Declarations
+ ************************************************************************************************/
+	include "./_lib_/util.xjs";
+	include "./_lib_/basicCommon.xjs";
+
+/************************************************************************************************
+ * Variable Definitions
+ ************************************************************************************************/
+	// Layout
+	this.BUTTON_SIZE = 28;	// 번호 버튼 한 변 크기
+	this.BUTTON_GAP = 4;	// 버튼 사이 간격
+	this.INFO_WIDTH = 240;	// 건수 문구 폭
+
+	// Style
+	this.INFO_FONT = "normal 12px/normal \"Malgun Gothic\"";	// 건수 문구 글꼴
+	this.INFO_COLOR = "#888780";	// 건수 문구 색
+	this.BUTTON_CSSCLASS = "btn_WF_Page";	// 번호/이전/다음 버튼 클래스 (선택 페이지 = [userstatus=selected])
+	this.PREV_TEXT = "‹";	// 이전 묶음 버튼 글자
+	this.NEXT_TEXT = "›";	// 다음 묶음 버튼 글자
+
+	// Default values of view properties
+	this.PAGE_SIZE = 50;	// 한 페이지 건수 기본값
+	this.BUTTON_COUNT = 5;	// 번호 버튼 개수 기본값
+	this.INFO_FORMAT = "총 {total}건 · {page} / {pages} 페이지";	// 건수 문구 형식
+	this.ALIGN = "right";	// 버튼 묶음 위치 기본값
+	this.ARR_ALIGN = ["left", "center", "right"];	// 위치 선택지
+	this.PAGE_ROLE = "none";	// 필드 역할 기본값
+	this.ARR_PAGE_ROLE = ["none", "index", "size", "total", "pages"];	// 필드 역할 선택지
+
+	// Component ids
+	this.ID_INFO = "sta_pageInfo";
+	this.ID_DIV = "div_page";
+	this.ID_PREV = "btn_prev";
+	this.ID_NEXT = "btn_next";
+	this.ID_PAGE_PREFIX = "btn_page";	// 번호 버튼 id 앞부분 (btn_page1 …)
+	this.ID_CHANGE = "btn_pagechange";	// 숨김 버튼. 트리거 연결용
+	this.ID_CENTER = "sta_pageCenter";	// align=center 일 때 가운데 기준선 (숨김)
+
+	// View-related variables
+	this.oFieldArray;
+	this.oContents;
+	this.oViewProperties;
+	this.oViewPropertiesValue;
+
+/************************************************************************************************
+ * Required Function Area for NexaLAP Studio
+ ************************************************************************************************/
+
+	this.set_viewProperties = function() {
+		let oViewAttr = { "attributes": [] };
+		let oProperties;
+		// View generation options (set_viewProperties)
+
+		oProperties = {};
+		oProperties.id = "pagesize";
+		oProperties.displaytext = "Page size";
+		oProperties.edittype = "Number";
+		oProperties.defaultvalue = this.PAGE_SIZE;
+		oProperties.description = "한 페이지에 보여줄 건수";
+		oProperties.group = "Paging";
+		oViewAttr.attributes.push(oProperties);
+
+		oProperties = {};
+		oProperties.id = "buttoncount";
+		oProperties.displaytext = "Button count";
+		oProperties.edittype = "Number";
+		oProperties.defaultvalue = this.BUTTON_COUNT;
+		oProperties.description = "한 번에 보여줄 번호 버튼 수 (1~10)";
+		oProperties.group = "Paging";
+		oViewAttr.attributes.push(oProperties);
+
+		oProperties = {};
+		oProperties.id = "infoformat";
+		oProperties.displaytext = "Info format";
+		oProperties.edittype = "String";
+		oProperties.defaultvalue = this.INFO_FORMAT;
+		oProperties.description = "{total} 전체 건수, {page} 현재 페이지, {pages} 전체 페이지, {from}~{to} 현재 범위. 비우면 건수 문구 숨김";
+		oProperties.group = "Info";
+		oViewAttr.attributes.push(oProperties);
+
+		oProperties = {};
+		oProperties.id = "align";
+		oProperties.displaytext = "Align";
+		oProperties.edittype = "Enum";
+		oProperties.enumlist = this.ARR_ALIGN;
+		oProperties.defaultvalue = this.ALIGN;
+		oProperties.description = "버튼 묶음 위치";
+		oProperties.group = "Layout";
+		oViewAttr.attributes.push(oProperties);
+
+		return JSON.stringify(oViewAttr, null, "\t");
+	};
+
+	this.set_fieldProperties = function() {
+		let oFieldAttr = { "attributes": [] };
+		let oProperties;
+
+		oProperties = {};
+		oProperties.id = "pagerole";
+		oProperties.displaytext = "Page role";
+		oProperties.edittype = "Enum";
+		oProperties.enumlist = this.ARR_PAGE_ROLE;
+		oProperties.defaultvalue = this.PAGE_ROLE;
+		oProperties.description = "index=현재 페이지, size=페이지 크기, total=전체 건수, pages=전체 페이지 수(없으면 total÷size 로 계산), none=안 씀";
+		oFieldAttr.attributes.push(oProperties);
+
+		return JSON.stringify(oFieldAttr, null, "\t");
+	};
+
+	this.main = function(fieldarray, contents, viewproperties, extradata) {
+		if (fieldarray) {
+			this.oFieldArray = JSON.parse(fieldarray);
+		}
+		if (contents) {
+			this.oContents = JSON.parse(contents);
+			this.oContents.View.Model = [];
+		}
+		if (viewproperties) {
+			this.oViewProperties = JSON.parse(viewproperties);
+		}
+
+		this.fn_GetModel();
+
+		this.oContents.View.attribute.viewdataset = "${VIEW_DATASET}";
+		this.oContents.View.InitValue = [];
+		this.oContents.View.Objects = [];
+		this.oContents.View.Script = this.fn_GetScript();
+
+		/* 이전에 템플릿이 만든 컴포넌트는 지우고, 사용자가 추가한 컴포넌트는 유지 */
+		this.fn_ClearContents();
+
+		return JSON.stringify(this.oContents, null, "\t");
+	};
+
+	this.set_viewPropertiesValue = function() {
+		return this.oViewPropertiesValue ? JSON.stringify(this.oViewPropertiesValue, null, "\t") : "";
+	};
+
+
+	/************************************************************************************************
+	 * Functions Related to the main() Execution Flow
+	 ************************************************************************************************/
+		/* View property value (없으면 기본값) */
+		this.fn_GetProp = function(sId, vDefault) {
+			var oAttr = (this.oViewProperties && this.oViewProperties.attributes) ? this.oViewProperties.attributes : null;
+			if (oAttr && oAttr[sId] !== undefined && oAttr[sId] !== null && oAttr[sId] !== "") {
+				return oAttr[sId];
+			}
+			return vDefault;
+		};
+
+		/* Field 의 pagerole (없으면 기본값) */
+		this.fn_GetRole = function(oField) {
+			return oField.pagerole ? oField.pagerole : this.PAGE_ROLE;
+		};
+
+		/* 화면 구성 : 건수 Static + [이전 / 번호 1..N / 다음] 버튼 Div + 숨김 버튼(트리거 연결용) */
+		this.fn_GetModel = function() {
+			var nSize   = this.BUTTON_SIZE;
+			var nGap    = this.BUTTON_GAP;
+			var nCount  = Math.max(1, Math.min(10, Number(this.fn_GetProp("buttoncount", this.BUTTON_COUNT))));
+			var sAlign  = this.fn_GetProp("align", this.ALIGN);
+			var oAttr   = (this.oViewProperties && this.oViewProperties.attributes) ? this.oViewProperties.attributes : {};
+			var bInfo   = (oAttr.infoformat === undefined || oAttr.infoformat === null) ? this.INFO_FORMAT != "" : String(oAttr.infoformat) != "";
+			var oRef    = this.oContents.View.referenceinfo;
+			var nHeight = (oRef && oRef.realheight) ? Number(oRef.realheight) : nSize;
+			var nTop    = Math.max(0, Math.round((nHeight - nSize) / 2));
+			var nDivW   = (nCount + 2) * nSize + (nCount + 1) * nGap;
+
+			/* 필드 역할 정리 (런타임 스크립트에서 사용) */
+			this.oRoles = { "index": "", "size": "", "total": "", "pages": "" };
+			var arrField = this.oFieldArray ? this.oFieldArray.fields : [];
+			for (var i = 0; i < arrField.length; i++) {
+				var sRole = this.fn_GetRole(arrField[i]);
+				if (this.oRoles[sRole] === "") {
+					this.oRoles[sRole] = arrField[i].id;
+				}
+			}
+
+			/* 건수 문구 (왼쪽) */
+			this.fn_AddComp("_info", { "tag": "Static", "attribute": {
+				"id": this.ID_INFO,
+				"left": 0,
+				"top": 0,
+				"bottom": 0,
+				"width": this.INFO_WIDTH,
+				"text": "",
+				"verticalAlign": "middle",
+				"font": this.INFO_FONT,
+				"color": this.INFO_COLOR,
+				"visible": bInfo ? "true" : "false",
+				"_fieldid": "_info",
+				"_fieldcomptype": "comp"
+				} });
+
+			/* 버튼 묶음 위치 : right = 오른쪽 끝, left = 건수 문구 뒤, center = 가운데 */
+			var oPos = { "top": nTop, "width": nDivW, "height": nSize };
+			if (sAlign == "left") {
+				oPos.left = bInfo ? this.ID_INFO + ":12" : 0;
+			} else if (sAlign == "center") {
+				/* 가운데 기준선(폭 1, 숨김) 왼쪽으로 Div 폭의 절반만큼 */
+				this.fn_AddComp("_center", { "tag": "Static", "attribute": {
+					"id": this.ID_CENTER,
+					"left": "50%",
+					"top": 0,
+					"bottom": 0,
+					"width": 1,
+					"text": "",
+					"visible": "false",
+					"_fieldid": "_center",
+					"_fieldcomptype": "comp"
+					} });
+				oPos.left = this.ID_CENTER + ":-" + Math.round(nDivW / 2);
+			} else {
+				oPos.right = 0;
+			}
+
+			/* 버튼들 (Div 안) */
+			var arrBtn = [];
+			var nLeft = 0;
+			var fnBtn = function(sId, sText) {
+				arrBtn.push({ "tag": "Button", "attribute": {
+					"id": sId,
+					"left": nLeft,
+					"top": 0,
+					"width": nSize,
+					"height": nSize,
+					"text": sText,
+					"cssclass": this.BUTTON_CSSCLASS
+					} });
+				nLeft += nSize + nGap;
+			}.bind(this);
+			fnBtn(this.ID_PREV, this.PREV_TEXT);
+			for (var n = 1; n <= nCount; n++) {
+				fnBtn(this.ID_PAGE_PREFIX + n, String(n));
+			}
+			fnBtn(this.ID_NEXT, this.NEXT_TEXT);
+
+			var oDivAttr = {
+				"id": this.ID_DIV,
+				"text": "",
+				"border": "0px none",
+				"background": "transparent",
+				"_fieldid": "_paging",
+				"_fieldcomptype": "comp"
+			};
+			for (var k in oPos) {
+				oDivAttr[k] = oPos[k];
+			}
+			this.fn_AddComp("_paging", {
+				"tag": "Div",
+				"attribute": oDivAttr,
+				"Div": [{
+					"tag": "Layouts",
+					"Layouts": [{
+						"tag": "Layout",
+						"Layout": arrBtn
+					}]
+				}]
+			});
+
+			/* 숨김 버튼 : 페이지가 바뀌면 런타임이 click() → Interaction 에서 조회 Action 연결 */
+			this.fn_AddComp("_change", { "tag": "Button", "attribute": {
+				"id": this.ID_CHANGE,
+				"left": 0,
+				"top": 0,
+				"width": 1,
+				"height": 1,
+				"text": "",
+				"visible": "false",
+				"_fieldid": "_change",
+				"_fieldcomptype": "comp"
+				} });
+
+			this.oContents.View.Bind = [];
+		};
+
+		/* Model 에 컴포넌트 하나 추가 (사용자가 바꾼 스타일 속성은 유지) */
+		this.fn_AddComp = function(sFieldId, oComp) {
+			oComp = this.fn_MergeField(oComp);
+			this.oContents.View.Model.push({ "fieldid": sFieldId, "Components": [oComp] });
+		};
+
+		/* 이전 생성 결과에 같은 id 가 있으면 위치/텍스트를 뺀 속성(색, 글꼴 등)을 이어받음 */
+		this.fn_MergeField = function(oComp) {
+			if (!this.oContents.View.View || !this.oContents.View.View[0].Layouts) {
+				return oComp;
+			}
+			var oLayout = this.oContents.View.View[0].Layouts[0].Layout;
+			if (!oLayout) {
+				return oComp;
+			}
+			var nIdx = oLayout.findIndex(function(item) {
+				return item.attribute && item.attribute.id === oComp.attribute.id;
+			});
+			if (nIdx < 0) {
+				return oComp;
+			}
+			var oOrg = oLayout.splice(nIdx, 1)[0];
+			if (oOrg.tag != oComp.tag) {
+				return oComp;
+			}
+			var arrExclude = ["top", "left", "width", "height", "right", "bottom", "text", "id", "visible", "_fieldid", "_fieldcomptype"];
+			for (var sKey in oOrg.attribute) {
+				if (arrExclude.indexOf(sKey) < 0 && !this.lfn_IsNull(oOrg.attribute[sKey]) && this.lfn_IsNull(oComp.attribute[sKey])) {
+					oComp.attribute[sKey] = oOrg.attribute[sKey];
+				}
+			}
+			return oComp;
+		};
+
+		/* View Script : 설정값(fvPager) + 런타임 라이브러리(ViewTemplateLib/PaginationView.js) 호출만 넣음 */
+		this.fn_GetScript = function() {
+			var nCount = Math.max(1, Math.min(10, Number(this.fn_GetProp("buttoncount", this.BUTTON_COUNT))));
+			var oAttr  = (this.oViewProperties && this.oViewProperties.attributes) ? this.oViewProperties.attributes : {};
+			var oConf = {
+				"roles"     : this.oRoles,
+				"pageSize"  : Number(this.fn_GetProp("pagesize", this.PAGE_SIZE)),
+				"count"     : nCount,
+				"format"    : (oAttr.infoformat === undefined || oAttr.infoformat === null) ? this.INFO_FORMAT : String(oAttr.infoformat),
+				"align"     : this.fn_GetProp("align", this.ALIGN),
+				"size"      : this.BUTTON_SIZE,
+				"gap"       : this.BUTTON_GAP,
+				"cssclass"  : this.BUTTON_CSSCLASS,
+				"ids"       : {
+					"info"  : this.ID_INFO,
+					"div"   : this.ID_DIV,
+					"prev"  : this.ID_PREV,
+					"next"  : this.ID_NEXT,
+					"page"  : this.ID_PAGE_PREFIX,
+					"change": this.ID_CHANGE,
+					"center": this.ID_CENTER
+				}
+			};
+			var sValue = "this.fvPager = " + JSON.stringify(oConf) + ";"
+				+ "this._fnViewOnLoad = function(objForm) { topsPagination.init(this, objForm); };"
+				+ "this.fn_paging_reset = function() { topsPagination.reset(this); };";
+			return { "tag": "Script", "attribute": { "type": "xscript5.1" }, "value": sValue };
+		};
+
+		/* 이전에 템플릿이 만든 컴포넌트(_fieldid 있음)는 지우고, 사용자가 추가한 컴포넌트는 Model 뒤에 붙임 */
+		this.fn_ClearContents = function() {
+			var oLayout = this.oContents.View.View[0].Layouts[0].Layout;
+			var oModel  = this.oContents.View.Model;
+			if (!oLayout) {
+				return;
+			}
+			for (var i = oLayout.length - 1; i >= 0; i--) {
+				var oComp = oLayout.splice(i, 1);
+				if (!(oComp[0].attribute && oComp[0].attribute._fieldid)) {
+					oModel.push({ "fieldid": "", "Components": oComp });
+				}
+			}
+		};
+]]>
+  </Script>
+</ViewTemplateInfo>

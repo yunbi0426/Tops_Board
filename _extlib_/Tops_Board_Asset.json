@@ -18,7 +18,8 @@
     "Tops_Board_Asset/ShuttleMove/ShuttleMove.js",
     "Tops_Board_Asset/SetRowPosition/SetRowPosition.js",
     "Tops_Board_Asset/InputFilter/InputFilter.js",
-    "Tops_Board_Asset/ExportExcelReport/ExportExcelReport.js"
+    "Tops_Board_Asset/ExportExcelReport/ExportExcelReport.js",
+    "Tops_Board_Asset/ViewTemplateLib/PaginationView.js"
   ],
   "designscripts": [
     "Tops_Board_Asset/OpenWorkForm/DesignOpenWorkForm.js",

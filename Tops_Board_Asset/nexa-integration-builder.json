@@ -9,7 +9,8 @@
     },
     "runtime": {
         "libraryScripts": [
-            "ActionLib/TopsActionLib.js"
+            "ActionLib/TopsActionLib.js",
+            "ViewTemplateLib/PaginationView.js"
         ]
     }
 }

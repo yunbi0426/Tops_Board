@@ -2324,6 +2324,45 @@
 	-nexa-border : 0px none;
 }
 
+/* PaginationView : 번호 / 이전 / 다음 버튼 */
+.Button.btn_WF_Page,
+.Button.btn_WF_Page[status=focused]
+{
+	-nexa-border : 0px none;
+	border-radius : 6px;
+	-nexa-padding : 0px 0px 0px 0px;
+	background : transparent;
+	color : #5F5E5A;
+	font : 400 12px "NotoSansKR-Regular";
+}
+
+.Button.btn_WF_Page[status=mouseover],
+.Button.btn_WF_Page[status=pushed]
+{
+	background : #F1EFE8;
+	color : #2C2C2A;
+}
+
+.Button.btn_WF_Page[status=disabled]
+{
+	background : transparent;
+	color : #D3D1C7;
+}
+
+/* PaginationView : 현재 페이지 */
+.Button.btn_WF_PageOn,
+.Button.btn_WF_PageOn[status=focused],
+.Button.btn_WF_PageOn[status=mouseover],
+.Button.btn_WF_PageOn[status=pushed]
+{
+	-nexa-border : 0px none;
+	border-radius : 6px;
+	-nexa-padding : 0px 0px 0px 0px;
+	background : #2C2C2A;
+	color : #FFFFFF;
+	font : 700 12px "NotoSansKR-Bold";
+}
+
 
 /***** TextArea *****/
 

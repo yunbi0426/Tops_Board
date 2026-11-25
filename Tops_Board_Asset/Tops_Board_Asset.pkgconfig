@@ -29,7 +29,12 @@
       "SummaryCardView.viewtemplate",
       "Tops_Board",
       "Tops_Board_Iris",
-      "ActionLib/TopsActionLib.js"
+      "ActionLib/TopsActionLib.js",
+      "PaginationView.viewtemplate",
+      "ViewTemplateLib/PaginationView.js",
+      "Tops_Board_Mono",
+      "ExportExcelReport.nexaobj",
+      "RecordDetailView.viewtemplate"
     ]
   },
   "contentsEditor": []
