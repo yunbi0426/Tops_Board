@@ -3,7 +3,7 @@
   <Form id="frmDetails" width="1050" height="736" titletext="ListDetail (H)">
     <Layouts>
       <Layout width="1050" height="736">
-        <View id="Search" taborder="1" viewtype="Search" viewdataset="_dstops_requirement_listSelect_ds_search" text="Search" left="10" height="50" top="40" right="10" cssclass="view_WF_Search">
+        <View id="Search" taborder="1" viewtype="Search" viewdataset="_dstops_requirement_listSelect_ds_search" text="Search" left="10" height="50" top="45" right="10" cssclass="view_WF_Search">
           <Layouts>
             <Layout>
               <Panel id="pnl_mainPanel" taborder="0" left="5" top="0" right="120" bottom="0" flexwrap="wrap" type="horizontal" verticalgap="5" fittocontents="height" spacing="5px 0px 5px 0px" _fieldid="_mainPanel" _fieldcomptype="panel">
@@ -255,7 +255,7 @@
 }]]>
         </Contents>
       </Transaction>
-      <Transaction id="Transaction01" alias="상태 목록 가져오기" servicemodel="tops::reqStatusSelect" serviceurl="NexaLAPServer::api/v1/execute">
+      <Transaction id="Transaction01" alias="상태 목록 가져오기" servicemodel="tops::requirement/reqStatusSelect" serviceurl="NexaLAPServer::api/v1/execute">
         <Contents><![CDATA[{
     "outputdatasets": [
         {
@@ -340,7 +340,7 @@ return !!(e && e.keycode == 13);`]]>
     </Objects>
     <ViewGenerationInfo>
       <ViewInfo viewid="frmDetails">
-        <ModelInfo modelserviceid="tops" serviceid="reqStatusSelect" modelid="ds_output" datasetid="_dstops_reqStatusSelect_ds_output" filepath=".model\reqStatusSelect.model">
+        <ModelInfo modelserviceid="tops" serviceid="requirement/reqStatusSelect" modelid="ds_output" datasetid="_dstops_reqStatusSelect_ds_output" filepath="requirement\.model\reqStatusSelect.model">
           <Fields>
             <Field id="status"/>
             <Field id="sort_no"/>
@@ -348,7 +348,7 @@ return !!(e && e.keycode == 13);`]]>
           <Components/>
         </ModelInfo>
         <ViewTemplateInfo/>
-        <ModelInfo modelserviceid="tops" serviceid="reqStatusSelect" modelid="ds_output" datasetid="_dstops_reqStatusSelect_ds_output_status00" filepath=".model\reqStatusSelect.model"/>
+        <ModelInfo modelserviceid="tops" serviceid="requirement/reqStatusSelect" modelid="ds_output" datasetid="_dstops_reqStatusSelect_ds_output_status00" filepath="requirement\.model\reqStatusSelect.model"/>
         <ModelInfo modelserviceid="tops" serviceid="requirement/detailSelect" modelid="ds_param" datasetid="_dstops_requirement_detailSelect_ds_param" filepath="requirement\.model\detailSelect.model"/>
       </ViewInfo>
       <ViewInfo viewid="View00">
@@ -378,7 +378,7 @@ return !!(e && e.keycode == 13);`]]>
             <Field id="req_name" label="요구처"/>
             <Field id="req_type" fieldtype="Select" options="{&quot;innerdataset_list&quot;:[{&quot;label&quot;:&quot;전체&quot;,&quot;value&quot;:&quot;&quot;},{&quot;label&quot;:&quot;버그&quot;,&quot;value&quot;:&quot;버그&quot;},{&quot;label&quot;:&quot;신규&quot;,&quot;value&quot;:&quot;신규&quot;},{&quot;label&quot;:&quot;변경&quot;,&quot;value&quot;:&quot;변경&quot;},{&quot;label&quot;:&quot;문의&quot;,&quot;value&quot;:&quot;문의&quot;}]}"/>
             <Field id="dev_result" label="처리 결과" fieldtype="Select" options="{&quot;innerdataset_list&quot;:[{&quot;label&quot;:&quot;전체&quot;,&quot;value&quot;:&quot;&quot;},{&quot;label&quot;:&quot;잔여&quot;,&quot;value&quot;:&quot;REMAIN&quot;},{&quot;label&quot;:&quot;완료&quot;,&quot;value&quot;:&quot;DONE&quot;},{&quot;label&quot;:&quot;제외&quot;,&quot;value&quot;:&quot;EXCLUDE&quot;}]}"/>
-            <Field id="status" fieldtype="MultiSelect" options="{&amp;quot;innerdataset_service&amp;quot;:{&amp;quot;serviceid&amp;quot;:&amp;quot;tops::reqStatusSelect&amp;quot;,&amp;quot;modelid&amp;quot;:&amp;quot;ds_output&amp;quot;,&amp;quot;datasetid&amp;quot;:&amp;quot;_dstops_reqStatusSelect_ds_output_status00&amp;quot;,&amp;quot;code&amp;quot;:&amp;quot;status&amp;quot;,&amp;quot;data&amp;quot;:&amp;quot;status&amp;quot;}}"/>
+            <Field id="status" fieldtype="MultiSelect" options="{&amp;quot;innerdataset_service&amp;quot;:{&amp;quot;serviceid&amp;quot;:&amp;quot;tops::requirement/reqStatusSelect&amp;quot;,&amp;quot;modelid&amp;quot;:&amp;quot;ds_output&amp;quot;,&amp;quot;datasetid&amp;quot;:&amp;quot;_dstops_reqStatusSelect_ds_output_status00&amp;quot;,&amp;quot;code&amp;quot;:&amp;quot;status&amp;quot;,&amp;quot;data&amp;quot;:&amp;quot;status&amp;quot;}}"/>
             <Field id="reg_from" label="등록일(시작)" fieldtype="Date"/>
             <Field id="reg_to" label="등록일(끝)" fieldtype="Date"/>
           </Fields>

@@ -306,7 +306,7 @@
     <Script type="xscript5.1"><![CDATA[]]>
     </Script>
     <Objects>
-      <Transaction id="Transaction00" alias="업로드 이력 가져오기" servicemodel="tops::uploadLogSelect" serviceurl="NexaLAPServer::api/v1/execute">
+      <Transaction id="Transaction00" alias="업로드 이력 가져오기" servicemodel="tops::upload/uploadLogSelect" serviceurl="NexaLAPServer::api/v1/execute">
         <Contents><![CDATA[{
     "outputdatasets": [
         {
@@ -345,7 +345,7 @@
           <Row/>
         </Rows>
       </Dataset>
-      <Transaction id="Transaction01" alias="엑셀 반영" servicemodel="tops::importTopsExcel" serviceurl="NexaLAPServer::api/v1/execute">
+      <Transaction id="Transaction01" alias="엑셀 반영" servicemodel="tops::upload/importTopsExcel" serviceurl="NexaLAPServer::api/v1/execute">
         <Contents><![CDATA[{
     "inputdatasets": [
         {
@@ -390,11 +390,11 @@
     </Trigger>
     <ViewGenerationInfo>
       <ViewInfo viewid="frmUpload">
-        <ModelInfo modelserviceid="tops" serviceid="importTopsExcel" modelid="_FileMetaInfo" datasetid="_dstops_importTopsExcel__FileMetaInfo00" filepath=".model\importTopsExcel.model"/>
+        <ModelInfo modelserviceid="tops" serviceid="upload/importTopsExcel" modelid="_FileMetaInfo" datasetid="_dstops_importTopsExcel__FileMetaInfo00" filepath="upload\.model\importTopsExcel.model"/>
         <ViewTemplateInfo/>
       </ViewInfo>
       <ViewInfo viewid="viewResult">
-        <ModelInfo modelserviceid="tops" serviceid="uploadLogSelect" modelid="ds_output" datasetid="_dstops_uploadLogSelect_ds_output" filepath=".model\uploadLogSelect.model">
+        <ModelInfo modelserviceid="tops" serviceid="upload/uploadLogSelect" modelid="ds_output" datasetid="_dstops_uploadLogSelect_ds_output" filepath="upload\.model\uploadLogSelect.model">
           <Fields>
             <Field id="upload_id" used="false"/>
             <Field id="base_date" used="false"/>
@@ -423,7 +423,7 @@
         </ViewTemplateInfo>
       </ViewInfo>
       <ViewInfo viewid="viewUpload">
-        <ModelInfo modelserviceid="tops" serviceid="importTopsExcel" modelid="ds_input" datasetid="_dstops_importTopsExcel_ds_input" filepath=".model\importTopsExcel.model">
+        <ModelInfo modelserviceid="tops" serviceid="upload/importTopsExcel" modelid="ds_input" datasetid="_dstops_importTopsExcel_ds_input" filepath="upload\.model\importTopsExcel.model">
           <Fields>
             <Field id="base_date"/>
             <Field id="file_name" label="파일"/>
@@ -442,7 +442,7 @@
         </ViewTemplateInfo>
       </ViewInfo>
       <ViewInfo viewid="viewHistory">
-        <ModelInfo modelserviceid="tops" serviceid="uploadLogSelect" modelid="ds_output" datasetid="_dstops_uploadLogSelect_ds_output" filepath=".model\uploadLogSelect.model">
+        <ModelInfo modelserviceid="tops" serviceid="upload/uploadLogSelect" modelid="ds_output" datasetid="_dstops_uploadLogSelect_ds_output" filepath="upload\.model\uploadLogSelect.model">
           <Fields>
             <Field id="upload_id" label="회차"/>
             <Field id="base_date" displaytype="date" edittype="normal"/>
