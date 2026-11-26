@@ -13,7 +13,7 @@
               <Button id="btnFileClear" left="edtFileName:-30" top="10" width="30" height="32" text="✕" tooltiptext="선택 취소" border="0px none" background="transparent" color="#A1A1AA" visible="false"/>
               <Button id="btnSelect" left="582" top="10" width="80" height="32" text="파일 선택"/>
               <Button id="btnUpload" left="btnSelect:10" top="10" width="100" height="32" text="업로드" cssclass="btn_Primary"/>
-              <Button id="btnGropingRequester" top="10" taborder="0" height="32" text="요구처 그룹핑" right="0" width="110"/>
+              <Button id="btnGroupingRequester" top="10" taborder="0" height="32" text="요구처 그룹핑" right="0" width="110"/>
             </Layout>
           </Layouts>
           <Objects>
@@ -265,6 +265,7 @@
                       <Column size="100" band="body"/>
                       <Column size="100" band="body"/>
                       <Column size="100" band="body"/>
+                      <Column size="30" band="body"/>
                     </Columns>
                     <Rows>
                       <Row size="40" band="head"/>
@@ -278,6 +279,7 @@
                       <Cell id="cell_head_4_0_신규" row="0" col="4" textAlign="center" text="신규"/>
                       <Cell id="cell_head_5_0_변경" row="0" col="5" textAlign="center" text="변경"/>
                       <Cell id="cell_head_6_0_업로드 시각" row="0" col="6" textAlign="center" text="업로드 시각"/>
+                      <Cell id="cell_head_7_0_undefined" row="0" col="7" textAlign="center"/>
                     </Band>
                     <Band id="body">
                       <Cell id="cell_body_0_0_upload_id" row="0" col="0" textAlign="center" text="bind:upload_id" displaytype="number" edittype="none"/>
@@ -287,6 +289,7 @@
                       <Cell id="cell_body_4_0_new_count" row="0" col="4" textAlign="center" text="bind:new_count" displaytype="number" edittype="none"/>
                       <Cell id="cell_body_5_0_changed_count" row="0" col="5" textAlign="center" text="bind:changed_count" displaytype="number" edittype="none"/>
                       <Cell id="cell_body_6_0_uploaded_at" row="0" col="6" textAlign="center" text="bind:uploaded_at" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_7_0_undefined" row="0" col="7" textAlign="center" text="expr:currow == 0 ? &apos;삭제&apos; : &apos;&apos;" cssclass="cell_WF_Delete"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -299,6 +302,14 @@
         </View>
       </Layout>
     </Layouts>
+    <DesignSettings>
+      <InteractionEditor>
+        <NodePositions>
+          <NodePosition id="action:OnLoadView00" x="2293" y="194"/>
+          <NodePosition id="action:Transaction00" x="2781" y="7"/>
+        </NodePositions>
+      </InteractionEditor>
+    </DesignSettings>
     <Script type="xscript5.1"><![CDATA[]]>
     </Script>
     <Objects>
@@ -417,6 +428,55 @@
           <Row/>
         </Rows>
       </Dataset>
+      <RunScript id="RunScript01" alias="삭제 버튼 클릭했는지 확인">
+        <Contents><![CDATA[`let e = this._current_action.getEventInfo();
+return !!(e && e.row == 0 && e.cell == 7);`]]>
+        </Contents>
+      </RunScript>
+      <Message id="Message02" alias="회차 삭제 진행 여부 Confirm" message="최근 회차를 삭제할까요? 이 회차에서 바뀐 요구사항 상태가 직전 회차로 되돌아가며, 삭제 후에는 복구할 수 없습니다." messagetype="confirm"/>
+      <Transaction id="Transaction03" alias="삭제 서비스 실행" servicemodel="tops::upload/uploadDelete" serviceurl="NexaLAPServer::api/v1/execute">
+        <Contents><![CDATA[{
+    "inputdatasets": [
+        {
+            "modelid": "ds_input",
+            "datasetid": "_dstops_upload_uploadDelete_ds_input",
+            "type": "A"
+        }
+    ],
+    "outputdatasets": [
+        {
+            "modelid": "ds_output",
+            "datasetid": "_dstops_upload_uploadDelete_ds_output"
+        }
+    ]
+}]]>
+        </Contents>
+      </Transaction>
+      <Message id="Message03" alias="삭제 성공 메세지" message="최근 회차를 성공적으로 삭제했습니다." messagetype="alert"/>
+      <Message id="Message04" alias="최근 회차가 아닌경우 메세지" message="최근 회차만 삭제할 수 있습니다. 이력을 다시 불러옵니다." messagetype="alert"/>
+      <Dataset id="_dstops_upload_uploadDelete_ds_input">
+        <ColumnInfo>
+          <Column id="upload_id" type="INT" size="10" description="업로드 회차"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <Dataset id="_dstops_upload_uploadDelete_ds_output">
+        <ColumnInfo>
+          <Column id="deleted_yn" type="int" size="2" description="deleted_yn"/>
+          <Column id="latest_id" type="int" size="11" description="latest_id"/>
+        </ColumnInfo>
+        <Rows/>
+      </Dataset>
+      <RunScript id="RunScript02" alias="삭제 대상 회차 담기">
+        <Contents><![CDATA[`let ds = this._dstops_upload_uploadDelete_ds_input;
+let src = this._dstops_uploadLogSelect_ds_output;
+ds.clearData();
+let nRow = ds.addRow();
+ds.setColumn(nRow, "upload_id", src.getColumn(0, "upload_id"));`]]>
+        </Contents>
+      </RunScript>
     </Objects>
     <Trigger>
       <TriggerItem id="item0" triggertype="onload" triggerview="" triggerobj="" targetaction="Transaction00"/>
@@ -433,7 +493,15 @@
       <TriggerItem id="item10" triggertype="Action Success" triggerview="" triggerobj="Message01" targetaction="FileUploadTransfer01"/>
       <TriggerItem id="item11" triggertype="Action Success" triggerview="" triggerobj="FileUploadTransfer01" targetaction="Transaction01"/>
       <TriggerItem id="item12" triggertype="onclick" triggerview="viewUpload" triggerobj="btnFileClear" targetaction="RunScript00"/>
-      <TriggerItem id="item3" triggertype="onclick" triggerview="viewUpload" triggerobj="btnGropingRequester" targetaction="OpenPopup00"/>
+      <TriggerItem id="item3" triggertype="onclick" triggerview="viewUpload" triggerobj="btnGroupingRequester" targetaction="OpenPopup00"/>
+      <TriggerItem id="item15" triggertype="oncellclick" triggerview="viewHistory" triggerobj="grdList" targetaction="RunScript01"/>
+      <TriggerItem id="item16" triggertype="Action Success" triggerview="" triggerobj="RunScript01" targetaction="Message02"/>
+      <TriggerItem id="item24" triggertype="Action Success" triggerview="" triggerobj="Message02" targetaction="RunScript02"/>
+      <TriggerItem id="item25" triggertype="Action Success" triggerview="" triggerobj="RunScript02" targetaction="Transaction03"/>
+      <TriggerItem id="item20" triggertype="Action Success" triggerview="" triggerobj="Transaction03" targetaction="Message03" condition="this._dstops_upload_uploadDelete_ds_output.getColumn(0, &apos;deleted_yn&apos;) == 1"/>
+      <TriggerItem id="item17" triggertype="Action Success" triggerview="" triggerobj="Transaction03" targetaction="Message04" condition="this._dstops_upload_uploadDelete_ds_output.getColumn(0, &apos;deleted_yn&apos;) == 0"/>
+      <TriggerItem id="item22" triggertype="Action Success" triggerview="" triggerobj="Message03" targetaction="Transaction00"/>
+      <TriggerItem id="item23" triggertype="Action Success" triggerview="" triggerobj="Message04" targetaction="Transaction00"/>
     </Trigger>
     <ViewGenerationInfo>
       <ViewInfo viewid="frmUpload">
@@ -441,6 +509,8 @@
         <ViewTemplateInfo/>
         <ModelInfo modelserviceid="tops" serviceid="upload/uploadDupCheck" modelid="ds_dup" datasetid="_dstops_upload_uploadDupCheck_ds_dup" filepath="upload\.model\uploadDupCheck.model"/>
         <ModelInfo modelserviceid="tops" serviceid="upload/uploadDupCheck" modelid="ds_input" datasetid="_dstops_upload_uploadDupCheck_ds_input" filepath="upload\.model\uploadDupCheck.model"/>
+        <ModelInfo modelserviceid="tops" serviceid="upload/uploadDelete" modelid="ds_input" datasetid="_dstops_upload_uploadDelete_ds_input" filepath="upload\.model\uploadDelete.model"/>
+        <ModelInfo modelserviceid="tops" serviceid="upload/uploadDelete" modelid="ds_output" datasetid="_dstops_upload_uploadDelete_ds_output" filepath="upload\.model\uploadDelete.model"/>
       </ViewInfo>
       <ViewInfo viewid="viewResult">
         <ModelInfo modelserviceid="tops" serviceid="upload/uploadLogSelect" modelid="ds_output" datasetid="_dstops_uploadLogSelect_ds_output" filepath="upload\.model\uploadLogSelect.model">
@@ -471,25 +541,6 @@
           <Attribute id="valuesuffix" value="건"/>
         </ViewTemplateInfo>
       </ViewInfo>
-      <ViewInfo viewid="viewHistory">
-        <ModelInfo modelserviceid="tops" serviceid="upload/uploadLogSelect" modelid="ds_output" datasetid="_dstops_uploadLogSelect_ds_output" filepath="upload\.model\uploadLogSelect.model">
-          <Fields>
-            <Field id="upload_id" label="회차"/>
-            <Field id="base_date" displaytype="date" edittype="normal"/>
-            <Field id="file_name"/>
-            <Field id="row_count" label="전체"/>
-            <Field id="new_count" label="신규"/>
-            <Field id="changed_count" label="변경"/>
-            <Field id="uploaded_at" fieldtype="Date" options="{&quot;dataformat&quot;:&quot;yyyy-MM-dd HH:mm:ss&quot;}" displaytype="normal"/>
-          </Fields>
-          <Components>
-            <Component id="grdList" fields="upload_id,base_date,file_name,row_count,new_count,changed_count,uploaded_at"/>
-          </Components>
-        </ModelInfo>
-        <ViewTemplateInfo filepath="NexaLAP_BasePack/Grid/GridView.viewtemplate">
-          <Attribute id="gridlayout" value="{&quot;columns&quot;:[{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100}],&quot;rows&quot;:[{&quot;band&quot;:&quot;head&quot;,&quot;size&quot;:40},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:40}],&quot;head&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;회차&quot;},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;기준일&quot;},{&quot;row&quot;:0,&quot;col&quot;:2,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;파일명&quot;},{&quot;row&quot;:0,&quot;col&quot;:3,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;전체&quot;},{&quot;row&quot;:0,&quot;col&quot;:4,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;신규&quot;},{&quot;row&quot;:0,&quot;col&quot;:5,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;변경&quot;},{&quot;row&quot;:0,&quot;col&quot;:6,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;업로드 시각&quot;}],&quot;body&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;upload_id&quot;},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;base_date&quot;},{&quot;row&quot;:0,&quot;col&quot;:2,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;file_name&quot;},{&quot;row&quot;:0,&quot;col&quot;:3,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;row_count&quot;},{&quot;row&quot;:0,&quot;col&quot;:4,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;new_count&quot;},{&quot;row&quot;:0,&quot;col&quot;:5,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;changed_count&quot;},{&quot;row&quot;:0,&quot;col&quot;:6,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;uploaded_at&quot;}],&quot;summ&quot;:[]}"/>
-        </ViewTemplateInfo>
-      </ViewInfo>
       <ViewInfo viewid="viewUpload">
         <ModelInfo modelserviceid="tops" serviceid="upload/importTopsExcel" modelid="ds_input" datasetid="_dstops_importTopsExcel_ds_input" filepath="upload\.model\importTopsExcel.model">
           <Fields>
@@ -508,6 +559,25 @@
         </ModelInfo>
         <ViewTemplateInfo filepath="Tops_Board_Asset/ExcelUploadView.viewtemplate">
           <Attribute id="uploadtext" value="업로드"/>
+        </ViewTemplateInfo>
+      </ViewInfo>
+      <ViewInfo viewid="viewHistory">
+        <ModelInfo modelserviceid="tops" serviceid="upload/uploadLogSelect" modelid="ds_output" datasetid="_dstops_uploadLogSelect_ds_output" filepath="upload\.model\uploadLogSelect.model">
+          <Fields>
+            <Field id="upload_id" label="회차"/>
+            <Field id="base_date" displaytype="date" edittype="normal"/>
+            <Field id="file_name"/>
+            <Field id="row_count" label="전체"/>
+            <Field id="new_count" label="신규"/>
+            <Field id="changed_count" label="변경"/>
+            <Field id="uploaded_at" fieldtype="Date" options="{&quot;dataformat&quot;:&quot;yyyy-MM-dd HH:mm:ss&quot;}" displaytype="normal"/>
+          </Fields>
+          <Components>
+            <Component id="grdList" fields="upload_id,base_date,file_name,row_count,new_count,changed_count,uploaded_at"/>
+          </Components>
+        </ModelInfo>
+        <ViewTemplateInfo filepath="NexaLAP_BasePack/Grid/GridView.viewtemplate">
+          <Attribute id="gridlayout" value="{&quot;columns&quot;:[{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:30}],&quot;rows&quot;:[{&quot;band&quot;:&quot;head&quot;,&quot;size&quot;:40},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:40}],&quot;head&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;회차&quot;},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;기준일&quot;},{&quot;row&quot;:0,&quot;col&quot;:2,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;파일명&quot;},{&quot;row&quot;:0,&quot;col&quot;:3,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;전체&quot;},{&quot;row&quot;:0,&quot;col&quot;:4,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;신규&quot;},{&quot;row&quot;:0,&quot;col&quot;:5,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;변경&quot;},{&quot;row&quot;:0,&quot;col&quot;:6,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;업로드 시각&quot;},{&quot;row&quot;:0,&quot;col&quot;:7,&quot;halign&quot;:&quot;center&quot;}],&quot;body&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;upload_id&quot;},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;base_date&quot;},{&quot;row&quot;:0,&quot;col&quot;:2,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;file_name&quot;},{&quot;row&quot;:0,&quot;col&quot;:3,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;row_count&quot;},{&quot;row&quot;:0,&quot;col&quot;:4,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;new_count&quot;},{&quot;row&quot;:0,&quot;col&quot;:5,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;changed_count&quot;},{&quot;row&quot;:0,&quot;col&quot;:6,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;uploaded_at&quot;},{&quot;row&quot;:0,&quot;col&quot;:7,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;expr:currow == 0 ? &apos;삭제&apos; : &apos;&apos;&quot;,&quot;cssclass&quot;:&quot;cell_WF_Delete&quot;}],&quot;summ&quot;:[]}"/>
         </ViewTemplateInfo>
       </ViewInfo>
     </ViewGenerationInfo>
