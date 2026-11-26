@@ -2363,6 +2363,25 @@
 	font : 700 12px "NotoSansKR-Bold";
 }
 
+/* 조건 초기화 버튼  */
+.Button.btn_WF_TextReset,
+.Button.btn_WF_TextReset[status=focused]
+{
+	-nexa-icon : URL("theme://images/btn_WF_TextReset.png");
+	-nexa-icon-position : left;
+	-nexa-border : 0px none;
+	-nexa-padding : 0px 0px 0px 0px;
+	background : transparent;
+	color : #71717A;
+	font : 400 12px "NotoSansKR-Regular";
+}
+
+.Button.btn_WF_TextReset[status=mouseover],
+.Button.btn_WF_TextReset[status=pushed]
+{
+	-nexa-icon : URL("theme://images/btn_WF_TextResetO.png");
+	color : #18181B;
+}
 
 /***** TextArea *****/
 

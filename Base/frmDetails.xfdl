@@ -3,7 +3,7 @@
   <Form id="frmDetails" width="1050" height="736" titletext="ListDetail (H)">
     <Layouts>
       <Layout width="1050" height="736">
-        <View id="Search" taborder="1" viewtype="Search" viewdataset="_dstops_requirement_listSelect_ds_search" text="Search" left="10" height="50" top="10" right="10" cssclass="view_WF_Search">
+        <View id="Search" taborder="1" viewtype="Search" viewdataset="_dstops_requirement_listSelect_ds_search" text="Search" left="10" height="50" top="40" right="10" cssclass="view_WF_Search">
           <Layouts>
             <Layout>
               <Panel id="pnl_mainPanel" taborder="0" left="5" top="0" right="120" bottom="0" flexwrap="wrap" type="horizontal" verticalgap="5" fittocontents="height" spacing="5px 0px 5px 0px" _fieldid="_mainPanel" _fieldcomptype="panel">
@@ -198,24 +198,24 @@
                       <Row size="32" band="body"/>
                     </Rows>
                     <Band id="head">
-                      <Cell id="cell_head_0_0_RP" row="0" col="0" text="RP"/>
-                      <Cell id="cell_head_1_0_RC" row="0" col="1" text="RC"/>
-                      <Cell id="cell_head_2_0_상태" row="0" col="2" text="상태"/>
-                      <Cell id="cell_head_3_0_요구종류" row="0" col="3" text="요구종류"/>
-                      <Cell id="cell_head_4_0_요구처" row="0" col="4" text="요구처"/>
-                      <Cell id="cell_head_5_0_모듈" row="0" col="5" text="모듈"/>
-                      <Cell id="cell_head_6_0_제목" row="0" col="6" text="제목"/>
-                      <Cell id="cell_head_7_0_등록일자" row="0" col="7" text="등록일자"/>
+                      <Cell id="cell_head_0_0_RP" row="0" col="0" textAlign="center" text="RP"/>
+                      <Cell id="cell_head_1_0_RC" row="0" col="1" textAlign="center" text="RC"/>
+                      <Cell id="cell_head_2_0_상태" row="0" col="2" textAlign="center" text="상태"/>
+                      <Cell id="cell_head_3_0_요구종류" row="0" col="3" textAlign="center" text="요구종류"/>
+                      <Cell id="cell_head_4_0_요구처" row="0" col="4" textAlign="center" text="요구처"/>
+                      <Cell id="cell_head_5_0_모듈" row="0" col="5" textAlign="center" text="모듈"/>
+                      <Cell id="cell_head_6_0_제목" row="0" col="6" textAlign="center" text="제목"/>
+                      <Cell id="cell_head_7_0_등록일자" row="0" col="7" textAlign="center" text="등록일자"/>
                     </Band>
                     <Band id="body">
-                      <Cell id="cell_body_0_0_rp" row="0" col="0" text="bind:rp" displaytype="normal" edittype="none"/>
-                      <Cell id="cell_body_1_0_rc" row="0" col="1" text="bind:rc" displaytype="normal" edittype="none"/>
-                      <Cell id="cell_body_2_0_status" row="0" col="2" text="bind:status" displaytype="normal" edittype="none"/>
-                      <Cell id="cell_body_3_0_req_type" row="0" col="3" text="bind:req_type" displaytype="normal" edittype="none"/>
-                      <Cell id="cell_body_4_0_req_name" row="0" col="4" text="bind:req_name" displaytype="normal" edittype="none"/>
-                      <Cell id="cell_body_5_0_product_module" row="0" col="5" text="bind:product_module" displaytype="normal" edittype="none"/>
-                      <Cell id="cell_body_6_0_title" row="0" col="6" text="bind:title" displaytype="normal" edittype="none"/>
-                      <Cell id="cell_body_7_0_reg_date" row="0" col="7" text="bind:reg_date" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_0_0_rp" row="0" col="0" textAlign="center" text="bind:rp" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_1_0_rc" row="0" col="1" textAlign="center" text="bind:rc" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_2_0_status" row="0" col="2" textAlign="center" text="bind:status" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_3_0_req_type" row="0" col="3" textAlign="center" text="bind:req_type" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_4_0_req_name" row="0" col="4" textAlign="center" text="bind:req_name" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_5_0_product_module" row="0" col="5" textAlign="center" text="bind:product_module" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_6_0_title" row="0" col="6" textAlign="center" text="bind:title" displaytype="normal" edittype="none"/>
+                      <Cell id="cell_body_7_0_reg_date" row="0" col="7" textAlign="center" text="bind:reg_date" displaytype="normal" edittype="none"/>
                     </Band>
                   </Format>
                 </Formats>
@@ -226,6 +226,7 @@
           <Script><![CDATA[this.cfn_FilterBtn_onclick = function(obj, e){let aComponents = this.components;for(let i = 0 ; i < aComponents.length ; i++){if(aComponents[i]._fieldcomptype == "filter"){aComponents[i].setSelectStatus(false);}}obj.setSelectStatus(true);};this._fnViewOnLoad = function(objForm){/* Sets the view form reference so that functions declared in the view can access it */this._ownerForm = objForm;this._sSearchFilterValue = "";this._sFilterValue = "";let aComponents = this.components;let oComp = null;for(let i = 0 ; i < aComponents.length ; i++){oComp = aComponents[i];if(oComp instanceof nexacro.Button){if(oComp._fieldcomptype == "filter"){oComp.addEventHandler("onclick",this.cfn_FilterBtn_onclick, this)}}}};]]>
           </Script>
         </View>
+        <Button id="Button00" top="10" taborder="2" width="120" text="  조건 초기화" right="10" bottom="Search:10" cssclass="btn_WF_TextReset"/>
       </Layout>
     </Layouts>
     <Objects>
@@ -334,6 +335,8 @@ return !!(e && e.keycode == 13);`]]>
         </ColumnInfo>
         <Rows/>
       </Dataset>
+      <CallDatasetFunction id="CallDatasetFunction00" alias="검색 조건 비우기" functionList="clearData" targetDataset="_dstops_requirement_listSelect_ds_search"/>
+      <CallDatasetFunction id="CallDatasetFunction01" alias="검색 조건 빈 행 추가" functionList="addRow" targetDataset="_dstops_requirement_listSelect_ds_search"/>
     </Objects>
     <ViewGenerationInfo>
       <ViewInfo viewid="frmDetails">
@@ -434,7 +437,7 @@ return !!(e && e.keycode == 13);`]]>
           </Components>
         </ModelInfo>
         <ViewTemplateInfo filepath="NexaLAP_BasePack/Grid/FilterGridView.viewtemplate">
-          <Attribute id="gridlayout" value="{&quot;columns&quot;:[{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:50},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:50},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:50},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:50},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:70},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:70},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:200},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:50}],&quot;rows&quot;:[{&quot;band&quot;:&quot;head&quot;,&quot;size&quot;:32},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:32}],&quot;head&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0,&quot;text&quot;:&quot;RP&quot;},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;text&quot;:&quot;RC&quot;},{&quot;row&quot;:0,&quot;col&quot;:2,&quot;text&quot;:&quot;상태&quot;},{&quot;row&quot;:0,&quot;col&quot;:3,&quot;text&quot;:&quot;요구종류&quot;},{&quot;row&quot;:0,&quot;col&quot;:4,&quot;text&quot;:&quot;요구처&quot;},{&quot;row&quot;:0,&quot;col&quot;:5,&quot;text&quot;:&quot;모듈&quot;},{&quot;row&quot;:0,&quot;col&quot;:6,&quot;text&quot;:&quot;제목&quot;},{&quot;row&quot;:0,&quot;col&quot;:7,&quot;text&quot;:&quot;등록일자&quot;}],&quot;body&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0,&quot;field&quot;:&quot;rp&quot;},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;field&quot;:&quot;rc&quot;},{&quot;row&quot;:0,&quot;col&quot;:2,&quot;field&quot;:&quot;status&quot;},{&quot;row&quot;:0,&quot;col&quot;:3,&quot;field&quot;:&quot;req_type&quot;},{&quot;row&quot;:0,&quot;col&quot;:4,&quot;field&quot;:&quot;req_name&quot;},{&quot;row&quot;:0,&quot;col&quot;:5,&quot;field&quot;:&quot;product_module&quot;},{&quot;row&quot;:0,&quot;col&quot;:6,&quot;field&quot;:&quot;title&quot;},{&quot;row&quot;:0,&quot;col&quot;:7,&quot;field&quot;:&quot;reg_date&quot;}],&quot;summ&quot;:[]}"/>
+          <Attribute id="gridlayout" value="{&quot;columns&quot;:[{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:50},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:50},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:50},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:50},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:70},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:70},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:200},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:50}],&quot;rows&quot;:[{&quot;band&quot;:&quot;head&quot;,&quot;size&quot;:32},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:32}],&quot;head&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;RP&quot;},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;RC&quot;},{&quot;row&quot;:0,&quot;col&quot;:2,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;상태&quot;},{&quot;row&quot;:0,&quot;col&quot;:3,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;요구종류&quot;},{&quot;row&quot;:0,&quot;col&quot;:4,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;요구처&quot;},{&quot;row&quot;:0,&quot;col&quot;:5,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;모듈&quot;},{&quot;row&quot;:0,&quot;col&quot;:6,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;제목&quot;},{&quot;row&quot;:0,&quot;col&quot;:7,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;등록일자&quot;}],&quot;body&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;rp&quot;},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;rc&quot;},{&quot;row&quot;:0,&quot;col&quot;:2,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;status&quot;},{&quot;row&quot;:0,&quot;col&quot;:3,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;req_type&quot;},{&quot;row&quot;:0,&quot;col&quot;:4,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;req_name&quot;},{&quot;row&quot;:0,&quot;col&quot;:5,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;product_module&quot;},{&quot;row&quot;:0,&quot;col&quot;:6,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;title&quot;},{&quot;row&quot;:0,&quot;col&quot;:7,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;reg_date&quot;}],&quot;summ&quot;:[]}"/>
         </ViewTemplateInfo>
       </ViewInfo>
     </ViewGenerationInfo>
@@ -454,6 +457,9 @@ return !!(e && e.keycode == 13);`]]>
       <TriggerItem id="item10" triggertype="oncelldblclick" triggerview="Master" triggerobj="grdList" targetaction="ClearData00"/>
       <TriggerItem id="item11" triggertype="Action Success" triggerview="" triggerobj="ClearData00" targetaction="CopyRow00"/>
       <TriggerItem id="item12" triggertype="Action Success" triggerview="" triggerobj="CopyRow00" targetaction="OpenPopup00"/>
+      <TriggerItem id="item13" triggertype="onclick" triggerview="" triggerobj="Button00" targetaction="CallDatasetFunction00"/>
+      <TriggerItem id="item14" triggertype="Action Success" triggerview="" triggerobj="CallDatasetFunction00" targetaction="CallDatasetFunction01"/>
+      <TriggerItem id="item15" triggertype="Action Success" triggerview="" triggerobj="CallDatasetFunction01" targetaction="RunScript01"/>
     </Trigger>
   </Form>
 </FDL>
