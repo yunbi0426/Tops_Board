@@ -12,22 +12,22 @@
       </MainFrame>
     </Layout>
   </Application>
-  <Script type="xscript5.1"><![CDATA[var objEnv = nexacro.getEnvironment();
+  <Script type="xscript5.1"><![CDATA[let objEnv = nexacro.getEnvironment();
 
 // Top 템플릿이라 Left 메뉴는 없음 → 빈 함수
 objEnv.fnSetLeftMenu = function (sMenuId) {};
 
 // gdsMenu의 MENU_URL을 frmWork의 div_work에 연다
 objEnv.fnOpenForm = function (sMenuId, bPopup) {
-    var app = nexacro.getApplication();
-    var ds = app.gdsMenu;
-    var nRow = ds.findRow("MENU_ID", sMenuId);
+    let app = nexacro.getApplication();
+    let ds = app.gdsMenu;
+    let nRow = ds.findRow("MENU_ID", sMenuId);
     if (nRow < 0) {
         return;
     }
 
-    var url = ds.getColumn(nRow, "MENU_URL");
-    var compDivWork = app.mainframe.vfrs.frmWork.form.div_work;
+    let url = ds.getColumn(nRow, "MENU_URL");
+    let compDivWork = app.mainframe.vfrs.frmWork.form.div_work;
     if (url && compDivWork) {
         compDivWork.set_url(url);
         objEnv.fnSetPageTitle(url);
@@ -36,29 +36,53 @@ objEnv.fnOpenForm = function (sMenuId, bPopup) {
 
 // frmWork 제목 줄(staPageTitle)을 gdsMenu의 PAGE_TITLE / PAGE_DESC로 갱신
 objEnv.fnSetPageTitle = function (sUrl) {
-    var app = nexacro.getApplication();
-    var oWorkForm = app.mainframe.vfrs.frmWork.form;
-    var oTitle = oWorkForm ? oWorkForm.staPageTitle : null;
+    objEnv.fvCurrentUrl = sUrl;
+    objEnv.fnHighlightMenu(sUrl);
+
+    let app = nexacro.getApplication();
+    let oWorkForm = app.mainframe.vfrs.frmWork.form;
+    let oTitle = oWorkForm ? oWorkForm.staPageTitle : null;
     if (!oTitle) {
         return;
     }
 
-    var ds = app.gdsMenu;
-    var nRow = ds.findRow("MENU_URL", sUrl);
+    let ds = app.gdsMenu;
+    let nRow = ds.findRow("MENU_URL", sUrl);
     if (nRow < 0) {
         oTitle.set_text("");
         return;
     }
 
-    var sTitle = ds.getColumn(nRow, "PAGE_TITLE") || ds.getColumn(nRow, "MENU_NM") || "";
-    var sDesc  = ds.getColumn(nRow, "PAGE_DESC") || "";
+    let sTitle = ds.getColumn(nRow, "PAGE_TITLE") || ds.getColumn(nRow, "MENU_NM") || "";
+    let sDesc  = ds.getColumn(nRow, "PAGE_DESC") || "";
 
-    var sText = "<b v='true'><fs v='16'>" + sTitle + "</fs></b>";
+    let sText = "<b v='true'><fs v='16'>" + sTitle + "</fs></b>";
     if (sDesc) {
         sText += "   <fc v='#6B7280'>" + sDesc + "</fc>";
     }
     oTitle.set_text(sText);
 };
+
+// 열린 화면 URL과 같은 메뉴만 강조 (btn_TF_MenuS), 나머지는 기본 (btn_TF_Menu)
+objEnv.fnHighlightMenu = function (sUrl) {
+    let app = nexacro.getApplication();
+    let oTop = app.mainframe.vfrs.frmTop.form;
+    if(!oTop || !oTop.divTopMenu) {
+        return;
+    }
+
+    let ds = app.gdsMenu;
+    let nRow = ds.findRow("MENU_URL", sUrl);
+    let sMenuId = nRow < 0 ? "" : ds.getColumn(nRow, "MENU_ID");
+    let arrComp = oTop.divTopMenu.form.components;
+    for(let i = 0; i < arrComp.length; i++) {
+        let oBtn = arrComp[i];
+        if(oBtn.menuid === undefined) {
+            continue;
+        }
+        oBtn.set_cssclass(oBtn.menuid === sMenuId ? "btn_TF_MenuS" : "btn_TF_Menu");
+    }
+}
 ]]>
   </Script>
 </ADL>

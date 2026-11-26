@@ -2982,7 +2982,7 @@
 	-nexa-border : 0px none;
 	-nexa-padding : 0px;
 	background : URL("theme://images/btn_TF_LogoutN.png") no-repeat center transparent;
-	border-radius : 8px;
+	border-radius : 0px;
 }
 
 
@@ -5142,11 +5142,12 @@
 .Button.btn_TF_Menu[userstatus=pushed]
 {
 	-nexa-border : 0px none;
-	-nexa-padding : 0px 25px 0px 25px;
+	-nexa-padding : 0px 16px 0px 16px;
 	-nexa-text-decoration : none;
 	background : transparent;
 	color : #FFFFFF;
 	font : 400 -nexa-define(--fontsize_l) "NotoSansKR-Regular";
+	border-radius: 0px;
 }
 .Button.btn_TF_Menu[userstatus=selected],
 .Button.btn_TF_MenuS,
@@ -5161,6 +5162,7 @@
 	background : transparent;
 	color : #FFFFFF;
 	font : 700 -nexa-define(--fontsize_l) "NotoSansKR-Bold";
+	border-radius: 0px;
 }
 .Button.btn_TF_MenuPrev[status=mouseover],
 .Button.btn_TF_MenuPrev[userstatus=pushed]
