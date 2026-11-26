@@ -9,8 +9,8 @@
             <Layout>
               <Static id="sta_frame" left="0" top="0" right="0" bottom="0" text="" border="1px solid #E4E4E7" borderRadius="10px" background="#FFFFFF" _fieldid="FRAME" _fieldcomptype="label"/>
               <Static id="sta_title" left="16" top="16" height="30" right="edt_filterSearch:8" text="시트로 내보낼 요구처" font="normal 700 13px/normal &quot;NotoSansKR-Bold&quot;" color="#18181B" usedecorate="true" _fieldid="TITLE" _fieldcomptype="label"/>
-              <Edit id="edt_filterSearch" top="16" right="16" width="240" height="30" displaynulltext="요구처 검색" padding="0px 30px 0px 30px" _fieldid="_filterSearch" _fieldcomptype="comp"/>
-              <Static id="sta_searchIcon" left="edt_filterSearch:-240" top="16" width="30" height="30" text="" background="URL(&apos;theme://images/btn_WF_InputSearchN.png&apos;) no-repeat center center" _fieldid="_searchIcon" _fieldcomptype="label"/>
+              <Edit id="edt_filterSearch" top="16" right="16" width="130" height="30" displaynulltext="요구처 검색" padding="0px 30px 0px 30px" _fieldid="_filterSearch" _fieldcomptype="comp"/>
+              <Static id="sta_searchIcon" left="edt_filterSearch:-130" top="16" width="30" height="30" text="" background="URL(&apos;theme://images/btn_WF_InputSearchN.png&apos;) no-repeat center center" _fieldid="_searchIcon" _fieldcomptype="label"/>
               <Button id="btn_searchClear" top="16" right="16" width="30" height="30" text="✕" tooltiptext="검색어 지우기" border="0px none" background="transparent" color="#A1A1AA" _fieldid="_searchClear" _fieldcomptype="comp"/>
               <Grid id="grdList" left="16" right="16" bottom="16" top="54" binddataset="_dstops_report_summarySelect_ds_sheet_option" autofittype="col" nodatatext="요구처가 없습니다." cssclass="grd_WF_Detail" _fieldid="grdList" _fieldcomptype="comp">
                 <Formats>
@@ -81,7 +81,7 @@
           <Script><![CDATA[this.fvConf = {"titleText":"","showCount":true,"headSort":true,"selectFirst":true,"mutedColor":"#A1A1AA","defaultSort":""};this._fnViewOnLoad = function(objForm) {/* Sets the view form reference so that functions declared in the view can access it */this._ownerForm = objForm;if (!this._bSearchGridInit) {let oDs = this.parent.getViewDataset();if (oDs) {oDs.addEventHandler("onload", this.fn_ds_onchanged, this);oDs.addEventHandler("onrowsetchanged", this.fn_ds_onchanged, this);}if (this.fvConf.headSort && this.grdList) {this.grdList.addEventHandler("onheadclick", this.fn_grid_onheadclick, this);}if (this.fvConf.headSort && this.grdList) {let sDef = this.fvConf.defaultSort;let nDefCell = -1;let sColDef = "";if (sDef) {sColDef = sDef.replace(/^[+-]/, "");for (let j = 0; j < this.grdList.getCellCount("body"); j++) {if (this.fn_getSortCol(this.grdList, j) == sColDef) {nDefCell = j;break;}}}this.fn_applySort(this.grdList, nDefCell, nDefCell < 0 ? "" : sColDef, sDef.charAt(0) != "+", true);}this._bSearchGridInit = true;}this.fn_updateCount();};this.fn_ds_onchanged = function(obj, e) {this.fn_updateCount();};this.fn_updateCount = function() {if (!this.sta_title) {return;}let c = this.fvConf;let sText = "<b v='true'>" + c.titleText + "</b>";let oDs = this.parent.getViewDataset();if (c.showCount && oDs) {let nShow = oDs.getRowCount();let nAll = oDs.getRowCountNF();let sCount = (nShow == nAll) ? (nAll + "건") : (nShow + " / " + nAll + "건");sText += "   <fc v='" + c.mutedColor + "'>" + sCount + "</fc>";}this.sta_title.set_text(sText);};this.fn_grid_onheadclick = function(obj, e) {let sCol = this.fn_getSortCol(obj, e.cell);if (!sCol) { return;}let bDesc = !(this._sSortCol == sCol && this._bSortDesc);this.fn_applySort(obj, e.cell, sCol, bDesc);let oDs = obj.getBindDataset();if (this.fvConf.selectFirst && oDs.getRowCount() > 0) {oDs.set_rowposition(-1);oDs.set_rowposition(0);}this.fn_applySort(obj, e.cell, sCol, bDesc, false);};this.fn_applySort = function(oGrid, nCell, sCol, bDesc, bHint) {let i;if (!this._arrHeadText) {this._arrHeadText = [];for (i = 0; i < oGrid.getCellCount("head"); i++) {this._arrHeadText[i] = oGrid.getCellProperty("head", i, "text");}}if (sCol) {this._sSortCol = sCol;this._bSortDesc = bDesc;oGrid.getBindDataset().set_keystring("S:" + (bDesc ? "-" : "+") + sCol);}for (i = 0; i < this._arrHeadText.length; i++) {let sMark = "";if (i == nCell) {sMark = bDesc ? " ▼" : " ▲";} else if (bHint && this.fn_getSortCol(oGrid, i) != "") {sMark = " ⇅";}oGrid.setCellProperty("head", i, "text", this._arrHeadText[i] + sMark);}};this.fn_getSortCol = function(oGrid, nCell) {let sText = "" + oGrid.getCellProperty("body", nCell, "text");if (sText.indexOf("bind:") == 0) {return sText.substr(5);}if (sText.indexOf("expr:") == 0) {let arr = /^expr:\s*([A-Za-z_][A-Za-z0-9_]*)/.exec(sText);let oDs = oGrid.getBindDataset();if (arr && oDs && oDs.getColIndex(arr[1]) >= 0) {return arr[1];}}return "";};]]>
           </Script>
         </View>
-        <View id="Summary" left="Options:10" top="10" height="140" text="Summary" right="10" viewtype="Grid" viewdataset="_dstops_report_summarySelect_ds_summary" taborder="4">
+        <View id="Summary" left="Options:10" top="10" text="Summary" right="10" viewtype="Grid" viewdataset="_dstops_report_summarySelect_ds_summary" taborder="4" height="140">
           <Layouts>
             <Layout>
               <Static id="sta_frame" left="0" top="0" right="0" bottom="0" text="" border="1px solid #E4E4E7" borderRadius="10px" background="#FFFFFF" _fieldid="FRAME" _fieldcomptype="label"/>
@@ -123,7 +123,7 @@
           <Script><![CDATA[this.fvConf = {"titleText":"전체 처리 현황","showCount":false,"headSort":false,"selectFirst":true,"mutedColor":"#A1A1AA","defaultSort":""};this._fnViewOnLoad = function(objForm) {/* Sets the view form reference so that functions declared in the view can access it */this._ownerForm = objForm;if (!this._bSearchGridInit) {let oDs = this.parent.getViewDataset();if (oDs) {oDs.addEventHandler("onload", this.fn_ds_onchanged, this);oDs.addEventHandler("onrowsetchanged", this.fn_ds_onchanged, this);}if (this.fvConf.headSort && this.grdList) {this.grdList.addEventHandler("onheadclick", this.fn_grid_onheadclick, this);}if (this.fvConf.headSort && this.grdList) {let sDef = this.fvConf.defaultSort;let nDefCell = -1;let sColDef = "";if (sDef) {sColDef = sDef.replace(/^[+-]/, "");for (let j = 0; j < this.grdList.getCellCount("body"); j++) {if (this.fn_getSortCol(this.grdList, j) == sColDef) {nDefCell = j;break;}}}this.fn_applySort(this.grdList, nDefCell, nDefCell < 0 ? "" : sColDef, sDef.charAt(0) != "+", true);}this._bSearchGridInit = true;}this.fn_updateCount();};this.fn_ds_onchanged = function(obj, e) {this.fn_updateCount();};this.fn_updateCount = function() {if (!this.sta_title) {return;}let c = this.fvConf;let sText = "<b v='true'>" + c.titleText + "</b>";let oDs = this.parent.getViewDataset();if (c.showCount && oDs) {let nShow = oDs.getRowCount();let nAll = oDs.getRowCountNF();let sCount = (nShow == nAll) ? (nAll + "건") : (nShow + " / " + nAll + "건");sText += "   <fc v='" + c.mutedColor + "'>" + sCount + "</fc>";}this.sta_title.set_text(sText);};this.fn_grid_onheadclick = function(obj, e) {let sCol = this.fn_getSortCol(obj, e.cell);if (!sCol) { return;}let bDesc = !(this._sSortCol == sCol && this._bSortDesc);this.fn_applySort(obj, e.cell, sCol, bDesc);let oDs = obj.getBindDataset();if (this.fvConf.selectFirst && oDs.getRowCount() > 0) {oDs.set_rowposition(-1);oDs.set_rowposition(0);}this.fn_applySort(obj, e.cell, sCol, bDesc, false);};this.fn_applySort = function(oGrid, nCell, sCol, bDesc, bHint) {let i;if (!this._arrHeadText) {this._arrHeadText = [];for (i = 0; i < oGrid.getCellCount("head"); i++) {this._arrHeadText[i] = oGrid.getCellProperty("head", i, "text");}}if (sCol) {this._sSortCol = sCol;this._bSortDesc = bDesc;oGrid.getBindDataset().set_keystring("S:" + (bDesc ? "-" : "+") + sCol);}for (i = 0; i < this._arrHeadText.length; i++) {let sMark = "";if (i == nCell) {sMark = bDesc ? " ▼" : " ▲";} else if (bHint && this.fn_getSortCol(oGrid, i) != "") {sMark = " ⇅";}oGrid.setCellProperty("head", i, "text", this._arrHeadText[i] + sMark);}};this.fn_getSortCol = function(oGrid, nCell) {let sText = "" + oGrid.getCellProperty("body", nCell, "text");if (sText.indexOf("bind:") == 0) {return sText.substr(5);}if (sText.indexOf("expr:") == 0) {let arr = /^expr:\s*([A-Za-z_][A-Za-z0-9_]*)/.exec(sText);let oDs = oGrid.getBindDataset();if (arr && oDs && oDs.getColIndex(arr[1]) >= 0) {return arr[1];}}return "";};]]>
           </Script>
         </View>
-        <View id="Requester" left="Options:10" top="150" height="45%" text="Requester" right="10" viewtype="Grid" viewdataset="_dstops_report_summarySelect_ds_requester">
+        <View id="Requester" left="Options:10" top="Summary:10" height="45%" text="Requester" right="10" viewtype="Grid" viewdataset="_dstops_report_summarySelect_ds_requester">
           <Layouts>
             <Layout>
               <Static id="sta_frame" left="0" top="0" right="0" bottom="0" text="" border="1px solid #E4E4E7" borderRadius="10px" background="#FFFFFF" _fieldid="FRAME" _fieldcomptype="label"/>
@@ -398,31 +398,6 @@
           <Attribute id="gridlayout" value="{&quot;columns&quot;:[{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100}],&quot;rows&quot;:[{&quot;band&quot;:&quot;head&quot;,&quot;size&quot;:32},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:32}],&quot;head&quot;:[{&quot;col&quot;:0,&quot;row&quot;:0,&quot;text&quot;:&quot;RP&quot;},{&quot;col&quot;:1,&quot;row&quot;:0,&quot;text&quot;:&quot;구분&quot;},{&quot;col&quot;:2,&quot;row&quot;:0,&quot;text&quot;:&quot;상태&quot;},{&quot;col&quot;:3,&quot;row&quot;:0,&quot;text&quot;:&quot;제목&quot;},{&quot;col&quot;:4,&quot;row&quot;:0,&quot;text&quot;:&quot;등록일&quot;},{&quot;col&quot;:5,&quot;row&quot;:0,&quot;text&quot;:&quot;개발자&quot;},{&quot;col&quot;:6,&quot;row&quot;:0,&quot;text&quot;:&quot;경과일&quot;}],&quot;body&quot;:[{&quot;col&quot;:0,&quot;row&quot;:0,&quot;field&quot;:&quot;rp&quot;},{&quot;col&quot;:1,&quot;row&quot;:0,&quot;field&quot;:&quot;req_type&quot;},{&quot;col&quot;:2,&quot;row&quot;:0,&quot;field&quot;:&quot;status&quot;},{&quot;col&quot;:3,&quot;row&quot;:0,&quot;field&quot;:&quot;title&quot;},{&quot;col&quot;:4,&quot;row&quot;:0,&quot;field&quot;:&quot;reg_date&quot;},{&quot;col&quot;:5,&quot;row&quot;:0,&quot;field&quot;:&quot;developer&quot;},{&quot;col&quot;:6,&quot;row&quot;:0,&quot;field&quot;:&quot;elapsed_days&quot;}]}"/>
         </ViewTemplateInfo>
       </ViewInfo>
-      <ViewInfo viewid="Options">
-        <ModelInfo modelserviceid="tops" serviceid="report/summarySelect" modelid="ds_sheet_option" datasetid="_dstops_report_summarySelect_ds_sheet_option" filepath="report\.model\summarySelect.model">
-          <Fields>
-            <Field id="chk" displaytype="checkboxcontrol" edittype="checkbox"/>
-            <Field id="req_name" label="요구처"/>
-            <Field id="remain_cnt" used="false"/>
-          </Fields>
-          <Components>
-            <Component id="sta_frame" fields="FRAME"/>
-            <Component id="sta_title" fields="TITLE"/>
-            <Component id="edt_filterSearch" fields="_filterSearch"/>
-            <Component id="sta_searchIcon" fields="_searchIcon"/>
-            <Component id="btn_searchClear" fields="_searchClear"/>
-            <Component id="grdList" fields="chk,req_name"/>
-          </Components>
-        </ModelInfo>
-        <ViewTemplateInfo filepath="Tops_Board_Asset/SearchGridView.viewtemplate">
-          <Attribute id="titletext" value="시트로 내보낼 요구처"/>
-          <Attribute id="showcount" value="false"/>
-          <Attribute id="searchplaceholder" value="요구처 검색"/>
-          <Attribute id="useheadsort" value="false"/>
-          <Attribute id="gridlayout" value="{&quot;columns&quot;:[{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:30},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100}],&quot;rows&quot;:[{&quot;band&quot;:&quot;head&quot;,&quot;size&quot;:32},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:32}],&quot;head&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;요구처&quot;}],&quot;body&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0,&quot;field&quot;:&quot;chk&quot;},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;req_name&quot;}],&quot;summ&quot;:[]}"/>
-          <Attribute id="nodatatext" value="요구처가 없습니다."/>
-        </ViewTemplateInfo>
-      </ViewInfo>
       <ViewInfo viewid="Summary">
         <ModelInfo modelserviceid="tops" serviceid="report/summarySelect" modelid="ds_summary" datasetid="_dstops_report_summarySelect_ds_summary" filepath="report\.model\summarySelect.model">
           <Fields>
@@ -499,6 +474,32 @@
           <Attribute id="useheadsort" value="false"/>
           <Attribute id="gridlayout" value="{&quot;columns&quot;:[{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100}],&quot;rows&quot;:[{&quot;band&quot;:&quot;head&quot;,&quot;size&quot;:32},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:32}],&quot;head&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;요구종류&quot;},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;접수·분석&quot;},{&quot;row&quot;:0,&quot;col&quot;:2,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;설계·개발&quot;},{&quot;row&quot;:0,&quot;col&quot;:3,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;검토&quot;},{&quot;row&quot;:0,&quot;col&quot;:4,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;개발답변&quot;},{&quot;row&quot;:0,&quot;col&quot;:5,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;검수·배포대기&quot;},{&quot;row&quot;:0,&quot;col&quot;:6,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;배포완료&quot;},{&quot;row&quot;:0,&quot;col&quot;:7,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;반려&quot;},{&quot;row&quot;:0,&quot;col&quot;:8,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;합계&quot;}],&quot;body&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;req_type&quot;},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;st1&quot;},{&quot;row&quot;:0,&quot;col&quot;:2,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;st2&quot;},{&quot;row&quot;:0,&quot;col&quot;:3,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;st3&quot;},{&quot;row&quot;:0,&quot;col&quot;:4,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;st4&quot;},{&quot;row&quot;:0,&quot;col&quot;:5,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;st5&quot;},{&quot;row&quot;:0,&quot;col&quot;:6,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;st6&quot;},{&quot;row&quot;:0,&quot;col&quot;:7,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;st7&quot;},{&quot;row&quot;:0,&quot;col&quot;:8,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;total_cnt&quot;}],&quot;summ&quot;:[]}"/>
           <Attribute id="nodatatext" value="데이터가 없습니다."/>
+        </ViewTemplateInfo>
+      </ViewInfo>
+      <ViewInfo viewid="Options">
+        <ModelInfo modelserviceid="tops" serviceid="report/summarySelect" modelid="ds_sheet_option" datasetid="_dstops_report_summarySelect_ds_sheet_option" filepath="report\.model\summarySelect.model">
+          <Fields>
+            <Field id="chk" displaytype="checkboxcontrol" edittype="checkbox"/>
+            <Field id="req_name" label="요구처"/>
+            <Field id="remain_cnt" used="false"/>
+          </Fields>
+          <Components>
+            <Component id="sta_frame" fields="FRAME"/>
+            <Component id="sta_title" fields="TITLE"/>
+            <Component id="edt_filterSearch" fields="_filterSearch"/>
+            <Component id="sta_searchIcon" fields="_searchIcon"/>
+            <Component id="btn_searchClear" fields="_searchClear"/>
+            <Component id="grdList" fields="chk,req_name"/>
+          </Components>
+        </ModelInfo>
+        <ViewTemplateInfo filepath="Tops_Board_Asset/SearchGridView.viewtemplate">
+          <Attribute id="titletext" value="시트로 내보낼 요구처"/>
+          <Attribute id="showcount" value="false"/>
+          <Attribute id="searchplaceholder" value="요구처 검색"/>
+          <Attribute id="useheadsort" value="false"/>
+          <Attribute id="gridlayout" value="{&quot;columns&quot;:[{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:30},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100}],&quot;rows&quot;:[{&quot;band&quot;:&quot;head&quot;,&quot;size&quot;:32},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:32}],&quot;head&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;요구처&quot;}],&quot;body&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0,&quot;field&quot;:&quot;chk&quot;},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;req_name&quot;}],&quot;summ&quot;:[]}"/>
+          <Attribute id="nodatatext" value="요구처가 없습니다."/>
+          <Attribute id="searchwidth" value="130"/>
         </ViewTemplateInfo>
       </ViewInfo>
     </ViewGenerationInfo>
@@ -580,14 +581,6 @@
         </ColumnInfo>
         <Rows/>
       </Dataset>
-      <Dataset id="_dstops_report_summarySelect_ds_sheet_option">
-        <ColumnInfo>
-          <Column id="chk" type="string" size="1" description="chk"/>
-          <Column id="req_name" type="string" size="200" description="req_name"/>
-          <Column id="remain_cnt" type="bigdecimal" size="24" description="remain_cnt"/>
-        </ColumnInfo>
-        <Rows/>
-      </Dataset>
       <Dataset id="_dstops_report_summarySelect_ds_requester">
         <ColumnInfo>
           <Column id="chk" type="string" size="1" description="chk"/>
@@ -611,6 +604,14 @@
           <Column id="st6" type="bigdecimal" size="24" description="st6"/>
           <Column id="st7" type="bigdecimal" size="24" description="st7"/>
           <Column id="total_cnt" type="bigdecimal" size="21" description="total_cnt"/>
+        </ColumnInfo>
+        <Rows/>
+      </Dataset>
+      <Dataset id="_dstops_report_summarySelect_ds_sheet_option">
+        <ColumnInfo>
+          <Column id="chk" type="string" size="1" description="chk"/>
+          <Column id="req_name" type="string" size="200" description="req_name"/>
+          <Column id="remain_cnt" type="bigdecimal" size="24" description="remain_cnt"/>
         </ColumnInfo>
         <Rows/>
       </Dataset>
