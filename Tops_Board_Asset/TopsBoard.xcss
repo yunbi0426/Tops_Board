@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <XCSS version="1.1">
   <Predefines/>
-  <CSSData><![CDATA[.Grid .body .row .cell.cell_WF_Done,
+  <CSSData><![CDATA[/* frmDashboard 관련 */
+/* Card View */
+.Grid .body .row .cell.cell_WF_Done,
 .Grid .body .row .cell.cell_WF_Done[status=mouseover],
 .Grid .body .row .cell.cell_WF_Done[userstatus=selected],
 .Grid .body .row .cell.cell_WF_Done[userstatus=selected][status=mouseover]
@@ -19,6 +21,7 @@
 	font : 700 12px "NotoSansKR-Bold";
 }
 
+/* Progressbar */
 .Grid .body .row .cell.cell_WF_Rate,
 .Grid .body .row .cell.cell_WF_Rate[status=mouseover],
 .Grid .body .row .cell.cell_WF_Rate[userstatus=selected],
@@ -64,6 +67,18 @@
 .Grid .body .row .cell.cell_WF_Rate .cellprogressbar .progressendcap[userstatus=selected][status=mouseover]
 {
 	background : #1D9E75;
-}]]>
+}
+
+/* frmUpload 최근 회차 삭제 관련 */
+.Grid .body .row .cell.cell_WF_Delete,
+.Grid .body .row .cell.cell_WF_Delete[status=mouseover],
+.Grid .body .row .cell.cell_WF_Delete[userstatus=selected],
+.Grid .body .row .cell.cell_WF_Delete[userstatus=selected][status=mouseover]
+{
+	color : #A32D2D;
+	font : 700 12px "NotoSansKR-Bold";
+	cursor : pointer;
+}
+]]>
   </CSSData>
 </XCSS>
