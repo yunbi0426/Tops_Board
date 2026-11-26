@@ -9663,6 +9663,92 @@
 							}
 						}
 					}
+				},
+				{
+					"sta_CardTitle" : 
+					{
+						"self" : 
+						{
+							"enabled" : 
+							{
+								"color" : nexacro.ColorObject("#18181B"),
+								"font" : nexacro.FontObject("700 13px \"NotoSansKR-Bold\"")
+							}
+						}
+					}
+				},
+				{
+					"sta_CardMuted" : 
+					{
+						"self" : 
+						{
+							"enabled" : 
+							{
+								"color" : nexacro.ColorObject("#A1A1AA"),
+								"font" : nexacro.FontObject("400 12px \"NotoSansKR-Regular\"")
+							}
+						}
+					}
+				},
+				{
+					"sta_KpiCard" : 
+					{
+						"self" : 
+						{
+							"enabled" : 
+							{
+								"border" : nexacro.BorderObject("1px solid #E4E4E7"),
+								"padding" : nexacro.PaddingObject("0px 20px 0px 20px"),
+								"color" : nexacro.ColorObject("#18181B"),
+								"font" : nexacro.FontObject("700 22px \"NotoSansKR-Bold\"")
+							}
+						}
+					}
+				},
+				{
+					"sta_KpiCard_Done" : 
+					{
+						"self" : 
+						{
+							"enabled" : 
+							{
+								"border" : nexacro.BorderObject("1px solid #9FE1CB"),
+								"padding" : nexacro.PaddingObject("0px 20px 0px 20px"),
+								"color" : nexacro.ColorObject("#085041"),
+								"font" : nexacro.FontObject("700 22px \"NotoSansKR-Bold\"")
+							}
+						}
+					}
+				},
+				{
+					"sta_KpiCard_Remain" : 
+					{
+						"self" : 
+						{
+							"enabled" : 
+							{
+								"border" : nexacro.BorderObject("1px solid #FAC775"),
+								"padding" : nexacro.PaddingObject("0px 20px 0px 20px"),
+								"color" : nexacro.ColorObject("#633806"),
+								"font" : nexacro.FontObject("700 22px \"NotoSansKR-Bold\"")
+							}
+						}
+					}
+				},
+				{
+					"sta_KpiCard_Rate" : 
+					{
+						"self" : 
+						{
+							"enabled" : 
+							{
+								"border" : nexacro.BorderObject("1px solid #B5D4F4"),
+								"padding" : nexacro.PaddingObject("0px 20px 0px 20px"),
+								"color" : nexacro.ColorObject("#0C447C"),
+								"font" : nexacro.FontObject("700 22px \"NotoSansKR-Bold\"")
+							}
+						}
+					}
 				}
 				]
 			},

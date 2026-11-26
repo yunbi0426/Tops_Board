@@ -6753,3 +6753,51 @@ textarea::-webkit-scrollbar { display:none; }
   color:#18181B;
   font:400 13px "NotoSansKR-Regular";
 }
+
+.Static.sta_Card {
+  border:1px solid #E4E4E7;
+  background:#FFFFFF;
+  border-radius:10px;
+}
+
+.Static.sta_CardTitle {
+  color:#18181B;
+  font:700 13px "NotoSansKR-Bold";
+}
+
+.Static.sta_CardMuted {
+  color:#A1A1AA;
+  font:400 12px "NotoSansKR-Regular";
+}
+
+.Static.sta_KpiCard {
+  border:1px solid #E4E4E7;
+  background:#FFFFFF;
+  border-radius:10px;
+  color:#18181B;
+  font:700 22px "NotoSansKR-Bold";
+}
+
+.Static.sta_KpiCard_Done {
+  border:1px solid #9FE1CB;
+  background:#E1F5EE;
+  border-radius:10px;
+  color:#085041;
+  font:700 22px "NotoSansKR-Bold";
+}
+
+.Static.sta_KpiCard_Remain {
+  border:1px solid #FAC775;
+  background:#FAEEDA;
+  border-radius:10px;
+  color:#633806;
+  font:700 22px "NotoSansKR-Bold";
+}
+
+.Static.sta_KpiCard_Rate {
+  border:1px solid #B5D4F4;
+  background:#E6F1FB;
+  border-radius:10px;
+  color:#0C447C;
+  font:700 22px "NotoSansKR-Bold";
+}
