@@ -3,7 +3,7 @@
   <Form id="frmDetails" width="1050" height="736" titletext="ListDetail (H)">
     <Layouts>
       <Layout width="1050" height="736">
-        <View id="Search" taborder="1" viewtype="Search" viewdataset="_dstops_requirement_listSelect_ds_search" text="Search" left="10" height="50" top="45" right="10" cssclass="view_WF_Search">
+        <View id="Search" taborder="1" viewtype="Search" text="Search" left="10" height="50" top="45" right="10" cssclass="view_WF_Search" viewdataset="_dstops_requirement_listSelect_ds_search">
           <Layouts>
             <Layout>
               <Panel id="pnl_mainPanel" taborder="0" left="5" top="0" right="120" bottom="0" flexwrap="wrap" type="horizontal" verticalgap="5" fittocontents="height" spacing="5px 0px 5px 0px" _fieldid="_mainPanel" _fieldcomptype="panel">
@@ -19,65 +19,65 @@
                 </Contents>
               </Panel>
               <Button id="btnSearch" cssclass="btn_WF_Search" text="Search" _fieldid="_btnSearch" _fieldcomptype="comp" top="5" height="38" width="110" right="5"/>
-              <Static id="staRp" taborder="0" text="RP" cssclass="sta_WF_SchLabel" left="0" top="0" width="80" height="38" _fieldid="rp" _fieldcomptype="label"/>
-              <Edit id="edtrp" taborder="1" left="0" top="0" width="190" height="38" flexgrow="1" _fieldid="rp" _fieldcomptype="comp"/>
-              <Panel id="pnlRp" taborder="2" left="0" top="0" width="270" height="38" flexcrossaxisalign="center" horizontalgap="0" flexgrow="1" verticalgap="0" cssclass="" _fieldid="rp" _fieldcomptype="panel">
+              <Static id="staRp" taborder="0" text="RP" cssclass="sta_WF_SchLabel" left="0" top="0" width="100" height="38" _fieldid="rp" _fieldcomptype="label"/>
+              <Edit id="edtrp" taborder="1" left="0" top="0" width="50" height="38" flexgrow="1" _fieldid="rp" _fieldcomptype="comp"/>
+              <Panel id="pnlRp" taborder="2" left="0" top="0" width="150" height="38" flexcrossaxisalign="center" horizontalgap="0" flexgrow="1" verticalgap="0" cssclass="" _fieldid="rp" _fieldcomptype="panel">
                 <Contents>
                   <PanelItem id="PanelItem_label" componentid="staRp"/>
                   <PanelItem id="PanelItem_comp_0" componentid="edtrp"/>
                 </Contents>
               </Panel>
-              <Static id="staReqName" taborder="2" text="요구처" cssclass="sta_WF_SchLabel" left="0" top="0" width="80" height="38" _fieldid="req_name" _fieldcomptype="label"/>
-              <Edit id="edtreqName" taborder="3" left="0" top="0" width="190" height="38" flexgrow="1" _fieldid="req_name" _fieldcomptype="comp"/>
-              <Panel id="pnlReqName" taborder="4" left="0" top="0" width="270" height="38" flexcrossaxisalign="center" horizontalgap="0" flexgrow="1" verticalgap="0" cssclass="" _fieldid="req_name" _fieldcomptype="panel">
+              <Static id="staReqName" taborder="2" text="요구처" cssclass="sta_WF_SchLabel" left="0" top="0" width="100" height="38" _fieldid="req_name" _fieldcomptype="label"/>
+              <MultiCombo id="mcbreqName" taborder="3" left="0" top="0" width="50" height="38" flexgrow="1" _fieldid="req_name" _fieldcomptype="comp" innerdataset="_dstops_requirement_reqNameSelect_ds_output_req_name00" codecolumn="req_name" datacolumn="req_name"/>
+              <Panel id="pnlReqName" taborder="4" left="0" top="0" width="150" height="38" flexcrossaxisalign="center" horizontalgap="0" flexgrow="1" verticalgap="0" cssclass="" _fieldid="req_name" _fieldcomptype="panel">
                 <Contents>
                   <PanelItem id="PanelItem_label" componentid="staReqName"/>
-                  <PanelItem id="PanelItem_comp_0" componentid="edtreqName"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="mcbreqName"/>
                 </Contents>
               </Panel>
-              <Static id="staDevResult" taborder="4" text="처리 결과" cssclass="sta_WF_SchLabel" left="0" top="0" width="80" height="38" _fieldid="dev_result" _fieldcomptype="label"/>
-              <Combo id="cmbdevResult" taborder="5" left="0" top="0" width="190" height="38" flexgrow="1" _fieldid="dev_result" _fieldcomptype="comp" innerdataset="innerdatasetDevResult" codecolumn="code" datacolumn="data"/>
-              <Panel id="pnlDevResult" taborder="6" left="0" top="0" width="270" height="38" flexcrossaxisalign="center" horizontalgap="0" flexgrow="1" verticalgap="0" cssclass="" _fieldid="dev_result" _fieldcomptype="panel">
+              <Static id="staDevResult" taborder="4" text="처리 결과" cssclass="sta_WF_SchLabel" left="0" top="0" width="100" height="38" _fieldid="dev_result" _fieldcomptype="label"/>
+              <MultiCombo id="mcbdevResult" taborder="5" left="0" top="0" width="50" height="38" flexgrow="1" _fieldid="dev_result" _fieldcomptype="comp" innerdataset="innerdatasetDevResult" codecolumn="code" datacolumn="data"/>
+              <Panel id="pnlDevResult" taborder="6" left="0" top="0" width="150" height="38" flexcrossaxisalign="center" horizontalgap="0" flexgrow="1" verticalgap="0" cssclass="" _fieldid="dev_result" _fieldcomptype="panel">
                 <Contents>
                   <PanelItem id="PanelItem_label" componentid="staDevResult"/>
-                  <PanelItem id="PanelItem_comp_0" componentid="cmbdevResult"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="mcbdevResult"/>
                 </Contents>
               </Panel>
-              <Static id="staStatus" taborder="6" text="상태" cssclass="sta_WF_SchLabel" left="0" top="0" width="80" height="38" _fieldid="status" _fieldcomptype="label"/>
-              <MultiCombo id="mcbstatus" taborder="7" left="0" top="0" width="190" height="38" flexgrow="1" _fieldid="status" _fieldcomptype="comp" innerdataset="_dstops_reqStatusSelect_ds_output_status00" codecolumn="status" datacolumn="status"/>
-              <Panel id="pnlStatus" taborder="8" left="0" top="0" width="270" height="38" flexcrossaxisalign="center" horizontalgap="0" flexgrow="1" verticalgap="0" cssclass="" _fieldid="status" _fieldcomptype="panel">
+              <Static id="staStatus" taborder="6" text="상태" cssclass="sta_WF_SchLabel" left="0" top="0" width="100" height="38" _fieldid="status" _fieldcomptype="label"/>
+              <MultiCombo id="mcbstatus" taborder="7" left="0" top="0" width="50" height="38" flexgrow="1" _fieldid="status" _fieldcomptype="comp" innerdataset="_dstops_reqStatusSelect_ds_output_status00" codecolumn="status" datacolumn="status"/>
+              <Panel id="pnlStatus" taborder="8" left="0" top="0" width="150" height="38" flexcrossaxisalign="center" horizontalgap="0" flexgrow="1" verticalgap="0" cssclass="" _fieldid="status" _fieldcomptype="panel">
                 <Contents>
                   <PanelItem id="PanelItem_label" componentid="staStatus"/>
                   <PanelItem id="PanelItem_comp_0" componentid="mcbstatus"/>
                 </Contents>
               </Panel>
-              <Static id="staTitle" taborder="8" text="제목" cssclass="sta_WF_SchLabel" left="0" top="0" width="80" height="38" _fieldid="title" _fieldcomptype="label"/>
-              <Edit id="edttitle" taborder="9" left="0" top="0" width="190" height="38" flexgrow="1" _fieldid="title" _fieldcomptype="comp"/>
-              <Panel id="pnlTitle" taborder="10" left="0" top="0" width="270" height="38" flexcrossaxisalign="center" horizontalgap="0" flexgrow="1" verticalgap="0" cssclass="" _fieldid="title" _fieldcomptype="panel">
+              <Static id="staTitle" taborder="8" text="제목" cssclass="sta_WF_SchLabel" left="0" top="0" width="100" height="38" _fieldid="title" _fieldcomptype="label"/>
+              <Edit id="edttitle" taborder="9" left="0" top="0" width="50" height="38" flexgrow="1" _fieldid="title" _fieldcomptype="comp"/>
+              <Panel id="pnlTitle" taborder="10" left="0" top="0" width="150" height="38" flexcrossaxisalign="center" horizontalgap="0" flexgrow="1" verticalgap="0" cssclass="" _fieldid="title" _fieldcomptype="panel">
                 <Contents>
                   <PanelItem id="PanelItem_label" componentid="staTitle"/>
                   <PanelItem id="PanelItem_comp_0" componentid="edttitle"/>
                 </Contents>
               </Panel>
-              <Static id="staReqType" taborder="10" text="요구종류" cssclass="sta_WF_SchLabel" left="0" top="0" width="80" height="38" _fieldid="req_type" _fieldcomptype="label"/>
-              <Combo id="cmbreqType" taborder="11" left="0" top="0" width="190" height="38" flexgrow="1" _fieldid="req_type" _fieldcomptype="comp" innerdataset="innerdatasetReqType" codecolumn="code" datacolumn="data"/>
-              <Panel id="pnlReqType" taborder="12" left="0" top="0" width="270" height="38" flexcrossaxisalign="center" horizontalgap="0" flexgrow="1" verticalgap="0" cssclass="" _fieldid="req_type" _fieldcomptype="panel">
+              <Static id="staReqType" taborder="10" text="요구종류" cssclass="sta_WF_SchLabel" left="0" top="0" width="100" height="38" _fieldid="req_type" _fieldcomptype="label"/>
+              <MultiCombo id="mcbreqType" taborder="11" left="0" top="0" width="50" height="38" flexgrow="1" _fieldid="req_type" _fieldcomptype="comp" innerdataset="innerdatasetReqType" codecolumn="code" datacolumn="data"/>
+              <Panel id="pnlReqType" taborder="12" left="0" top="0" width="150" height="38" flexcrossaxisalign="center" horizontalgap="0" flexgrow="1" verticalgap="0" cssclass="" _fieldid="req_type" _fieldcomptype="panel">
                 <Contents>
                   <PanelItem id="PanelItem_label" componentid="staReqType"/>
-                  <PanelItem id="PanelItem_comp_0" componentid="cmbreqType"/>
+                  <PanelItem id="PanelItem_comp_0" componentid="mcbreqType"/>
                 </Contents>
               </Panel>
-              <Static id="staRegFrom" taborder="12" text="등록일(시작)" cssclass="sta_WF_SchLabel" left="0" top="0" width="80" height="38" _fieldid="reg_from" _fieldcomptype="label"/>
-              <Calendar id="calregFrom" taborder="13" left="0" top="0" width="190" height="38" flexgrow="1" _fieldid="reg_from" _fieldcomptype="comp"/>
-              <Panel id="pnlRegFrom" taborder="14" left="0" top="0" width="270" height="38" flexcrossaxisalign="center" horizontalgap="0" flexgrow="1" verticalgap="0" cssclass="" _fieldid="reg_from" _fieldcomptype="panel">
+              <Static id="staRegFrom" taborder="12" text="등록일(시작)" cssclass="sta_WF_SchLabel" left="0" top="0" width="100" height="38" _fieldid="reg_from" _fieldcomptype="label"/>
+              <Calendar id="calregFrom" taborder="13" left="0" top="0" width="50" height="38" flexgrow="1" _fieldid="reg_from" _fieldcomptype="comp"/>
+              <Panel id="pnlRegFrom" taborder="14" left="0" top="0" width="150" height="38" flexcrossaxisalign="center" horizontalgap="0" flexgrow="1" verticalgap="0" cssclass="" _fieldid="reg_from" _fieldcomptype="panel">
                 <Contents>
                   <PanelItem id="PanelItem_label" componentid="staRegFrom"/>
                   <PanelItem id="PanelItem_comp_0" componentid="calregFrom"/>
                 </Contents>
               </Panel>
-              <Static id="staRegTo" taborder="14" text="등록일(끝)" cssclass="sta_WF_SchLabel" left="0" top="0" width="80" height="38" _fieldid="reg_to" _fieldcomptype="label"/>
-              <Calendar id="calregTo" taborder="15" left="0" top="0" width="190" height="38" flexgrow="1" _fieldid="reg_to" _fieldcomptype="comp"/>
-              <Panel id="pnlRegTo" taborder="16" left="0" top="0" width="270" height="38" flexcrossaxisalign="center" horizontalgap="0" flexgrow="1" verticalgap="0" cssclass="" _fieldid="reg_to" _fieldcomptype="panel">
+              <Static id="staRegTo" taborder="14" text="등록일(끝)" cssclass="sta_WF_SchLabel" left="0" top="0" width="100" height="38" _fieldid="reg_to" _fieldcomptype="label"/>
+              <Calendar id="calregTo" taborder="15" left="0" top="0" width="50" height="38" flexgrow="1" _fieldid="reg_to" _fieldcomptype="comp"/>
+              <Panel id="pnlRegTo" taborder="16" left="0" top="0" width="150" height="38" flexcrossaxisalign="center" horizontalgap="0" flexgrow="1" verticalgap="0" cssclass="" _fieldid="reg_to" _fieldcomptype="panel">
                 <Contents>
                   <PanelItem id="PanelItem_label" componentid="staRegTo"/>
                   <PanelItem id="PanelItem_comp_0" componentid="calregTo"/>
@@ -92,10 +92,6 @@
                 <Column id="data" type="STRING" size="256"/>
               </ColumnInfo>
               <Rows>
-                <Row>
-                  <Col id="code"/>
-                  <Col id="data">전체</Col>
-                </Row>
                 <Row>
                   <Col id="code">버그</Col>
                   <Col id="data">버그</Col>
@@ -121,10 +117,6 @@
               </ColumnInfo>
               <Rows>
                 <Row>
-                  <Col id="code"/>
-                  <Col id="data">전체</Col>
-                </Row>
-                <Row>
                   <Col id="code">REMAIN</Col>
                   <Col id="data">잔여</Col>
                 </Row>
@@ -141,18 +133,18 @@
           </Objects>
           <Bind>
             <BindItem id="bind_edtrp" compid="edtrp" propid="value" datasetid="_dstops_requirement_listSelect_ds_search" columnid="rp"/>
-            <BindItem id="bind_edtreqName" compid="edtreqName" propid="value" datasetid="_dstops_requirement_listSelect_ds_search" columnid="req_name"/>
-            <BindItem id="bind_cmbdevResult" compid="cmbdevResult" propid="value" datasetid="_dstops_requirement_listSelect_ds_search" columnid="dev_result"/>
+            <BindItem id="bind_mcbreqName" compid="mcbreqName" propid="value" datasetid="_dstops_requirement_listSelect_ds_search" columnid="req_name"/>
+            <BindItem id="bind_mcbdevResult" compid="mcbdevResult" propid="value" datasetid="_dstops_requirement_listSelect_ds_search" columnid="dev_result"/>
             <BindItem id="bind_mcbstatus" compid="mcbstatus" propid="value" datasetid="_dstops_requirement_listSelect_ds_search" columnid="status"/>
             <BindItem id="bind_edttitle" compid="edttitle" propid="value" datasetid="_dstops_requirement_listSelect_ds_search" columnid="title"/>
-            <BindItem id="bind_cmbreqType" compid="cmbreqType" propid="value" datasetid="_dstops_requirement_listSelect_ds_search" columnid="req_type"/>
+            <BindItem id="bind_mcbreqType" compid="mcbreqType" propid="value" datasetid="_dstops_requirement_listSelect_ds_search" columnid="req_type"/>
             <BindItem id="bind_calregFrom" compid="calregFrom" propid="value" datasetid="_dstops_requirement_listSelect_ds_search" columnid="reg_from"/>
             <BindItem id="bind_calregTo" compid="calregTo" propid="value" datasetid="_dstops_requirement_listSelect_ds_search" columnid="reg_to"/>
           </Bind>
           <Script><![CDATA[this._fnViewOnLoad = function(objForm){/* Sets the view form reference so that functions declared in the view can access it */this._ownerForm = objForm;};]]>
           </Script>
         </View>
-        <View id="View00" left="10" taborder="3" text="View00" right="10" height="50" bottom="10" viewdataset="_dstops_requirement_listSelect_ds_pageinfo">
+        <View id="Page" left="10" taborder="3" text="View00" right="10" height="50" bottom="10" viewdataset="_dstops_requirement_listSelect_ds_pageinfo">
           <Layouts>
             <Layout>
               <Static id="sta_pageInfo" left="0" top="0" bottom="0" width="240" text="" verticalAlign="middle" font="normal 12px/normal &quot;Malgun Gothic&quot;" color="#888780" visible="true" _fieldid="_info" _fieldcomptype="comp"/>
@@ -177,7 +169,7 @@
           <Script><![CDATA[this.fvPager = {"roles":{"index":"page_index","size":"page_size","total":"total_cnt","pages":"page_cnt"},"pageSize":50,"count":5,"format":"총 {total}건 · {page} / {pages} 페이지","align":"center","size":28,"gap":4,"cssclass":"btn_WF_Page","ids":{"info":"sta_pageInfo","div":"div_page","prev":"btn_prev","next":"btn_next","page":"btn_page","change":"btn_pagechange","center":"sta_pageCenter"}};this._fnViewOnLoad = function(objForm) { topsPagination.init(this, objForm); };this.fn_paging_reset = function() { topsPagination.reset(this); };]]>
           </Script>
         </View>
-        <View id="Master" taborder="0" viewtype="Grid" viewdataset="_dstops_requirement_listSelect_ds_list" text="Master(N)" left="10" bottom="View00:10" top="Search:10" right="10">
+        <View id="Master" taborder="0" viewtype="Grid" viewdataset="_dstops_requirement_listSelect_ds_list" text="Master(N)" left="10" bottom="Page:10" top="105" right="10">
           <Layouts>
             <Layout>
               <Grid id="grdList" left="0" top="0" right="0" bottom="0" binddataset="_dstops_requirement_listSelect_ds_list" autofittype="col" cssclass="grd_WF_Detail" _fieldid="grdList" _fieldcomptype="comp">
@@ -226,7 +218,7 @@
           <Script><![CDATA[this.cfn_FilterBtn_onclick = function(obj, e){let aComponents = this.components;for(let i = 0 ; i < aComponents.length ; i++){if(aComponents[i]._fieldcomptype == "filter"){aComponents[i].setSelectStatus(false);}}obj.setSelectStatus(true);};this._fnViewOnLoad = function(objForm){/* Sets the view form reference so that functions declared in the view can access it */this._ownerForm = objForm;this._sSearchFilterValue = "";this._sFilterValue = "";let aComponents = this.components;let oComp = null;for(let i = 0 ; i < aComponents.length ; i++){oComp = aComponents[i];if(oComp instanceof nexacro.Button){if(oComp._fieldcomptype == "filter"){oComp.addEventHandler("onclick",this.cfn_FilterBtn_onclick, this)}}}};]]>
           </Script>
         </View>
-        <Button id="Button00" top="10" taborder="2" width="120" text="  조건 초기화" right="10" bottom="Search:10" cssclass="btn_WF_TextReset"/>
+        <Button id="btnClear" top="10" taborder="2" width="120" text="조건 초기화" right="10" bottom="Search:10" cssclass="btn_WF_TextReset"/>
       </Layout>
     </Layouts>
     <Objects>
@@ -283,7 +275,7 @@ return !!(e && e.keycode == 13);`]]>
       </Dataset>
       <OnLoadView id="OnLoadView00" alias="폼 초기화"/>
       <RunScript id="RunScript01" alias="페이지 초기화">
-        <Contents><![CDATA[`this.View00.form.fn_paging_reset();`]]>
+        <Contents><![CDATA[`this.Page.form.fn_paging_reset();`]]>
         </Contents>
       </RunScript>
       <Dataset id="_dstops_reqStatusSelect_ds_output_status00">
@@ -292,21 +284,6 @@ return !!(e && e.keycode == 13);`]]>
           <Column id="sort_no" type="int" size="11" description="sort_no"/>
         </ColumnInfo>
         <Rows/>
-      </Dataset>
-      <Dataset id="_dstops_requirement_listSelect_ds_search">
-        <ColumnInfo>
-          <Column id="rp" type="STRING" size="10" description="RP"/>
-          <Column id="status" type="STRING" size="50" description="상태"/>
-          <Column id="req_type" type="STRING" size="10" description="요구종류"/>
-          <Column id="title" type="STRING" size="500" description="제목"/>
-          <Column id="dev_result" type="STRING" size="50" description="dev_result"/>
-          <Column id="reg_from" type="STRING" size="100" description="reg_from"/>
-          <Column id="reg_to" type="STRING" size="100" description="reg_to"/>
-          <Column id="req_name" type="STRING" size="100" description="req_name"/>
-        </ColumnInfo>
-        <Rows>
-          <Row/>
-        </Rows>
       </Dataset>
       <Dataset id="_dstops_requirement_detailSelect_ds_param">
         <ColumnInfo>
@@ -337,21 +314,43 @@ return !!(e && e.keycode == 13);`]]>
       </Dataset>
       <CallDatasetFunction id="CallDatasetFunction00" alias="검색 조건 비우기" functionList="clearData" targetDataset="_dstops_requirement_listSelect_ds_search"/>
       <CallDatasetFunction id="CallDatasetFunction01" alias="검색 조건 빈 행 추가" functionList="addRow" targetDataset="_dstops_requirement_listSelect_ds_search"/>
+      <Dataset id="_dstops_requirement_reqNameSelect_ds_output_req_name00">
+        <ColumnInfo>
+          <Column id="req_name" type="string" size="200" description="req_name"/>
+          <Column id="req_label" type="string" size="224" description="req_label"/>
+          <Column id="req_cnt" type="INT" size="21" description="req_cnt"/>
+        </ColumnInfo>
+        <Rows/>
+      </Dataset>
+      <Dataset id="_dstops_requirement_listSelect_ds_search">
+        <ColumnInfo>
+          <Column id="rp" type="STRING" size="10" description="RP"/>
+          <Column id="status" type="STRING" size="200" description="상태"/>
+          <Column id="req_type" type="STRING" size="100" description="요구종류"/>
+          <Column id="title" type="STRING" size="500" description="제목"/>
+          <Column id="dev_result" type="STRING" size="50" description="dev_result"/>
+          <Column id="reg_from" type="STRING" size="100" description="reg_from"/>
+          <Column id="reg_to" type="STRING" size="100" description="reg_to"/>
+          <Column id="req_name" type="STRING" size="1000" description="req_name"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <Transaction id="Transaction02" alias="요구처 목록 가져오기" servicemodel="tops::requirement/reqNameSelect" serviceurl="NexaLAPServer::api/v1/execute">
+        <Contents><![CDATA[{
+    "outputdatasets": [
+        {
+            "modelid": "ds_output",
+            "datasetid": "_dstops_requirement_reqNameSelect_ds_output_req_name00"
+        }
+    ]
+}]]>
+        </Contents>
+      </Transaction>
     </Objects>
     <ViewGenerationInfo>
-      <ViewInfo viewid="frmDetails">
-        <ModelInfo modelserviceid="tops" serviceid="requirement/reqStatusSelect" modelid="ds_output" datasetid="_dstops_reqStatusSelect_ds_output" filepath="requirement\.model\reqStatusSelect.model">
-          <Fields>
-            <Field id="status"/>
-            <Field id="sort_no"/>
-          </Fields>
-          <Components/>
-        </ModelInfo>
-        <ViewTemplateInfo/>
-        <ModelInfo modelserviceid="tops" serviceid="requirement/reqStatusSelect" modelid="ds_output" datasetid="_dstops_reqStatusSelect_ds_output_status00" filepath="requirement\.model\reqStatusSelect.model"/>
-        <ModelInfo modelserviceid="tops" serviceid="requirement/detailSelect" modelid="ds_param" datasetid="_dstops_requirement_detailSelect_ds_param" filepath="requirement\.model\detailSelect.model"/>
-      </ViewInfo>
-      <ViewInfo viewid="View00">
+      <ViewInfo viewid="Page">
         <ModelInfo modelserviceid="tops" serviceid="requirement/listSelect" modelid="ds_pageinfo" datasetid="_dstops_requirement_listSelect_ds_pageinfo" filepath="requirement\.model\listSelect.model">
           <Fields>
             <Field id="page_index" pagerole="index"/>
@@ -368,53 +367,6 @@ return !!(e && e.keycode == 13);`]]>
         </ModelInfo>
         <ViewTemplateInfo filepath="Tops_Board_Asset/PaginationView.viewtemplate" version="1.0.0">
           <Attribute id="align" value="center"/>
-        </ViewTemplateInfo>
-      </ViewInfo>
-      <ViewInfo viewid="Search">
-        <ModelInfo modelserviceid="tops" serviceid="requirement/listSelect" modelid="ds_search" datasetid="_dstops_requirement_listSelect_ds_search" filepath="requirement\.model\listSelect.model">
-          <Fields>
-            <Field id="rp"/>
-            <Field id="title"/>
-            <Field id="req_name" label="요구처"/>
-            <Field id="req_type" fieldtype="Select" options="{&quot;innerdataset_list&quot;:[{&quot;label&quot;:&quot;전체&quot;,&quot;value&quot;:&quot;&quot;},{&quot;label&quot;:&quot;버그&quot;,&quot;value&quot;:&quot;버그&quot;},{&quot;label&quot;:&quot;신규&quot;,&quot;value&quot;:&quot;신규&quot;},{&quot;label&quot;:&quot;변경&quot;,&quot;value&quot;:&quot;변경&quot;},{&quot;label&quot;:&quot;문의&quot;,&quot;value&quot;:&quot;문의&quot;}]}"/>
-            <Field id="dev_result" label="처리 결과" fieldtype="Select" options="{&quot;innerdataset_list&quot;:[{&quot;label&quot;:&quot;전체&quot;,&quot;value&quot;:&quot;&quot;},{&quot;label&quot;:&quot;잔여&quot;,&quot;value&quot;:&quot;REMAIN&quot;},{&quot;label&quot;:&quot;완료&quot;,&quot;value&quot;:&quot;DONE&quot;},{&quot;label&quot;:&quot;제외&quot;,&quot;value&quot;:&quot;EXCLUDE&quot;}]}"/>
-            <Field id="status" fieldtype="MultiSelect" options="{&amp;quot;innerdataset_service&amp;quot;:{&amp;quot;serviceid&amp;quot;:&amp;quot;tops::requirement/reqStatusSelect&amp;quot;,&amp;quot;modelid&amp;quot;:&amp;quot;ds_output&amp;quot;,&amp;quot;datasetid&amp;quot;:&amp;quot;_dstops_reqStatusSelect_ds_output_status00&amp;quot;,&amp;quot;code&amp;quot;:&amp;quot;status&amp;quot;,&amp;quot;data&amp;quot;:&amp;quot;status&amp;quot;}}"/>
-            <Field id="reg_from" label="등록일(시작)" fieldtype="Date"/>
-            <Field id="reg_to" label="등록일(끝)" fieldtype="Date"/>
-          </Fields>
-          <Components>
-            <Component id="pnl_mainPanel" fields="_mainPanel"/>
-            <Component id="btnSearch" fields="btnSearch"/>
-            <Component id="staRp" fields="rp"/>
-            <Component id="edtrp" fields="rp"/>
-            <Component id="pnlRp" fields="rp"/>
-            <Component id="staReqName" fields="req_name"/>
-            <Component id="edtreqName" fields="req_name"/>
-            <Component id="pnlReqName" fields="req_name"/>
-            <Component id="staDevResult" fields="dev_result"/>
-            <Component id="cmbdevResult" fields="dev_result"/>
-            <Component id="pnlDevResult" fields="dev_result"/>
-            <Component id="staStatus" fields="status"/>
-            <Component id="mcbstatus" fields="status"/>
-            <Component id="pnlStatus" fields="status"/>
-            <Component id="staTitle" fields="title"/>
-            <Component id="edttitle" fields="title"/>
-            <Component id="pnlTitle" fields="title"/>
-            <Component id="staReqType" fields="req_type"/>
-            <Component id="cmbreqType" fields="req_type"/>
-            <Component id="pnlReqType" fields="req_type"/>
-            <Component id="staRegFrom" fields="reg_from"/>
-            <Component id="calregFrom" fields="reg_from"/>
-            <Component id="pnlRegFrom" fields="reg_from"/>
-            <Component id="staRegTo" fields="reg_to"/>
-            <Component id="calregTo" fields="reg_to"/>
-            <Component id="pnlRegTo" fields="reg_to"/>
-          </Components>
-        </ModelInfo>
-        <ViewTemplateInfo filepath="NexaLAP_BasePack/Search/FluidSearchView.viewtemplate">
-          <Attribute id="labelWidth" value="80"/>
-          <Attribute id="fieldWidth" value="270"/>
-          <Attribute id="layout" value="{&quot;columnsize&quot;:[100,100,100,100],&quot;rowsize&quot;:[38,38],&quot;celllist&quot;:[{&quot;col&quot;:0,&quot;row&quot;:0,&quot;fieldlist&quot;:[&quot;rp&quot;],&quot;mergelabel&quot;:&quot;false&quot;},{&quot;col&quot;:1,&quot;row&quot;:0,&quot;mergelabel&quot;:&quot;false&quot;,&quot;fieldlist&quot;:[&quot;req_name&quot;]},{&quot;col&quot;:2,&quot;row&quot;:0,&quot;fieldlist&quot;:[&quot;dev_result&quot;],&quot;mergelabel&quot;:&quot;false&quot;},{&quot;col&quot;:3,&quot;row&quot;:0,&quot;fieldlist&quot;:[&quot;status&quot;],&quot;mergelabel&quot;:&quot;false&quot;},{&quot;col&quot;:0,&quot;row&quot;:1,&quot;halign&quot;:&quot;left&quot;,&quot;valign&quot;:&quot;top&quot;,&quot;direction&quot;:&quot;horizontal&quot;,&quot;mergelabel&quot;:&quot;false&quot;,&quot;fieldlist&quot;:[&quot;title&quot;]},{&quot;col&quot;:1,&quot;row&quot;:1,&quot;halign&quot;:&quot;left&quot;,&quot;valign&quot;:&quot;top&quot;,&quot;direction&quot;:&quot;horizontal&quot;,&quot;mergelabel&quot;:&quot;false&quot;,&quot;fieldlist&quot;:[&quot;req_type&quot;]},{&quot;col&quot;:2,&quot;row&quot;:1,&quot;halign&quot;:&quot;left&quot;,&quot;valign&quot;:&quot;top&quot;,&quot;direction&quot;:&quot;horizontal&quot;,&quot;mergelabel&quot;:&quot;false&quot;,&quot;fieldlist&quot;:[&quot;reg_from&quot;]},{&quot;col&quot;:3,&quot;row&quot;:1,&quot;halign&quot;:&quot;left&quot;,&quot;valign&quot;:&quot;top&quot;,&quot;direction&quot;:&quot;horizontal&quot;,&quot;mergelabel&quot;:&quot;false&quot;,&quot;fieldlist&quot;:[&quot;reg_to&quot;]}]}"/>
         </ViewTemplateInfo>
       </ViewInfo>
       <ViewInfo viewid="Master">
@@ -440,7 +392,84 @@ return !!(e && e.keycode == 13);`]]>
           <Attribute id="gridlayout" value="{&quot;columns&quot;:[{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:50},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:50},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:50},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:50},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:70},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:70},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:200},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:50}],&quot;rows&quot;:[{&quot;band&quot;:&quot;head&quot;,&quot;size&quot;:32},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:32}],&quot;head&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;RP&quot;},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;RC&quot;},{&quot;row&quot;:0,&quot;col&quot;:2,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;상태&quot;},{&quot;row&quot;:0,&quot;col&quot;:3,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;요구종류&quot;},{&quot;row&quot;:0,&quot;col&quot;:4,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;요구처&quot;},{&quot;row&quot;:0,&quot;col&quot;:5,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;모듈&quot;},{&quot;row&quot;:0,&quot;col&quot;:6,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;제목&quot;},{&quot;row&quot;:0,&quot;col&quot;:7,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;등록일자&quot;}],&quot;body&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;rp&quot;},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;rc&quot;},{&quot;row&quot;:0,&quot;col&quot;:2,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;status&quot;},{&quot;row&quot;:0,&quot;col&quot;:3,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;req_type&quot;},{&quot;row&quot;:0,&quot;col&quot;:4,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;req_name&quot;},{&quot;row&quot;:0,&quot;col&quot;:5,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;product_module&quot;},{&quot;row&quot;:0,&quot;col&quot;:6,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;title&quot;},{&quot;row&quot;:0,&quot;col&quot;:7,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;reg_date&quot;}],&quot;summ&quot;:[]}"/>
         </ViewTemplateInfo>
       </ViewInfo>
+      <ViewInfo viewid="frmDetails">
+        <ModelInfo modelserviceid="tops" serviceid="requirement/reqStatusSelect" modelid="ds_output" datasetid="_dstops_reqStatusSelect_ds_output" filepath="requirement\.model\reqStatusSelect.model">
+          <Fields>
+            <Field id="status"/>
+            <Field id="sort_no"/>
+          </Fields>
+          <Components/>
+        </ModelInfo>
+        <ViewTemplateInfo/>
+        <ModelInfo modelserviceid="tops" serviceid="requirement/reqStatusSelect" modelid="ds_output" datasetid="_dstops_reqStatusSelect_ds_output_status00" filepath="requirement\.model\reqStatusSelect.model"/>
+        <ModelInfo modelserviceid="tops" serviceid="requirement/detailSelect" modelid="ds_param" datasetid="_dstops_requirement_detailSelect_ds_param" filepath="requirement\.model\detailSelect.model"/>
+        <ModelInfo modelserviceid="tops" serviceid="requirement/reqNameSelect" modelid="ds_output" datasetid="_dstops_requirement_reqNameSelect_ds_output" filepath="requirement\.model\reqNameSelect.model">
+          <Fields>
+            <Field id="req_name"/>
+            <Field id="req_label"/>
+            <Field id="req_cnt"/>
+          </Fields>
+          <Components/>
+        </ModelInfo>
+        <ModelInfo modelserviceid="tops" serviceid="requirement/reqNameSelect" modelid="ds_output" datasetid="_dstops_requirement_reqNameSelect_ds_output_req_name00" filepath="requirement\.model\reqNameSelect.model"/>
+      </ViewInfo>
+      <ViewInfo viewid="Search">
+        <ModelInfo modelserviceid="tops" serviceid="requirement/listSelect" modelid="ds_search" datasetid="_dstops_requirement_listSelect_ds_search" filepath="requirement\.model\listSelect.model">
+          <Fields>
+            <Field id="rp"/>
+            <Field id="title"/>
+            <Field id="req_name" label="요구처" fieldtype="MultiSelect" options="{&quot;innerdataset_service&quot;:{&quot;serviceid&quot;:&quot;tops::requirement/reqNameSelect&quot;,&quot;modelid&quot;:&quot;ds_output&quot;,&quot;datasetid&quot;:&quot;_dstops_requirement_reqNameSelect_ds_output_req_name00&quot;,&quot;code&quot;:&quot;req_name&quot;,&quot;data&quot;:&quot;req_name&quot;}}"/>
+            <Field id="req_type" fieldtype="MultiSelect" options="{&quot;innerdataset_list&quot;:[{&quot;label&quot;:&quot;버그&quot;,&quot;value&quot;:&quot;버그&quot;},{&quot;label&quot;:&quot;신규&quot;,&quot;value&quot;:&quot;신규&quot;},{&quot;label&quot;:&quot;변경&quot;,&quot;value&quot;:&quot;변경&quot;},{&quot;label&quot;:&quot;문의&quot;,&quot;value&quot;:&quot;문의&quot;}]}"/>
+            <Field id="dev_result" label="처리 결과" fieldtype="MultiSelect" options="{&amp;quot;innerdataset_list&amp;quot;:[{&amp;quot;label&amp;quot;:&amp;quot;잔여&amp;quot;,&amp;quot;value&amp;quot;:&amp;quot;REMAIN&amp;quot;},{&amp;quot;label&amp;quot;:&amp;quot;완료&amp;quot;,&amp;quot;value&amp;quot;:&amp;quot;DONE&amp;quot;},{&amp;quot;label&amp;quot;:&amp;quot;제외&amp;quot;,&amp;quot;value&amp;quot;:&amp;quot;EXCLUDE&amp;quot;}]}"/>
+            <Field id="status" fieldtype="MultiSelect" options="{&quot;innerdataset_service&quot;:{&quot;serviceid&quot;:&quot;tops::requirement/reqStatusSelect&quot;,&quot;modelid&quot;:&quot;ds_output&quot;,&quot;datasetid&quot;:&quot;_dstops_reqStatusSelect_ds_output_status00&quot;,&quot;code&quot;:&quot;status&quot;,&quot;data&quot;:&quot;status&quot;}}"/>
+            <Field id="reg_from" label="등록일(시작)" fieldtype="Date"/>
+            <Field id="reg_to" label="등록일(끝)" fieldtype="Date"/>
+          </Fields>
+          <Components>
+            <Component id="pnl_mainPanel" fields="_mainPanel"/>
+            <Component id="btnSearch" fields="btnSearch"/>
+            <Component id="staRp" fields="rp"/>
+            <Component id="edtrp" fields="rp"/>
+            <Component id="pnlRp" fields="rp"/>
+            <Component id="staReqName" fields="req_name"/>
+            <Component id="mcbreqName" fields="req_name"/>
+            <Component id="pnlReqName" fields="req_name"/>
+            <Component id="staDevResult" fields="dev_result"/>
+            <Component id="mcbdevResult" fields="dev_result"/>
+            <Component id="pnlDevResult" fields="dev_result"/>
+            <Component id="staStatus" fields="status"/>
+            <Component id="mcbstatus" fields="status"/>
+            <Component id="pnlStatus" fields="status"/>
+            <Component id="staTitle" fields="title"/>
+            <Component id="edttitle" fields="title"/>
+            <Component id="pnlTitle" fields="title"/>
+            <Component id="staReqType" fields="req_type"/>
+            <Component id="mcbreqType" fields="req_type"/>
+            <Component id="pnlReqType" fields="req_type"/>
+            <Component id="staRegFrom" fields="reg_from"/>
+            <Component id="calregFrom" fields="reg_from"/>
+            <Component id="pnlRegFrom" fields="reg_from"/>
+            <Component id="staRegTo" fields="reg_to"/>
+            <Component id="calregTo" fields="reg_to"/>
+            <Component id="pnlRegTo" fields="reg_to"/>
+          </Components>
+        </ModelInfo>
+        <ViewTemplateInfo filepath="NexaLAP_BasePack/Search/FluidSearchView.viewtemplate">
+          <Attribute id="labelWidth" value="100"/>
+          <Attribute id="fieldWidth" value="150"/>
+          <Attribute id="layout" value="{&quot;columnsize&quot;:[100,100,100,100],&quot;rowsize&quot;:[38,38],&quot;celllist&quot;:[{&quot;col&quot;:0,&quot;row&quot;:0,&quot;fieldlist&quot;:[&quot;rp&quot;],&quot;mergelabel&quot;:&quot;false&quot;},{&quot;col&quot;:1,&quot;row&quot;:0,&quot;mergelabel&quot;:&quot;false&quot;,&quot;fieldlist&quot;:[&quot;req_name&quot;]},{&quot;col&quot;:2,&quot;row&quot;:0,&quot;fieldlist&quot;:[&quot;dev_result&quot;],&quot;mergelabel&quot;:&quot;false&quot;},{&quot;col&quot;:3,&quot;row&quot;:0,&quot;fieldlist&quot;:[&quot;status&quot;],&quot;mergelabel&quot;:&quot;false&quot;},{&quot;col&quot;:0,&quot;row&quot;:1,&quot;halign&quot;:&quot;left&quot;,&quot;valign&quot;:&quot;top&quot;,&quot;direction&quot;:&quot;horizontal&quot;,&quot;mergelabel&quot;:&quot;false&quot;,&quot;fieldlist&quot;:[&quot;title&quot;]},{&quot;col&quot;:1,&quot;row&quot;:1,&quot;halign&quot;:&quot;left&quot;,&quot;valign&quot;:&quot;top&quot;,&quot;direction&quot;:&quot;horizontal&quot;,&quot;mergelabel&quot;:&quot;false&quot;,&quot;fieldlist&quot;:[&quot;req_type&quot;]},{&quot;col&quot;:2,&quot;row&quot;:1,&quot;halign&quot;:&quot;left&quot;,&quot;valign&quot;:&quot;top&quot;,&quot;direction&quot;:&quot;horizontal&quot;,&quot;mergelabel&quot;:&quot;false&quot;,&quot;fieldlist&quot;:[&quot;reg_from&quot;]},{&quot;col&quot;:3,&quot;row&quot;:1,&quot;halign&quot;:&quot;left&quot;,&quot;valign&quot;:&quot;top&quot;,&quot;direction&quot;:&quot;horizontal&quot;,&quot;mergelabel&quot;:&quot;false&quot;,&quot;fieldlist&quot;:[&quot;reg_to&quot;]}]}"/>
+        </ViewTemplateInfo>
+      </ViewInfo>
     </ViewGenerationInfo>
+    <DesignSettings>
+      <InteractionEditor>
+        <NodePositions>
+          <NodePosition id="action:Message00" x="1607" y="237"/>
+          <NodePosition id="action:RunScript01" x="1969" y="639"/>
+          <NodePosition id="action:Transaction00" x="1385" y="237"/>
+        </NodePositions>
+      </InteractionEditor>
+    </DesignSettings>
     <Script type="xscript5.1"><![CDATA[]]>
     </Script>
     <Trigger>
@@ -449,17 +478,17 @@ return !!(e && e.keycode == 13);`]]>
       <TriggerItem id="item6" triggertype="onkeyup" triggerview="Search" triggerobj="edttitle" targetaction="RunScript00"/>
       <TriggerItem id="item7" triggertype="Action Success" triggerview="" triggerobj="Transaction00" targetaction="Message00" condition="this._dstops_requirement_listSelect_ds_list.rowcount == 0"/>
       <TriggerItem id="item5" triggertype="onload" triggerview="" triggerobj="" targetaction="OnLoadView00"/>
-      <TriggerItem id="item9" triggertype="onclick" triggerview="View00" triggerobj="btn_pagechange" targetaction="Transaction00"/>
+      <TriggerItem id="item9" triggertype="onclick" triggerview="Page" triggerobj="btn_pagechange" targetaction="Transaction00"/>
       <TriggerItem id="item1" triggertype="onclick" triggerview="Search" triggerobj="btnSearch" targetaction="RunScript01"/>
       <TriggerItem id="item4" triggertype="Action Success" triggerview="" triggerobj="RunScript00" targetaction="RunScript01"/>
       <TriggerItem id="item0" triggertype="onload" triggerview="" triggerobj="" targetaction="Transaction00"/>
-      <TriggerItem id="item8" triggertype="onkeyup" triggerview="Search" triggerobj="edtreqName" targetaction="RunScript00"/>
       <TriggerItem id="item10" triggertype="oncelldblclick" triggerview="Master" triggerobj="grdList" targetaction="ClearData00"/>
       <TriggerItem id="item11" triggertype="Action Success" triggerview="" triggerobj="ClearData00" targetaction="CopyRow00"/>
       <TriggerItem id="item12" triggertype="Action Success" triggerview="" triggerobj="CopyRow00" targetaction="OpenPopup00"/>
-      <TriggerItem id="item13" triggertype="onclick" triggerview="" triggerobj="Button00" targetaction="CallDatasetFunction00"/>
+      <TriggerItem id="item13" triggertype="onclick" triggerview="" triggerobj="btnClear" targetaction="CallDatasetFunction00"/>
       <TriggerItem id="item14" triggertype="Action Success" triggerview="" triggerobj="CallDatasetFunction00" targetaction="CallDatasetFunction01"/>
       <TriggerItem id="item15" triggertype="Action Success" triggerview="" triggerobj="CallDatasetFunction01" targetaction="RunScript01"/>
+      <TriggerItem id="item8" triggertype="onload" triggerview="" triggerobj="" targetaction="Transaction02"/>
     </Trigger>
   </Form>
 </FDL>

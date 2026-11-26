@@ -2369,6 +2369,7 @@
 {
 	-nexa-icon : URL("theme://images/btn_WF_TextReset.png");
 	-nexa-icon-position : left;
+	-nexa-text-padding : 0px 0px 0px 4px;
 	-nexa-border : 0px none;
 	-nexa-padding : 0px 0px 0px 0px;
 	background : transparent;
@@ -2377,7 +2378,7 @@
 }
 
 .Button.btn_WF_TextReset[status=mouseover],
-.Button.btn_WF_TextReset[status=pushed]
+.Button.btn_WF_TextReset[userstatus=pushed]
 {
 	-nexa-icon : URL("theme://images/btn_WF_TextResetO.png");
 	color : #18181B;
