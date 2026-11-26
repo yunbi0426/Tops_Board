@@ -138,18 +138,18 @@
 				{
 					"name": "FRAME_PADDING",
 					"type": "number",
-					"value": "12",
+					"value": "16",
 					"comment": "테두리 박스 ~ 내용"
 				},
 				{
 					"name": "HEADER_HEIGHT",
 					"type": "number",
-					"value": "26"
+					"value": "28"
 				},
 				{
 					"name": "HEADER_GAP",
 					"type": "number",
-					"value": "8"
+					"value": "16"
 				},
 				{
 					"name": "SPIN_WIDTH",
@@ -164,13 +164,13 @@
 				{
 					"name": "ROW_HEIGHT",
 					"type": "number",
-					"value": "26",
+					"value": "30",
 					"comment": "막대 한 줄 높이"
 				},
 				{
 					"name": "BAR_HEIGHT",
 					"type": "number",
-					"value": "10",
+					"value": "8",
 					"comment": "막대 두께"
 				},
 				{
@@ -200,27 +200,37 @@
 				{
 					"name": "TEXT_FONT",
 					"type": "string",
-					"value": "\"normal 12px/normal \\\"Malgun Gothic\\\"\""
+					"value": "\"normal 12px/normal \\\"NotoSansKR-Regular\\\"\""
 				},
 				{
 					"name": "TITLE_FONT",
 					"type": "string",
-					"value": "\"normal 500 13px/normal \\\"Malgun Gothic\\\"\""
+					"value": "\"normal 700 13px/normal \\\"NotoSansKR-Bold\\\"\""
 				},
 				{
 					"name": "FRAME_BORDER",
 					"type": "string",
-					"value": "\"1px solid #E0DED6\""
+					"value": "\"1px solid #E4E4E7\""
 				},
 				{
 					"name": "TEXT_COLOR",
 					"type": "string",
-					"value": "\"#444441\""
+					"value": "\"#3F3F46\""
 				},
 				{
 					"name": "MUTED_COLOR",
 					"type": "string",
-					"value": "\"#888780\""
+					"value": "\"#A1A1AA\""
+				},
+				{
+					"name": "TITLE_COLOR",
+					"type": "string",
+					"value": "\"#18181B\""
+				},
+				{
+					"name": "FRAME_RADIUS",
+					"type": "string",
+					"value": "\"10px\""
 				}
 			],
 			"comment": "Fonts / colors (화면과 무관한 스타일 기본 값)"
@@ -246,17 +256,17 @@
 				{
 					"name": "BAR_COLOR",
 					"type": "string",
-					"value": "\"#534AB7\""
+					"value": "\"#EF9F27\""
 				},
 				{
 					"name": "ETC_COLOR",
 					"type": "string",
-					"value": "\"#B4B2A9\""
+					"value": "\"#D4D4D8\""
 				},
 				{
 					"name": "TRACK_COLOR",
 					"type": "string",
-					"value": "\"#F1EFE8\""
+					"value": "\"#F4F4F5\""
 				},
 				{
 					"name": "USE_TOPN",
@@ -340,7 +350,7 @@
 	"sectionComments": {
 		"viewProperties": "View generation options (set_viewProperties)"
 	},
-	"functionsCode": "/************************************************************************************************\n * Functions Related to the main() Execution Flow\n ************************************************************************************************/\n\t// View property value (없으면 기본값)\n\tthis.fn_GetProp = function(sId, vDefault) {\n\t\tvar oAttr = (this.oViewProperties && this.oViewProperties.attributes) ? this.oViewProperties.attributes : null;\n\t\tif (oAttr && oAttr[sId] !== undefined && oAttr[sId] !== null && oAttr[sId] !== \"\") {\n\t\t\treturn oAttr[sId];\n\t\t}\n\t\treturn vDefault;\n\t};\n\n\t// 숫자 속성 (잘못된 값이면 기본값)\n\tthis.fn_GetNumProp = function(sId, nDefault) {\n\t\tvar n = parseInt(this.fn_GetProp(sId, nDefault), 10);\n\t\treturn isNaN(n) ? nDefault : n;\n\t};\n\n\t// Boolean 속성 (\"true\" 문자열도 true)\n\tthis.fn_GetBoolProp = function(sId, vDefault) {\n\t\tvar v = this.fn_GetProp(sId, vDefault);\n\t\treturn v === true || (\"\" + v).toLowerCase() == \"true\";\n\t};\n\n\t// Bar role 이 sRole 인 첫 번째 필드 id (없으면 \"\")\n\tthis.fn_FindRole = function(sRole) {\n\t\tvar arrFields = (this.oFieldArray && this.oFieldArray.fields) ? this.oFieldArray.fields : [];\n\t\tfor (var i = 0; i < arrFields.length; i++) {\n\t\t\tif (arrFields[i].barrole == sRole) {\n\t\t\t\treturn arrFields[i].id;\n\t\t\t}\n\t\t}\n\t\treturn \"\";\n\t};\n\n\tthis.fn_GetModel = function() {\n\t\tvar oModel = [];\n\n\t\tvar bTopN    = this.fn_GetBoolProp(\"usetopn\", this.USE_TOPN);\n\t\tvar sTitle   = this.fn_GetProp(\"titletext\", this.TITLE_TEXT);\n\t\tvar nTopMin  = this.fn_GetNumProp(\"topnmin\", this.TOPN_MIN);\n\t\tvar nTopMax  = this.fn_GetNumProp(\"topnmax\", this.TOPN_MAX);\n\t\tvar nTopDef  = this.fn_GetNumProp(\"topndefault\", this.TOPN_DEFAULT);\n\n\t\tvar nPad   = this.VIEW_PADDING;\n\t\tvar nInner = nPad + this.FRAME_PADDING;     // 테두리 박스 안쪽 시작 위치\n\t\tvar nTop   = nInner;\n\t\tvar bHeader = (sTitle != \"\") || bTopN;\n\n\t\t//---------------- 테두리 박스 : View 를 가득 채움 (가장 먼저 = 맨 뒤에 깔림) ----------------\n\t\toModel.push({ \"fieldid\": \"\", \"Components\": [{\n\t\t\t\"tag\": \"Static\",\n\t\t\t\"attribute\": {\n\t\t\t\t\"id\": this.ID_FRAME, \"left\": nPad, \"top\": nPad, \"right\": nPad, \"bottom\": nPad,\n\t\t\t\t\"text\": \"\", \"border\": this.FRAME_BORDER, \"borderRadius\": \"12px\", \"background\": \"#FFFFFF\"\n\t\t\t}\n\t\t}]});\n\n\t\t//---------------- 제목 줄 : 제목(왼쪽) + 상위 N Spin(오른쪽) ----------------\n\t\tif (bHeader) {\n\t\t\tif (bTopN) {\n\t\t\t\toModel.push({ \"fieldid\": \"\", \"Components\": [{\n\t\t\t\t\t\"tag\": \"Spin\",\n\t\t\t\t\t\"attribute\": {\n\t\t\t\t\t\t\"id\": this.ID_TOPN, \"top\": nTop, \"right\": nInner, \"width\": this.SPIN_WIDTH, \"height\": this.HEADER_HEIGHT,\n\t\t\t\t\t\t\"min\": \"\" + nTopMin, \"max\": \"\" + nTopMax, \"value\": \"\" + nTopDef, \"increment\": \"1\"\n\t\t\t\t\t}\n\t\t\t\t}]});\n\t\t\t\toModel.push({ \"fieldid\": \"\", \"Components\": [{\n\t\t\t\t\t\"tag\": \"Static\",\n\t\t\t\t\t\"attribute\": {\n\t\t\t\t\t\t\"id\": this.ID_TOPNLABEL, \"top\": nTop, \"right\": this.ID_TOPN + \":4\", \"width\": this.SPIN_LABEL_W, \"height\": this.HEADER_HEIGHT,\n\t\t\t\t\t\t\"text\": this.fn_GetProp(\"topnlabel\", this.TOPN_LABEL), \"textAlign\": \"right\",\n\t\t\t\t\t\t\"color\": this.MUTED_COLOR, \"font\": this.TEXT_FONT\n\t\t\t\t\t}\n\t\t\t\t}]});\n\t\t\t}\n\n\t\t\toModel.push({ \"fieldid\": \"\", \"Components\": [{\n\t\t\t\t\"tag\": \"Static\",\n\t\t\t\t\"attribute\": {\n\t\t\t\t\t\"id\": this.ID_TITLE, \"left\": nInner, \"top\": nTop,\n\t\t\t\t\t\"right\": bTopN ? this.ID_TOPNLABEL + \":8\" : nInner, \"height\": this.HEADER_HEIGHT,\n\t\t\t\t\t\"text\": sTitle, \"color\": this.TEXT_COLOR, \"font\": this.TITLE_FONT\n\t\t\t\t}\n\t\t\t}]});\n\n\t\t\tnTop += this.HEADER_HEIGHT + this.HEADER_GAP;\n\t\t}\n\n\t\t//---------------- 막대 영역 : 막대는 실행 시점에 이 Div 안에 그림 (넘치면 세로 스크롤) ----------------\n\t\toModel.push({ \"fieldid\": \"\", \"Components\": [{\n\t\t\t\"tag\": \"Div\",\n\t\t\t\"attribute\": {\n\t\t\t\t\"id\": this.ID_BARS, \"left\": nInner, \"top\": nTop, \"right\": nInner, \"bottom\": nInner,\n\t\t\t\t\"text\": \"\", \"border\": \"0px none\", \"background\": \"transparent\"\n\t\t\t}\n\t\t}]});\n\n\t\t//---------------- 데이터 없음 문구 (막대 영역 가운데) ----------------\n\t\toModel.push({ \"fieldid\": \"\", \"Components\": [{\n\t\t\t\"tag\": \"Static\",\n\t\t\t\"attribute\": {\n\t\t\t\t\"id\": this.ID_EMPTY, \"left\": nInner, \"top\": nTop, \"right\": nInner, \"bottom\": nInner,\n\t\t\t\t\"text\": this.fn_GetProp(\"emptytext\", this.EMPTY_TEXT), \"textAlign\": \"center\",\n\t\t\t\t\"color\": this.MUTED_COLOR, \"font\": this.TEXT_FONT, \"visible\": \"false\"\n\t\t\t}\n\t\t}]});\n\n\t\treturn oModel;\n\t};\n\n\t// 함수를 \"this.<name> = function...\" 문자열로 변환\n\tthis.fn_FuncString = function(sName) {\n\t\treturn \"\\n\\tthis.\" + sName + \" = \" + this[sName].toString() + \";\\n\";\n\t};\n\n\tthis.fn_GetScript = function() {\n\t\t// 실행 시점에 View 스크립트가 참조할 값\n\t\tvar oConf = {\n\t\t\tlabelField : this.fn_FindRole(\"label\"),\n\t\t\tvalueField : this.fn_FindRole(\"value\"),\n\t\t\tetcField   : this.fn_FindRole(\"etc\"),\n\t\t\tetcValue   : \"\" + this.fn_GetProp(\"etcvalue\", this.ETC_VALUE),\n\t\t\tbarColor   : this.fn_GetProp(\"barcolor\", this.BAR_COLOR),\n\t\t\tetcColor   : this.fn_GetProp(\"etccolor\", this.ETC_COLOR),\n\t\t\ttrackColor : this.fn_GetProp(\"trackcolor\", this.TRACK_COLOR),\n\t\t\tlabelWidth : this.fn_GetNumProp(\"labelwidth\", this.LABEL_WIDTH),\n\t\t\trowHeight  : this.fn_GetNumProp(\"rowheight\", this.ROW_HEIGHT),\n\t\t\tbarHeight  : this.BAR_HEIGHT,\n\t\t\tvalueWidth : this.VALUE_WIDTH,\n\t\t\tscrollW    : this.SCROLL_RESERVE,\n\t\t\ttextFont   : this.TEXT_FONT,\n\t\t\ttextColor  : this.TEXT_COLOR,\n\t\t\tmutedColor : this.MUTED_COLOR\n\t\t};\n\n\t\tvar sValue = \"\\n\\tthis.fvConf = \" + JSON.stringify(oConf) + \";\\n\";\n\n\t\tsValue += this.fn_FuncString(\"_fnViewOnLoad\");\n\t\tsValue += this.fn_FuncString(\"fn_ds_onchanged\");\n\t\tsValue += this.fn_FuncString(\"fn_onsize\");\n\t\tsValue += this.fn_FuncString(\"fn_clearBars\");\n\t\tsValue += this.fn_FuncString(\"fn_addStatic\");\n\t\tsValue += this.fn_FuncString(\"fn_render\");\n\t\tsValue += this.fn_FuncString(\"fn_formatNumber\");\n\n\t\treturn {\n\t\t\t\"tag\": \"Script\",\n\t\t\t\"attribute\": { \"type\": \"xscript5.1\" },\n\t\t\t\"value\": sValue\n\t\t};\n\t};\n\n/************************************************************************************************\n * Runtime Functions (생성된 View 안에서 실행되는 함수. this = View 내부 폼)\n ************************************************************************************************/\n\tthis._fnViewOnLoad = function(objForm) {\n\t\t/* Sets the view form reference so that functions declared in the view can access it */\n\t\tthis._ownerForm = objForm;\n\n\t\tif (!this._bRankInit) {\n\t\t\t/* 조회 완료 / 값 변경 / 필터 때 다시 그림, 크기 변경 때 다시 배치. 중복 등록 방지 */\n\t\t\tvar oDs = this.parent.getViewDataset();\n\t\t\tif (oDs) {\n\t\t\t\toDs.addEventHandler(\"onload\", this.fn_ds_onchanged, this);\n\t\t\t\toDs.addEventHandler(\"oncolumnchanged\", this.fn_ds_onchanged, this);\n\t\t\t\toDs.addEventHandler(\"onrowsetchanged\", this.fn_ds_onchanged, this);\n\t\t\t}\n\t\t\tthis.addEventHandler(\"onsize\", this.fn_onsize, this);\n\t\t\tthis.arrBarComps = [];\n\t\t\tthis._bRankInit = true;\n\t\t}\n\n\t\tthis.fn_render();\n\t};\n\n\tthis.fn_ds_onchanged = function(obj, e) {\n\t\tthis.fn_render();\n\t};\n\n\tthis.fn_onsize = function(obj, e) {\n\t\t/* 너비가 실제로 바뀐 경우에만 다시 그림 */\n\t\tif (this.divBars && this.divBars.getOffsetWidth() != this._nLastWidth) {\n\t\t\tthis.fn_render();\n\t\t}\n\t};\n\n\t/* 이전에 그린 막대 컴포넌트 제거 */\n\tthis.fn_clearBars = function() {\n\t\tvar oForm = this.divBars.form;\n\t\tvar arr = this.arrBarComps || [];\n\t\tfor (var i = 0; i < arr.length; i++) {\n\t\t\tvar oComp = oForm.removeChild(arr[i]);\n\t\t\tif (oComp) {\n\t\t\t\toComp.destroy();\n\t\t\t}\n\t\t}\n\t\tthis.arrBarComps = [];\n\t};\n\n\t/* 막대 영역(divBars) 안에 Static 하나를 만들어 붙임 (속성은 set_xxx 로 적용) */\n\tthis.fn_addStatic = function(sId, nLeft, nTop, nWidth, nHeight, oProps) {\n\t\tvar oForm = this.divBars.form;\n\t\tvar oSta = new Static(sId, nLeft, nTop, nWidth, nHeight, null, null, null, null, null, null, oForm);\n\t\tfor (var sKey in oProps) {\n\t\t\tvar fnSet = oSta[\"set_\" + sKey];\n\t\t\tif (typeof fnSet == \"function\") {\n\t\t\t\tfnSet.call(oSta, oProps[sKey]);\n\t\t\t}\n\t\t}\n\t\toForm.addChild(sId, oSta);\n\t\toSta.show();\n\t\tthis.arrBarComps.push(sId);\n\t\treturn oSta;\n\t};\n\n\t/* 행마다 [이름 | 막대 바탕 + 막대 | 값] 한 줄씩 그림 */\n\tthis.fn_render = function() {\n\t\tvar c     = this.fvConf;\n\t\tvar oDs   = this.parent.getViewDataset();\n\t\tvar nRows = (oDs && c.labelField && c.valueField) ? oDs.getRowCount() : 0;\n\t\tvar i;\n\n\t\tthis.fn_clearBars();\n\t\tthis.staEmpty.set_visible(nRows < 1);\n\t\tif (nRows < 1) {\n\t\t\tthis.divBars.form.resetScroll();\n\t\t\treturn;\n\t\t}\n\n\t\t/* 행 높이 합이 영역보다 크면 스크롤바 자리만큼 오른쪽을 비움 */\n\t\tvar nAreaW  = this.divBars.getOffsetWidth();\n\t\tvar nAreaH  = this.divBars.getOffsetHeight();\n\t\tvar nRight  = (nRows * c.rowHeight > nAreaH) ? c.scrollW : 0;\n\t\tvar nTrackL = c.labelWidth + 8;\n\t\tvar nTrackW = Math.max(nAreaW - nTrackL - c.valueWidth - 8 - nRight, 20);\n\t\tvar nValueL = nTrackL + nTrackW + 8;\n\t\tvar nBarTop = Math.floor((c.rowHeight - c.barHeight) / 2);\n\t\tthis._nLastWidth = nAreaW;\n\n\t\t/* 막대 길이 기준 : 기타가 아닌 행의 최댓값 (전부 기타면 전체 최댓값) */\n\t\tvar nMax = 0, nMaxAll = 0;\n\t\tfor (i = 0; i < nRows; i++) {\n\t\t\tvar nV = parseFloat(oDs.getColumn(i, c.valueField)) || 0;\n\t\t\tvar bE = c.etcField && (\"\" + oDs.getColumn(i, c.etcField)) == c.etcValue;\n\t\t\tnMaxAll = Math.max(nMaxAll, nV);\n\t\t\tif (!bE) {\n\t\t\t\tnMax = Math.max(nMax, nV);\n\t\t\t}\n\t\t}\n\t\tif (nMax <= 0) {\n\t\t\tnMax = nMaxAll > 0 ? nMaxAll : 1;\n\t\t}\n\n\t\tfor (i = 0; i < nRows; i++) {\n\t\t\tvar sLabel = oDs.getColumn(i, c.labelField);\n\t\t\tvar nValue = parseFloat(oDs.getColumn(i, c.valueField)) || 0;\n\t\t\tvar bEtc   = c.etcField && (\"\" + oDs.getColumn(i, c.etcField)) == c.etcValue;\n\t\t\tvar nTop   = i * c.rowHeight;\n\t\t\tvar nFillW = nValue > 0 ? Math.max(Math.round(nTrackW * Math.min(nValue / nMax, 1)), 2) : 0;\n\t\t\tvar sColor = bEtc ? c.mutedColor : c.textColor;\n\n\t\t\tthis.fn_addStatic(\"staBarLabel_\" + i, 0, nTop, c.labelWidth, c.rowHeight, {\n\t\t\t\ttext: sLabel == null ? \"\" : \"\" + sLabel, color: sColor, font: c.textFont, tooltiptext: sLabel == null ? \"\" : \"\" + sLabel\n\t\t\t});\n\t\t\tthis.fn_addStatic(\"staBarTrack_\" + i, nTrackL, nTop + nBarTop, nTrackW, c.barHeight, {\n\t\t\t\ttext: \"\", background: c.trackColor, borderRadius: \"4px\"\n\t\t\t});\n\t\t\tif (nFillW > 0) {\n\t\t\t\tthis.fn_addStatic(\"staBarFill_\" + i, nTrackL, nTop + nBarTop, nFillW, c.barHeight, {\n\t\t\t\t\ttext: \"\", background: bEtc ? c.etcColor : c.barColor, borderRadius: \"4px\"\n\t\t\t\t});\n\t\t\t}\n\t\t\tthis.fn_addStatic(\"staBarValue_\" + i, nValueL, nTop, c.valueWidth, c.rowHeight, {\n\t\t\t\ttext: this.fn_formatNumber(nValue), color: sColor, font: c.textFont, textAlign: \"right\"\n\t\t\t});\n\t\t}\n\n\t\tthis.divBars.form.resetScroll();\n\t};\n\n\t/* 숫자는 천 단위 쉼표 */\n\tthis.fn_formatNumber = function(v) {\n\t\tvar s = \"\" + v;\n\t\tif (!/^-?\\d+(\\.\\d+)?$/.test(s)) {\n\t\t\treturn s;\n\t\t}\n\t\tvar arr = s.split(\".\");\n\t\tarr[0] = arr[0].replace(/\\B(?=(\\d{3})+(?!\\d))/g, \",\");\n\t\treturn arr.join(\".\");\n\t};\n",
+	"functionsCode": "/************************************************************************************************\n * Functions Related to the main() Execution Flow\n ************************************************************************************************/\n\t// View property value (없으면 기본값)\n\tthis.fn_GetProp = function(sId, vDefault) {\n\t\tvar oAttr = (this.oViewProperties && this.oViewProperties.attributes) ? this.oViewProperties.attributes : null;\n\t\tif (oAttr && oAttr[sId] !== undefined && oAttr[sId] !== null && oAttr[sId] !== \"\") {\n\t\t\treturn oAttr[sId];\n\t\t}\n\t\treturn vDefault;\n\t};\n\n\t// 숫자 속성 (잘못된 값이면 기본값)\n\tthis.fn_GetNumProp = function(sId, nDefault) {\n\t\tvar n = parseInt(this.fn_GetProp(sId, nDefault), 10);\n\t\treturn isNaN(n) ? nDefault : n;\n\t};\n\n\t// Boolean 속성 (\"true\" 문자열도 true)\n\tthis.fn_GetBoolProp = function(sId, vDefault) {\n\t\tvar v = this.fn_GetProp(sId, vDefault);\n\t\treturn v === true || (\"\" + v).toLowerCase() == \"true\";\n\t};\n\n\t// Bar role 이 sRole 인 첫 번째 필드 id (없으면 \"\")\n\tthis.fn_FindRole = function(sRole) {\n\t\tvar arrFields = (this.oFieldArray && this.oFieldArray.fields) ? this.oFieldArray.fields : [];\n\t\tfor (var i = 0; i < arrFields.length; i++) {\n\t\t\tif (arrFields[i].barrole == sRole) {\n\t\t\t\treturn arrFields[i].id;\n\t\t\t}\n\t\t}\n\t\treturn \"\";\n\t};\n\n\tthis.fn_GetModel = function() {\n\t\tvar oModel = [];\n\n\t\tvar bTopN    = this.fn_GetBoolProp(\"usetopn\", this.USE_TOPN);\n\t\tvar sTitle   = this.fn_GetProp(\"titletext\", this.TITLE_TEXT);\n\t\tvar nTopMin  = this.fn_GetNumProp(\"topnmin\", this.TOPN_MIN);\n\t\tvar nTopMax  = this.fn_GetNumProp(\"topnmax\", this.TOPN_MAX);\n\t\tvar nTopDef  = this.fn_GetNumProp(\"topndefault\", this.TOPN_DEFAULT);\n\n\t\tvar nPad   = this.VIEW_PADDING;\n\t\tvar nInner = nPad + this.FRAME_PADDING;     // 테두리 박스 안쪽 시작 위치\n\t\tvar nTop   = nInner;\n\t\tvar bHeader = (sTitle != \"\") || bTopN;\n\n\t\t//---------------- 테두리 박스 : View 를 가득 채움 (가장 먼저 = 맨 뒤에 깔림) ----------------\n\t\toModel.push({ \"fieldid\": \"\", \"Components\": [{\n\t\t\t\"tag\": \"Static\",\n\t\t\t\"attribute\": {\n\t\t\t\t\"id\": this.ID_FRAME, \"left\": nPad, \"top\": nPad, \"right\": nPad, \"bottom\": nPad,\n\t\t\t\t\"text\": \"\", \"border\": this.FRAME_BORDER, \"borderRadius\": this.FRAME_RADIUS, \"background\": \"#FFFFFF\"\n\t\t\t}\n\t\t}]});\n\n\t\t//---------------- 제목 줄 : 제목(왼쪽) + 상위 N Spin(오른쪽) ----------------\n\t\tif (bHeader) {\n\t\t\tif (bTopN) {\n\t\t\t\toModel.push({ \"fieldid\": \"\", \"Components\": [{\n\t\t\t\t\t\"tag\": \"Spin\",\n\t\t\t\t\t\"attribute\": {\n\t\t\t\t\t\t\"id\": this.ID_TOPN, \"top\": nTop, \"right\": nInner, \"width\": this.SPIN_WIDTH, \"height\": this.HEADER_HEIGHT,\n\t\t\t\t\t\t\"min\": \"\" + nTopMin, \"max\": \"\" + nTopMax, \"value\": \"\" + nTopDef, \"increment\": \"1\"\n\t\t\t\t\t}\n\t\t\t\t}]});\n\t\t\t\toModel.push({ \"fieldid\": \"\", \"Components\": [{\n\t\t\t\t\t\"tag\": \"Static\",\n\t\t\t\t\t\"attribute\": {\n\t\t\t\t\t\t\"id\": this.ID_TOPNLABEL, \"top\": nTop, \"right\": this.ID_TOPN + \":4\", \"width\": this.SPIN_LABEL_W, \"height\": this.HEADER_HEIGHT,\n\t\t\t\t\t\t\"text\": this.fn_GetProp(\"topnlabel\", this.TOPN_LABEL), \"textAlign\": \"right\",\n\t\t\t\t\t\t\"color\": this.MUTED_COLOR, \"font\": this.TEXT_FONT\n\t\t\t\t\t}\n\t\t\t\t}]});\n\t\t\t}\n\n\t\t\toModel.push({ \"fieldid\": \"\", \"Components\": [{\n\t\t\t\t\"tag\": \"Static\",\n\t\t\t\t\"attribute\": {\n\t\t\t\t\t\"id\": this.ID_TITLE, \"left\": nInner, \"top\": nTop,\n\t\t\t\t\t\"right\": bTopN ? this.ID_TOPNLABEL + \":8\" : nInner, \"height\": this.HEADER_HEIGHT,\n\t\t\t\t\t\"text\": sTitle, \"color\": this.TITLE_COLOR, \"font\": this.TITLE_FONT\n\t\t\t\t}\n\t\t\t}]});\n\n\t\t\tnTop += this.HEADER_HEIGHT + this.HEADER_GAP;\n\t\t}\n\n\t\t//---------------- 막대 영역 : 막대는 실행 시점에 이 Div 안에 그림 (넘치면 세로 스크롤) ----------------\n\t\toModel.push({ \"fieldid\": \"\", \"Components\": [{\n\t\t\t\"tag\": \"Div\",\n\t\t\t\"attribute\": {\n\t\t\t\t\"id\": this.ID_BARS, \"left\": nInner, \"top\": nTop, \"right\": nInner, \"bottom\": nInner,\n\t\t\t\t\"text\": \"\", \"border\": \"0px none\", \"background\": \"transparent\"\n\t\t\t}\n\t\t}]});\n\n\t\t//---------------- 데이터 없음 문구 (막대 영역 가운데) ----------------\n\t\toModel.push({ \"fieldid\": \"\", \"Components\": [{\n\t\t\t\"tag\": \"Static\",\n\t\t\t\"attribute\": {\n\t\t\t\t\"id\": this.ID_EMPTY, \"left\": nInner, \"top\": nTop, \"right\": nInner, \"bottom\": nInner,\n\t\t\t\t\"text\": this.fn_GetProp(\"emptytext\", this.EMPTY_TEXT), \"textAlign\": \"center\",\n\t\t\t\t\"color\": this.MUTED_COLOR, \"font\": this.TEXT_FONT, \"visible\": \"false\"\n\t\t\t}\n\t\t}]});\n\n\t\treturn oModel;\n\t};\n\n\t// 함수를 \"this.<name> = function...\" 문자열로 변환\n\tthis.fn_FuncString = function(sName) {\n\t\treturn \"\\n\\tthis.\" + sName + \" = \" + this[sName].toString() + \";\\n\";\n\t};\n\n\tthis.fn_GetScript = function() {\n\t\t// 실행 시점에 View 스크립트가 참조할 값\n\t\tvar oConf = {\n\t\t\tlabelField : this.fn_FindRole(\"label\"),\n\t\t\tvalueField : this.fn_FindRole(\"value\"),\n\t\t\tetcField   : this.fn_FindRole(\"etc\"),\n\t\t\tetcValue   : \"\" + this.fn_GetProp(\"etcvalue\", this.ETC_VALUE),\n\t\t\tbarColor   : this.fn_GetProp(\"barcolor\", this.BAR_COLOR),\n\t\t\tetcColor   : this.fn_GetProp(\"etccolor\", this.ETC_COLOR),\n\t\t\ttrackColor : this.fn_GetProp(\"trackcolor\", this.TRACK_COLOR),\n\t\t\tlabelWidth : this.fn_GetNumProp(\"labelwidth\", this.LABEL_WIDTH),\n\t\t\trowHeight  : this.fn_GetNumProp(\"rowheight\", this.ROW_HEIGHT),\n\t\t\tbarHeight  : this.BAR_HEIGHT,\n\t\t\tvalueWidth : this.VALUE_WIDTH,\n\t\t\tscrollW    : this.SCROLL_RESERVE,\n\t\t\ttextFont   : this.TEXT_FONT,\n\t\t\ttextColor  : this.TEXT_COLOR,\n\t\t\tmutedColor : this.MUTED_COLOR\n\t\t};\n\n\t\tvar sValue = \"\\n\\tthis.fvConf = \" + JSON.stringify(oConf) + \";\\n\";\n\n\t\tsValue += this.fn_FuncString(\"_fnViewOnLoad\");\n\t\tsValue += this.fn_FuncString(\"fn_ds_onchanged\");\n\t\tsValue += this.fn_FuncString(\"fn_onsize\");\n\t\tsValue += this.fn_FuncString(\"fn_clearBars\");\n\t\tsValue += this.fn_FuncString(\"fn_addStatic\");\n\t\tsValue += this.fn_FuncString(\"fn_render\");\n\t\tsValue += this.fn_FuncString(\"fn_formatNumber\");\n\n\t\treturn {\n\t\t\t\"tag\": \"Script\",\n\t\t\t\"attribute\": { \"type\": \"xscript5.1\" },\n\t\t\t\"value\": sValue\n\t\t};\n\t};\n\n/************************************************************************************************\n * Runtime Functions (생성된 View 안에서 실행되는 함수. this = View 내부 폼)\n ************************************************************************************************/\n\tthis._fnViewOnLoad = function(objForm) {\n\t\t/* Sets the view form reference so that functions declared in the view can access it */\n\t\tthis._ownerForm = objForm;\n\n\t\tif (!this._bRankInit) {\n\t\t\t/* 조회 완료 / 값 변경 / 필터 때 다시 그림, 크기 변경 때 다시 배치. 중복 등록 방지 */\n\t\t\tvar oDs = this.parent.getViewDataset();\n\t\t\tif (oDs) {\n\t\t\t\toDs.addEventHandler(\"onload\", this.fn_ds_onchanged, this);\n\t\t\t\toDs.addEventHandler(\"oncolumnchanged\", this.fn_ds_onchanged, this);\n\t\t\t\toDs.addEventHandler(\"onrowsetchanged\", this.fn_ds_onchanged, this);\n\t\t\t}\n\t\t\tthis.addEventHandler(\"onsize\", this.fn_onsize, this);\n\t\t\tthis.arrBarComps = [];\n\t\t\tthis._bRankInit = true;\n\t\t}\n\n\t\tthis.fn_render();\n\t};\n\n\tthis.fn_ds_onchanged = function(obj, e) {\n\t\tthis.fn_render();\n\t};\n\n\tthis.fn_onsize = function(obj, e) {\n\t\t/* 너비가 실제로 바뀐 경우에만 다시 그림 */\n\t\tif (this.divBars && this.divBars.getOffsetWidth() != this._nLastWidth) {\n\t\t\tthis.fn_render();\n\t\t}\n\t};\n\n\t/* 이전에 그린 막대 컴포넌트 제거 */\n\tthis.fn_clearBars = function() {\n\t\tvar oForm = this.divBars.form;\n\t\tvar arr = this.arrBarComps || [];\n\t\tfor (var i = 0; i < arr.length; i++) {\n\t\t\tvar oComp = oForm.removeChild(arr[i]);\n\t\t\tif (oComp) {\n\t\t\t\toComp.destroy();\n\t\t\t}\n\t\t}\n\t\tthis.arrBarComps = [];\n\t};\n\n\t/* 막대 영역(divBars) 안에 Static 하나를 만들어 붙임 (속성은 set_xxx 로 적용) */\n\tthis.fn_addStatic = function(sId, nLeft, nTop, nWidth, nHeight, oProps) {\n\t\tvar oForm = this.divBars.form;\n\t\tvar oSta = new Static(sId, nLeft, nTop, nWidth, nHeight, null, null, null, null, null, null, oForm);\n\t\tfor (var sKey in oProps) {\n\t\t\tvar fnSet = oSta[\"set_\" + sKey];\n\t\t\tif (typeof fnSet == \"function\") {\n\t\t\t\tfnSet.call(oSta, oProps[sKey]);\n\t\t\t}\n\t\t}\n\t\toForm.addChild(sId, oSta);\n\t\toSta.show();\n\t\tthis.arrBarComps.push(sId);\n\t\treturn oSta;\n\t};\n\n\t/* 행마다 [이름 | 막대 바탕 + 막대 | 값] 한 줄씩 그림 */\n\tthis.fn_render = function() {\n\t\tvar c     = this.fvConf;\n\t\tvar oDs   = this.parent.getViewDataset();\n\t\tvar nRows = (oDs && c.labelField && c.valueField) ? oDs.getRowCount() : 0;\n\t\tvar i;\n\n\t\tthis.fn_clearBars();\n\t\tthis.staEmpty.set_visible(nRows < 1);\n\t\tif (nRows < 1) {\n\t\t\tthis.divBars.form.resetScroll();\n\t\t\treturn;\n\t\t}\n\n\t\t/* 행 높이 합이 영역보다 크면 스크롤바 자리만큼 오른쪽을 비움 */\n\t\tvar nAreaW  = this.divBars.getOffsetWidth();\n\t\tvar nAreaH  = this.divBars.getOffsetHeight();\n\t\tvar nRight  = (nRows * c.rowHeight > nAreaH) ? c.scrollW : 0;\n\t\tvar nTrackL = c.labelWidth + 8;\n\t\tvar nTrackW = Math.max(nAreaW - nTrackL - c.valueWidth - 8 - nRight, 20);\n\t\tvar nValueL = nTrackL + nTrackW + 8;\n\t\tvar nBarTop = Math.floor((c.rowHeight - c.barHeight) / 2);\n\t\tthis._nLastWidth = nAreaW;\n\n\t\t/* 막대 길이 기준 : 기타가 아닌 행의 최댓값 (전부 기타면 전체 최댓값) */\n\t\tvar nMax = 0, nMaxAll = 0;\n\t\tfor (i = 0; i < nRows; i++) {\n\t\t\tvar nV = parseFloat(oDs.getColumn(i, c.valueField)) || 0;\n\t\t\tvar bE = c.etcField && (\"\" + oDs.getColumn(i, c.etcField)) == c.etcValue;\n\t\t\tnMaxAll = Math.max(nMaxAll, nV);\n\t\t\tif (!bE) {\n\t\t\t\tnMax = Math.max(nMax, nV);\n\t\t\t}\n\t\t}\n\t\tif (nMax <= 0) {\n\t\t\tnMax = nMaxAll > 0 ? nMaxAll : 1;\n\t\t}\n\n\t\tfor (i = 0; i < nRows; i++) {\n\t\t\tvar sLabel = oDs.getColumn(i, c.labelField);\n\t\t\tvar nValue = parseFloat(oDs.getColumn(i, c.valueField)) || 0;\n\t\t\tvar bEtc   = c.etcField && (\"\" + oDs.getColumn(i, c.etcField)) == c.etcValue;\n\t\t\tvar nTop   = i * c.rowHeight;\n\t\t\tvar nFillW = nValue > 0 ? Math.max(Math.round(nTrackW * Math.min(nValue / nMax, 1)), 2) : 0;\n\t\t\tvar sColor = bEtc ? c.mutedColor : c.textColor;\n\n\t\t\tthis.fn_addStatic(\"staBarLabel_\" + i, 0, nTop, c.labelWidth, c.rowHeight, {\n\t\t\t\ttext: sLabel == null ? \"\" : \"\" + sLabel, color: sColor, font: c.textFont, tooltiptext: sLabel == null ? \"\" : \"\" + sLabel\n\t\t\t});\n\t\t\tthis.fn_addStatic(\"staBarTrack_\" + i, nTrackL, nTop + nBarTop, nTrackW, c.barHeight, {\n\t\t\t\ttext: \"\", background: c.trackColor, borderRadius: \"4px\"\n\t\t\t});\n\t\t\tif (nFillW > 0) {\n\t\t\t\tthis.fn_addStatic(\"staBarFill_\" + i, nTrackL, nTop + nBarTop, nFillW, c.barHeight, {\n\t\t\t\t\ttext: \"\", background: bEtc ? c.etcColor : c.barColor, borderRadius: \"4px\"\n\t\t\t\t});\n\t\t\t}\n\t\t\tthis.fn_addStatic(\"staBarValue_\" + i, nValueL, nTop, c.valueWidth, c.rowHeight, {\n\t\t\t\ttext: this.fn_formatNumber(nValue), color: sColor, font: c.textFont, textAlign: \"right\"\n\t\t\t});\n\t\t}\n\n\t\tthis.divBars.form.resetScroll();\n\t};\n\n\t/* 숫자는 천 단위 쉼표 */\n\tthis.fn_formatNumber = function(v) {\n\t\tvar s = \"\" + v;\n\t\tif (!/^-?\\d+(\\.\\d+)?$/.test(s)) {\n\t\t\treturn s;\n\t\t}\n\t\tvar arr = s.split(\".\");\n\t\tarr[0] = arr[0].replace(/\\B(?=(\\d{3})+(?!\\d))/g, \",\");\n\t\treturn arr.join(\".\");\n\t};\n",
 	"viewPropertiesValueBody": ""
 }]]>
   </UIConfig>
@@ -353,31 +363,33 @@
  ************************************************************************************************/
 	// Layout
 	this.VIEW_PADDING = 0;	// View 가장자리 ~ 테두리 박스
-	this.FRAME_PADDING = 12;	// 테두리 박스 ~ 내용
-	this.HEADER_HEIGHT = 26;
-	this.HEADER_GAP = 8;
+	this.FRAME_PADDING = 16;	// 테두리 박스 ~ 내용
+	this.HEADER_HEIGHT = 28;
+	this.HEADER_GAP = 16;
 	this.SPIN_WIDTH = 64;
 	this.SPIN_LABEL_W = 40;
-	this.ROW_HEIGHT = 26;	// 막대 한 줄 높이
-	this.BAR_HEIGHT = 10;	// 막대 두께
+	this.ROW_HEIGHT = 30;	// 막대 한 줄 높이
+	this.BAR_HEIGHT = 8;	// 막대 두께
 	this.LABEL_WIDTH = 140;	// 막대 이름 칸 너비
 	this.VALUE_WIDTH = 56;	// 값 칸 너비
 	this.SCROLL_RESERVE = 14;	// 세로 스크롤바 자리
 
 	// Fonts / colors (화면과 무관한 스타일 기본 값)
-	this.TEXT_FONT = "normal 12px/normal \"Malgun Gothic\"";
-	this.TITLE_FONT = "normal 500 13px/normal \"Malgun Gothic\"";
-	this.FRAME_BORDER = "1px solid #E0DED6";
-	this.TEXT_COLOR = "#444441";
-	this.MUTED_COLOR = "#888780";
+	this.TEXT_FONT = "normal 12px/normal \"NotoSansKR-Regular\"";
+	this.TITLE_FONT = "normal 700 13px/normal \"NotoSansKR-Bold\"";
+	this.FRAME_BORDER = "1px solid #E4E4E7";
+	this.TEXT_COLOR = "#3F3F46";
+	this.MUTED_COLOR = "#A1A1AA";
+	this.TITLE_COLOR = "#18181B";
+	this.FRAME_RADIUS = "10px";
 
 	// Default values of view properties (화면마다 다른 값은 비워두고 View Generation 속성에서 지정)
 	this.TITLE_TEXT = "";
 	this.EMPTY_TEXT = "데이터가 없습니다";
 	this.ETC_VALUE = "Y";
-	this.BAR_COLOR = "#534AB7";
-	this.ETC_COLOR = "#B4B2A9";
-	this.TRACK_COLOR = "#F1EFE8";
+	this.BAR_COLOR = "#EF9F27";
+	this.ETC_COLOR = "#D4D4D8";
+	this.TRACK_COLOR = "#F4F4F5";
 	this.USE_TOPN = "true";
 	this.TOPN_LABEL = "상위";
 	this.TOPN_MIN = 1;
@@ -629,7 +641,7 @@
 				"tag": "Static",
 				"attribute": {
 					"id": this.ID_FRAME, "left": nPad, "top": nPad, "right": nPad, "bottom": nPad,
-					"text": "", "border": this.FRAME_BORDER, "borderRadius": "12px", "background": "#FFFFFF"
+					"text": "", "border": this.FRAME_BORDER, "borderRadius": this.FRAME_RADIUS, "background": "#FFFFFF"
 				}
 			}]});
 
@@ -658,7 +670,7 @@
 					"attribute": {
 						"id": this.ID_TITLE, "left": nInner, "top": nTop,
 						"right": bTopN ? this.ID_TOPNLABEL + ":8" : nInner, "height": this.HEADER_HEIGHT,
-						"text": sTitle, "color": this.TEXT_COLOR, "font": this.TITLE_FONT
+						"text": sTitle, "color": this.TITLE_COLOR, "font": this.TITLE_FONT
 					}
 				}]});
 

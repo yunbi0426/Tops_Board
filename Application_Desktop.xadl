@@ -11,6 +11,7 @@
         </VFrameSet>
       </MainFrame>
     </Layout>
+    <Style url="xcssrc::Tops_Board_Asset_TopsBoard.xcss"/>
   </Application>
   <Script type="xscript5.1"><![CDATA[let objEnv = nexacro.getEnvironment();
 

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XCSS version="1.1">
+  <Predefines/>
+  <CSSData><![CDATA[.Grid .body .row .cell.cell_WF_Done,
+.Grid .body .row .cell.cell_WF_Done[status=mouseover],
+.Grid .body .row .cell.cell_WF_Done[userstatus=selected],
+.Grid .body .row .cell.cell_WF_Done[userstatus=selected][status=mouseover]
+{
+	color : #0F6E56;
+	font : 700 12px "NotoSansKR-Bold";
+}
+
+.Grid .body .row .cell.cell_WF_Remain,
+.Grid .body .row .cell.cell_WF_Remain[status=mouseover],
+.Grid .body .row .cell.cell_WF_Remain[userstatus=selected],
+.Grid .body .row .cell.cell_WF_Remain[userstatus=selected][status=mouseover]
+{
+	color : #854F0B;
+	font : 700 12px "NotoSansKR-Bold";
+}
+
+.Grid .body .row .cell.cell_WF_Rate,
+.Grid .body .row .cell.cell_WF_Rate[status=mouseover],
+.Grid .body .row .cell.cell_WF_Rate[userstatus=selected],
+.Grid .body .row .cell.cell_WF_Rate[userstatus=selected][status=mouseover]
+{
+	-nexa-padding : 4px 0px;
+}
+
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar .progressbartext,
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar .progressbartext[status=focused],
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar .progressbartext[status=mouseover],
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar .progressbartext[userstatus=selected],
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar .progressbartext[userstatus=selected][status=mouseover]
+{
+	color : #FFFFFF;
+	font : 700 12px "NotoSansKR-Bold";
+}
+
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar,
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar[status=focused],
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar[status=mouseover],
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar[userstatus=selected],
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar[userstatus=selected][status=mouseover]
+{
+	background : #EF9F27;
+	border-radius: 4px;
+}
+
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar .progressbaritem,
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar .progressbaritem[status=focused],
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar .progressbaritem[status=mouseover],
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar .progressbaritem[userstatus=selected],
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar .progressbaritem[userstatus=selected][status=mouseover],
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar .progressstartcap,
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar .progressstartcap[status=focused],
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar .progressstartcap[status=mouseover],
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar .progressstartcap[userstatus=selected],
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar .progressstartcap[userstatus=selected][status=mouseover],
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar .progressendcap,
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar .progressendcap[status=focused],
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar .progressendcap[status=mouseover],
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar .progressendcap[userstatus=selected],
+.Grid .body .row .cell.cell_WF_Rate .cellprogressbar .progressendcap[userstatus=selected][status=mouseover]
+{
+	background : #1D9E75;
+}]]>
+  </CSSData>
+</XCSS>

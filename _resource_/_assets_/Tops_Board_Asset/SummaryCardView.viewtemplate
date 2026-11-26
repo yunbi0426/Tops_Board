@@ -67,6 +67,14 @@
 			"defaultValueExpr": "this.CARD_GAP",
 			"description": "카드 사이 간격(px)",
 			"group": "Card"
+		},
+		{
+			"id": "bordercolors",
+			"displaytext": "Border colors",
+			"editType": "String",
+			"defaultValueExpr": "this.BORDER_COLORS",
+			"group": "Card",
+			"description": "카드 테두리색 (카드 순서대로, 쉼표 구분)"
 		}
 	],
 	"fieldProperties": [
@@ -92,7 +100,7 @@
 				{
 					"name": "FRAME_PADDING",
 					"type": "number",
-					"value": "12",
+					"value": "0",
 					"comment": "테두리 박스 ~ 내용"
 				},
 				{
@@ -130,17 +138,42 @@
 				{
 					"name": "TEXT_FONT",
 					"type": "string",
-					"value": "\"normal 12px/normal \\\"Malgun Gothic\\\"\""
+					"value": "\"normal 12px/normal \\\"NotoSansKR-Regular\\\"\""
 				},
 				{
 					"name": "FRAME_BORDER",
 					"type": "string",
-					"value": "\"1px solid #E0DED6\""
+					"value": "\"0px none\""
 				},
 				{
 					"name": "HEADER_COLOR",
 					"type": "string",
-					"value": "\"#5F5E5A\""
+					"value": "\"#A1A1AA\""
+				},
+				{
+					"name": "FRAME_BACKGROUND",
+					"type": "string",
+					"value": "\"transparent\""
+				},
+				{
+					"name": "HEADER_ALIGN",
+					"type": "string",
+					"value": "\"right\""
+				},
+				{
+					"name": "CARD_RADIUS",
+					"type": "string",
+					"value": "\"10px\""
+				},
+				{
+					"name": "CARD_PADDING",
+					"type": "string",
+					"value": "\"0px 20px\""
+				},
+				{
+					"name": "CARD_FONT_FAMILY",
+					"type": "string",
+					"value": "\"\\\"NotoSansKR-Bold\\\"\""
 				}
 			],
 			"comment": "Fonts / colors (화면과 무관한 스타일 기본 값)"
@@ -166,17 +199,22 @@
 				{
 					"name": "CARD_COLORS",
 					"type": "string",
-					"value": "\"#F1EFE8,#EAF3DE,#FAEEDA,#E6F1FB\""
+					"value": "\"#F4F4F5,#E1F5EE,#FAEEDA,#E6F1FB\""
+				},
+				{
+					"name": "BORDER_COLORS",
+					"type": "string",
+					"value": "\"#E4E4E7,#9FE1CB,#FAC775,#B5D4F4\""
 				},
 				{
 					"name": "LABEL_COLORS",
 					"type": "string",
-					"value": "\"#5F5E5A,#3B6D11,#854F0B,#185FA5\""
+					"value": "\"#71717A,#0F6E56,#854F0B,#185FA5\""
 				},
 				{
 					"name": "VALUE_COLORS",
 					"type": "string",
-					"value": "\"#444441,#27500A,#633806,#0C447C\""
+					"value": "\"#18181B,#085041,#633806,#0C447C\""
 				}
 			],
 			"comment": "Default values of view properties (화면마다 다른 값은 비워두고 View Generation 속성에서 지정)"
@@ -231,7 +269,7 @@
 	"sectionComments": {
 		"viewProperties": "View generation options (set_viewProperties)"
 	},
-	"functionsCode": "/************************************************************************************************\r\n * Functions Related to the main() Execution Flow\r\n ************************************************************************************************/\r\n\t// View property value (없으면 기본값)\r\n\tthis.fn_GetProp = function(sId, vDefault) {\r\n\t\tvar oAttr = (this.oViewProperties && this.oViewProperties.attributes) ? this.oViewProperties.attributes : null;\r\n\t\tif (oAttr && oAttr[sId] !== undefined && oAttr[sId] !== null && oAttr[sId] !== \"\") {\r\n\t\t\treturn oAttr[sId];\r\n\t\t}\r\n\t\treturn vDefault;\r\n\t};\r\n\r\n\t// 숫자 속성 (잘못된 값이면 기본값)\r\n\tthis.fn_GetNumProp = function(sId, nDefault) {\r\n\t\tvar n = parseInt(this.fn_GetProp(sId, nDefault), 10);\r\n\t\treturn isNaN(n) ? nDefault : n;\r\n\t};\r\n\r\n\t// 쉼표 문자열 → 배열 (공백 제거)\r\n\tthis.fn_Split = function(sValue) {\r\n\t\tvar arr = (\"\" + sValue).split(\",\");\r\n\t\tvar arrResult = [];\r\n\t\tfor (var i = 0; i < arr.length; i++) {\r\n\t\t\tvar s = arr[i].replace(/^\\s+|\\s+$/g, \"\");\r\n\t\t\tif (s != \"\") {\r\n\t\t\t\tarrResult.push(s);\r\n\t\t\t}\r\n\t\t}\r\n\t\treturn arrResult;\r\n\t};\r\n\r\n\t// 배열에서 i 번째 (모자라면 순환, 비었으면 기본값)\r\n\tthis.fn_Pick = function(arr, i, sDefault) {\r\n\t\treturn arr.length > 0 ? arr[i % arr.length] : sDefault;\r\n\t};\r\n\r\n\t// 카드로 만들 필드 = 선택한 필드 중 헤더 필드를 뺀 나머지\r\n\tthis.fn_GetCardFields = function() {\r\n\t\tvar arrFields = (this.oFieldArray && this.oFieldArray.fields) ? this.oFieldArray.fields : [];\r\n\t\tvar arrHeader = this.fn_Split(this.fn_GetProp(\"headerfields\", this.HEADER_FIELDS));\r\n\t\tvar arrResult = [];\r\n\r\n\t\tfor (var i = 0; i < arrFields.length; i++) {\r\n\t\t\tif (arrHeader.indexOf(arrFields[i].id) < 0) {\r\n\t\t\t\tarrResult.push(arrFields[i]);\r\n\t\t\t}\r\n\t\t}\r\n\t\treturn arrResult;\r\n\t};\r\n\r\n\tthis.fn_GetModel = function() {\r\n\t\tvar oModel = [];\r\n\r\n\t\tvar arrCards   = this.fn_GetCardFields();\r\n\t\tvar arrBg      = this.fn_Split(this.fn_GetProp(\"cardcolors\", this.CARD_COLORS));\r\n\t\tvar arrValueFg = this.fn_Split(this.fn_GetProp(\"valuecolors\", this.VALUE_COLORS));\r\n\t\tvar nFontSize  = this.fn_GetNumProp(\"valuefontsize\", this.VALUE_FONT_SIZE);\r\n\t\tvar nGap       = this.fn_GetNumProp(\"cardgap\", this.CARD_GAP);\r\n\t\tvar bHeader    = this.fn_GetProp(\"headerformat\", this.HEADER_FORMAT) != \"\";\r\n\r\n\t\tvar nPad   = this.VIEW_PADDING;\r\n\t\tvar nInner = nPad + this.FRAME_PADDING;     // 테두리 박스 안쪽 시작 위치\r\n\t\tvar nTop   = nInner;\r\n\r\n\t\t//---------------- 테두리 박스 : View 를 가득 채움 (가장 먼저 = 맨 뒤에 깔림) ----------------\r\n\t\tvar oFrame = {\r\n\t\t\t\"tag\": \"Static\",\r\n\t\t\t\"attribute\": {\r\n\t\t\t\t\"id\": this.ID_FRAME, \"left\": nPad, \"top\": nPad, \"right\": nPad, \"bottom\": nPad,\r\n\t\t\t\t\"text\": \"\", \"border\": this.FRAME_BORDER, \"borderRadius\": \"12px\", \"background\": \"#FFFFFF\"\r\n\t\t\t}\r\n\t\t};\r\n\t\toModel.push({ \"fieldid\": \"\", \"Components\": [oFrame] });\r\n\r\n\t\t//---------------- 제목 줄 (headerformat 이 있을 때만) ----------------\r\n\t\tif (bHeader) {\r\n\t\t\tvar oHeader = {\r\n\t\t\t\t\"tag\": \"Static\",\r\n\t\t\t\t\"attribute\": {\r\n\t\t\t\t\t\"id\": this.ID_HEADER, \"left\": nInner, \"top\": nTop, \"right\": nInner, \"height\": this.HEADER_HEIGHT,\r\n\t\t\t\t\t\"text\": \"\", \"color\": this.HEADER_COLOR, \"font\": this.TEXT_FONT, \"usedecorate\": \"true\"\r\n\t\t\t\t}\r\n\t\t\t};\r\n\t\t\toModel.push({ \"fieldid\": \"\", \"Components\": [oHeader] });\r\n\r\n\t\t\tnTop += this.HEADER_HEIGHT + this.HEADER_GAP;\r\n\t\t}\r\n\r\n\t\t//---------------- 카드 : 라벨 + 값을 한 Static 에 두 줄로 (세로 가운데) ----------------\r\n\t\t// 너비 : 테두리 안쪽 너비를 카드 수로 나눈 %(간격만큼 2% 덜어냄). 마지막 카드는 right 로 끝을 맞춤\r\n\t\t// 높이 : bottom 으로 테두리 안쪽 끝까지\r\n\t\tvar nCount  = arrCards.length;\r\n\t\tvar sWidth  = nCount > 0 ? (Math.floor(10000 / nCount) / 100 - 2) + \"%\" : \"100%\";\r\n\t\tvar sPrevId = \"\";\r\n\r\n\t\tfor (var i = 0; i < nCount; i++) {\r\n\t\t\tvar oField  = arrCards[i];\r\n\t\t\tvar sCardId = \"staCard_\" + oField.id;\r\n\t\t\tvar bLast   = (i == nCount - 1);\r\n\r\n\t\t\tvar oCard = {\r\n\t\t\t\t\"tag\": \"Static\",\r\n\t\t\t\t\"attribute\": {\r\n\t\t\t\t\t\"id\": sCardId, \"left\": (i == 0) ? nInner : sPrevId + \":\" + nGap, \"top\": nTop, \"bottom\": nInner,\r\n\t\t\t\t\t\"text\": oField.label ? oField.label : oField.id,\r\n\t\t\t\t\t\"background\": this.fn_Pick(arrBg, i, \"#F1EFE8\"), \"borderRadius\": \"8px\",\r\n\t\t\t\t\t\"color\": this.fn_Pick(arrValueFg, i, \"#444441\"), \"padding\": \"0px 14px\",\r\n\t\t\t\t\t\"verticalAlign\": \"middle\", \"usedecorate\": \"true\",\r\n\t\t\t\t\t\"font\": \"normal 500 \" + nFontSize + \"px/normal \\\"Malgun Gothic\\\"\",\r\n\t\t\t\t\t\"_fieldid\": oField.id, \"_fieldcomptype\": \"comp\"\r\n\t\t\t\t}\r\n\t\t\t};\r\n\r\n\t\t\tif (bLast) {\r\n\t\t\t\toCard.attribute.right = nInner;\r\n\t\t\t} else {\r\n\t\t\t\toCard.attribute.width = sWidth;\r\n\t\t\t}\r\n\r\n\t\t\tthis.arrCardIds.push(oField.id);\r\n\t\t\tthis.arrCardLabels.push(oField.label ? oField.label : oField.id);\r\n\t\t\tthis.arrCardSuffix.push(oField.valuesuffix ? oField.valuesuffix : \"\");\r\n\t\t\toModel.push({ \"fieldid\": oField.id, \"Components\": [oCard] });\r\n\r\n\t\t\tsPrevId = sCardId;\r\n\t\t}\r\n\r\n\t\treturn oModel;\r\n\t};\r\n\r\n\t// 함수를 \"this.<name> = function...\" 문자열로 변환\r\n\tthis.fn_FuncString = function(sName) {\r\n\t\treturn \"\\n\\tthis.\" + sName + \" = \" + this[sName].toString() + \";\\n\";\r\n\t};\r\n\r\n\tthis.fn_GetScript = function() {\r\n\t\t// 실행 시점에 View 스크립트가 참조할 값\r\n\t\tvar sValue = \"\\n\\tthis.fvHeaderFormat = \" + JSON.stringify(this.fn_GetProp(\"headerformat\", this.HEADER_FORMAT)) + \";\"\r\n\t\t           + \"\\n\\tthis.fvEmptyText = \" + JSON.stringify(this.fn_GetProp(\"emptytext\", this.EMPTY_TEXT)) + \";\"\r\n\t\t           + \"\\n\\tthis.fvValueSuffix = \" + JSON.stringify(this.arrCardSuffix) + \";\"\r\n\t\t           + \"\\n\\tthis.fvCardFields = \" + JSON.stringify(this.arrCardIds) + \";\"\r\n\t\t           + \"\\n\\tthis.fvCardLabels = \" + JSON.stringify(this.arrCardLabels) + \";\"\r\n\t\t           + \"\\n\\tthis.fvLabelColors = \" + JSON.stringify(this.fn_Split(this.fn_GetProp(\"labelcolors\", this.LABEL_COLORS))) + \";\"\r\n\t\t           + \"\\n\\tthis.fvSmallPt = \" + this.LABEL_FONT_PT + \";\\n\";\r\n\r\n\t\tsValue += this.fn_FuncString(\"_fnViewOnLoad\");\r\n\t\tsValue += this.fn_FuncString(\"fn_ds_onchanged\");\r\n\t\tsValue += this.fn_FuncString(\"fn_refresh\");\r\n\t\tsValue += this.fn_FuncString(\"fn_formatValue\");\r\n\t\tsValue += this.fn_FuncString(\"fn_formatNumber\");\r\n\r\n\t\treturn {\r\n\t\t\t\"tag\": \"Script\",\r\n\t\t\t\"attribute\": { \"type\": \"xscript5.1\" },\r\n\t\t\t\"value\": sValue\r\n\t\t};\r\n\t};\r\n\r\n/************************************************************************************************\r\n * Runtime Functions (생성된 View 안에서 실행되는 함수. this = View 내부 폼)\r\n ************************************************************************************************/\r\n\tthis._fnViewOnLoad = function(objForm) {\r\n\t\t/* Sets the view form reference so that functions declared in the view can access it */\r\n\t\tthis._ownerForm = objForm;\r\n\r\n\t\tvar oDs = this.parent.getViewDataset();\r\n\t\tif (oDs && !this._bSummaryInit) {\r\n\t\t\t/* 조회 완료(onload) / 값 변경(oncolumnchanged) / 행 이동(onrowposchanged) 때 갱신. 재호출 시 중복 등록 방지 */\r\n\t\t\toDs.addEventHandler(\"onload\", this.fn_ds_onchanged, this);\r\n\t\t\toDs.addEventHandler(\"oncolumnchanged\", this.fn_ds_onchanged, this);\r\n\t\t\toDs.addEventHandler(\"onrowposchanged\", this.fn_ds_onchanged, this);\r\n\t\t\tthis._bSummaryInit = true;\r\n\t\t}\r\n\r\n\t\tthis.fn_refresh();\r\n\t};\r\n\r\n\tthis.fn_ds_onchanged = function(obj, e) {\r\n\t\tthis.fn_refresh();\r\n\t};\r\n\r\n\t/* 제목 줄 + 카드 값을 현재 행 기준으로 다시 그림 */\r\n\tthis.fn_refresh = function() {\r\n\t\tvar oDs   = this.parent.getViewDataset();\r\n\t\tvar bData = oDs && oDs.getRowCount() > 0 && oDs.rowposition >= 0;\r\n\t\tvar nRow  = bData ? oDs.rowposition : -1;\r\n\t\tvar oThis = this;\r\n\r\n\t\t// 제목 줄\r\n\t\tif (this.staHeader && this.fvHeaderFormat) {\r\n\t\t\tif (!bData) {\r\n\t\t\t\tthis.staHeader.set_text(this.fvEmptyText);\r\n\t\t\t} else {\r\n\t\t\t\tvar sText = (\"\" + this.fvHeaderFormat).replace(/\\{([A-Za-z0-9_]+)\\}/g, function(sAll, sCol) {\r\n\t\t\t\t\treturn oThis.fn_formatValue(oDs.getColumn(nRow, sCol));\r\n\t\t\t\t});\r\n\t\t\t\tthis.staHeader.set_text(sText);\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t// 카드 : 1줄 라벨(작게, 라벨색) + 2줄 값(천 단위 쉼표) + 작은 단위\r\n\t\tvar sSmall = \"<fs v='\" + this.fvSmallPt + \"'>\";\r\n\t\tfor (var i = 0; i < this.fvCardFields.length; i++) {\r\n\t\t\tvar sCol  = this.fvCardFields[i];\r\n\t\t\tvar oCard = this[\"staCard_\" + sCol];\r\n\t\t\tif (!oCard) {\r\n\t\t\t\tcontinue;\r\n\t\t\t}\r\n\r\n\t\t\tvar sColor = this.fvLabelColors.length > 0 ? this.fvLabelColors[i % this.fvLabelColors.length] : \"#5F5E5A\";\r\n\t\t\tvar sLabel = \"<fc v='\" + sColor + \"'>\" + sSmall + this.fvCardLabels[i] + \"</fs></fc>\";\r\n\r\n\t\t\tvar sValue = \"-\";\r\n\t\t\tif (bData) {\r\n\t\t\t\tvar v = oDs.getColumn(nRow, sCol);\r\n\t\t\t\tif (v !== undefined && v !== null && v !== \"\") {\r\n\t\t\t\t\tvar sSuffix = this.fvValueSuffix[i] || \"\";\r\n\t\t\t\t\tsValue = this.fn_formatNumber(v) + (sSuffix ? sSmall + \" \" + sSuffix + \"</fs>\" : \"\");\r\n\t\t\t\t}\r\n\t\t\t}\r\n\r\n\t\t\toCard.set_text(sLabel + \"\\n\" + sValue);\r\n\t\t}\r\n\t};\r\n\r\n\t/* 날짜 값은 yyyy-MM-dd (시각이 있으면 HH:mm 까지), 그 외는 문자열 */\r\n\tthis.fn_formatValue = function(v) {\r\n\t\tif (v === undefined || v === null) {\r\n\t\t\treturn \"\";\r\n\t\t}\r\n\t\tif (v.getFullYear) {\r\n\t\t\tvar p = function(n) { return n < 10 ? \"0\" + n : \"\" + n; };\r\n\t\t\tvar sDate = v.getFullYear() + \"-\" + p(v.getMonth() + 1) + \"-\" + p(v.getDate());\r\n\t\t\tif (v.getHours() == 0 && v.getMinutes() == 0) {\r\n\t\t\t\treturn sDate;\r\n\t\t\t}\r\n\t\t\treturn sDate + \" \" + p(v.getHours()) + \":\" + p(v.getMinutes());\r\n\t\t}\r\n\t\treturn \"\" + v;\r\n\t};\r\n\r\n\t/* 숫자는 천 단위 쉼표, 숫자가 아니면 그대로 */\r\n\tthis.fn_formatNumber = function(v) {\r\n\t\tvar s = \"\" + v;\r\n\t\tif (!/^-?\\d+(\\.\\d+)?$/.test(s)) {\r\n\t\t\treturn this.fn_formatValue(v);\r\n\t\t}\r\n\t\tvar arr = s.split(\".\");\r\n\t\tarr[0] = arr[0].replace(/\\B(?=(\\d{3})+(?!\\d))/g, \",\");\r\n\t\treturn arr.join(\".\");\r\n\t};\r\n",
+	"functionsCode": "/************************************************************************************************\r\n * Functions Related to the main() Execution Flow\r\n ************************************************************************************************/\r\n\t// View property value (없으면 기본값)\r\n\tthis.fn_GetProp = function(sId, vDefault) {\r\n\t\tlet oAttr = (this.oViewProperties && this.oViewProperties.attributes) ? this.oViewProperties.attributes : null;\r\n\t\tif (oAttr && oAttr[sId] !== undefined && oAttr[sId] !== null && oAttr[sId] !== \"\") {\r\n\t\t\treturn oAttr[sId];\r\n\t\t}\r\n\t\treturn vDefault;\r\n\t};\r\n\r\n\t// 숫자 속성 (잘못된 값이면 기본값)\r\n\tthis.fn_GetNumProp = function(sId, nDefault) {\r\n\t\tlet n = parseInt(this.fn_GetProp(sId, nDefault), 10);\r\n\t\treturn isNaN(n) ? nDefault : n;\r\n\t};\r\n\r\n\t// 쉼표 문자열 → 배열 (공백 제거)\r\n\tthis.fn_Split = function(sValue) {\r\n\t\tlet arr = (\"\" + sValue).split(\",\");\r\n\t\tlet arrResult = [];\r\n\t\tfor (let i = 0; i < arr.length; i++) {\r\n\t\t\tlet s = arr[i].replace(/^\\s+|\\s+$/g, \"\");\r\n\t\t\tif (s != \"\") {\r\n\t\t\t\tarrResult.push(s);\r\n\t\t\t}\r\n\t\t}\r\n\t\treturn arrResult;\r\n\t};\r\n\r\n\t// 배열에서 i 번째 (모자라면 순환, 비었으면 기본값)\r\n\tthis.fn_Pick = function(arr, i, sDefault) {\r\n\t\treturn arr.length > 0 ? arr[i % arr.length] : sDefault;\r\n\t};\r\n\r\n\t// 카드로 만들 필드 = 선택한 필드 중 헤더 필드를 뺀 나머지\r\n\tthis.fn_GetCardFields = function() {\r\n\t\tlet arrFields = (this.oFieldArray && this.oFieldArray.fields) ? this.oFieldArray.fields : [];\r\n\t\tlet arrHeader = this.fn_Split(this.fn_GetProp(\"headerfields\", this.HEADER_FIELDS));\r\n\t\tlet arrResult = [];\r\n\r\n\t\tfor (let i = 0; i < arrFields.length; i++) {\r\n\t\t\tif (arrHeader.indexOf(arrFields[i].id) < 0) {\r\n\t\t\t\tarrResult.push(arrFields[i]);\r\n\t\t\t}\r\n\t\t}\r\n\t\treturn arrResult;\r\n\t};\r\n\r\n\tthis.fn_GetModel = function() {\r\n\t\tlet oModel = [];\r\n\r\n\t\tlet arrCards   = this.fn_GetCardFields();\r\n\t\tlet arrBg      = this.fn_Split(this.fn_GetProp(\"cardcolors\", this.CARD_COLORS));\r\n\t\tlet arrValueFg = this.fn_Split(this.fn_GetProp(\"valuecolors\", this.VALUE_COLORS));\r\n\t\tlet arrBorder  = this.fn_Split(this.fn_GetProp(\"bordercolors\", this.BORDER_COLORS));\r\n\t\tlet nFontSize  = this.fn_GetNumProp(\"valuefontsize\", this.VALUE_FONT_SIZE);\r\n\t\tlet nGap       = this.fn_GetNumProp(\"cardgap\", this.CARD_GAP);\r\n\t\tlet bHeader    = this.fn_GetProp(\"headerformat\", this.HEADER_FORMAT) != \"\";\r\n\r\n\t\tlet nPad   = this.VIEW_PADDING;\r\n\t\tlet nInner = nPad + this.FRAME_PADDING;     // 테두리 박스 안쪽 시작 위치\r\n\t\tlet nTop   = nInner;\r\n\r\n\t\t//---------------- 테두리 박스 : View 를 가득 채움 (가장 먼저 = 맨 뒤에 깔림) ----------------\r\n\t\tlet oFrame = {\r\n\t\t\t\"tag\": \"Static\",\r\n\t\t\t\"attribute\": {\r\n\t\t\t\t\"id\": this.ID_FRAME, \"left\": nPad, \"top\": nPad, \"right\": nPad, \"bottom\": nPad,\r\n\t\t\t\t\"text\": \"\", \"border\": this.FRAME_BORDER, \"borderRadius\": \"12px\", \"background\": this.FRAME_BACKGROUND\r\n\t\t\t}\r\n\t\t};\r\n\t\toModel.push({ \"fieldid\": \"\", \"Components\": [oFrame] });\r\n\r\n\t\t//---------------- 제목 줄 (headerformat 이 있을 때만) ----------------\r\n\t\tif (bHeader) {\r\n\t\t\tlet oHeader = {\r\n\t\t\t\t\"tag\": \"Static\",\r\n\t\t\t\t\"attribute\": {\r\n\t\t\t\t\t\"id\": this.ID_HEADER, \"left\": nInner, \"top\": nTop, \"right\": nInner, \"height\": this.HEADER_HEIGHT,\r\n\t\t\t\t\t\"text\": \"\", \"color\": this.HEADER_COLOR, \"font\": this.TEXT_FONT, \"usedecorate\": \"true\", \"textAlign\": this.HEADER_ALIGN\r\n\t\t\t\t}\r\n\t\t\t};\r\n\t\t\toModel.push({ \"fieldid\": \"\", \"Components\": [oHeader] });\r\n\r\n\t\t\tnTop += this.HEADER_HEIGHT + this.HEADER_GAP;\r\n\t\t}\r\n\r\n\t\t//---------------- 카드 : 라벨 + 값을 한 Static 에 두 줄로 (세로 가운데) ----------------\r\n\t\t// 너비 : 테두리 안쪽 너비를 카드 수로 나눈 %(간격만큼 2% 덜어냄). 마지막 카드는 right 로 끝을 맞춤\r\n\t\t// 높이 : bottom 으로 테두리 안쪽 끝까지\r\n\t\tlet nCount  = arrCards.length;\r\n\t\tlet sWidth  = nCount > 0 ? (Math.floor(10000 / nCount) / 100 - 2) + \"%\" : \"100%\";\r\n\t\tlet sPrevId = \"\";\r\n\r\n\t\tfor (let i = 0; i < nCount; i++) {\r\n\t\t\tlet oField  = arrCards[i];\r\n\t\t\tlet sCardId = \"staCard_\" + oField.id;\r\n\t\t\tlet bLast   = (i == nCount - 1);\r\n\r\n\t\t\tlet oCard = {\r\n\t\t\t\t\"tag\": \"Static\",\r\n\t\t\t\t\"attribute\": {\r\n\t\t\t\t\t\"id\": sCardId, \"left\": (i == 0) ? nInner : sPrevId + \":\" + nGap, \"top\": nTop, \"bottom\": nInner,\r\n\t\t\t\t\t\"text\": oField.label ? oField.label : oField.id,\r\n\t\t\t\t\t\"background\": this.fn_Pick(arrBg, i, \"#F4F4F5\"),\r\n\t\t\t\t\t\"border\": \"1px solid \" + this.fn_Pick(arrBorder, i, \"#E4E4E7\"),\r\n\t\t\t\t\t\"borderRadius\": this.CARD_RADIUS,\r\n\t\t\t\t\t\"color\": this.fn_Pick(arrValueFg, i, \"#18181B\"), \"padding\": this.CARD_PADDING,\r\n\t\t\t\t\t\"verticalAlign\": \"middle\", \"usedecorate\": \"true\",\r\n\t\t\t\t\t\"font\": \"normal 700 \" + nFontSize + \"px/normal \" + this.CARD_FONT_FAMILY,\r\n\t\t\t\t\t\"_fieldid\": oField.id, \"_fieldcomptype\": \"comp\"\r\n\t\t\t\t}\r\n\t\t\t};\r\n\r\n\t\t\tif (bLast) {\r\n\t\t\t\toCard.attribute.right = nInner;\r\n\t\t\t} else {\r\n\t\t\t\toCard.attribute.width = sWidth;\r\n\t\t\t}\r\n\r\n\t\t\tthis.arrCardIds.push(oField.id);\r\n\t\t\tthis.arrCardLabels.push(oField.label ? oField.label : oField.id);\r\n\t\t\tthis.arrCardSuffix.push(oField.valuesuffix ? oField.valuesuffix : \"\");\r\n\t\t\toModel.push({ \"fieldid\": oField.id, \"Components\": [oCard] });\r\n\r\n\t\t\tsPrevId = sCardId;\r\n\t\t}\r\n\r\n\t\treturn oModel;\r\n\t};\r\n\r\n\t// 함수를 \"this.<name> = function...\" 문자열로 변환\r\n\tthis.fn_FuncString = function(sName) {\r\n\t\treturn \"\\n\\tthis.\" + sName + \" = \" + this[sName].toString() + \";\\n\";\r\n\t};\r\n\r\n\tthis.fn_GetScript = function() {\r\n\t\t// 실행 시점에 View 스크립트가 참조할 값\r\n\t\tlet sValue = \"\\n\\tthis.fvHeaderFormat = \" + JSON.stringify(this.fn_GetProp(\"headerformat\", this.HEADER_FORMAT)) + \";\"\r\n\t\t           + \"\\n\\tthis.fvEmptyText = \" + JSON.stringify(this.fn_GetProp(\"emptytext\", this.EMPTY_TEXT)) + \";\"\r\n\t\t           + \"\\n\\tthis.fvValueSuffix = \" + JSON.stringify(this.arrCardSuffix) + \";\"\r\n\t\t           + \"\\n\\tthis.fvCardFields = \" + JSON.stringify(this.arrCardIds) + \";\"\r\n\t\t           + \"\\n\\tthis.fvCardLabels = \" + JSON.stringify(this.arrCardLabels) + \";\"\r\n\t\t           + \"\\n\\tthis.fvLabelColors = \" + JSON.stringify(this.fn_Split(this.fn_GetProp(\"labelcolors\", this.LABEL_COLORS))) + \";\"\r\n\t\t           + \"\\n\\tthis.fvSmallPt = \" + this.LABEL_FONT_PT + \";\\n\";\r\n\r\n\t\tsValue += this.fn_FuncString(\"_fnViewOnLoad\");\r\n\t\tsValue += this.fn_FuncString(\"fn_ds_onchanged\");\r\n\t\tsValue += this.fn_FuncString(\"fn_refresh\");\r\n\t\tsValue += this.fn_FuncString(\"fn_formatValue\");\r\n\t\tsValue += this.fn_FuncString(\"fn_formatNumber\");\r\n\r\n\t\treturn {\r\n\t\t\t\"tag\": \"Script\",\r\n\t\t\t\"attribute\": { \"type\": \"xscript5.1\" },\r\n\t\t\t\"value\": sValue\r\n\t\t};\r\n\t};\r\n\r\n/************************************************************************************************\r\n * Runtime Functions (생성된 View 안에서 실행되는 함수. this = View 내부 폼)\r\n ************************************************************************************************/\r\n\tthis._fnViewOnLoad = function(objForm) {\r\n\t\t/* Sets the view form reference so that functions declared in the view can access it */\r\n\t\tthis._ownerForm = objForm;\r\n\r\n\t\tlet oDs = this.parent.getViewDataset();\r\n\t\tif (oDs && !this._bSummaryInit) {\r\n\t\t\t/* 조회 완료(onload) / 값 변경(oncolumnchanged) / 행 이동(onrowposchanged) 때 갱신. 재호출 시 중복 등록 방지 */\r\n\t\t\toDs.addEventHandler(\"onload\", this.fn_ds_onchanged, this);\r\n\t\t\toDs.addEventHandler(\"oncolumnchanged\", this.fn_ds_onchanged, this);\r\n\t\t\toDs.addEventHandler(\"onrowposchanged\", this.fn_ds_onchanged, this);\r\n\t\t\tthis._bSummaryInit = true;\r\n\t\t}\r\n\r\n\t\tthis.fn_refresh();\r\n\t};\r\n\r\n\tthis.fn_ds_onchanged = function(obj, e) {\r\n\t\tthis.fn_refresh();\r\n\t};\r\n\r\n\t/* 제목 줄 + 카드 값을 현재 행 기준으로 다시 그림 */\r\n\tthis.fn_refresh = function() {\r\n\t\tlet oDs   = this.parent.getViewDataset();\r\n\t\tlet bData = oDs && oDs.getRowCount() > 0 && oDs.rowposition >= 0;\r\n\t\tlet nRow  = bData ? oDs.rowposition : -1;\r\n\t\tlet oThis = this;\r\n\r\n\t\t// 제목 줄\r\n\t\tif (this.staHeader && this.fvHeaderFormat) {\r\n\t\t\tif (!bData) {\r\n\t\t\t\tthis.staHeader.set_text(this.fvEmptyText);\r\n\t\t\t} else {\r\n\t\t\t\tlet sText = (\"\" + this.fvHeaderFormat).replace(/\\{([A-Za-z0-9_]+)\\}/g, function(sAll, sCol) {\r\n\t\t\t\t\treturn oThis.fn_formatValue(oDs.getColumn(nRow, sCol));\r\n\t\t\t\t});\r\n\t\t\t\tthis.staHeader.set_text(sText);\r\n\t\t\t}\r\n\t\t}\r\n\r\n\t\t// 카드 : 1줄 라벨(작게, 라벨색) + 2줄 값(천 단위 쉼표) + 작은 단위\r\n\t\tlet sSmall = \"<fs v='\" + this.fvSmallPt + \"'>\";\r\n\t\tfor (let i = 0; i < this.fvCardFields.length; i++) {\r\n\t\t\tlet sCol  = this.fvCardFields[i];\r\n\t\t\tlet oCard = this[\"staCard_\" + sCol];\r\n\t\t\tif (!oCard) {\r\n\t\t\t\tcontinue;\r\n\t\t\t}\r\n\r\n\t\t\tlet sColor = this.fvLabelColors.length > 0 ? this.fvLabelColors[i % this.fvLabelColors.length] : \"#71717A\";\r\n\t\t\tlet sLabel = \"<fc v='\" + sColor + \"'>\" + sSmall + this.fvCardLabels[i] + \"</fs></fc>\";\r\n\r\n\t\t\tlet sValue = \"-\";\r\n\t\t\tif (bData) {\r\n\t\t\t\tlet v = oDs.getColumn(nRow, sCol);\r\n\t\t\t\tif (v !== undefined && v !== null && v !== \"\") {\r\n\t\t\t\t\tlet sSuffix = this.fvValueSuffix[i] || \"\";\r\n\t\t\t\t\tsValue = this.fn_formatNumber(v) + (sSuffix ? sSmall + \" \" + sSuffix + \"</fs>\" : \"\");\r\n\t\t\t\t}\r\n\t\t\t}\r\n\r\n\t\t\toCard.set_text(sLabel + \"\\n\" + sValue);\r\n\t\t}\r\n\t};\r\n\r\n\t/* 날짜 값은 yyyy-MM-dd (시각이 있으면 HH:mm 까지), 그 외는 문자열 */\r\n\tthis.fn_formatValue = function(v) {\r\n\t\tif (v === undefined || v === null) {\r\n\t\t\treturn \"\";\r\n\t\t}\r\n\t\tif (v.getFullYear) {\r\n\t\t\tlet p = function(n) { return n < 10 ? \"0\" + n : \"\" + n; };\r\n\t\t\tlet sDate = v.getFullYear() + \"-\" + p(v.getMonth() + 1) + \"-\" + p(v.getDate());\r\n\t\t\tif (v.getHours() == 0 && v.getMinutes() == 0) {\r\n\t\t\t\treturn sDate;\r\n\t\t\t}\r\n\t\t\treturn sDate + \" \" + p(v.getHours()) + \":\" + p(v.getMinutes());\r\n\t\t}\r\n\t\treturn \"\" + v;\r\n\t};\r\n\r\n\t/* 숫자는 천 단위 쉼표, 숫자가 아니면 그대로 */\r\n\tthis.fn_formatNumber = function(v) {\r\n\t\tlet s = \"\" + v;\r\n\t\tif (!/^-?\\d+(\\.\\d+)?$/.test(s)) {\r\n\t\t\treturn this.fn_formatValue(v);\r\n\t\t}\r\n\t\tlet arr = s.split(\".\");\r\n\t\tarr[0] = arr[0].replace(/\\B(?=(\\d{3})+(?!\\d))/g, \",\");\r\n\t\treturn arr.join(\".\");\r\n\t};\r\n",
 	"viewPropertiesValueBody": ""
 }]]>
   </UIConfig>
@@ -244,7 +282,7 @@
  ************************************************************************************************/
 	// Layout
 	this.VIEW_PADDING = 0;	// View 가장자리 ~ 테두리 박스
-	this.FRAME_PADDING = 12;	// 테두리 박스 ~ 내용
+	this.FRAME_PADDING = 0;	// 테두리 박스 ~ 내용
 	this.HEADER_HEIGHT = 20;
 	this.HEADER_GAP = 8;
 	this.VALUE_FONT_SIZE = 22;
@@ -252,17 +290,23 @@
 	this.CARD_GAP = 8;
 
 	// Fonts / colors (화면과 무관한 스타일 기본 값)
-	this.TEXT_FONT = "normal 12px/normal \"Malgun Gothic\"";
-	this.FRAME_BORDER = "1px solid #E0DED6";
-	this.HEADER_COLOR = "#5F5E5A";
+	this.TEXT_FONT = "normal 12px/normal \"NotoSansKR-Regular\"";
+	this.FRAME_BORDER = "0px none";
+	this.HEADER_COLOR = "#A1A1AA";
+	this.FRAME_BACKGROUND = "transparent";
+	this.HEADER_ALIGN = "right";
+	this.CARD_RADIUS = "10px";
+	this.CARD_PADDING = "0px 20px";
+	this.CARD_FONT_FAMILY = "\"NotoSansKR-Bold\"";
 
 	// Default values of view properties (화면마다 다른 값은 비워두고 View Generation 속성에서 지정)
 	this.HEADER_FIELDS = "";
 	this.HEADER_FORMAT = "";
 	this.EMPTY_TEXT = "데이터가 없습니다";
-	this.CARD_COLORS = "#F1EFE8,#EAF3DE,#FAEEDA,#E6F1FB";
-	this.LABEL_COLORS = "#5F5E5A,#3B6D11,#854F0B,#185FA5";
-	this.VALUE_COLORS = "#444441,#27500A,#633806,#0C447C";
+	this.CARD_COLORS = "#F4F4F5,#E1F5EE,#FAEEDA,#E6F1FB";
+	this.BORDER_COLORS = "#E4E4E7,#9FE1CB,#FAC775,#B5D4F4";
+	this.LABEL_COLORS = "#71717A,#0F6E56,#854F0B,#185FA5";
+	this.VALUE_COLORS = "#18181B,#085041,#633806,#0C447C";
 
 	// Component ids
 	this.ID_FRAME = "staFrame";
@@ -357,6 +401,15 @@
 		oProperties.group = "Card";
 		oViewAttr.attributes.push(oProperties);
 
+		oProperties = {};
+		oProperties.id = "bordercolors";
+		oProperties.displaytext = "Border colors";
+		oProperties.edittype = "String";
+		oProperties.defaultvalue = this.BORDER_COLORS;
+		oProperties.description = "카드 테두리색 (카드 순서대로, 쉼표 구분)";
+		oProperties.group = "Card";
+		oViewAttr.attributes.push(oProperties);
+
 		return JSON.stringify(oViewAttr, null, "\t");
 	};
 
@@ -418,7 +471,7 @@
 	 ************************************************************************************************/
 		// View property value (없으면 기본값)
 		this.fn_GetProp = function(sId, vDefault) {
-			var oAttr = (this.oViewProperties && this.oViewProperties.attributes) ? this.oViewProperties.attributes : null;
+			let oAttr = (this.oViewProperties && this.oViewProperties.attributes) ? this.oViewProperties.attributes : null;
 			if (oAttr && oAttr[sId] !== undefined && oAttr[sId] !== null && oAttr[sId] !== "") {
 				return oAttr[sId];
 			}
@@ -427,16 +480,16 @@
 
 		// 숫자 속성 (잘못된 값이면 기본값)
 		this.fn_GetNumProp = function(sId, nDefault) {
-			var n = parseInt(this.fn_GetProp(sId, nDefault), 10);
+			let n = parseInt(this.fn_GetProp(sId, nDefault), 10);
 			return isNaN(n) ? nDefault : n;
 		};
 
 		// 쉼표 문자열 → 배열 (공백 제거)
 		this.fn_Split = function(sValue) {
-			var arr = ("" + sValue).split(",");
-			var arrResult = [];
-			for (var i = 0; i < arr.length; i++) {
-				var s = arr[i].replace(/^\s+|\s+$/g, "");
+			let arr = ("" + sValue).split(",");
+			let arrResult = [];
+			for (let i = 0; i < arr.length; i++) {
+				let s = arr[i].replace(/^\s+|\s+$/g, "");
 				if (s != "") {
 					arrResult.push(s);
 				}
@@ -451,11 +504,11 @@
 
 		// 카드로 만들 필드 = 선택한 필드 중 헤더 필드를 뺀 나머지
 		this.fn_GetCardFields = function() {
-			var arrFields = (this.oFieldArray && this.oFieldArray.fields) ? this.oFieldArray.fields : [];
-			var arrHeader = this.fn_Split(this.fn_GetProp("headerfields", this.HEADER_FIELDS));
-			var arrResult = [];
+			let arrFields = (this.oFieldArray && this.oFieldArray.fields) ? this.oFieldArray.fields : [];
+			let arrHeader = this.fn_Split(this.fn_GetProp("headerfields", this.HEADER_FIELDS));
+			let arrResult = [];
 
-			for (var i = 0; i < arrFields.length; i++) {
+			for (let i = 0; i < arrFields.length; i++) {
 				if (arrHeader.indexOf(arrFields[i].id) < 0) {
 					arrResult.push(arrFields[i]);
 				}
@@ -464,36 +517,37 @@
 		};
 
 		this.fn_GetModel = function() {
-			var oModel = [];
+			let oModel = [];
 
-			var arrCards   = this.fn_GetCardFields();
-			var arrBg      = this.fn_Split(this.fn_GetProp("cardcolors", this.CARD_COLORS));
-			var arrValueFg = this.fn_Split(this.fn_GetProp("valuecolors", this.VALUE_COLORS));
-			var nFontSize  = this.fn_GetNumProp("valuefontsize", this.VALUE_FONT_SIZE);
-			var nGap       = this.fn_GetNumProp("cardgap", this.CARD_GAP);
-			var bHeader    = this.fn_GetProp("headerformat", this.HEADER_FORMAT) != "";
+			let arrCards   = this.fn_GetCardFields();
+			let arrBg      = this.fn_Split(this.fn_GetProp("cardcolors", this.CARD_COLORS));
+			let arrValueFg = this.fn_Split(this.fn_GetProp("valuecolors", this.VALUE_COLORS));
+			let arrBorder  = this.fn_Split(this.fn_GetProp("bordercolors", this.BORDER_COLORS));
+			let nFontSize  = this.fn_GetNumProp("valuefontsize", this.VALUE_FONT_SIZE);
+			let nGap       = this.fn_GetNumProp("cardgap", this.CARD_GAP);
+			let bHeader    = this.fn_GetProp("headerformat", this.HEADER_FORMAT) != "";
 
-			var nPad   = this.VIEW_PADDING;
-			var nInner = nPad + this.FRAME_PADDING;     // 테두리 박스 안쪽 시작 위치
-			var nTop   = nInner;
+			let nPad   = this.VIEW_PADDING;
+			let nInner = nPad + this.FRAME_PADDING;     // 테두리 박스 안쪽 시작 위치
+			let nTop   = nInner;
 
 			//---------------- 테두리 박스 : View 를 가득 채움 (가장 먼저 = 맨 뒤에 깔림) ----------------
-			var oFrame = {
+			let oFrame = {
 				"tag": "Static",
 				"attribute": {
 					"id": this.ID_FRAME, "left": nPad, "top": nPad, "right": nPad, "bottom": nPad,
-					"text": "", "border": this.FRAME_BORDER, "borderRadius": "12px", "background": "#FFFFFF"
+					"text": "", "border": this.FRAME_BORDER, "borderRadius": "12px", "background": this.FRAME_BACKGROUND
 				}
 			};
 			oModel.push({ "fieldid": "", "Components": [oFrame] });
 
 			//---------------- 제목 줄 (headerformat 이 있을 때만) ----------------
 			if (bHeader) {
-				var oHeader = {
+				let oHeader = {
 					"tag": "Static",
 					"attribute": {
 						"id": this.ID_HEADER, "left": nInner, "top": nTop, "right": nInner, "height": this.HEADER_HEIGHT,
-						"text": "", "color": this.HEADER_COLOR, "font": this.TEXT_FONT, "usedecorate": "true"
+						"text": "", "color": this.HEADER_COLOR, "font": this.TEXT_FONT, "usedecorate": "true", "textAlign": this.HEADER_ALIGN
 					}
 				};
 				oModel.push({ "fieldid": "", "Components": [oHeader] });
@@ -504,24 +558,26 @@
 			//---------------- 카드 : 라벨 + 값을 한 Static 에 두 줄로 (세로 가운데) ----------------
 			// 너비 : 테두리 안쪽 너비를 카드 수로 나눈 %(간격만큼 2% 덜어냄). 마지막 카드는 right 로 끝을 맞춤
 			// 높이 : bottom 으로 테두리 안쪽 끝까지
-			var nCount  = arrCards.length;
-			var sWidth  = nCount > 0 ? (Math.floor(10000 / nCount) / 100 - 2) + "%" : "100%";
-			var sPrevId = "";
+			let nCount  = arrCards.length;
+			let sWidth  = nCount > 0 ? (Math.floor(10000 / nCount) / 100 - 2) + "%" : "100%";
+			let sPrevId = "";
 
-			for (var i = 0; i < nCount; i++) {
-				var oField  = arrCards[i];
-				var sCardId = "staCard_" + oField.id;
-				var bLast   = (i == nCount - 1);
+			for (let i = 0; i < nCount; i++) {
+				let oField  = arrCards[i];
+				let sCardId = "staCard_" + oField.id;
+				let bLast   = (i == nCount - 1);
 
-				var oCard = {
+				let oCard = {
 					"tag": "Static",
 					"attribute": {
 						"id": sCardId, "left": (i == 0) ? nInner : sPrevId + ":" + nGap, "top": nTop, "bottom": nInner,
 						"text": oField.label ? oField.label : oField.id,
-						"background": this.fn_Pick(arrBg, i, "#F1EFE8"), "borderRadius": "8px",
-						"color": this.fn_Pick(arrValueFg, i, "#444441"), "padding": "0px 14px",
+						"background": this.fn_Pick(arrBg, i, "#F4F4F5"),
+						"border": "1px solid " + this.fn_Pick(arrBorder, i, "#E4E4E7"),
+						"borderRadius": this.CARD_RADIUS,
+						"color": this.fn_Pick(arrValueFg, i, "#18181B"), "padding": this.CARD_PADDING,
 						"verticalAlign": "middle", "usedecorate": "true",
-						"font": "normal 500 " + nFontSize + "px/normal \"Malgun Gothic\"",
+						"font": "normal 700 " + nFontSize + "px/normal " + this.CARD_FONT_FAMILY,
 						"_fieldid": oField.id, "_fieldcomptype": "comp"
 					}
 				};
@@ -550,7 +606,7 @@
 
 		this.fn_GetScript = function() {
 			// 실행 시점에 View 스크립트가 참조할 값
-			var sValue = "\n\tthis.fvHeaderFormat = " + JSON.stringify(this.fn_GetProp("headerformat", this.HEADER_FORMAT)) + ";"
+			let sValue = "\n\tthis.fvHeaderFormat = " + JSON.stringify(this.fn_GetProp("headerformat", this.HEADER_FORMAT)) + ";"
 			           + "\n\tthis.fvEmptyText = " + JSON.stringify(this.fn_GetProp("emptytext", this.EMPTY_TEXT)) + ";"
 			           + "\n\tthis.fvValueSuffix = " + JSON.stringify(this.arrCardSuffix) + ";"
 			           + "\n\tthis.fvCardFields = " + JSON.stringify(this.arrCardIds) + ";"
@@ -578,7 +634,7 @@
 			/* Sets the view form reference so that functions declared in the view can access it */
 			this._ownerForm = objForm;
 
-			var oDs = this.parent.getViewDataset();
+			let oDs = this.parent.getViewDataset();
 			if (oDs && !this._bSummaryInit) {
 				/* 조회 완료(onload) / 값 변경(oncolumnchanged) / 행 이동(onrowposchanged) 때 갱신. 재호출 시 중복 등록 방지 */
 				oDs.addEventHandler("onload", this.fn_ds_onchanged, this);
@@ -596,17 +652,17 @@
 
 		/* 제목 줄 + 카드 값을 현재 행 기준으로 다시 그림 */
 		this.fn_refresh = function() {
-			var oDs   = this.parent.getViewDataset();
-			var bData = oDs && oDs.getRowCount() > 0 && oDs.rowposition >= 0;
-			var nRow  = bData ? oDs.rowposition : -1;
-			var oThis = this;
+			let oDs   = this.parent.getViewDataset();
+			let bData = oDs && oDs.getRowCount() > 0 && oDs.rowposition >= 0;
+			let nRow  = bData ? oDs.rowposition : -1;
+			let oThis = this;
 
 			// 제목 줄
 			if (this.staHeader && this.fvHeaderFormat) {
 				if (!bData) {
 					this.staHeader.set_text(this.fvEmptyText);
 				} else {
-					var sText = ("" + this.fvHeaderFormat).replace(/\{([A-Za-z0-9_]+)\}/g, function(sAll, sCol) {
+					let sText = ("" + this.fvHeaderFormat).replace(/\{([A-Za-z0-9_]+)\}/g, function(sAll, sCol) {
 						return oThis.fn_formatValue(oDs.getColumn(nRow, sCol));
 					});
 					this.staHeader.set_text(sText);
@@ -614,22 +670,22 @@
 			}
 
 			// 카드 : 1줄 라벨(작게, 라벨색) + 2줄 값(천 단위 쉼표) + 작은 단위
-			var sSmall = "<fs v='" + this.fvSmallPt + "'>";
-			for (var i = 0; i < this.fvCardFields.length; i++) {
-				var sCol  = this.fvCardFields[i];
-				var oCard = this["staCard_" + sCol];
+			let sSmall = "<fs v='" + this.fvSmallPt + "'>";
+			for (let i = 0; i < this.fvCardFields.length; i++) {
+				let sCol  = this.fvCardFields[i];
+				let oCard = this["staCard_" + sCol];
 				if (!oCard) {
 					continue;
 				}
 
-				var sColor = this.fvLabelColors.length > 0 ? this.fvLabelColors[i % this.fvLabelColors.length] : "#5F5E5A";
-				var sLabel = "<fc v='" + sColor + "'>" + sSmall + this.fvCardLabels[i] + "</fs></fc>";
+				let sColor = this.fvLabelColors.length > 0 ? this.fvLabelColors[i % this.fvLabelColors.length] : "#71717A";
+				let sLabel = "<fc v='" + sColor + "'>" + sSmall + this.fvCardLabels[i] + "</fs></fc>";
 
-				var sValue = "-";
+				let sValue = "-";
 				if (bData) {
-					var v = oDs.getColumn(nRow, sCol);
+					let v = oDs.getColumn(nRow, sCol);
 					if (v !== undefined && v !== null && v !== "") {
-						var sSuffix = this.fvValueSuffix[i] || "";
+						let sSuffix = this.fvValueSuffix[i] || "";
 						sValue = this.fn_formatNumber(v) + (sSuffix ? sSmall + " " + sSuffix + "</fs>" : "");
 					}
 				}
@@ -644,8 +700,8 @@
 				return "";
 			}
 			if (v.getFullYear) {
-				var p = function(n) { return n < 10 ? "0" + n : "" + n; };
-				var sDate = v.getFullYear() + "-" + p(v.getMonth() + 1) + "-" + p(v.getDate());
+				let p = function(n) { return n < 10 ? "0" + n : "" + n; };
+				let sDate = v.getFullYear() + "-" + p(v.getMonth() + 1) + "-" + p(v.getDate());
 				if (v.getHours() == 0 && v.getMinutes() == 0) {
 					return sDate;
 				}
@@ -656,11 +712,11 @@
 
 		/* 숫자는 천 단위 쉼표, 숫자가 아니면 그대로 */
 		this.fn_formatNumber = function(v) {
-			var s = "" + v;
+			let s = "" + v;
 			if (!/^-?\d+(\.\d+)?$/.test(s)) {
 				return this.fn_formatValue(v);
 			}
-			var arr = s.split(".");
+			let arr = s.split(".");
 			arr[0] = arr[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 			return arr.join(".");
 		};
