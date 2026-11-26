@@ -283,7 +283,7 @@
                     </Band>
                     <Band id="body">
                       <Cell id="cell_body_0_0_upload_id" row="0" col="0" textAlign="center" text="bind:upload_id" displaytype="number" edittype="none"/>
-                      <Cell id="cell_body_1_0_base_date" row="0" col="1" textAlign="center" text="bind:base_date" displaytype="date" edittype="normal" calendardateformat="yyyy-MM-dd" calendardisplaynulltype="none"/>
+                      <Cell id="cell_body_1_0_base_date" row="0" col="1" textAlign="center" text="bind:base_date" displaytype="date" edittype="none" calendardateformat="yyyy-MM-dd" calendardisplaynulltype="none"/>
                       <Cell id="cell_body_2_0_file_name" row="0" col="2" textAlign="center" text="bind:file_name" displaytype="normal" edittype="none"/>
                       <Cell id="cell_body_3_0_row_count" row="0" col="3" textAlign="center" text="bind:row_count" displaytype="number" edittype="none"/>
                       <Cell id="cell_body_4_0_new_count" row="0" col="4" textAlign="center" text="bind:new_count" displaytype="number" edittype="none"/>
@@ -565,7 +565,7 @@ ds.setColumn(nRow, "upload_id", src.getColumn(0, "upload_id"));`]]>
         <ModelInfo modelserviceid="tops" serviceid="upload/uploadLogSelect" modelid="ds_output" datasetid="_dstops_uploadLogSelect_ds_output" filepath="upload\.model\uploadLogSelect.model">
           <Fields>
             <Field id="upload_id" label="회차"/>
-            <Field id="base_date" displaytype="date" edittype="normal"/>
+            <Field id="base_date" displaytype="date"/>
             <Field id="file_name"/>
             <Field id="row_count" label="전체"/>
             <Field id="new_count" label="신규"/>
