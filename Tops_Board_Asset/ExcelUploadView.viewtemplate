@@ -70,6 +70,21 @@
 					"name": "LABEL_GAP",
 					"type": "number",
 					"value": "6"
+				},
+				{
+					"name": "CLEAR_WIDTH",
+					"type": "number",
+					"value": "30"
+				},
+				{
+					"name": "MUTED_COLOR",
+					"type": "string",
+					"value": "\"#A1A1AA\""
+				},
+				{
+					"name": "UPLOAD_CSSCLASS",
+					"type": "string",
+					"value": "\"btn_Primary\""
 				}
 			],
 			"comment": "Layout"
@@ -132,6 +147,11 @@
 					"name": "ID_UPLOAD",
 					"type": "string",
 					"value": "\"btnUpload\""
+				},
+				{
+					"name": "ID_CLEAR",
+					"type": "string",
+					"value": "\"btnFileClear\""
 				}
 			],
 			"comment": "Component ids (업로드 버튼 id 는 Interaction 의 Trigger 대상이므로 고정)"
@@ -160,7 +180,7 @@
 	"sectionComments": {
 		"viewProperties": "View generation options (set_viewProperties)"
 	},
-	"functionsCode": "// View property value (없으면 기본값)\nthis.fn_GetProp = function(sId, vDefault) {\n\tvar oAttr = (this.oViewProperties && this.oViewProperties.attributes) ? this.oViewProperties.attributes : null;\n\tif (oAttr && oAttr[sId] !== undefined && oAttr[sId] !== null && oAttr[sId] !== \"\") {\n\t\treturn oAttr[sId];\n\t}\n\treturn vDefault;\n};\n\n// Model field 찾기 (없으면 null)\nthis.fn_FindField = function(sFieldId) {\n\tvar arrFields = (this.oFieldArray && this.oFieldArray.fields) ? this.oFieldArray.fields : [];\n\tfor (var i = 0; i < arrFields.length; i++) {\n\t\tif (arrFields[i].id == sFieldId) {\n\t\t\treturn arrFields[i];\n\t\t}\n\t}\n\treturn null;\n};\n\nthis.fn_GetModel = function() {\n\tvar oModel = [];\n\n\tvar sDateField = this.fn_GetProp(\"basedatefield\", this.BASE_DATE_FIELD);\n\tvar sFileField = this.fn_GetProp(\"filenamefield\", this.FILE_NAME_FIELD);\n\tvar oDateField = this.fn_FindField(sDateField);\n\tvar oFileField = this.fn_FindField(sFileField);\n\n\tvar nTop    = this.VIEW_PADDING;\n\tvar nLeft   = this.VIEW_PADDING;\n\tvar nHeight = this.COMP_HEIGHT;\n\n\t//---------------- 기준일 : Label + Calendar ----------------\n\tvar oDateLabel = {\n\t\t\"tag\": \"Static\",\n\t\t\"attribute\": {\n\t\t\t\"id\": \"staBaseDate\", \"left\": nLeft, \"top\": nTop, \"width\": 56, \"height\": nHeight,\n\t\t\t\"text\": (oDateField && oDateField.label) ? oDateField.label : \"기준일\"\n\t\t}\n\t};\n\tnLeft += 56 + this.LABEL_GAP;\n\n\tvar oCal = {\n\t\t\"tag\": \"Calendar\",\n\t\t\"attribute\": {\n\t\t\t\"id\": this.ID_CAL, \"left\": nLeft, \"top\": nTop, \"width\": 140, \"height\": nHeight,\n\t\t\t\"dateformat\": \"yyyy-MM-dd\", \"editformat\": \"yyyy-MM-dd\"\n\t\t}\n\t};\n\tnLeft += 140 + this.COMP_GAP * 2;\n\n\tif (oDateField) {\n\t\toDateLabel.attribute._fieldid = sDateField;\n\t\toDateLabel.attribute._fieldcomptype = \"label\";\n\t\toCal.attribute._fieldid = sDateField;\n\t\toCal.attribute._fieldcomptype = \"comp\";\n\t\tthis.arrBindItems.push({ \"compid\": this.ID_CAL, \"fieldid\": sDateField, \"propid\": \"value\" });\n\t}\n\toModel.push({ \"fieldid\": oDateField ? sDateField : \"\", \"Components\": [oDateLabel, oCal] });\n\n\t//---------------- 파일 : Label + Edit(readonly) ----------------\n\tvar oFileLabel = {\n\t\t\"tag\": \"Static\",\n\t\t\"attribute\": {\n\t\t\t\"id\": \"staFileName\", \"left\": nLeft, \"top\": nTop, \"width\": 40, \"height\": nHeight,\n\t\t\t\"text\": (oFileField && oFileField.label) ? oFileField.label : \"파일\"\n\t\t}\n\t};\n\tnLeft += 40 + this.LABEL_GAP;\n\n\tvar oEdit = {\n\t\t\"tag\": \"Edit\",\n\t\t\"attribute\": {\n\t\t\t\"id\": this.ID_EDIT, \"left\": nLeft, \"top\": nTop, \"width\": 300, \"height\": nHeight,\n\t\t\t\"readonly\": \"true\"\n\t\t}\n\t};\n\tnLeft += 300 + this.COMP_GAP;\n\n\tif (oFileField) {\n\t\toFileLabel.attribute._fieldid = sFileField;\n\t\toFileLabel.attribute._fieldcomptype = \"label\";\n\t\toEdit.attribute._fieldid = sFileField;\n\t\toEdit.attribute._fieldcomptype = \"comp\";\n\t\tthis.arrBindItems.push({ \"compid\": this.ID_EDIT, \"fieldid\": sFileField, \"propid\": \"value\" });\n\t}\n\toModel.push({ \"fieldid\": oFileField ? sFileField : \"\", \"Components\": [oFileLabel, oEdit] });\n\n\t//---------------- 버튼 : 파일 선택 / 업로드 ----------------\n\tvar oSelect = {\n\t\t\"tag\": \"Button\",\n\t\t\"attribute\": {\n\t\t\t\"id\": this.ID_SELECT, \"left\": nLeft, \"top\": nTop, \"width\": 90, \"height\": nHeight,\n\t\t\t\"text\": this.fn_GetProp(\"selecttext\", this.SELECT_TEXT)\n\t\t}\n\t};\n\tnLeft += 90 + this.COMP_GAP;\n\toModel.push({ \"fieldid\": \"\", \"Components\": [oSelect] });\n\n\tvar oUpload = {\n\t\t\"tag\": \"Button\",\n\t\t\"attribute\": {\n\t\t\t\"id\": this.ID_UPLOAD, \"left\": nLeft, \"top\": nTop, \"width\": 110, \"height\": nHeight,\n\t\t\t\"text\": this.fn_GetProp(\"uploadtext\", this.UPLOAD_TEXT)\n\t\t}\n\t};\n\toModel.push({ \"fieldid\": \"\", \"Components\": [oUpload] });\n\n\treturn oModel;\n};\n\nthis.fn_GetObjects = function() {\n\tvar oObjects = [];\n\n\toObjects.push({\n\t\t\"tag\": \"FileDialog\",\n\t\t\"attribute\": {\n\t\t\t\"id\": this.ID_DIALOG,\n\t\t\t\"filter\": this.fn_GetProp(\"filefilter\", this.FILE_FILTER)\n\t\t}\n\t});\n\n\treturn oObjects;\n};\n\nthis.fn_GetBind = function() {\n\tvar oBind = [];\n\tvar oBindItems = [];\n\n\tfor (var i = 0; i < this.arrBindItems.length; i++) {\n\t\toBindItems.push({\n\t\t\t\"tag\": \"BindItem\",\n\t\t\t\"attribute\": {\n\t\t\t\t\"id\": \"bind_\" + this.arrBindItems[i].compid,\n\t\t\t\t\"compid\": this.arrBindItems[i].compid,\n\t\t\t\t\"propid\": this.arrBindItems[i].propid,\n\t\t\t\t\"datasetid\": \"${VIEW_DATASET}\",\n\t\t\t\t\"columnid\": this.arrBindItems[i].fieldid\n\t\t\t}\n\t\t});\n\t}\n\n\tif (oBindItems.length > 0) {\n\t\toBind.push({ \"tag\": \"Bind\", \"Bind\": oBindItems });\n\t}\n\n\treturn oBind;\n};\n\n// 함수를 \"this.<name> = function...\" 문자열로 변환\nthis.fn_FuncString = function(sName) {\n\treturn \"\\n\\tthis.\" + sName + \" = \" + this[sName].toString() + \";\\n\";\n};\n\nthis.fn_GetScript = function() {\n\tvar sDateField = this.fn_FindField(this.fn_GetProp(\"basedatefield\", this.BASE_DATE_FIELD)) ? this.fn_GetProp(\"basedatefield\", this.BASE_DATE_FIELD) : \"\";\n\tvar sFileField = this.fn_FindField(this.fn_GetProp(\"filenamefield\", this.FILE_NAME_FIELD)) ? this.fn_GetProp(\"filenamefield\", this.FILE_NAME_FIELD) : \"\";\n\n\t// 실행 시점에 View 스크립트가 참조할 필드 ID\n\tvar sValue = \"\\n\\tthis.fvBaseDateField = \" + JSON.stringify(sDateField) + \";\"\n\t\t\t\t+ \"\\n\\tthis.fvFileNameField = \" + JSON.stringify(sFileField) + \";\\n\";\n\n\tsValue += this.fn_FuncString(\"_fnViewOnLoad\");\n\tsValue += this.fn_FuncString(\"fn_getToday\");\n\tsValue += this.fn_FuncString(\"fn_setFileName\");\n\tsValue += this.fn_FuncString(\"fn_btnSelect_onclick\");\n\tsValue += this.fn_FuncString(\"fn_fileDialog_onclose\");\n\tsValue += this.fn_FuncString(\"fn_clearFile\");\n\n\treturn {\n\t\t\"tag\": \"Script\",\n\t\t\"attribute\": { \"type\": \"xscript5.1\" },\n\t\t\"value\": sValue\n\t};\n};\n\n/************************************************************************************************\n* Runtime Functions (생성된 View 안에서 실행되는 함수. this = View 내부 폼)\n************************************************************************************************/\nthis._fnViewOnLoad = function(objForm) {\n\t/* Sets the view form reference so that functions declared in the view can access it */\n\tthis._ownerForm = objForm;\n\n\t/* 업로드 Action 이 읽어가는 파일 목록 */\n\tthis.oUploadFileList = [];\n\n\t/* View Dataset : 1행 보장 + 기준일 기본값(오늘) */\n\tvar oDs = this.parent.getViewDataset();\n\tif (oDs) {\n\t\t/* 기본 행(Normal)을 지우고 Insert 상태 행으로 새로 만든다 */\n\t\toDs.clearData();\n\t\toDs.addRow();\n\t\t\n\t\tif (this.fvBaseDateField) {\n\t\t\tvar vDate = oDs.getColumn(0, this.fvBaseDateField);\n\t\t\tif (vDate === undefined || vDate === null || vDate === \"\") {\n\t\t\t\toDs.setColumn(0, this.fvBaseDateField, this.fn_getToday());\n\t\t\t}\n\t\t}\n\t} else if (this.calBaseDate) {\n\t\tthis.calBaseDate.set_value(this.fn_getToday());\n\t}\n\n\tthis.fdgExcel.addEventHandler(\"onclose\", this.fn_fileDialog_onclose, this);\n\tthis.btnSelect.addEventHandler(\"onclick\", this.fn_btnSelect_onclick, this);\n};\n\nthis.fn_getToday = function() {\n\tvar d = new Date();\n\tvar m = d.getMonth() + 1;\n\tvar n = d.getDate();\n\treturn \"\" + d.getFullYear() + (m < 10 ? \"0\" + m : m) + (n < 10 ? \"0\" + n : n);\n};\n\nthis.fn_setFileName = function(sFileName) {\n\tvar oDs = this.parent.getViewDataset();\n\tif (oDs && this.fvFileNameField) {\n\t\tif (oDs.getRowCount() < 1) {\n\t\t\toDs.addRow();\n\t\t}\n\t\toDs.setColumn(0, this.fvFileNameField, sFileName);\n\t} else if (this.edtFileName) {\n\t\tthis.edtFileName.set_value(sFileName);\n\t}\n};\n\nthis.fn_btnSelect_onclick = function(obj, e) {\n\t/* 1 : FileDialog.LOAD (파일 1개) */\n\tthis.fdgExcel.open(\"엑셀 파일 선택\", 1);\n};\n\nthis.fn_fileDialog_onclose = function(obj, e) {\n\tvar aFiles = e.virtualfiles;\n\tif (!aFiles || aFiles.length < 1) {\n\t\treturn;\t\t// 취소 : 기존 선택 유지\n\t}\n\n\tvar oFile = aFiles[0];\n\tvar sName = oFile.filename ? (\"\" + oFile.filename) : \"\";\n\tif (sName.toLowerCase().lastIndexOf(\".xlsx\") != sName.length - 5 || sName.length < 6) {\n\t\tthis.fn_clearFile();\n\t\tthis.alert(\"xlsx 파일만 업로드할 수 있습니다.\");\n\t\treturn;\n\t}\n\n\tthis.oUploadFileList = [oFile];\n\tthis.fn_setFileName(sName);\n};\n\n/* 업로드 완료 후 선택 초기화가 필요할 때 호출 */\nthis.fn_clearFile = function() {\n\tthis.oUploadFileList = [];\n\tthis.fn_setFileName(\"\");\n};\n",
+	"functionsCode": "// View property value (없으면 기본값)\nthis.fn_GetProp = function(sId, vDefault) {\n\tvar oAttr = (this.oViewProperties && this.oViewProperties.attributes) ? this.oViewProperties.attributes : null;\n\tif (oAttr && oAttr[sId] !== undefined && oAttr[sId] !== null && oAttr[sId] !== \"\") {\n\t\treturn oAttr[sId];\n\t}\n\treturn vDefault;\n};\n\n// Model field 찾기 (없으면 null)\nthis.fn_FindField = function(sFieldId) {\n\tvar arrFields = (this.oFieldArray && this.oFieldArray.fields) ? this.oFieldArray.fields : [];\n\tfor (var i = 0; i < arrFields.length; i++) {\n\t\tif (arrFields[i].id == sFieldId) {\n\t\t\treturn arrFields[i];\n\t\t}\n\t}\n\treturn null;\n};\n\nthis.fn_GetModel = function() {\n\tvar oModel = [];\n\n\tvar sDateField = this.fn_GetProp(\"basedatefield\", this.BASE_DATE_FIELD);\n\tvar sFileField = this.fn_GetProp(\"filenamefield\", this.FILE_NAME_FIELD);\n\tvar oDateField = this.fn_FindField(sDateField);\n\tvar oFileField = this.fn_FindField(sFileField);\n\n\tvar nTop    = this.VIEW_PADDING;\n\tvar nLeft   = this.VIEW_PADDING;\n\tvar nHeight = this.COMP_HEIGHT;\n\n\t//---------------- 기준일 : Label + Calendar ----------------\n\tvar oDateLabel = {\n\t\t\"tag\": \"Static\",\n\t\t\"attribute\": {\n\t\t\t\"id\": \"staBaseDate\", \"left\": nLeft, \"top\": nTop, \"width\": 56, \"height\": nHeight,\n\t\t\t\"text\": (oDateField && oDateField.label) ? oDateField.label : \"기준일\"\n\t\t}\n\t};\n\tnLeft += 56 + this.LABEL_GAP;\n\n\tvar oCal = {\n\t\t\"tag\": \"Calendar\",\n\t\t\"attribute\": {\n\t\t\t\"id\": this.ID_CAL, \"left\": nLeft, \"top\": nTop, \"width\": 140, \"height\": nHeight,\n\t\t\t\"dateformat\": \"yyyy-MM-dd\", \"editformat\": \"yyyy-MM-dd\"\n\t\t}\n\t};\n\tnLeft += 140 + this.COMP_GAP * 2;\n\n\tif (oDateField) {\n\t\toDateLabel.attribute._fieldid = sDateField;\n\t\toDateLabel.attribute._fieldcomptype = \"label\";\n\t\toCal.attribute._fieldid = sDateField;\n\t\toCal.attribute._fieldcomptype = \"comp\";\n\t\tthis.arrBindItems.push({ \"compid\": this.ID_CAL, \"fieldid\": sDateField, \"propid\": \"value\" });\n\t}\n\toModel.push({ \"fieldid\": oDateField ? sDateField : \"\", \"Components\": [oDateLabel, oCal] });\n\n\t//---------------- 파일 : Label + Edit(readonly) ----------------\n\tvar oFileLabel = {\n\t\t\"tag\": \"Static\",\n\t\t\"attribute\": {\n\t\t\t\"id\": \"staFileName\", \"left\": nLeft, \"top\": nTop, \"width\": 40, \"height\": nHeight,\n\t\t\t\"text\": (oFileField && oFileField.label) ? oFileField.label : \"파일\"\n\t\t}\n\t};\n\tnLeft += 40 + this.LABEL_GAP;\n\n\tvar oEdit = {\n\t\t\"tag\": \"Edit\",\n\t\t\"attribute\": {\n\t\t\t\"id\": this.ID_EDIT, \"left\": nLeft, \"top\": nTop, \"width\": 300, \"height\": nHeight,\n\t\t\t\"readonly\": \"true\", \"padding\": \"0px \" + this.CLEAR_WIDTH + \"px 0px 10px\"\n\t\t}\n\t};\n\tnLeft += 300 + this.COMP_GAP;\n\n\tif (oFileField) {\n\t\toFileLabel.attribute._fieldid = sFileField;\n\t\toFileLabel.attribute._fieldcomptype = \"label\";\n\t\toEdit.attribute._fieldid = sFileField;\n\t\toEdit.attribute._fieldcomptype = \"comp\";\n\t\tthis.arrBindItems.push({ \"compid\": this.ID_EDIT, \"fieldid\": sFileField, \"propid\": \"value\" });\n\t}\n\toModel.push({ \"fieldid\": oFileField ? sFileField : \"\", \"Components\": [oFileLabel, oEdit] });\n\n\tvar oClear = {\n\t\t\"tag\": \"Button\",\n\t\t\"attribute\": {\n\t\t\t\"id\": this.ID_CLEAR, \"left\": this.ID_EDIT + \":-\" + this.CLEAR_WIDTH, \"top\": nTop,\n\t\t\t\"width\": this.CLEAR_WIDTH, \"height\": nHeight,\n\t\t\t\"text\": \"✕\", \"tooltiptext\": \"선택 취소\", \"border\": \"0px none\", \"background\": \"transparent\",\n\t\t\t\"color\": this.MUTED_COLOR, \"visible\": \"false\"\n\t\t}\n\t};\n\toModel.push({ \"fieldid\": \"\", \"Components\": [oClear] });\n\n\t//---------------- 버튼 : 파일 선택 / 업로드 ----------------\n\tvar oSelect = {\n\t\t\"tag\": \"Button\",\n\t\t\"attribute\": {\n\t\t\t\"id\": this.ID_SELECT, \"left\": nLeft, \"top\": nTop, \"width\": 80, \"height\": nHeight,\n\t\t\t\"text\": this.fn_GetProp(\"selecttext\", this.SELECT_TEXT)\n\t\t}\n\t};\n\tnLeft += 90 + this.COMP_GAP;\n\toModel.push({ \"fieldid\": \"\", \"Components\": [oSelect] });\n\n\tvar oUpload = {\n\t\t\"tag\": \"Button\",\n\t\t\"attribute\": {\n\t\t\t\"id\": this.ID_UPLOAD, \"left\": this.ID_SELECT + \":\" + \"10\", \"top\": nTop, \"width\": 100, \"height\": nHeight,\n\t\t\t\"text\": this.fn_GetProp(\"uploadtext\", this.UPLOAD_TEXT), \"cssclass\": this.UPLOAD_CSSCLASS\n\t\t}\n\t};\n\toModel.push({ \"fieldid\": \"\", \"Components\": [oUpload] });\n\n\treturn oModel;\n};\n\nthis.fn_GetObjects = function() {\n\tvar oObjects = [];\n\n\toObjects.push({\n\t\t\"tag\": \"FileDialog\",\n\t\t\"attribute\": {\n\t\t\t\"id\": this.ID_DIALOG,\n\t\t\t\"filter\": this.fn_GetProp(\"filefilter\", this.FILE_FILTER)\n\t\t}\n\t});\n\n\treturn oObjects;\n};\n\nthis.fn_GetBind = function() {\n\tvar oBind = [];\n\tvar oBindItems = [];\n\n\tfor (var i = 0; i < this.arrBindItems.length; i++) {\n\t\toBindItems.push({\n\t\t\t\"tag\": \"BindItem\",\n\t\t\t\"attribute\": {\n\t\t\t\t\"id\": \"bind_\" + this.arrBindItems[i].compid,\n\t\t\t\t\"compid\": this.arrBindItems[i].compid,\n\t\t\t\t\"propid\": this.arrBindItems[i].propid,\n\t\t\t\t\"datasetid\": \"${VIEW_DATASET}\",\n\t\t\t\t\"columnid\": this.arrBindItems[i].fieldid\n\t\t\t}\n\t\t});\n\t}\n\n\tif (oBindItems.length > 0) {\n\t\toBind.push({ \"tag\": \"Bind\", \"Bind\": oBindItems });\n\t}\n\n\treturn oBind;\n};\n\n// 함수를 \"this.<name> = function...\" 문자열로 변환\nthis.fn_FuncString = function(sName) {\n\treturn \"\\n\\tthis.\" + sName + \" = \" + this[sName].toString() + \";\\n\";\n};\n\nthis.fn_GetScript = function() {\n\tvar sDateField = this.fn_FindField(this.fn_GetProp(\"basedatefield\", this.BASE_DATE_FIELD)) ? this.fn_GetProp(\"basedatefield\", this.BASE_DATE_FIELD) : \"\";\n\tvar sFileField = this.fn_FindField(this.fn_GetProp(\"filenamefield\", this.FILE_NAME_FIELD)) ? this.fn_GetProp(\"filenamefield\", this.FILE_NAME_FIELD) : \"\";\n\n\t// 실행 시점에 View 스크립트가 참조할 필드 ID\n\tvar sValue = \"\\n\\tthis.fvBaseDateField = \" + JSON.stringify(sDateField) + \";\"\n\t\t\t\t+ \"\\n\\tthis.fvFileNameField = \" + JSON.stringify(sFileField) + \";\\n\";\n\n\tsValue += this.fn_FuncString(\"_fnViewOnLoad\");\n\tsValue += this.fn_FuncString(\"fn_getToday\");\n\tsValue += this.fn_FuncString(\"fn_setFileName\");\n\tsValue += this.fn_FuncString(\"fn_btnSelect_onclick\");\n\tsValue += this.fn_FuncString(\"fn_fileDialog_onclose\");\n\tsValue += this.fn_FuncString(\"fn_clearFile\");\n\n\treturn {\n\t\t\"tag\": \"Script\",\n\t\t\"attribute\": { \"type\": \"xscript5.1\" },\n\t\t\"value\": sValue\n\t};\n};\n\n/************************************************************************************************\n* Runtime Functions (생성된 View 안에서 실행되는 함수. this = View 내부 폼)\n************************************************************************************************/\nthis._fnViewOnLoad = function(objForm) {\n\t/* Sets the view form reference so that functions declared in the view can access it */\n\tthis._ownerForm = objForm;\n\n\t/* 업로드 Action 이 읽어가는 파일 목록 */\n\tthis.oUploadFileList = [];\n\n\t/* View Dataset : 1행 보장 + 기준일 기본값(오늘) */\n\tvar oDs = this.parent.getViewDataset();\n\tif (oDs) {\n\t\t/* 기본 행(Normal)을 지우고 Insert 상태 행으로 새로 만든다 */\n\t\toDs.clearData();\n\t\toDs.addRow();\n\t\t\n\t\tif (this.fvBaseDateField) {\n\t\t\tvar vDate = oDs.getColumn(0, this.fvBaseDateField);\n\t\t\tif (vDate === undefined || vDate === null || vDate === \"\") {\n\t\t\t\toDs.setColumn(0, this.fvBaseDateField, this.fn_getToday());\n\t\t\t}\n\t\t}\n\t} else if (this.calBaseDate) {\n\t\tthis.calBaseDate.set_value(this.fn_getToday());\n\t}\n\n\tthis.fdgExcel.addEventHandler(\"onclose\", this.fn_fileDialog_onclose, this);\n\tthis.btnSelect.addEventHandler(\"onclick\", this.fn_btnSelect_onclick, this);\n};\n\nthis.fn_getToday = function() {\n\tvar d = new Date();\n\tvar m = d.getMonth() + 1;\n\tvar n = d.getDate();\n\treturn \"\" + d.getFullYear() + (m < 10 ? \"0\" + m : m) + (n < 10 ? \"0\" + n : n);\n};\n\nthis.fn_setFileName = function(sFileName) {\n\tvar oDs = this.parent.getViewDataset();\n\tif (oDs && this.fvFileNameField) {\n\t\tif (oDs.getRowCount() < 1) {\n\t\t\toDs.addRow();\n\t\t}\n\t\toDs.setColumn(0, this.fvFileNameField, sFileName);\n\t} else if (this.edtFileName) {\n\t\tthis.edtFileName.set_value(sFileName);\n\t}\n\n\tif (this.btnFileClear) {\n\t\tthis.btnFileClear.set_visible(!!sFileName);\n\t}\n};\n\nthis.fn_btnSelect_onclick = function(obj, e) {\n\t/* 1 : FileDialog.LOAD (파일 1개) */\n\tthis.fdgExcel.open(\"엑셀 파일 선택\", 1);\n};\n\nthis.fn_fileDialog_onclose = function(obj, e) {\n\tvar aFiles = e.virtualfiles;\n\tif (!aFiles || aFiles.length < 1) {\n\t\treturn;\t\t// 취소 : 기존 선택 유지\n\t}\n\n\tvar oFile = aFiles[0];\n\tvar sName = oFile.filename ? (\"\" + oFile.filename) : \"\";\n\tif (sName.toLowerCase().lastIndexOf(\".xlsx\") != sName.length - 5 || sName.length < 6) {\n\t\tthis.fn_clearFile();\n\t\tthis.alert(\"xlsx 파일만 업로드할 수 있습니다.\");\n\t\treturn;\n\t}\n\n\tthis.oUploadFileList = [oFile];\n\tthis.fn_setFileName(sName);\n};\n\n/* 업로드 완료 후 선택 초기화가 필요할 때 호출 */\nthis.fn_clearFile = function() {\n\tthis.oUploadFileList = [];\n\tthis.fn_setFileName(\"\");\n};\n",
 	"viewPropertiesValueBody": ""
 }]]>
   </UIConfig>
@@ -176,6 +196,9 @@
 	this.COMP_HEIGHT = 32;
 	this.COMP_GAP = 8;
 	this.LABEL_GAP = 6;
+	this.CLEAR_WIDTH = 30;
+	this.MUTED_COLOR = "#A1A1AA";
+	this.UPLOAD_CSSCLASS = "btn_Primary";
 
 	// Default values of view properties
 	this.BASE_DATE_FIELD = "base_date";
@@ -190,6 +213,7 @@
 	this.ID_EDIT = "edtFileName";
 	this.ID_SELECT = "btnSelect";
 	this.ID_UPLOAD = "btnUpload";
+	this.ID_CLEAR = "btnFileClear";
 
 	// View-related variables
 	this.oFieldArray;
@@ -376,7 +400,7 @@
 			"tag": "Edit",
 			"attribute": {
 				"id": this.ID_EDIT, "left": nLeft, "top": nTop, "width": 300, "height": nHeight,
-				"readonly": "true"
+				"readonly": "true", "padding": "0px " + this.CLEAR_WIDTH + "px 0px 10px"
 			}
 		};
 		nLeft += 300 + this.COMP_GAP;
@@ -390,11 +414,22 @@
 		}
 		oModel.push({ "fieldid": oFileField ? sFileField : "", "Components": [oFileLabel, oEdit] });
 
+		var oClear = {
+			"tag": "Button",
+			"attribute": {
+				"id": this.ID_CLEAR, "left": this.ID_EDIT + ":-" + this.CLEAR_WIDTH, "top": nTop,
+				"width": this.CLEAR_WIDTH, "height": nHeight,
+				"text": "✕", "tooltiptext": "선택 취소", "border": "0px none", "background": "transparent",
+				"color": this.MUTED_COLOR, "visible": "false"
+			}
+		};
+		oModel.push({ "fieldid": "", "Components": [oClear] });
+
 		//---------------- 버튼 : 파일 선택 / 업로드 ----------------
 		var oSelect = {
 			"tag": "Button",
 			"attribute": {
-				"id": this.ID_SELECT, "left": nLeft, "top": nTop, "width": 90, "height": nHeight,
+				"id": this.ID_SELECT, "left": nLeft, "top": nTop, "width": 80, "height": nHeight,
 				"text": this.fn_GetProp("selecttext", this.SELECT_TEXT)
 			}
 		};
@@ -404,8 +439,8 @@
 		var oUpload = {
 			"tag": "Button",
 			"attribute": {
-				"id": this.ID_UPLOAD, "left": nLeft, "top": nTop, "width": 110, "height": nHeight,
-				"text": this.fn_GetProp("uploadtext", this.UPLOAD_TEXT)
+				"id": this.ID_UPLOAD, "left": this.ID_SELECT + ":" + "10", "top": nTop, "width": 100, "height": nHeight,
+				"text": this.fn_GetProp("uploadtext", this.UPLOAD_TEXT), "cssclass": this.UPLOAD_CSSCLASS
 			}
 		};
 		oModel.push({ "fieldid": "", "Components": [oUpload] });
@@ -525,6 +560,10 @@
 			oDs.setColumn(0, this.fvFileNameField, sFileName);
 		} else if (this.edtFileName) {
 			this.edtFileName.set_value(sFileName);
+		}
+
+		if (this.btnFileClear) {
+			this.btnFileClear.set_visible(!!sFileName);
 		}
 	};
 

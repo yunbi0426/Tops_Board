@@ -5495,6 +5495,59 @@
 	font : 400 13px "NotoSansKR-Regular";
 }
 /************************  MONO OVERRIDES END  *************************/
+
+.Static.sta_Card
+{
+	-nexa-border : 1px solid #E4E4E7;
+	background : #FFFFFF;
+	border-radius : 10px;
+}
+.Static.sta_CardTitle
+{
+	color : #18181B;
+	font : 700 13px "NotoSansKR-Bold";
+}
+.Static.sta_CardMuted
+{
+	color : #A1A1AA;
+	font : 400 12px "NotoSansKR-Regular";
+}
+.Static.sta_KpiCard
+{
+	-nexa-border : 1px solid #E4E4E7;
+	-nexa-padding : 0px 20px 0px 20px;
+	background : #FFFFFF;
+	border-radius : 10px;
+	color : #18181B;
+	font : 700 22px "NotoSansKR-Bold";
+}
+.Static.sta_KpiCard_Done
+{
+	-nexa-border : 1px solid #9FE1CB;
+	-nexa-padding : 0px 20px 0px 20px;
+	background : #E1F5EE;
+	border-radius : 10px;
+	color : #085041;
+	font : 700 22px "NotoSansKR-Bold";
+}
+.Static.sta_KpiCard_Remain
+{
+	-nexa-border : 1px solid #FAC775;
+	-nexa-padding : 0px 20px 0px 20px;
+	background : #FAEEDA;
+	border-radius : 10px;
+	color : #633806;
+	font : 700 22px "NotoSansKR-Bold";
+}
+.Static.sta_KpiCard_Rate
+{
+	-nexa-border : 1px solid #B5D4F4;
+	-nexa-padding : 0px 20px 0px 20px;
+	background : #E6F1FB;
+	border-radius : 10px;
+	color : #0C447C;
+	font : 700 22px "NotoSansKR-Bold";
+}
 ]]>
   </CSSData>
   <CSSData type="desktop"><![CDATA[]]>

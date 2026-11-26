@@ -9,10 +9,11 @@
               <Static id="staBaseDate" left="10" top="10" width="56" height="32" text="기준일" _fieldid="base_date" _fieldcomptype="label"/>
               <Calendar id="calBaseDate" left="72" top="10" width="140" height="32" dateformat="yyyy-MM-dd" editformat="yyyy-MM-dd" _fieldid="base_date" _fieldcomptype="comp"/>
               <Static id="staFileName" left="228" top="10" width="40" height="32" text="파일" _fieldid="file_name" _fieldcomptype="label"/>
-              <Edit id="edtFileName" left="274" top="10" width="300" height="32" readonly="true" _fieldid="file_name" _fieldcomptype="comp"/>
-              <Button id="btnSelect" left="582" top="10" width="90" height="32" text="파일 선택"/>
-              <Button id="btnUpload" left="680" top="10" width="110" height="32" text="업로드"/>
-              <Button id="Button00" top="10" taborder="0" height="32" text="요구처 그룹핑" right="0" width="110"/>
+              <Edit id="edtFileName" left="274" top="10" width="300" height="32" readonly="true" padding="0px 30px 0px 10px" _fieldid="file_name" _fieldcomptype="comp"/>
+              <Button id="btnFileClear" left="edtFileName:-30" top="10" width="30" height="32" text="✕" tooltiptext="선택 취소" border="0px none" background="transparent" color="#A1A1AA" visible="false"/>
+              <Button id="btnSelect" left="582" top="10" width="80" height="32" text="파일 선택"/>
+              <Button id="btnUpload" left="btnSelect:10" top="10" width="100" height="32" text="업로드" cssclass="btn_Primary"/>
+              <Button id="btnGropingRequester" top="10" taborder="0" height="32" text="요구처 그룹핑" right="0" width="110"/>
             </Layout>
           </Layouts>
           <Objects>
@@ -70,6 +71,10 @@
 			oDs.setColumn(0, this.fvFileNameField, sFileName);
 		} else if (this.edtFileName) {
 			this.edtFileName.set_value(sFileName);
+		}
+
+		if (this.btnFileClear) {
+			this.btnFileClear.set_visible(!!sFileName);
 		}
 	};
 
@@ -294,15 +299,6 @@
         </View>
       </Layout>
     </Layouts>
-    <DesignSettings>
-      <InteractionEditor>
-        <NodePositions>
-          <NodePosition id="action:OnLoadView00" x="1605" y="418"/>
-          <NodePosition id="action:Transaction00" x="1604" y="172"/>
-          <NodePosition id="action:Transaction01" x="1291" y="617"/>
-        </NodePositions>
-      </InteractionEditor>
-    </DesignSettings>
     <Script type="xscript5.1"><![CDATA[]]>
     </Script>
     <Objects>
@@ -367,7 +363,51 @@
 }]]>
         </Contents>
       </Transaction>
-      <FileUploadTransfer id="FileUploadTransfer00" alias="엑셀 업로드" targetview="viewUpload" resultdataset="_dstops_importTopsExcel__FileMetaInfo00"/>
+      <FileUploadTransfer id="FileUploadTransfer00" alias="엑셀 업로드 (중복 없음)" targetview="viewUpload" resultdataset="_dstops_importTopsExcel__FileMetaInfo00"/>
+      <OpenPopup id="OpenPopup00" alias="요구처 그룹핑 팝업 오픈" title="요구처 그룹핑" formurl="Popup::popRequesterMap.xfdl" autosize="true" popupStyle="modal"/>
+      <Transaction id="Transaction02" alias="업로드 전 기준일 검사" servicemodel="tops::upload/uploadDupCheck" serviceurl="NexaLAPServer::api/v1/execute">
+        <Contents><![CDATA[{
+    "inputdatasets": [
+        {
+            "modelid": "ds_input",
+            "datasetid": "_dstops_upload_uploadDupCheck_ds_input"
+        }
+    ],
+    "outputdatasets": [
+        {
+            "modelid": "ds_dup",
+            "datasetid": "_dstops_upload_uploadDupCheck_ds_dup"
+        }
+    ]
+}]]>
+        </Contents>
+      </Transaction>
+      <Dataset id="_dstops_upload_uploadDupCheck_ds_dup">
+        <ColumnInfo>
+          <Column id="dup_cnt" type="INT" size="21" description="dup_cnt"/>
+          <Column id="last_upload_id" type="int" size="11" description="last_upload_id"/>
+          <Column id="last_uploaded_at" type="string" size="21" description="last_uploaded_at"/>
+          <Column id="future_yn" type="int" size="2" description="future_yn"/>
+        </ColumnInfo>
+        <Rows/>
+      </Dataset>
+      <Message id="Message00" alias="기준일이 현재보다 미래인 경우 안내 메세지 표시" message="기준일을 오늘 이후 날짜로 지정할 수 없습니다." messagetype="alert"/>
+      <Message id="Message01" alias="기준일이 중복일인 경우 안내 메세지" message="같은 기준일로 업로드한 이력이 있습니다. 다시 업로드하면 새 회차로 추가됩니다. 계속 할까요?" messagetype="confirm"/>
+      <FileUploadTransfer id="FileUploadTransfer01" alias="엑셀 업로드 (중복 확인 후)" targetview="viewUpload" resultdataset="_dstops_importTopsExcel__FileMetaInfo00"/>
+      <RunScript id="RunScript00" alias="업로드 파일 초기화">
+        <Contents><![CDATA[`this.viewUpload.form.fn_clearFile();`]]>
+        </Contents>
+      </RunScript>
+      <Dataset id="_dstops_upload_uploadDupCheck_ds_input">
+        <ColumnInfo>
+          <Column id="base_date" type="STRING" size="10" description="기준일"/>
+        </ColumnInfo>
+        <Rows>
+          <Row/>
+        </Rows>
+      </Dataset>
+      <ClearData id="ClearData00" alias="데이터셋 초기화" targetDataset="_dstops_upload_uploadDupCheck_ds_input"/>
+      <CopyRow id="CopyRow00" alias="데이터셋 복사" sourceDataset="_dstops_importTopsExcel_ds_input" targetDataset="_dstops_upload_uploadDupCheck_ds_input"/>
       <Dataset id="_dstops_importTopsExcel_ds_input">
         <ColumnInfo>
           <Column id="base_date" type="DATE" size="100" description="기준일"/>
@@ -377,21 +417,30 @@
           <Row/>
         </Rows>
       </Dataset>
-      <OpenPopup id="OpenPopup00" alias="요구처 그룹핑 팝업 오픈" title="요구처 그룹핑" formurl="Popup::popRequesterMap.xfdl" autosize="true" popupStyle="modal"/>
     </Objects>
     <Trigger>
       <TriggerItem id="item0" triggertype="onload" triggerview="" triggerobj="" targetaction="Transaction00"/>
       <TriggerItem id="item1" triggertype="onload" triggerview="" triggerobj="" targetaction="OnLoadView00"/>
       <TriggerItem id="item4" triggertype="Action Success" triggerview="" triggerobj="Transaction01" targetaction="Transaction00"/>
       <TriggerItem id="item2" triggertype="Action Success" triggerview="" triggerobj="Transaction01" targetaction="OnLoadView00"/>
-      <TriggerItem id="item6" triggertype="onclick" triggerview="viewUpload" triggerobj="btnUpload" targetaction="FileUploadTransfer00"/>
+      <TriggerItem id="item13" triggertype="onclick" triggerview="viewUpload" triggerobj="btnUpload" targetaction="ClearData00"/>
+      <TriggerItem id="item14" triggertype="Action Success" triggerview="" triggerobj="ClearData00" targetaction="CopyRow00"/>
+      <TriggerItem id="item5" triggertype="Action Success" triggerview="" triggerobj="CopyRow00" targetaction="Transaction02"/>
+      <TriggerItem id="item8" triggertype="Action Success" triggerview="" triggerobj="Transaction02" targetaction="Message00" condition="this._dstops_upload_uploadDupCheck_ds_dup.getColumn(0, &quot;future_yn&quot;) == 1"/>
       <TriggerItem id="item7" triggertype="Action Success" triggerview="" triggerobj="FileUploadTransfer00" targetaction="Transaction01"/>
-      <TriggerItem id="item3" triggertype="onclick" triggerview="viewUpload" triggerobj="Button00" targetaction="OpenPopup00"/>
+      <TriggerItem id="item6" triggertype="Action Success" triggerview="" triggerobj="Transaction02" targetaction="Message01" condition="this._dstops_upload_uploadDupCheck_ds_dup.getColumn(0, &quot;future_yn&quot;) == 0 &amp;&amp; this._dstops_upload_uploadDupCheck_ds_dup.getColumn(0, &quot;dup_cnt&quot;) &gt; 0"/>
+      <TriggerItem id="item9" triggertype="Action Success" triggerview="" triggerobj="Transaction02" targetaction="FileUploadTransfer00" condition="this._dstops_upload_uploadDupCheck_ds_dup.getColumn(0, &quot;future_yn&quot;) == 0 &amp;&amp; this._dstops_upload_uploadDupCheck_ds_dup.getColumn(0, &quot;dup_cnt&quot;) == 0"/>
+      <TriggerItem id="item10" triggertype="Action Success" triggerview="" triggerobj="Message01" targetaction="FileUploadTransfer01"/>
+      <TriggerItem id="item11" triggertype="Action Success" triggerview="" triggerobj="FileUploadTransfer01" targetaction="Transaction01"/>
+      <TriggerItem id="item12" triggertype="onclick" triggerview="viewUpload" triggerobj="btnFileClear" targetaction="RunScript00"/>
+      <TriggerItem id="item3" triggertype="onclick" triggerview="viewUpload" triggerobj="btnGropingRequester" targetaction="OpenPopup00"/>
     </Trigger>
     <ViewGenerationInfo>
       <ViewInfo viewid="frmUpload">
         <ModelInfo modelserviceid="tops" serviceid="upload/importTopsExcel" modelid="_FileMetaInfo" datasetid="_dstops_importTopsExcel__FileMetaInfo00" filepath="upload\.model\importTopsExcel.model"/>
         <ViewTemplateInfo/>
+        <ModelInfo modelserviceid="tops" serviceid="upload/uploadDupCheck" modelid="ds_dup" datasetid="_dstops_upload_uploadDupCheck_ds_dup" filepath="upload\.model\uploadDupCheck.model"/>
+        <ModelInfo modelserviceid="tops" serviceid="upload/uploadDupCheck" modelid="ds_input" datasetid="_dstops_upload_uploadDupCheck_ds_input" filepath="upload\.model\uploadDupCheck.model"/>
       </ViewInfo>
       <ViewInfo viewid="viewResult">
         <ModelInfo modelserviceid="tops" serviceid="upload/uploadLogSelect" modelid="ds_output" datasetid="_dstops_uploadLogSelect_ds_output" filepath="upload\.model\uploadLogSelect.model">
@@ -422,25 +471,6 @@
           <Attribute id="valuesuffix" value="건"/>
         </ViewTemplateInfo>
       </ViewInfo>
-      <ViewInfo viewid="viewUpload">
-        <ModelInfo modelserviceid="tops" serviceid="upload/importTopsExcel" modelid="ds_input" datasetid="_dstops_importTopsExcel_ds_input" filepath="upload\.model\importTopsExcel.model">
-          <Fields>
-            <Field id="base_date"/>
-            <Field id="file_name" label="파일"/>
-          </Fields>
-          <Components>
-            <Component id="staBaseDate" fields="base_date"/>
-            <Component id="calBaseDate" fields="base_date"/>
-            <Component id="staFileName" fields="file_name"/>
-            <Component id="edtFileName" fields="file_name"/>
-            <Component id="btnSelect" fields=""/>
-            <Component id="btnUpload" fields=""/>
-          </Components>
-        </ModelInfo>
-        <ViewTemplateInfo filepath="Tops_Board_Asset/ExcelUploadView.viewtemplate">
-          <Attribute id="uploadtext" value="업로드"/>
-        </ViewTemplateInfo>
-      </ViewInfo>
       <ViewInfo viewid="viewHistory">
         <ModelInfo modelserviceid="tops" serviceid="upload/uploadLogSelect" modelid="ds_output" datasetid="_dstops_uploadLogSelect_ds_output" filepath="upload\.model\uploadLogSelect.model">
           <Fields>
@@ -458,6 +488,26 @@
         </ModelInfo>
         <ViewTemplateInfo filepath="NexaLAP_BasePack/Grid/GridView.viewtemplate">
           <Attribute id="gridlayout" value="{&quot;columns&quot;:[{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:100}],&quot;rows&quot;:[{&quot;band&quot;:&quot;head&quot;,&quot;size&quot;:40},{&quot;band&quot;:&quot;body&quot;,&quot;size&quot;:40}],&quot;head&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;회차&quot;},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;기준일&quot;},{&quot;row&quot;:0,&quot;col&quot;:2,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;파일명&quot;},{&quot;row&quot;:0,&quot;col&quot;:3,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;전체&quot;},{&quot;row&quot;:0,&quot;col&quot;:4,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;신규&quot;},{&quot;row&quot;:0,&quot;col&quot;:5,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;변경&quot;},{&quot;row&quot;:0,&quot;col&quot;:6,&quot;halign&quot;:&quot;center&quot;,&quot;text&quot;:&quot;업로드 시각&quot;}],&quot;body&quot;:[{&quot;row&quot;:0,&quot;col&quot;:0,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;upload_id&quot;},{&quot;row&quot;:0,&quot;col&quot;:1,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;base_date&quot;},{&quot;row&quot;:0,&quot;col&quot;:2,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;file_name&quot;},{&quot;row&quot;:0,&quot;col&quot;:3,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;row_count&quot;},{&quot;row&quot;:0,&quot;col&quot;:4,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;new_count&quot;},{&quot;row&quot;:0,&quot;col&quot;:5,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;changed_count&quot;},{&quot;row&quot;:0,&quot;col&quot;:6,&quot;halign&quot;:&quot;center&quot;,&quot;field&quot;:&quot;uploaded_at&quot;}],&quot;summ&quot;:[]}"/>
+        </ViewTemplateInfo>
+      </ViewInfo>
+      <ViewInfo viewid="viewUpload">
+        <ModelInfo modelserviceid="tops" serviceid="upload/importTopsExcel" modelid="ds_input" datasetid="_dstops_importTopsExcel_ds_input" filepath="upload\.model\importTopsExcel.model">
+          <Fields>
+            <Field id="base_date"/>
+            <Field id="file_name" label="파일"/>
+          </Fields>
+          <Components>
+            <Component id="staBaseDate" fields="base_date"/>
+            <Component id="calBaseDate" fields="base_date"/>
+            <Component id="staFileName" fields="file_name"/>
+            <Component id="edtFileName" fields="file_name"/>
+            <Component id="btnFileClear" fields=""/>
+            <Component id="btnSelect" fields=""/>
+            <Component id="btnUpload" fields=""/>
+          </Components>
+        </ModelInfo>
+        <ViewTemplateInfo filepath="Tops_Board_Asset/ExcelUploadView.viewtemplate">
+          <Attribute id="uploadtext" value="업로드"/>
         </ViewTemplateInfo>
       </ViewInfo>
     </ViewGenerationInfo>
