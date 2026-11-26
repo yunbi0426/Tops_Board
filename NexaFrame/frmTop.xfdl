@@ -104,12 +104,12 @@ this.fnFindMenuBtn = function (sId)
       <TriggerItem id="item2" triggertype="onload" triggerview="" triggerobj="" targetaction="RunScript01"/>
     </Trigger>
     <Objects>
-      <OpenWorkForm id="OpenWorkForm00" alias="Dashboard 화면으로 돌아가기" formUrl="Base::frmDashboard.xfdl"/>
-      <RunScript id="RunScript00" alias="로고 클릭">
+      <OpenWorkForm id="OpenWorkForm00" alias="대시보드 열기" formUrl="Base::frmDashboard.xfdl"/>
+      <RunScript id="RunScript00" alias="화면 제목·메뉴 표시">
         <Contents><![CDATA[`nexacro.getEnvironment().fnSetPageTitle(nexacro.getApplication().mainframe.vfrs.frmWork.form.div_work.url);`]]>
         </Contents>
       </RunScript>
-      <RunScript id="RunScript01" alias="Top Menu 활성화 된 Form에 알맞는 selected 처리">
+      <RunScript id="RunScript01" alias="현재 메뉴 표시">
         <Contents><![CDATA[`nexacro.getEnvironment().fnHighlightMenu(nexacro.getEnvironment().fvCurrentUrl);`]]>
         </Contents>
       </RunScript>

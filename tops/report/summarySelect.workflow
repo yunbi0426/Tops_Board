@@ -3,7 +3,7 @@
     "version": "1.0",
     "package": "tops.report",
     "name": "summarySelect",
-    "alias": "summarySelect",
+    "alias": "보고서 집계 조회",
     "description": ""
   },
   "workflow": [
@@ -29,7 +29,7 @@
       }
     },
     {
-      "alias": "전체 요약 가저오기",
+      "alias": "전체 건수 집계",
       "description": "",
       "type": "sql",
       "position": {
@@ -71,7 +71,7 @@
       }
     },
     {
-      "alias": "요구처별 목록 가져오기",
+      "alias": "요구처별 건수 집계",
       "description": "",
       "type": "sql",
       "position": {
@@ -113,7 +113,7 @@
       }
     },
     {
-      "alias": "단계별 갯수 가져오기",
+      "alias": "요구종류별 건수 집계",
       "description": "",
       "type": "sql",
       "position": {
@@ -155,7 +155,7 @@
       }
     },
     {
-      "alias": "그룹 기준으로 단계 별 갯수 가져오기",
+      "alias": "요구처·요구종류별 단계 건수 집계",
       "description": "",
       "type": "sql",
       "position": {
@@ -197,7 +197,7 @@
       }
     },
     {
-      "alias": "잔여 항목",
+      "alias": "잔여 요구사항 조회 (경과일 포함)",
       "description": "",
       "type": "sql",
       "position": {
@@ -239,7 +239,7 @@
       }
     },
     {
-      "alias": "Options용 요구처 목록",
+      "alias": "요구처 선택 목록 조회",
       "description": "",
       "type": "sql",
       "position": {

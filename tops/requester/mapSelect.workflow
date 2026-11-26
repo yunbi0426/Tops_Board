@@ -3,7 +3,7 @@
     "version": "1.0",
     "package": "tops.requester",
     "name": "mapSelect",
-    "alias": "mapSelect",
+    "alias": "요구처 매핑 조회",
     "description": ""
   },
   "workflow": [
@@ -29,7 +29,7 @@
       }
     },
     {
-      "alias": "매핑 요구처 표시명 목록",
+      "alias": "요구처 그룹 조회",
       "description": "",
       "type": "sql",
       "position": {
@@ -132,7 +132,7 @@
       }
     },
     {
-      "alias": "미매핑 요구처 목록",
+      "alias": "미매핑 요구처 조회",
       "description": "",
       "type": "sql",
       "position": {
@@ -174,7 +174,7 @@
       }
     },
     {
-      "alias": "매핑 요구처 목록",
+      "alias": "매핑된 요구처 조회",
       "description": "",
       "type": "sql",
       "position": {

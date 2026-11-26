@@ -3,7 +3,7 @@
     "version": "1.0",
     "package": "tops.dashboard",
     "name": "statSelect",
-    "alias": "statSelect"
+    "alias": "요구사항 현황 통계 조회"
   },
   "workflow": [
     {
@@ -28,7 +28,7 @@
       }
     },
     {
-      "alias": "요구처별 전체·완료·잔여",
+      "alias": "요구처별 건수 집계",
       "description": "",
       "type": "sql",
       "position": {
@@ -76,7 +76,7 @@
       }
     },
     {
-      "alias": "잔여 요구사항 목록",
+      "alias": "잔여 요구사항 조회",
       "description": "",
       "type": "sql",
       "position": {
@@ -118,7 +118,7 @@
       }
     },
     {
-      "alias": "전체 현황 요약",
+      "alias": "전체 건수 집계",
       "description": "",
       "type": "sql",
       "position": {
@@ -160,7 +160,7 @@
       }
     },
     {
-      "alias": "상위 N + 기타 현황 요약",
+      "alias": "잔여 상위 요구처 집계 (상위 N 개 + 기타)",
       "description": "",
       "type": "sql",
       "position": {

@@ -3,7 +3,7 @@
   <Form id="frmDetails" width="1050" height="736" titletext="ListDetail (H)">
     <Layouts>
       <Layout width="1050" height="736">
-        <View id="Search" taborder="1" viewtype="Search" text="Search" left="10" height="50" top="45" right="10" cssclass="view_WF_Search" viewdataset="_dstops_requirement_listSelect_ds_search">
+        <View id="Search" taborder="1" viewtype="Search" text="검색" left="10" height="50" top="45" right="10" cssclass="view_WF_Search" viewdataset="_dstops_requirement_listSelect_ds_search">
           <Layouts>
             <Layout>
               <Panel id="pnl_mainPanel" taborder="0" left="5" top="0" right="120" bottom="0" flexwrap="wrap" type="horizontal" verticalgap="5" fittocontents="height" spacing="5px 0px 5px 0px" _fieldid="_mainPanel" _fieldcomptype="panel">
@@ -18,7 +18,7 @@
                   <PanelItem id="PanelItem_7" componentid="pnlRegTo"/>
                 </Contents>
               </Panel>
-              <Button id="btnSearch" cssclass="btn_WF_Search" text="Search" _fieldid="_btnSearch" _fieldcomptype="comp" top="5" height="38" width="110" right="5"/>
+              <Button id="btnSearch" cssclass="btn_WF_Search" text="검색" _fieldid="_btnSearch" _fieldcomptype="comp" top="5" height="38" width="110" right="5"/>
               <Static id="staRp" taborder="0" text="RP" cssclass="sta_WF_SchLabel" left="0" top="0" width="100" height="38" _fieldid="rp" _fieldcomptype="label"/>
               <Edit id="edtrp" taborder="1" left="0" top="0" width="50" height="38" flexgrow="1" _fieldid="rp" _fieldcomptype="comp"/>
               <Panel id="pnlRp" taborder="2" left="0" top="0" width="150" height="38" flexcrossaxisalign="center" horizontalgap="0" flexgrow="1" verticalgap="0" cssclass="" _fieldid="rp" _fieldcomptype="panel">
@@ -222,7 +222,7 @@
       </Layout>
     </Layouts>
     <Objects>
-      <Transaction id="Transaction00" alias="Details 데이터 가져오기" servicemodel="tops::requirement/listSelect" serviceurl="NexaLAPServer::api/v1/execute">
+      <Transaction id="Transaction00" alias="요구사항 목록 조회" servicemodel="tops::requirement/listSelect" serviceurl="NexaLAPServer::api/v1/execute">
         <Contents><![CDATA[{
     "inputdatasets": [
         {
@@ -247,7 +247,7 @@
 }]]>
         </Contents>
       </Transaction>
-      <Transaction id="Transaction01" alias="상태 목록 가져오기" servicemodel="tops::requirement/reqStatusSelect" serviceurl="NexaLAPServer::api/v1/execute">
+      <Transaction id="Transaction01" alias="상태 목록 조회" servicemodel="tops::requirement/reqStatusSelect" serviceurl="NexaLAPServer::api/v1/execute">
         <Contents><![CDATA[{
     "outputdatasets": [
         {
@@ -258,12 +258,12 @@
 }]]>
         </Contents>
       </Transaction>
-      <RunScript id="RunScript00" alias="Enter 키 입력 여부 확인">
+      <RunScript id="RunScript00" alias="Enter 키 확인">
         <Contents><![CDATA[`let e = this._current_action.getEventInfo();
 return !!(e && e.keycode == 13);`]]>
         </Contents>
       </RunScript>
-      <Message id="Message00" alias="검색 결과 없는 경우 안내 메세지" message="검색 조건에 일치하는 결과가 없습니다." messagetype="alert"/>
+      <Message id="Message00" alias="검색 결과 없음 안내" message="검색 조건에 일치하는 결과가 없습니다." messagetype="alert"/>
       <Dataset id="_dstops_requirement_listSelect_ds_pageinfo">
         <ColumnInfo>
           <Column id="page_index" type="string" size="1" description="page_index"/>
@@ -273,8 +273,8 @@ return !!(e && e.keycode == 13);`]]>
         </ColumnInfo>
         <Rows/>
       </Dataset>
-      <OnLoadView id="OnLoadView00" alias="폼 초기화"/>
-      <RunScript id="RunScript01" alias="페이지 초기화">
+      <OnLoadView id="OnLoadView00" alias="화면 초기화"/>
+      <RunScript id="RunScript01" alias="1페이지로 이동">
         <Contents><![CDATA[`this.Page.form.fn_paging_reset();`]]>
         </Contents>
       </RunScript>
@@ -293,9 +293,9 @@ return !!(e && e.keycode == 13);`]]>
           <Row/>
         </Rows>
       </Dataset>
-      <ClearData id="ClearData00" alias="초기화" targetDataset="_dstops_requirement_detailSelect_ds_param"/>
-      <CopyRow id="CopyRow00" alias="복사" sourceDataset="_dstops_requirement_listSelect_ds_list" targetDataset="_dstops_requirement_detailSelect_ds_param"/>
-      <OpenPopup id="OpenPopup00" alias="팝업 오픈" title="요구사항 상세" formurl="Popup::popReqDetail.xfdl" paramDataset="_dstops_requirement_detailSelect_ds_param" autosize="false" popupStyle="modal"/>
+      <ClearData id="ClearData00" alias="상세 전달 값 비우기" targetDataset="_dstops_requirement_detailSelect_ds_param"/>
+      <CopyRow id="CopyRow00" alias="선택 요구사항 복사" sourceDataset="_dstops_requirement_listSelect_ds_list" targetDataset="_dstops_requirement_detailSelect_ds_param"/>
+      <OpenPopup id="OpenPopup00" alias="요구사항 상세 열기" title="요구사항 상세" formurl="Popup::popReqDetail.xfdl" paramDataset="_dstops_requirement_detailSelect_ds_param" autosize="false" popupStyle="modal"/>
       <Dataset id="_dstops_requirement_listSelect_ds_list">
         <ColumnInfo>
           <Column id="rn" type="bigdecimal" size="21" description="rn"/>
@@ -337,7 +337,7 @@ return !!(e && e.keycode == 13);`]]>
           <Row/>
         </Rows>
       </Dataset>
-      <Transaction id="Transaction02" alias="요구처 목록 가져오기" servicemodel="tops::requirement/reqNameSelect" serviceurl="NexaLAPServer::api/v1/execute">
+      <Transaction id="Transaction02" alias="요구처 목록 조회" servicemodel="tops::requirement/reqNameSelect" serviceurl="NexaLAPServer::api/v1/execute">
         <Contents><![CDATA[{
     "outputdatasets": [
         {

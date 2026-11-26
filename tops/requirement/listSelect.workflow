@@ -3,7 +3,7 @@
     "version": "1.0",
     "package": "tops.requirement",
     "name": "listSelect",
-    "alias": "listSelect"
+    "alias": "요구사항 목록 조회"
   },
   "workflow": [
     {
@@ -28,7 +28,7 @@
       }
     },
     {
-      "alias": "전체 건수",
+      "alias": "검색 건수·페이지 수 조회",
       "description": "",
       "type": "sql",
       "position": {
@@ -70,7 +70,7 @@
       }
     },
     {
-      "alias": "SQL2",
+      "alias": "요구사항 목록 조회 (페이지)",
       "description": "",
       "type": "sql",
       "position": {

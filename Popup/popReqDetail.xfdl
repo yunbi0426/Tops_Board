@@ -194,9 +194,9 @@
           <Row/>
         </Rows>
       </Dataset>
-      <OnLoadView id="OnLoadView00" alias="View 초기화"/>
-      <CallDatasetFunction id="CallDatasetFunction00" alias="전달 값 받기" functionList="popupCopyData" targetDataset="_dstops_requirement_detailSelect_ds_param"/>
-      <Transaction id="Transaction00" alias="상세 조회" servicemodel="tops::requirement/detailSelect" serviceurl="NexaLAPServer::api/v1/execute">
+      <OnLoadView id="OnLoadView00" alias="화면 초기화"/>
+      <CallDatasetFunction id="CallDatasetFunction00" alias="상세 전달 값 받기" functionList="popupCopyData" targetDataset="_dstops_requirement_detailSelect_ds_param"/>
+      <Transaction id="Transaction00" alias="요구사항 상세 조회" servicemodel="tops::requirement/detailSelect" serviceurl="NexaLAPServer::api/v1/execute">
         <Contents><![CDATA[{
     "inputdatasets": [
         {

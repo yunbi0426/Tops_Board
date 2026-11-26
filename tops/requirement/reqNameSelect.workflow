@@ -3,7 +3,7 @@
     "version": "1.0",
     "package": "tops.requirement",
     "name": "reqNameSelect",
-    "alias": "reqNameSelect",
+    "alias": "요구처 선택 목록 조회",
     "description": ""
   },
   "workflow": [
@@ -29,7 +29,7 @@
       }
     },
     {
-      "alias": "SQL1",
+      "alias": "요구처별 건수 조회",
       "description": "",
       "type": "sql",
       "position": {

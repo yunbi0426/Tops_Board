@@ -3,7 +3,7 @@
     "version": "1.0",
     "package": "tops.requirement",
     "name": "detailSelect",
-    "alias": "detailSelect",
+    "alias": "요구사항 상세 조회",
     "description": ""
   },
   "workflow": [
@@ -29,7 +29,7 @@
       }
     },
     {
-      "alias": "SQL1",
+      "alias": "요구사항 상세 조회",
       "description": "",
       "type": "sql",
       "position": {

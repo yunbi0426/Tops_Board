@@ -306,6 +306,7 @@
       <InteractionEditor>
         <NodePositions>
           <NodePosition id="action:OnLoadView00" x="2293" y="194"/>
+          <NodePosition id="action:OpenPopup00" x="960" y="1035"/>
           <NodePosition id="action:Transaction00" x="2781" y="7"/>
         </NodePositions>
       </InteractionEditor>
@@ -313,7 +314,7 @@
     <Script type="xscript5.1"><![CDATA[]]>
     </Script>
     <Objects>
-      <Transaction id="Transaction00" alias="업로드 이력 가져오기" servicemodel="tops::upload/uploadLogSelect" serviceurl="NexaLAPServer::api/v1/execute">
+      <Transaction id="Transaction00" alias="업로드 회차 조회" servicemodel="tops::upload/uploadLogSelect" serviceurl="NexaLAPServer::api/v1/execute">
         <Contents><![CDATA[{
     "outputdatasets": [
         {
@@ -324,7 +325,7 @@
 }]]>
         </Contents>
       </Transaction>
-      <OnLoadView id="OnLoadView00" alias="폼 초기화"/>
+      <OnLoadView id="OnLoadView00" alias="화면 초기화"/>
       <Dataset id="_dstops_uploadLogSelect_ds_output">
         <ColumnInfo>
           <Column id="upload_id" type="int" size="11" description="업로드 회차"/>
@@ -352,7 +353,7 @@
           <Row/>
         </Rows>
       </Dataset>
-      <Transaction id="Transaction01" alias="엑셀 반영" servicemodel="tops::upload/importTopsExcel" serviceurl="NexaLAPServer::api/v1/execute">
+      <Transaction id="Transaction01" alias="TOPS 엑셀 반영" servicemodel="tops::upload/importTopsExcel" serviceurl="NexaLAPServer::api/v1/execute">
         <Contents><![CDATA[{
     "inputdatasets": [
         {
@@ -374,9 +375,9 @@
 }]]>
         </Contents>
       </Transaction>
-      <FileUploadTransfer id="FileUploadTransfer00" alias="엑셀 업로드 (중복 없음)" targetview="viewUpload" resultdataset="_dstops_importTopsExcel__FileMetaInfo00"/>
-      <OpenPopup id="OpenPopup00" alias="요구처 그룹핑 팝업 오픈" title="요구처 그룹핑" formurl="Popup::popRequesterMap.xfdl" autosize="true" popupStyle="modal"/>
-      <Transaction id="Transaction02" alias="업로드 전 기준일 검사" servicemodel="tops::upload/uploadDupCheck" serviceurl="NexaLAPServer::api/v1/execute">
+      <FileUploadTransfer id="FileUploadTransfer00" alias="엑셀 파일 전송 (중복 없음)" targetview="viewUpload" resultdataset="_dstops_importTopsExcel__FileMetaInfo00"/>
+      <OpenPopup id="OpenPopup00" alias="요구처 그룹핑 열기" title="요구처 그룹핑" formurl="Popup::popRequesterMap.xfdl" autosize="true" popupStyle="modal"/>
+      <Transaction id="Transaction02" alias="기준일 검사" servicemodel="tops::upload/uploadDupCheck" serviceurl="NexaLAPServer::api/v1/execute">
         <Contents><![CDATA[{
     "inputdatasets": [
         {
@@ -402,10 +403,10 @@
         </ColumnInfo>
         <Rows/>
       </Dataset>
-      <Message id="Message00" alias="기준일이 현재보다 미래인 경우 안내 메세지 표시" message="기준일을 오늘 이후 날짜로 지정할 수 없습니다." messagetype="alert"/>
-      <Message id="Message01" alias="기준일이 중복일인 경우 안내 메세지" message="같은 기준일로 업로드한 이력이 있습니다. 다시 업로드하면 새 회차로 추가됩니다. 계속 할까요?" messagetype="confirm"/>
-      <FileUploadTransfer id="FileUploadTransfer01" alias="엑셀 업로드 (중복 확인 후)" targetview="viewUpload" resultdataset="_dstops_importTopsExcel__FileMetaInfo00"/>
-      <RunScript id="RunScript00" alias="업로드 파일 초기화">
+      <Message id="Message00" alias="미래 기준일 안내" message="기준일을 오늘 이후 날짜로 지정할 수 없습니다." messagetype="alert"/>
+      <Message id="Message01" alias="중복 기준일 업로드 확인" message="같은 기준일로 업로드한 이력이 있습니다. 다시 업로드하면 새 회차로 추가됩니다. 계속 할까요?" messagetype="confirm"/>
+      <FileUploadTransfer id="FileUploadTransfer01" alias="엑셀 파일 전송 (중복 확인 후)" targetview="viewUpload" resultdataset="_dstops_importTopsExcel__FileMetaInfo00"/>
+      <RunScript id="RunScript00" alias="선택 파일 비우기">
         <Contents><![CDATA[`this.viewUpload.form.fn_clearFile();`]]>
         </Contents>
       </RunScript>
@@ -417,8 +418,8 @@
           <Row/>
         </Rows>
       </Dataset>
-      <ClearData id="ClearData00" alias="데이터셋 초기화" targetDataset="_dstops_upload_uploadDupCheck_ds_input"/>
-      <CopyRow id="CopyRow00" alias="데이터셋 복사" sourceDataset="_dstops_importTopsExcel_ds_input" targetDataset="_dstops_upload_uploadDupCheck_ds_input"/>
+      <ClearData id="ClearData00" alias="기준일 검사값 비우기" targetDataset="_dstops_upload_uploadDupCheck_ds_input"/>
+      <CopyRow id="CopyRow00" alias="기준일 검사값 복사" sourceDataset="_dstops_importTopsExcel_ds_input" targetDataset="_dstops_upload_uploadDupCheck_ds_input"/>
       <Dataset id="_dstops_importTopsExcel_ds_input">
         <ColumnInfo>
           <Column id="base_date" type="DATE" size="100" description="기준일"/>
@@ -428,13 +429,13 @@
           <Row/>
         </Rows>
       </Dataset>
-      <RunScript id="RunScript01" alias="삭제 버튼 클릭했는지 확인">
+      <RunScript id="RunScript01" alias="삭제 칸 클릭 확인">
         <Contents><![CDATA[`let e = this._current_action.getEventInfo();
 return !!(e && e.row == 0 && e.cell == 7);`]]>
         </Contents>
       </RunScript>
-      <Message id="Message02" alias="회차 삭제 진행 여부 Confirm" message="최근 회차를 삭제할까요? 이 회차에서 바뀐 요구사항 상태가 직전 회차로 되돌아가며, 삭제 후에는 복구할 수 없습니다." messagetype="confirm"/>
-      <Transaction id="Transaction03" alias="삭제 서비스 실행" servicemodel="tops::upload/uploadDelete" serviceurl="NexaLAPServer::api/v1/execute">
+      <Message id="Message02" alias="최근 회차 삭제 확인" message="최근 회차를 삭제할까요? 이 회차에서 바뀐 요구사항 상태가 직전 회차로 되돌아가며, 삭제 후에는 복구할 수 없습니다." messagetype="confirm"/>
+      <Transaction id="Transaction03" alias="최근 회차 삭제" servicemodel="tops::upload/uploadDelete" serviceurl="NexaLAPServer::api/v1/execute">
         <Contents><![CDATA[{
     "inputdatasets": [
         {
@@ -452,8 +453,8 @@ return !!(e && e.row == 0 && e.cell == 7);`]]>
 }]]>
         </Contents>
       </Transaction>
-      <Message id="Message03" alias="삭제 성공 메세지" message="최근 회차를 성공적으로 삭제했습니다." messagetype="alert"/>
-      <Message id="Message04" alias="최근 회차가 아닌경우 메세지" message="최근 회차만 삭제할 수 있습니다. 이력을 다시 불러옵니다." messagetype="alert"/>
+      <Message id="Message03" alias="회차 삭제 완료 안내" message="최근 회차를 성공적으로 삭제했습니다." messagetype="alert"/>
+      <Message id="Message04" alias="최근 회차 아님 안내" message="최근 회차만 삭제할 수 있습니다. 이력을 다시 불러옵니다." messagetype="alert"/>
       <Dataset id="_dstops_upload_uploadDelete_ds_input">
         <ColumnInfo>
           <Column id="upload_id" type="INT" size="10" description="업로드 회차"/>

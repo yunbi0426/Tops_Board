@@ -3,7 +3,7 @@
     "version": "1.0",
     "package": "tops.requester",
     "name": "mapSave",
-    "alias": "mapSave",
+    "alias": "요구처 매핑 저장",
     "description": ""
   },
   "workflow": [
@@ -29,7 +29,7 @@
       }
     },
     {
-      "alias": "SQL1",
+      "alias": "요구처 매핑 저장",
       "description": "",
       "type": "sql",
       "position": {

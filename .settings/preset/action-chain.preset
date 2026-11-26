@@ -52,7 +52,7 @@
       },
       {
         "id": "81fb3212-65cc-4b92-81a8-6b6ca3e59187",
-        "name": "폼 초기화",
+        "name": "화면 초기화",
         "root": {
           "className": "nexacro.OnLoadView",
           "alias": "폼 초기화",

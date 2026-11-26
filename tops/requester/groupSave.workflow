@@ -3,7 +3,7 @@
     "version": "1.0",
     "package": "tops.requester",
     "name": "groupSave",
-    "alias": "groupSave"
+    "alias": "요구처 그룹 저장"
   },
   "workflow": [
     {
@@ -28,7 +28,7 @@
       }
     },
     {
-      "alias": "SQL1",
+      "alias": "요구처 그룹 추가",
       "description": "",
       "type": "sql",
       "position": {

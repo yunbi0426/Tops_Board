@@ -3,7 +3,7 @@
     "version": "1.0",
     "package": "tops.upload",
     "name": "uploadDupCheck",
-    "alias": "uploadDupCheck"
+    "alias": "기준일 검사"
   },
   "workflow": [
     {
@@ -23,12 +23,12 @@
       "alias": "End",
       "description": "",
       "position": {
-        "x": 1620,
+        "x": 1230,
         "y": 225
       }
     },
     {
-      "alias": "등록일을 기준으로 같은 날짜에 등록된 파일이 있는지 확인",
+      "alias": "기준일 중복·미래 검사",
       "description": "",
       "type": "sql",
       "position": {

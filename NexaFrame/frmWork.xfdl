@@ -15,7 +15,7 @@
       <TriggerItem id="item0" triggertype="onload" triggerview="" triggerobj="" targetaction="RunScript00"/>
     </Trigger>
     <Objects>
-      <RunScript id="RunScript00" alias="Title 표시">
+      <RunScript id="RunScript00" alias="화면 제목 표시">
         <Contents><![CDATA[`nexacro.getEnvironment().fnSetPageTitle(this.div_work.url);`]]>
         </Contents>
       </RunScript>

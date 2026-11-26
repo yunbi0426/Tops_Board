@@ -113,7 +113,7 @@
 ]]>
           </Script>
         </View>
-        <View id="Chart" left="24" top="Summary:16" width="40%" height="50%" text="Chart" viewtype="Chart" viewdataset="_dstops_dashboard_statSelect_ds_rank">
+        <View id="Chart" left="24" top="Summary:16" width="40%" height="40%" text="Chart" viewtype="Chart" viewdataset="_dstops_dashboard_statSelect_ds_rank">
           <Layouts>
             <Layout>
               <Static id="staFrame" left="0" top="0" right="0" bottom="0" text="" border="1px solid #E4E4E7" borderRadius="10px" background="#FFFFFF"/>
@@ -265,7 +265,7 @@
 ]]>
           </Script>
         </View>
-        <View id="Main" left="Chart:16" top="Summary:16" height="50%" text="Main" right="24" viewtype="Grid" viewdataset="_dstops_dashboard_statSelect_ds_requester">
+        <View id="Main" left="Chart:16" top="Summary:16" height="40%" text="Main" right="24" viewtype="Grid" viewdataset="_dstops_dashboard_statSelect_ds_requester">
           <Layouts>
             <Layout>
               <Static id="sta_frame" left="0" top="0" right="0" bottom="0" text="" border="1px solid #E4E4E7" borderRadius="10px" background="#FFFFFF" _fieldid="FRAME" _fieldcomptype="label"/>
@@ -464,8 +464,8 @@
     <Script type="xscript5.1"><![CDATA[]]>
     </Script>
     <Objects>
-      <OnLoadView id="OnLoadView00" alias="OnLoadView"/>
-      <Transaction id="Transaction00" alias="Dashboard 데이터 가져오기" servicemodel="tops::dashboard/statSelect" serviceurl="NexaLAPServer::api/v1/execute">
+      <OnLoadView id="OnLoadView00" alias="화면 초기화"/>
+      <Transaction id="Transaction00" alias="현황 통계 조회" servicemodel="tops::dashboard/statSelect" serviceurl="NexaLAPServer::api/v1/execute">
         <Contents><![CDATA[{
     "outputdatasets": [
         {
@@ -488,7 +488,7 @@
 }]]>
         </Contents>
       </Transaction>
-      <MasterRowFilter id="MasterRowFilter00" alias="잔여 목록 필터" master="_dstops_dashboard_statSelect_ds_requester.req_name" target="_dstops_dashboard_statSelect_ds_remain.req_name"/>
+      <MasterRowFilter id="MasterRowFilter00" alias="선택 요구처로 잔여 목록 필터" master="_dstops_dashboard_statSelect_ds_requester.req_name" target="_dstops_dashboard_statSelect_ds_remain.req_name"/>
       <Dataset id="_dstops_dashboard_statSelect_ds_option">
         <ColumnInfo>
           <Column id="top_n" type="INT" size="100" description="top_n"/>
@@ -497,7 +497,7 @@
           <Row/>
         </Rows>
       </Dataset>
-      <RunScript id="RunScript00" alias="잔여 상위 요구처 상위 Spin 변경">
+      <RunScript id="RunScript00" alias="상위 N 변경 시 재조회 연결">
         <Contents><![CDATA[`var oAction = this._current_action;      // 이 RunScript Action 자신
 
 var fnApply = function(obj, e) {
@@ -524,7 +524,7 @@ this._nLastTopN = oSpin.value;
 return false;   // 등록할 때는 Success를 안 내보냄 (화면 열 때 중복 조회 방지)`]]>
         </Contents>
       </RunScript>
-      <Transaction id="Transaction01" alias="상위 N 요구처 조회" servicemodel="tops::dashboard/statSelect" serviceurl="NexaLAPServer::api/v1/execute">
+      <Transaction id="Transaction01" alias="잔여 상위 요구처 조회" servicemodel="tops::dashboard/statSelect" serviceurl="NexaLAPServer::api/v1/execute">
         <Contents><![CDATA[{
     "inputdatasets": [
         {
@@ -541,9 +541,9 @@ return false;   // 등록할 때는 Success를 안 내보냄 (화면 열 때 중
 }]]>
         </Contents>
       </Transaction>
-      <InputFilter id="InputFilter00" alias="요구처 필터링" targetview="Main" sourcecomp="edt_filterSearch" searchcolumns="_dstops_dashboard_statSelect_ds_requester.req_name"/>
-      <SetRowPosition id="SetRowPosition00" alias="필터링 후 첫번쨰 행 선택" targetdataset="_dstops_dashboard_statSelect_ds_requester" position="first"/>
-      <InputFilter id="InputFilter01" alias="요구처 초기화" targetview="Main" sourcecomp="edt_filterSearch" searchcolumns="_dstops_dashboard_statSelect_ds_requester.req_name" clearinput="true"/>
+      <InputFilter id="InputFilter00" alias="요구처 검색어 필터" targetview="Main" sourcecomp="edt_filterSearch" searchcolumns="_dstops_dashboard_statSelect_ds_requester.req_name"/>
+      <SetRowPosition id="SetRowPosition00" alias="첫 요구처 선택" targetdataset="_dstops_dashboard_statSelect_ds_requester" position="first"/>
+      <InputFilter id="InputFilter01" alias="요구처 검색어 비우기" targetview="Main" sourcecomp="edt_filterSearch" searchcolumns="_dstops_dashboard_statSelect_ds_requester.req_name" clearinput="true"/>
       <Dataset id="_dstops_requirement_detailSelect_ds_param">
         <ColumnInfo>
           <Column id="rp" type="STRING" size="10" description="RP"/>
@@ -552,8 +552,8 @@ return false;   // 등록할 때는 Success를 안 내보냄 (화면 열 때 중
           <Row/>
         </Rows>
       </Dataset>
-      <ClearData id="ClearData00" alias="팝업 전달 값 비우기" targetDataset="_dstops_requirement_detailSelect_ds_param"/>
-      <CopyRow id="CopyRow00" alias="선택 행 복사" sourceDataset="_dstops_dashboard_statSelect_ds_remain" targetDataset="_dstops_requirement_detailSelect_ds_param"/>
+      <ClearData id="ClearData00" alias="상세 전달 값 비우기" targetDataset="_dstops_requirement_detailSelect_ds_param"/>
+      <CopyRow id="CopyRow00" alias="선택 요구사항 복사" sourceDataset="_dstops_dashboard_statSelect_ds_remain" targetDataset="_dstops_requirement_detailSelect_ds_param"/>
       <OpenPopup id="OpenPopup00" alias="요구사항 상세 열기" title="요구사항 상세" formurl="Popup::popReqDetail.xfdl" paramDataset="_dstops_requirement_detailSelect_ds_param" autosize="false" popupStyle="modal"/>
       <Dataset id="_dstops_dashboard_statSelect_ds_rank">
         <ColumnInfo>

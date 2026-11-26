@@ -3,7 +3,7 @@
     "version": "1.0",
     "package": "tops.upload",
     "name": "uploadDelete",
-    "alias": "uploadDelete",
+    "alias": "최근 회차 삭제",
     "description": ""
   },
   "workflow": [
@@ -29,7 +29,7 @@
       }
     },
     {
-      "alias": "삭제 결과 조회",
+      "alias": "삭제 가능 여부 조회",
       "description": "",
       "type": "sql",
       "position": {
@@ -71,7 +71,7 @@
       }
     },
     {
-      "alias": "새로 생긴 요구사항 삭제",
+      "alias": "새 요구사항 삭제",
       "description": "",
       "type": "sql",
       "position": {
@@ -119,7 +119,7 @@
       }
     },
     {
-      "alias": "기존 요구사항 상태 되돌리기",
+      "alias": "요구사항 상태 되돌리기",
       "description": "",
       "type": "sql",
       "position": {
@@ -167,7 +167,7 @@
       }
     },
     {
-      "alias": "스냅샷 삭제",
+      "alias": "회차 상태 삭제",
       "description": "",
       "type": "sql",
       "position": {
@@ -215,7 +215,7 @@
       }
     },
     {
-      "alias": "업로드 회차 기록 삭제",
+      "alias": "회차 기록 삭제",
       "description": "",
       "type": "sql",
       "position": {
