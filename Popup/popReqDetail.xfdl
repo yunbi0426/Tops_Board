@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="popReqDetail" width="1000" height="600" titletext="요구사항 상세" left="0" top="0">
+  <Form id="popReqDetail" width="1000" height="600" titletext="TEXT(&quot;TitleText.popReqDetail&quot;,&quot;요구사항 상세&quot;)" left="0" top="0">
     <Layouts>
       <Layout width="1000" height="600">
         <View id="Master" taborder="0" viewtype="Freeform" viewdataset="_dstops_requirement_detailSelect_ds_detail" text="Master" left="10" top="10" right="10" bottom="10">

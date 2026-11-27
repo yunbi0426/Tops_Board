@@ -672,5 +672,31 @@
       "options": "{\"dataformat\": \"YYYY. M. D. aa h:mm:ss\"}",
       "datasource": "tops_board"
     }
+  ],
+  "TitleText": [
+    {
+      "type": "extradata",
+      "key": "TitleText.frmDashboard"
+    },
+    {
+      "type": "extradata",
+      "key": "TitleText.frmDetails"
+    },
+    {
+      "type": "extradata",
+      "key": "TitleText.frmUpload"
+    },
+    {
+      "type": "extradata",
+      "key": "TitleText.frmExport"
+    },
+    {
+      "type": "extradata",
+      "key": "TitleText.popReqDetail"
+    },
+    {
+      "type": "extradata",
+      "key": "TitleText.popRequesterMap"
+    }
   ]
 }

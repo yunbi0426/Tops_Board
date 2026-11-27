@@ -11,6 +11,10 @@
           <Col id="code">en</Col>
           <Col id="data">English</Col>
         </Row>
+        <Row>
+          <Col id="code">ko</Col>
+          <Col id="data">한국어</Col>
+        </Row>
       </Rows>
     </Dataset>
     <Dataset id="gdsMenu">

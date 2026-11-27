@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="frmExport" width="1050" height="736" titletext="New Form">
+  <Form id="frmExport" width="1050" height="736" titletext="TEXT(&quot;TitleText.frmExport&quot;,&quot;New Form&quot;)">
     <Layouts>
       <Layout width="1050" height="736">
         <Button id="btnExport" left="10" top="10" width="14%" height="50" text="엑셀 내보내기" cssclass="btn_Primary"/>

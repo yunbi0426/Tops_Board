@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="frmUpload" width="1050" height="736" titletext="New Form">
+  <Form id="frmUpload" width="1050" height="736" titletext="TEXT(&quot;TitleText.frmUpload&quot;,&quot;New Form&quot;)">
     <Layouts>
       <Layout width="1050" height="736">
         <View id="viewUpload" left="10" top="10" taborder="3" height="50" text="View00" right="10" viewdataset="_dstops_importTopsExcel_ds_input">

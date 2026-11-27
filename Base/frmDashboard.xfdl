@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="frmDashboard" width="1050" height="736">
+  <Form id="frmDashboard" width="1050" height="736" titletext="TEXT(&quot;TitleText.frmDashboard&quot;,&quot;Dashboard&quot;)">
     <Layouts>
       <Layout width="1050" height="736">
         <View id="Summary" left="24" top="8" height="116" text="Summary" right="24" viewdataset="_dstops_dashboard_statSelect_ds_summary">
