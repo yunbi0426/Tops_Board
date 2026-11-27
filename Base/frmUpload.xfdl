@@ -13,7 +13,7 @@
               <Button id="btnFileClear" left="edtFileName:-30" top="10" width="30" height="32" text="✕" tooltiptext="선택 취소" border="0px none" background="transparent" color="#A1A1AA" visible="false"/>
               <Button id="btnSelect" left="582" top="10" width="80" height="32" text="파일 선택"/>
               <Button id="btnUpload" left="btnSelect:10" top="10" width="100" height="32" text="업로드" cssclass="btn_Primary"/>
-              <Button id="btnGroupingRequester" top="10" taborder="0" height="32" text="요구처 그룹핑" right="0" width="110"/>
+              <Button id="btnGroupingRequester" top="10" taborder="0" height="32" text="TEXT(&quot;Common.btnGroupingRequester&quot;,&quot;요구처 그룹핑&quot;)" right="0" width="110"/>
             </Layout>
           </Layouts>
           <Objects>

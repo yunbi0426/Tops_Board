@@ -18,7 +18,7 @@
                   <PanelItem id="PanelItem_7" componentid="pnlRegTo"/>
                 </Contents>
               </Panel>
-              <Button id="btnSearch" cssclass="btn_WF_Search" text="검색" _fieldid="_btnSearch" _fieldcomptype="comp" top="5" height="38" width="110" right="5"/>
+              <Button id="btnSearch" cssclass="btn_WF_Search" text="TEXT(&quot;Common.btnSearch&quot;,&quot;검색&quot;)" _fieldid="_btnSearch" _fieldcomptype="comp" top="5" height="38" width="110" right="5"/>
               <Static id="staRp" taborder="0" text="RP" cssclass="sta_WF_SchLabel" left="0" top="0" width="100" height="38" _fieldid="rp" _fieldcomptype="label"/>
               <Edit id="edtrp" taborder="1" left="0" top="0" width="50" height="38" flexgrow="1" _fieldid="rp" _fieldcomptype="comp"/>
               <Panel id="pnlRp" taborder="2" left="0" top="0" width="150" height="38" flexcrossaxisalign="center" horizontalgap="0" flexgrow="1" verticalgap="0" cssclass="" _fieldid="rp" _fieldcomptype="panel">
@@ -218,7 +218,7 @@
           <Script><![CDATA[this.cfn_FilterBtn_onclick = function(obj, e){let aComponents = this.components;for(let i = 0 ; i < aComponents.length ; i++){if(aComponents[i]._fieldcomptype == "filter"){aComponents[i].setSelectStatus(false);}}obj.setSelectStatus(true);};this._fnViewOnLoad = function(objForm){/* Sets the view form reference so that functions declared in the view can access it */this._ownerForm = objForm;this._sSearchFilterValue = "";this._sFilterValue = "";let aComponents = this.components;let oComp = null;for(let i = 0 ; i < aComponents.length ; i++){oComp = aComponents[i];if(oComp instanceof nexacro.Button){if(oComp._fieldcomptype == "filter"){oComp.addEventHandler("onclick",this.cfn_FilterBtn_onclick, this)}}}};]]>
           </Script>
         </View>
-        <Button id="btnClear" top="10" taborder="2" width="120" text="조건 초기화" right="10" bottom="Search:10" cssclass="btn_WF_TextReset"/>
+        <Button id="btnClear" top="10" taborder="2" width="120" text="TEXT(&quot;Common.btnclear&quot;,&quot;조건 초기화&quot;)" right="10" bottom="Search:10" cssclass="btn_WF_TextReset"/>
       </Layout>
     </Layouts>
     <Objects>

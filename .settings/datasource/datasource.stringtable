@@ -698,5 +698,37 @@
       "type": "extradata",
       "key": "TitleText.popRequesterMap"
     }
+  ],
+  "Common": [
+    {
+      "type": "extradata",
+      "key": "Common.btnclear",
+      "description": "조건 초기화 버튼 Text"
+    },
+    {
+      "type": "extradata",
+      "key": "Common.btnSearch",
+      "description": "검색 버튼 Text"
+    },
+    {
+      "type": "extradata",
+      "key": "Common.btnExportExcel",
+      "description": "엑셀 내보내기 버튼 Text"
+    },
+    {
+      "type": "extradata",
+      "key": "Common.btnGroupingRequester",
+      "description": "요구처 그룹핑 버튼 Text"
+    },
+    {
+      "type": "extradata",
+      "key": "Common.btnClose",
+      "description": "닫기 버튼 Text"
+    },
+    {
+      "type": "extradata",
+      "key": "Common.btnSave",
+      "description": "저장 버튼 Text"
+    }
   ]
 }

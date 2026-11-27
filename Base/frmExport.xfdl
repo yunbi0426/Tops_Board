@@ -3,7 +3,7 @@
   <Form id="frmExport" width="1050" height="736" titletext="TEXT(&quot;TitleText.frmExport&quot;,&quot;New Form&quot;)">
     <Layouts>
       <Layout width="1050" height="736">
-        <Button id="btnExport" left="10" top="10" width="14%" height="50" text="엑셀 내보내기" cssclass="btn_Primary"/>
+        <Button id="btnExport" left="10" top="10" width="14%" height="50" text="TEXT(&quot;Common.btnExportExcel&quot;,&quot;엑셀 내보내기&quot;)" cssclass="btn_Primary"/>
         <View id="Options" left="10" top="btnExport:10" width="14%" text="Options" bottom="10" viewtype="Grid" viewdataset="_dstops_report_summarySelect_ds_sheet_option">
           <Layouts>
             <Layout>

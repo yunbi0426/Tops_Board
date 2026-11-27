@@ -97,8 +97,8 @@
         </View>
         <Button id="btnToTarget" left="Source:10" top="40%" height="30" text="▶" right="Target:10" textAlign="center" padding="0"/>
         <Button id="btnToSource" top="btnToTarget:5" height="30" text="◀" left="Source:10" right="Target:10" textAlign="center" padding="0"/>
-        <Button id="btnSave" top="Target:10" text="저장" right="10" bottom="10" width="80"/>
-        <Button id="btnClose" top="Target:10" text="닫기" bottom="10" right="btnSave:10" width="80" tooltiptext="Popup Close"/>
+        <Button id="btnSave" top="Target:10" text="TEXT(&quot;Common.btnSave&quot;,&quot;Save&quot;)" right="10" bottom="10" width="80"/>
+        <Button id="btnClose" top="Target:10" text="TEXT(&quot;Common.btnClose&quot;,&quot;닫기&quot;)" bottom="10" right="btnSave:10" width="80" tooltiptext="Popup Close"/>
       </Layout>
     </Layouts>
     <ViewGenerationInfo>
