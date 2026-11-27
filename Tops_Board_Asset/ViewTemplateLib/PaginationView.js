@@ -1,7 +1,6 @@
 /**
  * PaginationView 런타임 라이브러리
  * - PaginationView.viewtemplate 으로 생성한 View 가 실행 중에 쓰는 함수 모음
- * - nexa-integration-builder.json 의 runtime.libraryScripts 로 앱 시작 때 로드
  * - 모든 함수는 첫 번째 인자로 View 의 form(oView)을 받는다 → 화면마다 상태가 섞이지 않음
  * - 설정값은 템플릿이 생성 시 View Script 에 넣어 둔 oView.fvPager 를 사용
  *

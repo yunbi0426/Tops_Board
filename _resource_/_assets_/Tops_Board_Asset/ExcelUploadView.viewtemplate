@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ViewTemplateInfo version="2.1">
-  <ViewTemplate id="ExcelUploadView" viewtype="Others" description_en="Base date + single excel file select + upload button"/>
+  <ViewTemplate id="ExcelUploadView" viewtype="Others" manual="extlib::Tops_Board_Asset/_manual_/viewtemplates/ExcelUploadView.md" description_en="Base date + single excel file select + upload button"/>
   <UIConfig version="1.0"><![CDATA[{
 	"includes": [],
 	"viewProperties": [

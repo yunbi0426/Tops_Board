@@ -31,5 +31,6 @@
     "Tops_Board_Asset/ExportExcelReport/DesignExportExcelReport.js"
   ],
   "moduletype": "component",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "help": "Tops_Board_Asset/_manual_"
 }

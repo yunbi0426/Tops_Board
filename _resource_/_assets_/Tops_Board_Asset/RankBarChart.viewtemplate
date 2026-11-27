@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ViewTemplateInfo version="2.1">
-  <ViewTemplate id="RankBarChart" viewtype="Chart" description_en="Horizontal ranking bars for each row of the view dataset, with an optional top-N spin"/>
+  <ViewTemplate id="RankBarChart" viewtype="Chart" manual="extlib::Tops_Board_Asset/_manual_/viewtemplates/RankBarChart.md" description_en="Horizontal ranking bars for each row of the view dataset, with an optional top-N spin"/>
   <UIConfig version="1.0"><![CDATA[{
 	"includes": [],
 	"viewProperties": [

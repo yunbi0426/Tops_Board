@@ -5,7 +5,7 @@
   "description": "",
   "minNexacroVersion": "",
   "license": "",
-  "manual": "",
+  "manual": "_manual_",
   "icon": "",
   "publisher": "",
   "contents": {
@@ -32,7 +32,8 @@
       "ViewTemplateLib/PaginationView.js",
       "Tops_Board_Mono",
       "ExportExcelReport.nexaobj",
-      "RecordDetailView.viewtemplate"
+      "RecordDetailView.viewtemplate",
+      "TopsBoard.xcss"
     ]
   },
   "contentsEditor": []

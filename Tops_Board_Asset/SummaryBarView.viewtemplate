@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ViewTemplateInfo version="2.1">
-  <ViewTemplate id="SummaryBarView" viewtype="Others" description_en="One-line summary with a proportion bar for the current row of the view dataset"/>
+  <ViewTemplate id="SummaryBarView" viewtype="Others" manual="viewtemplates/SummaryBarView.md" description_en="One-line summary with a proportion bar for the current row of the view dataset"/>
   <UIConfig version="1.0"><![CDATA[{
 	"includes": [],
 	"viewProperties": [
@@ -379,7 +379,6 @@
 
 	this.set_fieldProperties = function() {
 		let oFieldAttr = { "attributes": [] };
-		let oProperties;
 
 		return JSON.stringify(oFieldAttr, null, "\t");
 	};
@@ -420,7 +419,6 @@
 
 		return JSON.stringify(this.oContents, null, "\t");
 	};
-
 
 	/************************************************************************************************
 	 * @FileName    SummaryBarView
@@ -714,26 +712,4 @@
 		};
 ]]>
   </Script>
-  <TestData>
-    <TestFields><![CDATA[{
-    "fields": [
-        {"id": "new_count", "label": "신규", "uselabel": "true", "editable": "false", "fieldtype": "Number", "datatype": "INT", "datasize": "11", "required": "false", "description_ENG": "", "description_KOR": "", "description_JPN": "", "options": ""},
-        {"id": "changed_count", "label": "상태 변경", "uselabel": "true", "editable": "false", "fieldtype": "Number", "datatype": "INT", "datasize": "11", "required": "false", "description_ENG": "", "description_KOR": "", "description_JPN": "", "options": ""}
-    ]
-}]]>
-    </TestFields>
-    <TestViewProperties><![CDATA[{
-    "attributes": {
-        "headerformat": "<b v='true'>{upload_id}회차</b>   기준일 {base_date} · {file_name}",
-        "emptytext": "업로드 이력이 없습니다",
-        "totalfield": "row_count",
-        "totallabel": "전체",
-        "restlabel": "변동 없음",
-        "valuesuffix": "건",
-        "segmentcolors": "#1D9E75,#EF9F27,#378ADD,#D4537E",
-        "restcolor": "#E4E4E7"
-    }
-}]]>
-    </TestViewProperties>
-  </TestData>
 </ViewTemplateInfo>

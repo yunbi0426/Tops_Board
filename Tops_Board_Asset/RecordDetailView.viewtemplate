@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ViewTemplateInfo version="2.1">
-  <ViewTemplate id="RecordDetailView" viewtype="Freeform" description_en="Single record detail card: key, status badge and info list on the left, title and tabbed long-text fields on the right"/>
+  <ViewTemplate id="RecordDetailView" viewtype="Freeform" manual="viewtemplates/RecordDetailView.md" description_en="Single record detail card: key, status badge and info list on the left, title and tabbed long-text fields on the right"/>
   <UIConfig version="1.0"><![CDATA[{
 	"includes": [
 		{

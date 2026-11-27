@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ViewTemplateInfo version="2.1">
-  <ViewTemplate id="SearchGridView" viewtype="Grid" description_en="A grid in a card with a title, row count, keyword search box, clear button and header-click sorting"/>
+  <ViewTemplate id="SearchGridView" viewtype="Grid" manual="extlib::Tops_Board_Asset/_manual_/viewtemplates/SearchGridView.md" description_en="A grid in a card with a title, row count, keyword search box, clear button and header-click sorting"/>
   <UIConfig version="1.0"><![CDATA[{
 	"includes": [
 		{

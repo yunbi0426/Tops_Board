@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ViewTemplateInfo version="2.1">
-  <ViewTemplate id="SummaryCardView" viewtype="Others" description_en="Summary cards for the current row of the view dataset"/>
+  <ViewTemplate id="SummaryCardView" viewtype="Others" manual="viewtemplates/SummaryCardView.md" description_en="Summary cards for the current row of the view dataset"/>
   <UIConfig version="1.0"><![CDATA[{
 	"includes": [],
 	"viewProperties": [
