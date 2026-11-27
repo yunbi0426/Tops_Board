@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="popRequesterMap" width="1000" height="600" titletext="TEXT(&quot;TitleText.popRequesterMap&quot;,&quot;New Form&quot;)">
+  <Form id="popRequesterMap" width="1000" height="600" titletext="TEXT(&quot;TitleText.popRequesterMap&quot;,&quot;Requester Grouping&quot;)">
     <Layouts>
       <Layout width="1000" height="600">
         <View id="Master" left="10" top="10" text="Master" width="30%" bottom="50" viewtype="Grid" viewdataset="_dstops_requester_mapSelect_ds_group">

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FDL version="2.1">
-  <Form id="frmDetails" width="1050" height="736" titletext="TEXT(&quot;TitleText.frmDetails&quot;,&quot;ListDetail (H)&quot;)">
+  <Form id="frmDetails" width="1050" height="736" titletext="TEXT(&quot;TitleText.frmDetails&quot;,&quot;Requirement List&quot;)">
     <Layouts>
       <Layout width="1050" height="736">
         <View id="Search" taborder="1" viewtype="Search" text="검색" left="10" height="50" top="45" right="10" cssclass="view_WF_Search" viewdataset="_dstops_requirement_listSelect_ds_search">
